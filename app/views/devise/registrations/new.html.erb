@@ -1,0 +1,41 @@
+<div class="container mx-auto">
+  <div class="text-center text-2xl">Log In</div>
+
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  
+    <%= render "devise/shared/error_messages", resource: resource %>
+    <div class="">
+      <div class="field text-center">
+        <label class="block text-grey-darker text-sm font-bold mb-2" for="username">
+          Email
+        </label>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "shadow appearance-none border rounded py-2 px-4 text-grey-darker" %>
+      </div>
+
+      <div class="field text-center">
+        <label class="block text-grey-darker text-sm font-bold mb-2" for="username">
+          Password
+        </label>
+        <% if @minimum_password_length %>
+        <em>(<%= @minimum_password_length %> characters minimum)</em>
+        <% end %><br />
+        <%= f.password_field :password, autocomplete: "new-password", class: "shadow appearance-none border rounded py-2 px-4 text-grey-darker"  %>
+      </div>
+      <br>
+      <div class="field text-center">
+        <label class="block text-grey-darker text-sm font-bold mb-2" for="username">
+          Password Confirmation
+        </label>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "shadow appearance-none border rounded py-2 px-4 text-grey-darker"  %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "Sign up", class: "text-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" %>
+      </div>
+    </div>
+  <% end %>
+  <br>
+  <div class="text-center text-xl"><%= render "devise/shared/links" %></div>
+  
+
+</div>
