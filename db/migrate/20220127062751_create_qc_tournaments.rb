@@ -1,0 +1,15 @@
+class CreateQcTournaments < ActiveRecord::Migration[7.0]
+  def change
+    create_table :qc_tournaments do |t|
+      t.string   :name
+      t.string   :address1
+      t.string   :address2
+      t.string   :city
+      t.string   :state
+      t.string   :zip
+      t.datetime :date
+
+      t.timestamps
+    end
+  end
+end

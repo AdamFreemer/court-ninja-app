@@ -1,0 +1,10 @@
+class CreateUserAttributes < ActiveRecord::Migration[7.0]
+  def change
+    create_table :user_attributes do |t|
+      t.integer :user_id
+      t.integer :attribute_id
+
+      t.timestamps
+    end
+  end
+end
