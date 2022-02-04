@@ -1,7 +1,11 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+User.create(email: 'john@example.com', first_name: 'john', password: 'password', password_confirmation: 'password')
+User.create(email: 'dave@example.com', first_name: 'dave', password: 'password', password_confirmation: 'password')
+User.create(email: 'bill@example.com', first_name: 'bill', password: 'password', password_confirmation: 'password')
+User.create(email: 'sam@example.com', first_name: 'sam', password: 'password', password_confirmation: 'password')
+User.create(email: 'mike@example.com', first_name: 'mike', password: 'password', password_confirmation: 'password')
+User.create(email: 'chris@example.com', first_name: 'chris', password: 'password', password_confirmation: 'password')
+User.create(email: 'steve@example.com', first_name: 'steve', password: 'password', password_confirmation: 'password')
+User.create(email: 'amber@example.com', first_name: 'amber', password: 'password', password_confirmation: 'password')
+User.create(email: 'ginger@example.com', first_name: 'ginger', password: 'password', password_confirmation: 'password')
+User.create(email: 'leo@example.com', first_name: 'leo', password: 'password', password_confirmation: 'password')
+puts "== Created #{User.count} users. ===================="

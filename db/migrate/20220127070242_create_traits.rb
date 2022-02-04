@@ -1,6 +1,6 @@
-class CreateAttributes < ActiveRecord::Migration[7.0]
+class CreateTraits < ActiveRecord::Migration[7.0]
   def change
-    create_table :attributes do |t|
+    create_table :traits do |t|
       t.string :name
       t.string :description
       t.boolean :is_objective?

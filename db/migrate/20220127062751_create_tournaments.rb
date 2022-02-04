@@ -1,6 +1,6 @@
-class CreateQcTournaments < ActiveRecord::Migration[7.0]
+class CreateTournaments < ActiveRecord::Migration[7.0]
   def change
-    create_table :qc_tournaments do |t|
+    create_table :tournaments do |t|
       t.string   :name
       t.string   :address1
       t.string   :address2

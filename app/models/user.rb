@@ -4,12 +4,12 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :qc_tournaments, through: :qc_tournament_users
-  has_many :qc_tournament_users
+  has_many :tournament_users
+  has_many :tournaments, through: :tournament_users
 
-  has_many :qc_teams, through: :qc_team_users
-  has_many :qc_team_users
+  has_many :team_users
+  has_many :teams, through: :team_users
 
-  has_many :attributes, through: :user_attributes
-  has_many :user_attributes
+  has_many :user_traits
+  has_many :traits, through: :user_traits
 end
