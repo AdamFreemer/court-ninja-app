@@ -9,47 +9,33 @@ class TournamentGenerator
   end
 
   def generate_tournament
-    if players.count == 7
-      create_tournament(7)
-    elsif players.count == 8
-      # stuff
-    elsif players.count == 9
-      # stuff
-    end
-  end
-
-  def create_tournament
-    binding.pry
     players_count = players.count
-    # make generic with attribute for players
     players_query
     court = 1
     tournament = Tournament.create
     if players_count == 7
-      (0..(players_count - 1)).each do |match|
-        create_match(match, tournament.id, court, t7_config[match], players_query)
+      (0..6).each do |match|
+        create_match(match, tournament, court, t7_config[match], players_query)
       end
     end
   end
 
   def create_match(number, tournament, court=1, config, players_query)
     match = Match.create(
-      tournament_id: tournament,
+      tournament_id: tournament.id,
       court: court, number: number
     )
-    binding.pry
-    team_1 = Team.create
-    team_2 = Team.create
+    team1 = Team.create(number: 1, score: 0)
+    team2 = Team.create(number: 2, score: 0)
+    match.teams << team1
+    match.teams << team2
 
     config[0].each do |tp|
-      team_1.team_users.create(user_id: players_query[tp.to_i].id)
+      team1.users << User.find(players_query[tp.to_i].id)
     end
-
     config[1].each do |tp|
-      team_2.team_users.create(user_id: players_query[tp.to_i].id)
+      team2.users << User.find(players_query[tp.to_i].id)
     end
-
-
   end
 
   def players_query

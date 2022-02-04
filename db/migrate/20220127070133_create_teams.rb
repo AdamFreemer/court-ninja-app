@@ -3,6 +3,7 @@ class CreateTeams < ActiveRecord::Migration[7.0]
     create_table :teams do |t|
       t.timestamps
 
+      t.integer :number
       t.integer :score
     end
   end
