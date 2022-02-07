@@ -3,7 +3,11 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 module.exports = {
   content: ["./app/**/*.{html,js,erb}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+      },
+    },
   },
   plugins: [
     require('@tailwindcss/forms')

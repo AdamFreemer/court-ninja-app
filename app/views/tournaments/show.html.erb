@@ -4,28 +4,15 @@
       <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
     <% end %>
 
-<table class="table table-striped table-bordered" id="users">
+    <h1 class="text-xl tracking-tight font-extrabold text-gray-900 sm:text-3xl md:text-4xl">
+      <span class="block text-indigo-700 md:inline"><%= @tournament.name %></span>
+    </h1>
+    <h3 class="text-md tracking-tight font-extrabold text-gray-900 sm:text-2xl md:text-3xl">
+      <span class="block text-indigo-400 sm:inline"><%= @tournament.city %>, <%= @tournament.state %></span>
+    </h3>        
 
-
-  <tbody>
-    <% @tournament.matches.each do |match| %>
-      <tr>
-        <td><%= match.teams.first.users.first.first_name %></td>
-        <td><%= match.teams.first.users.second.first_name %></td>
-        <td><%= match.teams.first.users.third.first_name %></td>
-        <td>&nbsp;</td>
-        <td><%= match.teams.second.users.first.first_name %></td>
-        <td><%= match.teams.second.users.second.first_name %></td>
-        <td><%= match.teams.second.users.third.first_name %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-    <%= link_to 'Edit this tournament', edit_tournament_path(@tournament), class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <div class="inline-block ml-2">
-      <%= button_to 'Destroy this tournament', tournament_path(@tournament), method: :delete, class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
-    </div>
-    <%= link_to 'Back to tournaments', tournaments_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+<% if @tournament.users.count == 7 %>
+    <%= render "tournament_7", tournament: @tournament %>
+<% end %>
   </div>
 </div>

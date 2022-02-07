@@ -5,6 +5,7 @@ class CreateTeams < ActiveRecord::Migration[7.0]
 
       t.integer :number
       t.integer :score
+      t.integer :tournament_id
     end
   end
 end

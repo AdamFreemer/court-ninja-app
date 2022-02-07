@@ -10,9 +10,9 @@ class TournamentGenerator
 
   def generate_tournament
     players_count = players.count
-    players_query
     court = 1
     tournament = Tournament.create
+    associate_tournament_players(tournament, players_query)
     if players_count == 7
       (0..6).each do |match|
         create_match(match, tournament, court, t7_config[match], players_query)
@@ -25,8 +25,8 @@ class TournamentGenerator
       tournament_id: tournament.id,
       court: court, number: number
     )
-    team1 = Team.create(number: 1, score: 0)
-    team2 = Team.create(number: 2, score: 0)
+    team1 = Team.create(number: 1, score: nil, tournament_id: tournament.id)
+    team2 = Team.create(number: 2, score: nil, tournament_id: tournament.id)
     match.teams << team1
     match.teams << team2
 
@@ -41,6 +41,12 @@ class TournamentGenerator
   def players_query
     # TODO: validation
     User.where(id: players)
+  end
+
+  def associate_tournament_players(tournament, players_query)
+    players_query.each do |player|
+      tournament.users << player
+    end
   end
 
   def t7_config

@@ -3,11 +3,15 @@ class TournamentsController < ApplicationController
 
   # GET /tournaments or /tournaments.json
   def index
-    @tournaments = Tournament.all
+    @tournaments = Tournament.all.order(:id)
   end
 
   # GET /tournaments/1 or /tournaments/1.json
   def show
+    @score_tags = []
+    @tournament.teams.each do |team|
+      @score_tags << team.id
+    end
   end
 
   # GET /tournaments/new
@@ -57,14 +61,29 @@ class TournamentsController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_tournament
-      @tournament = Tournament.find(params[:id])
+  def team_scores_update
+    # binding.pry
+    teams_count = request.params['score_data'].length
+    teams_count_array = [*0..teams_count - 1].map(&:to_s)
+
+    teams_count_array.each do |team_number|
+      team = request.params['score_data'][team_number]
+      team_lookup = Team.find(team['team_id'].to_i)
+      team_lookup.update(score: team['score'].to_i)
     end
 
-    # Only allow a list of trusted parameters through.
-    def tournament_params
-      params.fetch(:tournament, {})
-    end
+    render json: {}
+  end
+
+  private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_tournament
+    @tournament = Tournament.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def tournament_params
+    params.fetch(:tournament, [{}])
+  end
 end
