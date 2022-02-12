@@ -1,23 +1,27 @@
 # frozen_string_literal: true
 
 class TournamentGenerator
-  attr_accessor :players, :courts
+  attr_accessor :players, :courts, :tournament
 
-  def initialize(players, courts=1)
+  def initialize(players, courts=1, tournament)
     @players = players
     @courts = courts
+    @tournament = tournament
   end
 
   def generate_tournament
     players_count = players.count
     court = 1
-    tournament = Tournament.create
     associate_tournament_players(tournament, players_query)
+
+    ## player count 7
     if players_count == 7
       (0..6).each do |match|
         create_match(match, tournament, court, t7_config[match], players_query)
       end
     end
+
+    tournament.update!(configured: true) if tournament.matches.count.positive?
   end
 
   def create_match(number, tournament, court=1, config, players_query)

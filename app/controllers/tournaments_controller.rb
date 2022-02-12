@@ -26,9 +26,12 @@ class TournamentsController < ApplicationController
   # POST /tournaments or /tournaments.json
   def create
     @tournament = Tournament.new(tournament_params)
+    @tournament.players = params[:tournament][:players].reject(&:blank?)
 
     respond_to do |format|
       if @tournament.save
+        configure_tournament(@tournament.players, @tournament.courts, @tournament)
+
         format.html { redirect_to tournament_url(@tournament), notice: "Tournament was successfully created." }
         format.json { render :show, status: :created, location: @tournament }
       else
@@ -62,7 +65,6 @@ class TournamentsController < ApplicationController
   end
 
   def team_scores_update
-    # binding.pry
     teams_count = request.params['score_data'].length
     teams_count_array = [*0..teams_count - 1].map(&:to_s)
 
@@ -77,6 +79,11 @@ class TournamentsController < ApplicationController
 
   private
 
+  def configure_tournament(players, courts, tournament)
+    tournament = TournamentGenerator.new(players, courts, tournament)
+    tournament.generate_tournament
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_tournament
     @tournament = Tournament.find(params[:id])
@@ -84,6 +91,6 @@ class TournamentsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def tournament_params
-    params.fetch(:tournament, [{}])
+    params.fetch(:tournament, [{}]).permit(:name, :address1, :address2, :city, :state, :zip, :date, :players, :courts)
   end
 end
