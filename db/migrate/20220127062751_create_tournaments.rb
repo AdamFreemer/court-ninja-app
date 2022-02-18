@@ -9,6 +9,7 @@ class CreateTournaments < ActiveRecord::Migration[7.0]
       t.string   :zip
       t.datetime :date
       t.integer :courts
+      t.integer :team_size
       t.boolean :configured, default: false
       t.string :players, array: true, default: []
 

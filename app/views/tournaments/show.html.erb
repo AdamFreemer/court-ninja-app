@@ -9,7 +9,10 @@
     </h1>
     <h3 class="text-md tracking-tight font-extrabold text-gray-900 sm:text-2xl md:text-3xl">
       <span class="block text-indigo-400 sm:inline"><%= @tournament.city %>, <%= @tournament.state %></span>
-    </h3>        
+    </h3>       
+    <h4 class="text-sm tracking-tight font-regular text-gray-900 sm:text-2xl sm:text-3xl">
+      <span class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Players: <%= @tournament.name %></span>
+    </h4>    
 
 <% if @tournament.users.count == 7 %>
     <%= render "tournament_7", tournament: @tournament %>

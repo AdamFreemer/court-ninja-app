@@ -14,7 +14,7 @@ class TournamentGenerator
     court = 1
     associate_tournament_players(tournament, players_query)
 
-    ## player count 7
+    ## rules engine will go here
     if players_count == 7
       (0..6).each do |match|
         create_match(match, tournament, court, t7_config[match], players_query)
@@ -63,5 +63,22 @@ class TournamentGenerator
       [[0, 1, 5], [2, 4, 6]],
       [[0, 4, 5], [1, 3, 6]]
     ]
+  end
+
+  def even_count_match_generator(players_count)
+    base_array = [*1...(players_count + 1)]
+    all_combinations = base_array.combination(players_count / 2).to_a
+    matches = [base_array]
+    all_combinations.each do |set|
+      all_combinations.each do |sub_set|
+        set_combined = set + sub_set
+        if set.sum + sub_set.sum == base_array.sum && set_combined.length == set_combined.uniq.length
+          next if matches.include?(set_combined) || matches.include?((set_combined).rotate(base_array.count / 2))
+
+          matches << (set + sub_set)
+        end
+      end
+    end
+    matches
   end
 end

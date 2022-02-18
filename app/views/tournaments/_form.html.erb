@@ -14,8 +14,8 @@
   <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
     <div class="md:grid md:grid-cols-3 md:gap-6">
       <div class="md:col-span-1">
-        <label for="courts" class="block text-sm font-medium text-gray-700">Players</label>
-        <%= form.select :players, User.all.order(:last_name).map{ |u| [u.full_name, u.id]}, { :placeholder => "Please Select" }, multiple: true, id: "player", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md", disabled: tournament.configured %>        
+        <label for="courts" id="players-label" class="block text-sm font-medium text-gray-700">Players</label>
+        <%= form.select :players, User.all.order(:last_name).map{ |u| [u.full_name, u.id]}, { :placeholder => "Please Select" }, multiple: true, id: "players", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md", disabled: tournament.configured %>        
       </div>
       <div class="mt-5 md:mt-0 md:col-span-2">
         <form action="#" method="POST">
@@ -23,12 +23,18 @@
             <div class="col-span-6 sm:col-span-3">
               <label for="courts" class="block text-sm font-medium text-gray-700">Number of Courts</label>
               <%= form.select :courts, [1,2,3,4,5,6,7,8,9,10], {}, multiple: false, id: "courts", class: "mb-3 mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"  %>
-            </div>          
+            </div>  
+
             <div class="col-span-6 sm:col-span-3">
+              <label for="courts" class="block text-sm font-medium text-gray-700">Players on each Team</label>
+              <%= form.select :courts, [1,2,3,4,5,6,7,8,9,10], {}, multiple: false, id: "courts", class: "mb-3 mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"  %>
+            </div>              
+
+            <div class="col-span-6 sm:col-span-6">
               <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
               <%= form.text_field :name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-             
             </div>
+
             <div class="col-span-6">
               <label for="street-address" class="block text-sm font-medium text-gray-700">Street address</label>
               <%= form.text_field :address1, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
@@ -65,5 +71,10 @@
 
 
   <script>
-    $(document).ready(function() { $("#player").select2(); });
+    $(document).ready(function() { 
+      $('#players').select2({
+      }).on('select2:opening select2:closing', function (event) {
+          $('#players-label').text(`Players (${$("#players :selected").length} selected)`);
+      });
+    });
   </script>
