@@ -65,17 +65,40 @@ class TournamentGenerator
     ]
   end
 
-  def even_count_match_generator(players_count)
-    base_array = [*1...(players_count + 1)]
-    all_combinations = base_array.combination(players_count / 2).to_a
-    matches = [base_array]
-    all_combinations.each do |set|
-      all_combinations.each do |sub_set|
-        set_combined = set + sub_set
-        if set.sum + sub_set.sum == base_array.sum && set_combined.length == set_combined.uniq.length
-          next if matches.include?(set_combined) || matches.include?((set_combined).rotate(base_array.count / 2))
+  def match_generator(players_count)
+    # base_array = [*1...(players_count + 1)]
+    # binding.pry
+    combo = 0
+    all_combinations = if players_count.even?
+                         base_array = [*1...(players_count + 1)]
+                         matches = [base_array]
+                         [*1...(players_count + 1)].combination(players_count / 2).to_a
+                       else
+                         base_array = [*1...(players_count + 2)]
+                         matches = []
+                         [*1...(players_count + 2)].combination((players_count + 1) / 2).to_a
+                       end
+    all_combinations.each do |set| # List of all unique match possibilities
+      all_combinations.each do |compare_set| # Compare each to all possibilities including self
+        set_combined = set + compare_set
+        combo = combo + 1
+        puts "== #{combo} | #{set_combined}"
+        if set.sum + compare_set.sum == base_array.sum && set_combined.length == set_combined.uniq.length
+          next if matches.include?(set_combined) # Next if matches include current match configuration
 
-          matches << (set + sub_set)
+          if players_count.even? # Array is same length as players_count
+            next if matches.include?((set_combined).rotate(base_array.count / 2)) # Next if teams are same but swapped
+          else
+            # We add 1 to array length in odd players_count case to run same "even" algorithm.
+            # Rows ending in an element with players_count will have unique other elements
+            # We skip adding a combination unless the last digit is ending in an element with players_count
+            next if set_combined.last != players_count + 1
+
+            set_combined.pop
+          end
+          next if matches.count > players_count * 2
+
+          matches << set_combined
         end
       end
     end

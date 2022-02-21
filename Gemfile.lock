@@ -70,6 +70,7 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     awesome_print (1.9.2)
     bcrypt (3.1.16)
+    bcrypt (3.1.16-java)
     bindex (0.8.1)
     bootsnap (1.10.3)
       msgpack (~> 1.2)
@@ -99,7 +100,9 @@ GEM
       responders
       warden (~> 1.2.3)
     digest (3.1.0)
+    digest (3.1.0-java)
     erubi (1.10.0)
+    ffi (1.15.5-java)
     globalid (1.0.0)
       activesupport (>= 5.0)
     i18n (1.9.1)
@@ -126,6 +129,7 @@ GEM
     mini_portile2 (2.7.1)
     minitest (5.15.0)
     msgpack (1.4.4)
+    msgpack (1.4.4-java)
     net-imap (0.2.3)
       digest
       net-protocol
@@ -142,14 +146,25 @@ GEM
       net-protocol
       timeout
     nio4r (2.5.8)
+    nio4r (2.5.8-java)
     nokogiri (1.13.1)
       mini_portile2 (~> 2.7.0)
+      racc (~> 1.4)
+    nokogiri (1.13.1-java)
+      racc (~> 1.4)
+    nokogiri (1.13.1-x64-mingw32)
+      racc (~> 1.4)
+    nokogiri (1.13.1-x86-mingw32)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     pg (1.3.1)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
+    pry (0.13.1-java)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
+      spoon (~> 0.0)
     pry-byebug (3.9.0)
       byebug (~> 11.0)
       pry (~> 0.13.0)
@@ -158,7 +173,10 @@ GEM
     public_suffix (4.0.6)
     puma (5.6.1)
       nio4r (~> 2.0)
+    puma (5.6.1-java)
+      nio4r (~> 2.0)
     racc (1.6.0)
+    racc (1.6.0-java)
     rack (2.2.3)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -203,6 +221,8 @@ GEM
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
+    spoon (0.0.6)
+      ffi
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -215,6 +235,8 @@ GEM
     strscan (3.0.1)
     tailwindcss-rails (2.0.5)
       railties (>= 6.0.0)
+    tailwindcss-rails (2.0.5-x64-mingw32)
+      railties (>= 6.0.0)
     thor (1.2.1)
     timeout (0.2.0)
     turbo-rails (1.0.1)
@@ -222,6 +244,8 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
+    tzinfo-data (1.2021.5)
+      tzinfo (>= 1.0.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.0)
@@ -235,13 +259,19 @@ GEM
       selenium-webdriver (~> 4.0)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
+    websocket-driver (0.7.5-java)
+      websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.5.4)
 
 PLATFORMS
+  java
   ruby
+  x64-mingw32
+  x86-mingw32
+  x86-mswin32
 
 DEPENDENCIES
   awesome_print
