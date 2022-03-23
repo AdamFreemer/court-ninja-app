@@ -1,77 +1,18 @@
 
+ 
 
-<div class="flex flex-col">
-  <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-9">
-    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-      <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"></div>
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-          <% team_count = [*1..tournament.matches.first.teams.first.users.count] %>
-            <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Match</th>
-              <% team_count.each do |team_1| %>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Player <%= team_1 %></th>
-              <% end %>
-              <% team_count.each do |team_2| %>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Player <%= team_2 %></th>
-              <% end %>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team 1 Score</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team 2 Score</th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
 
-            <% tournament.matches.each do |match| %>
-              <% team1 = match.teams.first.users %>
-              <% team2 = match.teams.last.users %>
-              <tr>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= match.number + 1 %></td>
-              <% team1.each do |player| %>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= player.first_name.capitalize %></td>
-              <% end %>
-              <% team2.each do |player| %>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= player.first_name.capitalize %></td>
-              <% end %>              
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <div class="mt-1 flex rounded-md shadow-sm">
-                    <% team_ids = match.teams.collect(&:id) %>
-                    <% scores = match.teams.collect(&:score) %>
-                    <input 
-                      type="text" 
-                      name="<%= "team-#{team_ids[0]}" %>" 
-                      id="<%= team_ids[0] %>" 
-                      class="flex-1 block w-full px-3 py-2 rounded-l-md rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300" 
-                      placeholder="<%= scores[0] %>"
-                    >
-                  </div>
-                </td>     
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <div class="mt-1 flex rounded-md shadow-sm">
-                    <input 
-                      type="text" 
-                      name="<%= "team-#{team_ids[1]}" %>" 
-                      id="<%= team_ids[1] %>" 
-                      class="flex-1 block w-full px-3 py-2 rounded-l-md rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300" 
-                      placeholder="<%= scores[1] %>"
-                    >
-                  </div>
-                </td>                             
-              </tr>
-            <% end %>
-          </tbody>
-         
-        </table>
+   
+<div class="columns-2">
+    <div class=""><%= render "table", tournament: @tournament %></div>
+    <div class=""><%= render "table", tournament: @tournament %></div>
+</div>     
 
-        <div class="flex float-right space-x-4">
-          <%= link_to 'Back to Tournaments', tournaments_path, class: "inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500", tab_index: 0 %>
-          <%= link_to 'Update Scores', "#", id: "update-scores", class: "inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"%>
-        </div>
 
-      </div>
-    </div>
-  </div>
-</div>
-
+<div class="columns-2">
+    <div class=""><%= render "table", tournament: @tournament %></div>
+    <div class=""><%= render "table", tournament: @tournament %></div>
+</div>    
 
 
 <script>

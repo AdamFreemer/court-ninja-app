@@ -8,4 +8,8 @@ User.create(email: 'steve@example.com', first_name: 'steve', last_name: 'jobs', 
 User.create(email: 'amber@example.com', first_name: 'amber', last_name: 'lynn', password: 'password', password_confirmation: 'password')
 User.create(email: 'ginger@example.com', first_name: 'ginger', last_name: 'robbins', password: 'password', password_confirmation: 'password')
 User.create(email: 'leo@example.com', first_name: 'leo', last_name: 'gold', password: 'password', password_confirmation: 'password')
+User.create(email: 'mort@example.com', first_name: 'mort', last_name: 'sims', password: 'password', password_confirmation: 'password')
+User.create(email: 'danielle@example.com', first_name: 'danielle', last_name: 'belusk', password: 'password', password_confirmation: 'password')
+User.create(email: 'alexa@example.com', first_name: 'alexa', last_name: 'bezos', password: 'password', password_confirmation: 'password')
+User.create(email: 'jenn@example.com', first_name: 'jenn', last_name: 'kerbie', password: 'password', password_confirmation: 'password')
 puts "== Created #{User.count} users. ===================="

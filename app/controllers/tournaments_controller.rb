@@ -8,6 +8,7 @@ class TournamentsController < ApplicationController
 
   # GET /tournaments/1 or /tournaments/1.json
   def show
+    #TODO - create views based on tournament counts, based off generation
     @score_tags = []
     @tournament.teams.each do |team|
       @score_tags << team.id
@@ -30,7 +31,8 @@ class TournamentsController < ApplicationController
 
     respond_to do |format|
       if @tournament.save
-        configure_tournament(@tournament.players, @tournament.courts, @tournament)
+        tournament = TournamentGenerator.new(@tournament, @tournament.players)
+        tournament.generate_tournament
 
         format.html { redirect_to tournament_url(@tournament), notice: "Tournament was successfully created." }
         format.json { render :show, status: :created, location: @tournament }
@@ -79,9 +81,8 @@ class TournamentsController < ApplicationController
 
   private
 
-  def configure_tournament(players, courts, tournament)
-    tournament = TournamentGenerator.new(players, courts, tournament)
-    tournament.generate_tournament
+  def configure_tournament(tournament, players)
+
   end
 
   # Use callbacks to share common setup or constraints between actions.

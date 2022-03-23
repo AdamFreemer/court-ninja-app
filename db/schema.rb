@@ -24,8 +24,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_04_012308) do
   create_table "matches", force: :cascade do |t|
     t.string "zip"
     t.integer "number"
-    t.integer "tournament_id"
     t.integer "court"
+    t.integer "round"
+    t.integer "tournament_id"
+    t.integer "ghost_player_id", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -41,8 +43,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_04_012308) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "number"
-    t.integer "score"
+    t.integer "score", default: nil
     t.integer "tournament_id"
+    t.boolean "work_team?", default: false
   end
 
   create_table "tournament_users", force: :cascade do |t|
@@ -61,6 +64,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_04_012308) do
     t.string "zip"
     t.datetime "date"
     t.integer "courts"
+    t.integer "team_size"
     t.boolean "configured", default: false
     t.string "players", default: [], array: true
     t.datetime "created_at", null: false

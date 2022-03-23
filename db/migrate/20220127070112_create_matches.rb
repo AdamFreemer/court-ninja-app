@@ -3,8 +3,10 @@ class CreateMatches < ActiveRecord::Migration[7.0]
     create_table :matches do |t|
       t.string :zip
       t.integer :number
-      t.integer :tournament_id
       t.integer :court
+      t.integer :round
+      t.integer :tournament_id
+      t.integer :ghost_player_id, default: 0
 
       t.timestamps
     end
