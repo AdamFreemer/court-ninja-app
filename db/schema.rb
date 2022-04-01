@@ -27,7 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_04_012308) do
     t.integer "court"
     t.integer "round"
     t.integer "tournament_id"
-    t.integer "ghost_player_id", default: 0
+    t.integer "ghost_players", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -43,9 +43,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_04_012308) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "number"
-    t.integer "score", default: nil
+    t.integer "score"
     t.integer "tournament_id"
-    t.boolean "work_team?", default: false
+    t.boolean "work_team?"
   end
 
   create_table "tournament_users", force: :cascade do |t|

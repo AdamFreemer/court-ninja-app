@@ -6,7 +6,7 @@ class CreateMatches < ActiveRecord::Migration[7.0]
       t.integer :court
       t.integer :round
       t.integer :tournament_id
-      t.integer :ghost_player_id, default: 0
+      t.integer :ghost_players, default: 0
 
       t.timestamps
     end

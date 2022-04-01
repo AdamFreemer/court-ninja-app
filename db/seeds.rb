@@ -12,4 +12,8 @@ User.create(email: 'mort@example.com', first_name: 'mort', last_name: 'sims', pa
 User.create(email: 'danielle@example.com', first_name: 'danielle', last_name: 'belusk', password: 'password', password_confirmation: 'password')
 User.create(email: 'alexa@example.com', first_name: 'alexa', last_name: 'bezos', password: 'password', password_confirmation: 'password')
 User.create(email: 'jenn@example.com', first_name: 'jenn', last_name: 'kerbie', password: 'password', password_confirmation: 'password')
+
+User.create(email: '_ghost_player1@mail.com', first_name: 'ghost_player1', last_name: '-', password: 'password', password_confirmation: 'password')
+User.create(email: '_ghost_player2@mail.com', first_name: 'ghost_player2', last_name: '-', password: 'password', password_confirmation: 'password')
+User.create(email: '_ghost_player3@mail.com', first_name: 'ghost_player3', last_name: '-', password: 'password', password_confirmation: 'password')
 puts "== Created #{User.count} users. ===================="
