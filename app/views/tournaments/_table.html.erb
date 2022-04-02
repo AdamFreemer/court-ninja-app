@@ -1,6 +1,6 @@
   <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-gray-50">
-    <% team_count = [*1..tournament.matches.first.teams.first.users.count] %>
+    <% team_count = [*1..tournament.matches.where(court: 1).first.teams.first.users.count] %>
       <tr>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Match</th>
         <% team_count.each do |team_1| %>
@@ -10,25 +10,31 @@
         <% team_count.each do |team_2| %>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Player <%= team_2 %></th>
         <% end %>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">GP</th>
+        <th class="min-w-50">&nbsp;</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Work Team</th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team 1 Score</th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team 2 Score</th>
       </tr>
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
 
-      <% tournament.matches.each do |match| %>
+      <% matches.each do |match| %>
         <% team1 = match.teams.first.users %>
-        <% team2 = match.teams.last.users %>
+        <% team2 = match.teams.second.users %>
+        <% work_team = match.teams.last.users %>
         <tr>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= match.number + 1 %></td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= match.number %></td>
         <% team1.each do |player| %>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= player.first_name.capitalize %></td>
         <% end %>
         <td>|</td>
         <% team2.each do |player| %>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= player.first_name.capitalize %></td>
-        <% end %>              
+        <% end %> 
+        <td>|</td>
+        <% work_team.each do |player| %>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= player.first_name.capitalize %></td>
+        <% end %>                          
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             <div class="mt-1 flex rounded-md shadow-sm">
               <% team_ids = match.teams.collect(&:id) %>

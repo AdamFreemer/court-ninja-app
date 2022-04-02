@@ -1,17 +1,13 @@
 
- 
-
-
-   
 <div class="columns-2">
-    <div class=""><%= render "table", tournament: @tournament %></div>
-    <div class=""><%= render "table", tournament: @tournament %></div>
+    <div class=""><%= render "table", tournament: @tournament, matches: @tournament.matches.where(court: 1) %></div>
+    <div class=""><%= render "table", tournament: @tournament, matches: @tournament.matches.where(court: 2) %></div>
 </div>     
 
 
 <div class="columns-2">
-    <div class=""><%= render "table", tournament: @tournament %></div>
-    <div class=""><%= render "table", tournament: @tournament %></div>
+
+
 </div>    
 
 

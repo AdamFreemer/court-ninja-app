@@ -16,7 +16,7 @@
     <span class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Players: <%= @tournament.name %></span>
   </h4>    
 
-  <% if @tournament.users.count == 7 %>
+  <% if true # @tournament.users.count == 7 %>
       <%= render "tournament_7", tournament: @tournament %>
   <% end %>
 
