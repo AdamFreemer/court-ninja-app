@@ -69,11 +69,12 @@ class TournamentsController < ApplicationController
   def team_scores_update
     teams_count = request.params['score_data'].length
     teams_count_array = [*0..teams_count - 1].map(&:to_s)
-
     teams_count_array.each do |team_number|
       team = request.params['score_data'][team_number]
-      team_lookup = Team.find(team['team_id'].to_i)
-      team_lookup.update(score: team['score'].to_i)
+      team_lookup = Team.find_by(id: team['team_id'])
+      next if team_lookup.work_team? == true
+
+      team_lookup.update(score: team['score'])
     end
 
     render json: {}

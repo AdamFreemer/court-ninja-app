@@ -37,14 +37,14 @@
         <% end %>                          
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             <div class="mt-1 flex rounded-md shadow-sm">
-              <% team_ids = match.teams.collect(&:id) %>
-              <% scores = match.teams.collect(&:score) %>
+              <% team_1 = match.teams.find_by(number: 1) %>
+              <% team_2 = match.teams.find_by(number: 2) %>
               <input 
                 type="text" 
-                name="<%= "team-#{team_ids[0]}" %>" 
-                id="<%= team_ids[0] %>" 
+                name="<%= "team-#{team_1.id}" %>" 
+                id="<%= team_1.id %>" 
                 class="flex-1 block w-full px-3 py-2 rounded-l-md rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300" 
-                placeholder="<%= scores[0] %>"
+                value="<%= team_1.score %>"
               >
             </div>
           </td>     
@@ -52,10 +52,10 @@
             <div class="mt-1 flex rounded-md shadow-sm">
               <input 
                 type="text" 
-                name="<%= "team-#{team_ids[1]}" %>" 
-                id="<%= team_ids[1] %>" 
+                name="<%= "team-#{team_2.id}" %>" 
+                id="<%= team_2.id %>" 
                 class="flex-1 block w-full px-3 py-2 rounded-l-md rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300" 
-                placeholder="<%= scores[1] %>"
+                value="<%= team_2.score %>"
               >
             </div>
           </td>                             

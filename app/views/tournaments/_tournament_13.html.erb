@@ -14,7 +14,7 @@
 <script>
   console.log("hello!@")
 
-  $("#update-scores").click(function() {
+  function updateScores() {
     console.log("== click")
     var score_data = $('input[name^=team-]').map(function(idx, elem) {
       return { team_id: $(elem).attr('id'), score: $(elem).val() }
@@ -32,5 +32,5 @@
           location.reload(); 
         }
     })
-  });
+  };
 </script>
