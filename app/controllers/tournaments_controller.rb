@@ -17,6 +17,7 @@ class TournamentsController < ApplicationController
 
   # GET /tournaments/new
   def new
+    @t_users = User.where(is_ghost_player?: false).order(:last_name).map { |u| [u.full_name, u.id] }
     @tournament = Tournament.new
   end
 

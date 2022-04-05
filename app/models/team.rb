@@ -8,4 +8,6 @@ class Team < ApplicationRecord
 
   has_many :match_teams
   has_many :matches, through: :match_teams
+
+  has_many :user_scores
 end

@@ -13,6 +13,8 @@ class User < ApplicationRecord
   has_many :user_traits
   has_many :traits, through: :user_traits
 
+  has_many :user_scores
+
   def full_name
     "#{last_name}, #{first_name}"
   end
