@@ -12,22 +12,27 @@
 
 
 <script>
-  function updateScores() {
+  function updateScores(finalize) {
     console.log("== click")
     var score_data = $('input[name^=team-]').map(function(idx, elem) {
       return { team_id: $(elem).attr('id'), score: $(elem).val() }
     }).get();
 
-    console.log(score_data);
+
     event.preventDefault();
 
     $.ajax({
         type: "POST",
         url: "/team_scores_update",
-        data: { score_data },
+        data: { score_data, finalize },
         success: function (response) {
+          console.log("== finalize: " + finalize);
           console.log("== success, response: " + response)
-          location.reload(); 
+          if (finalize == false) {
+            location.reload(); 
+          } else {
+            window.location.href = "/tournament_round_two/<%= @tournament.id %>";
+          }
         }
     })
   };

@@ -1,5 +1,5 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: %i[ show edit update destroy ]
+  before_action :set_tournament, only: %i[ show show_round_two edit update destroy ]
 
   # GET /tournaments or /tournaments.json
   def index
@@ -13,6 +13,26 @@ class TournamentsController < ApplicationController
     @tournament.teams.each do |team|
       @score_tags << team.id
     end
+  end
+
+  def team_scores_update
+
+    teams_count = request.params['score_data'].length
+    teams_count_array = [*0..teams_count - 1].map(&:to_s)
+    teams_count_array.each do |team_number|
+      team = request.params['score_data'][team_number]
+      team_lookup = Team.find_by(id: team['team_id'])
+      next if team_lookup.work_team? == true
+
+      team_lookup.update(score: team['score'])
+    end
+
+    render json: {}
+  end
+
+  def show_round_two
+    @tournament.finalize_scores
+    # binding.pry
   end
 
   # GET /tournaments/new
@@ -65,20 +85,6 @@ class TournamentsController < ApplicationController
       format.html { redirect_to tournaments_url, notice: "Tournament was successfully destroyed." }
       format.json { head :no_content }
     end
-  end
-
-  def team_scores_update
-    teams_count = request.params['score_data'].length
-    teams_count_array = [*0..teams_count - 1].map(&:to_s)
-    teams_count_array.each do |team_number|
-      team = request.params['score_data'][team_number]
-      team_lookup = Team.find_by(id: team['team_id'])
-      next if team_lookup.work_team? == true
-
-      team_lookup.update(score: team['score'])
-    end
-
-    render json: {}
   end
 
   private

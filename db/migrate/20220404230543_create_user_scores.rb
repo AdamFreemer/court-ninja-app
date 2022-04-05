@@ -6,7 +6,7 @@ class CreateUserScores < ActiveRecord::Migration[7.0]
       t.integer :team_id
       t.integer :tournament_id
       t.integer :score
-      t.boolean :win_loss, default: nil
+      t.string :win_loss
 
       t.timestamps
     end
