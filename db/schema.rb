@@ -86,7 +86,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_04_230543) do
     t.integer "team_id"
     t.integer "tournament_id"
     t.integer "score"
-    t.boolean "win_loss"
+    t.string "win_loss"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
