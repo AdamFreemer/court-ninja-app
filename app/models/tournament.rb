@@ -11,31 +11,28 @@ class Tournament < ApplicationRecord
 
   def finalize_scores
     matches.each do |match|
+      score = scoring(match)
       # binding.pry
       team_1 = match.teams.find_by(number: 1)
       team_2 = match.teams.find_by(number: 2)
       match.teams.each do |team|
+        next if team.work_team?
+
         team.users.each do |user|
-          binding.pry #iterate teams / users
+          puts "######### scores"
+          puts score
+          # binding.pry
           user.user_scores.create(
             match_id: match.id,
             team_id: team_1.id,
             tournament_id: match.tournament.id,
-            score: team_1.score.to_i > team_2.score.to_i,
-            win_loss: 'win'
+            score: team.number == 1 ? score[:team_1][:score] : score[:team_2][:score],
+            win_loss: team.number == 1 ? score[:team_1][:result] : score[:team_1][:result]
           )
         end
       end
-
-
-
-
-
     end
   end
-
-
-
 
   def scoring(match)
     team_1_score = match.teams.find_by(number: 1).score

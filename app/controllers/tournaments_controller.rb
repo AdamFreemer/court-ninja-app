@@ -16,7 +16,6 @@ class TournamentsController < ApplicationController
   end
 
   def team_scores_update
-
     teams_count = request.params['score_data'].length
     teams_count_array = [*0..teams_count - 1].map(&:to_s)
     teams_count_array.each do |team_number|
