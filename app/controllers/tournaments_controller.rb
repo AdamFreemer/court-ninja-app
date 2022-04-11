@@ -31,7 +31,9 @@ class TournamentsController < ApplicationController
 
   def show_round_two
     @tournament.finalize_scores
+    @tournament.player_ranking
     # binding.pry
+
   end
 
   # GET /tournaments/new
