@@ -30,8 +30,8 @@ class TournamentsController < ApplicationController
   end
 
   def show_round_two
-    @tournament.finalize_scores
-    @tournament.player_ranking
+    @tournament.create_user_scores
+    @tournament.player_ranking_round_1
     # binding.pry
 
   end
@@ -54,7 +54,7 @@ class TournamentsController < ApplicationController
     respond_to do |format|
       if @tournament.save
         tournament = TournamentGenerator.new(@tournament, @tournament.players)
-        tournament.generate_tournament
+        tournament.generate_round(1)
 
         format.html { redirect_to tournament_url(@tournament), notice: "Tournament was successfully created." }
         format.json { render :show, status: :created, location: @tournament }

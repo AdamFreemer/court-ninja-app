@@ -7,7 +7,7 @@ class TournamentGenerator
     @tournament = tournament
   end
 
-  def generate_tournament
+  def generate_round(t_round)
     players_count = @players.count
 
     if players_count == 13
@@ -17,7 +17,7 @@ class TournamentGenerator
       (0..6).each do |match|
         config = PlayerConfigurations.p7
         number = match + 1
-        round = 1
+        round = t_round
         court = 1
         create_match(
           tournament,

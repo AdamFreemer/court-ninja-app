@@ -8,7 +8,8 @@ class CreateUserScores < ActiveRecord::Migration[7.0]
       t.integer :score
       t.integer :court
       t.integer :round
-      t.string :win_loss
+      t.integer :win
+      t.integer :loss
 
       t.timestamps
     end
