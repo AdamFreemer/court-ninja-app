@@ -1,3 +1,7 @@
+  <h4 class="text-sm tracking-tight font-extrabold text-gray-900 sm:text-2xl sm:text-3xl">
+    <span class="text-gray-500 uppercase tracking-wider">Court <%= matches.first.court %> : <%= name %></span>
+  </h4>    
+  
   <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-gray-50">
     <% team_count = [*1..tournament.matches.where(court: 1).first.teams.first.users.count] %>
@@ -45,6 +49,7 @@
                 id="<%= team_1.id %>" 
                 class="flex-1 block w-full px-3 py-2 rounded-l-md rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300" 
                 value="<%= team_1.score %>"
+                <%= @tournament.round_1_finalized ? "disabled" : "" %>
               >
             </div>
           </td>     
@@ -56,6 +61,7 @@
                 id="<%= team_2.id %>" 
                 class="flex-1 block w-full px-3 py-2 rounded-l-md rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300" 
                 value="<%= team_2.score %>"
+                <%= @tournament.round_1_finalized ? "disabled" : "" %>
               >
             </div>
           </td>                             

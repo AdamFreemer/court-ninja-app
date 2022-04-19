@@ -1,12 +1,14 @@
 Rails.application.routes.draw do
-  resources :tournaments
+  resources :tournaments, except: :show do
+    member do
+      get 'round_one'
+      get 'round_two'
+      get 'results'
+      post 'team_scores_update'
+    end
+  end
+  get '/tournament/process_round/:id/:round', to: 'tournaments#process_round'
+
   resources :users
   devise_for :users
-  post '/team_scores_update', to: 'tournaments#team_scores_update'
-  get '/tournament_round_two/:id', to: 'tournaments#show_round_two'
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
-  # root to: "home#index"
 end

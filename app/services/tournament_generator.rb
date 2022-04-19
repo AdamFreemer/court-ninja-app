@@ -32,7 +32,7 @@ class TournamentGenerator
       (0..6).each do |match|
         config = PlayerConfigurations.p7
         number = match + 1
-        round = 1
+        round = t_round
         court = 2
         create_match(
           tournament,
@@ -44,7 +44,6 @@ class TournamentGenerator
         )
       end
     end
-
     tournament.update!(configured: true) if tournament.matches.count.positive?
   end
 
@@ -73,7 +72,7 @@ class TournamentGenerator
     )
     team1 = Team.create(number: 1, tournament_id: tournament.id)
     team2 = Team.create(number: 2, tournament_id: tournament.id)
-    work_team = Team.create(number: 3, tournament_id: tournament.id, work_team?: true)
+    work_team = Team.create(number: 3, tournament_id: tournament.id, work_team: true)
 
     config[0].each do |config_player_number|
       team1.users << User.find(team_ids[config_player_number - 1])

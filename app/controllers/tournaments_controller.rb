@@ -1,18 +1,25 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: %i[ show show_round_two edit update destroy ]
+  before_action :set_tournament, only: %i[round_one round_two result process_round edit update destroy]
 
-  # GET /tournaments or /tournaments.json
   def index
     @tournaments = Tournament.all.order(:id)
   end
 
-  # GET /tournaments/1 or /tournaments/1.json
-  def show
-    #TODO - create views based on tournament counts, based off generation
-    @score_tags = []
-    @tournament.teams.each do |team|
-      @score_tags << team.id
-    end
+  def new
+    @available_players = User.where(is_ghost_player: false).order(:last_name).map { |u| [u.full_name, u.id] }
+    @tournament = Tournament.new
+  end
+
+  def edit
+  end
+
+  def round_one #show round one
+  end
+
+  def round_two #show round two 
+  end
+
+  def result # show results
   end
 
   def team_scores_update
@@ -21,7 +28,7 @@ class TournamentsController < ApplicationController
     teams_count_array.each do |team_number|
       team = request.params['score_data'][team_number]
       team_lookup = Team.find_by(id: team['team_id'])
-      next if team_lookup.work_team? == true
+      next if team_lookup.work_team == true
 
       team_lookup.update(score: team['score'])
     end
@@ -29,21 +36,22 @@ class TournamentsController < ApplicationController
     render json: {}
   end
 
-  def show_round_two
-    @tournament.create_user_scores
-    @tournament.player_ranking_round_1
-    # binding.pry
+  def process_round
+    # params: :id / :round
+    if params[:round].to_i == 1
+      return if @tournament.round_1_finalized #this prevents from doubling up create user_scores
 
-  end
+      @tournament.create_user_scores(params[:round])
+      @tournament.update(round_1_finalized: true)
+      @tournament.round_two_courts_generate(@tournament.player_ranking(1))
 
-  # GET /tournaments/new
-  def new
-    @t_users = User.where(is_ghost_player?: false).order(:last_name).map { |u| [u.full_name, u.id] }
-    @tournament = Tournament.new
-  end
+      redirect_to round_two_tournament_url(@tournament), notice: "Round 1 successfully processed."
+    elsif params[:round].to_i == 2
+      return if @tournament.round_2_finalized
 
-  # GET /tournaments/1/edit
-  def edit
+      redirect_to results_tournament_url(@tournament), notice: "Round 1 successfully processed."
+    else
+    end
   end
 
   # POST /tournaments or /tournaments.json
@@ -51,30 +59,23 @@ class TournamentsController < ApplicationController
     @tournament = Tournament.new(tournament_params)
     @tournament.players = params[:tournament][:players].reject(&:blank?)
 
-    respond_to do |format|
-      if @tournament.save
-        tournament = TournamentGenerator.new(@tournament, @tournament.players)
-        tournament.generate_round(1)
 
-        format.html { redirect_to tournament_url(@tournament), notice: "Tournament was successfully created." }
-        format.json { render :show, status: :created, location: @tournament }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @tournament.errors, status: :unprocessable_entity }
-      end
+    if @tournament.save
+      tournament = TournamentGenerator.new(@tournament, @tournament.players)
+      tournament.generate_round(1)
+
+      redirect_to round_one_tournament_url(@tournament), notice: "Tournament was successfully created."
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /tournaments/1 or /tournaments/1.json
   def update
-    respond_to do |format|
-      if @tournament.update(tournament_params)
-        format.html { redirect_to tournament_url(@tournament), notice: "Tournament was successfully updated." }
-        format.json { render :show, status: :ok, location: @tournament }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @tournament.errors, status: :unprocessable_entity }
-      end
+    if @tournament.update(tournament_params)
+      redirect_to round_one_tournament_url(@tournament), notice: "Tournament was successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 

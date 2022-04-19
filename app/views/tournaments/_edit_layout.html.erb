@@ -1,0 +1,58 @@
+
+<div class="mx-auto">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+  <h1 class="text-xl tracking-tight font-extrabold text-gray-900 sm:text-3xl md:text-4xl">
+    <span class="block text-indigo-700 md:inline"><%= @tournament.name %> : Round 1</span>
+  </h1>
+  <h3 class="text-md tracking-tight font-extrabold text-gray-900 sm:text-2xl md:text-3xl">
+    <span class="block text-indigo-400 sm:inline"><%= @tournament.city %>, <%= @tournament.state %></span>
+  </h3>       
+    
+
+  <% if true # @tournament.users.count == 13 %>
+    <div class="columns-2 space-y-32">
+      <div class="">
+        <%= render "table", name: names[0], tournament: tournament, matches: @tournament.matches.where(court: 1, round: round) %>
+      </div>
+      <div class="">
+        <%= render "table", name: names[1], tournament: tournament, matches: @tournament.matches.where(court: 2, round: round) %>
+      </div>
+    </div>  
+  <% end %>
+
+  <div class="flex float-right space-x-4">
+    <%= link_to 'Back to Tournaments', tournaments_path, class: "inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500", tab_index: 0 %>
+    <button onclick="updateScores('update')" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Update Scores</button> 
+    <button onclick="updateScores('finalize')" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Finalize Round <%= round %></button>
+  </div>
+</div>
+
+
+<script>
+  function updateScores(finalize) {
+    console.log("== click")
+    var score_data = $('input[name^=team-]').map(function(idx, elem) {
+      return { team_id: $(elem).attr('id'), score: $(elem).val() }
+    }).get();
+
+    event.preventDefault();
+
+    $.ajax({
+        type: "POST",
+        url: "/tournaments/<%= @tournament.id %>/team_scores_update",
+        data: { score_data, finalize },
+        success: function (response) {
+          console.log("== finalize: " + finalize);
+          console.log("== success, response: " + response)
+          if (finalize == 'update') {
+            location.reload(); 
+          } else {
+            window.location.href = "/tournament/process_round/<%= @tournament.id %>/<%= round %>";
+          }
+        }
+    })
+  };
+</script>

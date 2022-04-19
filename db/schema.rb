@@ -45,7 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_04_230543) do
     t.integer "number"
     t.integer "score"
     t.integer "tournament_id"
-    t.boolean "work_team?"
+    t.boolean "work_team"
   end
 
   create_table "tournament_users", force: :cascade do |t|
@@ -66,6 +66,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_04_230543) do
     t.integer "courts"
     t.integer "team_size"
     t.boolean "configured", default: false
+    t.boolean "round_1_finalized", default: false
+    t.boolean "round_2_finalized", default: false
     t.string "players", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -106,7 +108,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_04_230543) do
     t.string "encrypted_password", default: "", null: false
     t.string "first_name"
     t.string "last_name"
-    t.boolean "is_ghost_player?", default: false
+    t.boolean "is_ghost_player", default: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
