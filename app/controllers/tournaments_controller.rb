@@ -1,6 +1,6 @@
 class TournamentsController < ApplicationController
   before_action :set_tournament, only: %i[round_one round_two result process_round edit update destroy]
-
+  before_action :round_two_generated, only: %i[round_one round_two]
   def index
     @tournaments = Tournament.all.order(:id)
   end
@@ -11,9 +11,11 @@ class TournamentsController < ApplicationController
   end
 
   def edit
+    @available_players = User.where(is_ghost_player: false).order(:last_name).map { |u| [u.full_name, u.id] }
   end
 
   def round_one #show round one
+
   end
 
   def round_two #show round two 
@@ -56,8 +58,10 @@ class TournamentsController < ApplicationController
 
   # POST /tournaments or /tournaments.json
   def create
+
     @tournament = Tournament.new(tournament_params)
-    @tournament.players = params[:tournament][:players].reject(&:blank?)
+    # binding.pry
+    @tournament.players = params[:tournament][:players].reject(&:blank?).map(&:to_i)
 
 
     if @tournament.save
@@ -98,6 +102,14 @@ class TournamentsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_tournament
     @tournament = Tournament.find(params[:id])
+  end
+
+  def round_two_generated
+    @round_two_generated = if Tournament.find(params[:id]).matches.where(round: 2).count.positive?
+                             true
+                           else
+                             false
+                           end
   end
 
   # Only allow a list of trusted parameters through.

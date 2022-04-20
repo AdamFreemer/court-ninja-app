@@ -10,8 +10,13 @@ class TournamentGenerator
   def generate_round(t_round)
     players_count = @players.count
 
+    if players_count == 3
+      players = players_combined(1)
+      tournament.update!(configured: true)
+    end
+
     if players_count == 13
-      players = players_combined(1) # where we add in ghost player(s)
+      players = players_combined(1) # where we add in ghost player(s), we're saving players to the model, need to refactor this out at some point
       associate_tournament_players(@tournament, players)
 
       (0..6).each do |match|

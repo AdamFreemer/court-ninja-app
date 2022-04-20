@@ -53,7 +53,7 @@ class Tournament < ApplicationRecord
     ordered_player_ids = gold_team_ids + silver_team_ids
     # feed in players to tournament generator combined "gold" team first
     binding.pry
-    round_two_generation = TournamentGenerator.new(self, ordered_player_ids)
+    round_two_generation = TournamentGenerator.new(self, Tournament.sanitized_of_ghosts_players(ordered_player_ids))
     round_two_generation.generate_round(2)
   end
 
@@ -74,5 +74,10 @@ class Tournament < ApplicationRecord
         team2: { win: 1, loss: 0, score: score_delta }
       }
     end
+  end
+
+  def self.sanitized_of_ghosts_players(player_ids)
+    ghost_users_ids = User.where(is_ghost_player: true).collect(&:id)
+    player_ids.map(&:to_i) - ghost_users_ids
   end
 end
