@@ -14,28 +14,16 @@
   <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
     <div class="md:grid md:grid-cols-3 md:gap-6">
       <div class="md:col-span-1">
-        <label for="courts" id="players-label" class="block text-sm font-medium text-gray-700">Players</label>
+        <label for="courts" id="players-label" class="block text-sm font-medium text-gray-700">Players <span class="text-gray-400">(command+click to select multiple)</span></label>
         <%= form.select :players, @available_players, { :placeholder => "Please Select" }, multiple: true, id: "players", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md", disabled: tournament.configured %>        
         <br /><br>
-        <input type="button" id="select_all" name="select_all" value="Select All" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              <br /><br>
-        <input type="button" id="select_none" name="select_none" value="Select None" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+      
       </div>
       <div class="mt-5 md:mt-0 md:col-span-2">
         <form action="#" method="POST">
-          <div class="grid grid-cols-6 gap-6">
-            <div class="col-span-6 sm:col-span-3">
-              <label for="courts" class="block text-sm font-medium text-gray-700">Number of Courts</label>
-              <%= form.select :courts, [1,2,3,4,5,6,7,8,9,10], {}, multiple: false, id: "courts", class: "mb-3 mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"  %>
-            </div>  
-
-            <div class="col-span-6 sm:col-span-3">
-              <label for="courts" class="block text-sm font-medium text-gray-700">Players on each Team</label>
-              <%= form.select :courts, [1,2,3,4,5,6,7,8,9,10], {}, multiple: false, id: "courts", class: "mb-3 mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"  %>
-            </div>              
-
+          <div class="grid grid-cols-6 gap-6">           
             <div class="col-span-6 sm:col-span-6">
-              <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+              <label for="name" class="block text-sm font-medium text-gray-700">Tournament Name</label>
               <%= form.text_field :name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
             </div>
 
