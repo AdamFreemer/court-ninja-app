@@ -1,5 +1,5 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: %i[round_one round_two result process_round edit update destroy]
+  before_action :set_tournament, only: %i[round_one round_two results process_round edit update destroy]
   before_action :round_two_generated, only: %i[round_one round_two]
   def index
     @tournaments = Tournament.all.order(:id)
@@ -15,13 +15,18 @@ class TournamentsController < ApplicationController
   end
 
   def round_one #show round one
-
   end
 
   def round_two #show round two 
   end
 
-  def result # show results
+  def results # show results
+    players_gold = @tournament.player_ranking(2)[0]
+    @players_gold_winner = @tournament.player_ranking(2)[0].first
+    players_gold.shift
+    @players_gold = players_gold
+    @players_silver = @tournament.player_ranking(2)[1]
+  
   end
 
   def team_scores_update
@@ -43,7 +48,7 @@ class TournamentsController < ApplicationController
     if params[:round].to_i == 1
       return if @tournament.round_1_finalized #this prevents from doubling up create user_scores
 
-      @tournament.create_user_scores(params[:round])
+      @tournament.create_user_scores(params[:round].to_i)
       @tournament.update(round_1_finalized: true)
       @tournament.round_two_courts_generate(@tournament.player_ranking(1))
 
@@ -51,18 +56,16 @@ class TournamentsController < ApplicationController
     elsif params[:round].to_i == 2
       return if @tournament.round_2_finalized
 
-      redirect_to results_tournament_url(@tournament), notice: "Round 1 successfully processed."
-    else
+      @tournament.create_user_scores(params[:round].to_i)
+      @tournament.update(round_2_finalized: true)
+
+      redirect_to results_tournament_url(@tournament), notice: "Round 2 successfully processed."
     end
   end
 
-  # POST /tournaments or /tournaments.json
   def create
-
     @tournament = Tournament.new(tournament_params)
-    # binding.pry
     @tournament.players = params[:tournament][:players].reject(&:blank?).map(&:to_i)
-
 
     if @tournament.save
       tournament = TournamentGenerator.new(@tournament, @tournament.players)
@@ -74,7 +77,6 @@ class TournamentsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /tournaments/1 or /tournaments/1.json
   def update
     if @tournament.update(tournament_params)
       redirect_to round_one_tournament_url(@tournament), notice: "Tournament was successfully updated."
@@ -83,7 +85,6 @@ class TournamentsController < ApplicationController
     end
   end
 
-  # DELETE /tournaments/1 or /tournaments/1.json
   def destroy
     @tournament.destroy
 
@@ -94,10 +95,6 @@ class TournamentsController < ApplicationController
   end
 
   private
-
-  def configure_tournament(tournament, players)
-
-  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_tournament

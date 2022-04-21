@@ -1,0 +1,69 @@
+<div class="bg-white">
+  <div class="max-w-7xl mx-auto py-24 px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <h1 class="text-5xl font-extrabold text-gray-900 sm:text-center">Queen of the Court Results</h1>
+    </div>
+    <div class="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-2">
+      <div class="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
+        <div class="p-6">
+          <h2 class="text-xl leading-6 font-medium text-gray-900">Gold Competition</h2>
+          <table class="min-w-full divide-y divide-gray-300">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Wins</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Point Differential</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%= @players_gold_winner[1] %></td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= @players_gold_winner[3] %></td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm"><%= @players_gold_winner[2] %>&nbsp;&nbsp;<span class="text-green-700 font-bold">Winner</span></td>
+                </tr>
+
+              <% @players_gold.each do |player| %>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%= player[1] %></td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= player[3] %></td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= player[2] %></td>
+                </tr>
+              <% end %>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
+        <div class="p-6">
+          <h2 class="text-xl leading-6 font-medium text-gray-900">Silver Competition</h2>
+
+          <table class="min-w-full divide-y divide-gray-300">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Wins</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Point Differential</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+              <% @players_silver.each do |player| %>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%= player[1] %></td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= player[3] %></td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= player[2] %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+ 
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
