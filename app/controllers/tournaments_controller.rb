@@ -1,5 +1,5 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: %i[round_one round_two results process_round edit update destroy]
+  before_action :set_tournament, only: %i[round_one round_two round_display results process_round edit update destroy]
   before_action :round_two_generated, only: %i[round_one round_two]
   def index
     @tournaments = Tournament.all.order(:id)
@@ -18,6 +18,12 @@ class TournamentsController < ApplicationController
   end
 
   def round_two #show round two 
+  end
+
+  def round_display
+    @round = params[:round]
+    @court_1_matches = @tournament.matches.where(court: 1, round: params[:round])
+    @court_2_matches = @tournament.matches.where(court: 2, round: params[:round])
   end
 
   def results # show results

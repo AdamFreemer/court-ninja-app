@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     end
   end
   get '/tournament/process_round/:id/:round', to: 'tournaments#process_round'
-
+  get '/tournaments/round_display/:id/:round', to: 'tournaments#round_display'
   resources :users
   devise_for :users
 
