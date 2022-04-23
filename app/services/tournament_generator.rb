@@ -10,14 +10,11 @@ class TournamentGenerator
   def generate_round(t_round)
     players_count = @players.count
 
-    if players_count == 3
-      players = players_combined(1)
-      tournament.update!(configured: true)
-    end
+    if players_count == 12 || players_count == 13
+      player_ids = @players.map(&:to_i)
+      ghost_ids = User.where(is_ghost_player: true).first(2).collect(&:id)
 
-    if players_count == 13
-      players = players_combined(1) # where we add in ghost player(s), we're saving players to the model, need to refactor this out at some point
-      associate_tournament_players(@tournament, players)
+      associate_tournament_players(@tournament, @players)
 
       (0..6).each do |match|
         config = PlayerConfigurations.p7
@@ -25,12 +22,9 @@ class TournamentGenerator
         round = t_round
         court = 1
         create_match(
-          tournament,
-          number,
-          round,
-          court,
+          tournament, number, round, court,
           config[match],
-          players.first(7)
+          players_count == 12 ? player_ids.first(6) + [ghost_ids.first] : player_ids.first(7) # 12 players, 6 + ghost, 13 use the first 7, ghost on 2nd coury
         )
       end
 
@@ -40,15 +34,13 @@ class TournamentGenerator
         round = t_round
         court = 2
         create_match(
-          tournament,
-          number,
-          round,
-          court,
+          tournament, number, round, court,
           config[match],
-          players.last(7)
+          players_count == 12 ? player_ids.last(6) + [ghost_ids.last] : player_ids.last(6) + [ghost_ids.first]
         )
       end
     end
+
     tournament.update!(configured: true) if tournament.matches.count.positive?
   end
 
