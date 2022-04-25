@@ -79,6 +79,26 @@ class Tournament < ApplicationRecord
     end
   end
 
+  def update_current_set(score_data)
+    teams_count = score_data.length
+    teams_count_array = [*0..teams_count - 1].map(&:to_s)
+    found_current = false
+    teams_count_array.each do |team_number|
+      break if found_current
+
+      if score_data[team_number]['score'] == ''
+        no_score_team = Team.find(score_data[team_number][:team_id])
+        current_set = no_score_team.matches.first.number
+        # if we find a blank score, we update tournament.current_set and mark found_current
+        # which will break out of loop on next pass
+        update(current_set: current_set)
+        found_current = true
+      end
+    end
+    # if we find no empty scores, set current_set so no rows are highlighted
+    update(current_set: 99) if found_current == false
+  end
+
   def self.sanitized_of_ghosts_players(player_ids)
     ghost_users_ids = User.where(is_ghost_player: true).collect(&:id)
     player_ids.map(&:to_i) - ghost_users_ids

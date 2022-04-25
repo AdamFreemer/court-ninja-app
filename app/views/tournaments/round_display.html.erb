@@ -23,7 +23,7 @@
                   <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">&nbsp;</th>
                 <% end %>
                 <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">&nbsp;</th>
-                <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Work Team</th>
+                <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Working</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -31,18 +31,22 @@
                 <% team1 = match.teams.first.users %>
                 <% team2 = match.teams.second.users %>
                 <% work_team = match.teams.last.users %>
-                <tr class="divide-x divide-gray-300">
-                  <td class="px-2 py-3.5 text-left text-xs font-normal text-gray-600"><%= match.number %></td>
+                <% if @tournament.current_set == match.number %>
+                  <tr class="font-extrabold divide-x divide-gray-300 shadow-md">
+                <% else %>
+                  <tr class="font-normal divide-x divide-gray-300">
+                <% end %>
+                  <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= match.number %></td>
                   <% team1.each do |player| %>
-                    <td class="px-2 py-3.5 text-left text-xs font-normal text-gray-600"><%= player.name_abbreviated %></td>
+                    <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= player.name_abbreviated %></td>
                   <% end %>  
                   <th scope="col" class="px-1 py-3.5 text-left text-xs font-normal text-gray-600">&nbsp;</th>      
                   <% team2.each do |player| %>
-                    <td class="px-2 py-3.5 text-left text-xs font-normal text-gray-600"><%= player.name_abbreviated %></td>
+                    <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= player.name_abbreviated %></td>
                   <% end %>                         
-                  <th scope="col" class="px-2 py-3.5 text-left text-xs font-normal text-gray-900">&nbsp;</th>
+                  <th scope="col" class="px-2 py-3.5 text-left text-xs text-gray-900">&nbsp;</th>
                   <% work_team.each do |player| %>
-                    <td class="px-2 py-3.5 text-left text-xs font-normal text-gray-600"><%= player.name_abbreviated %></td>
+                    <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= player.name_abbreviated %></td>
                   <% end %>                                      
                 </tr>
               <% end %>
@@ -69,7 +73,7 @@
                   <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">&nbsp;</th>
                 <% end %>
                 <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">&nbsp;</th>
-                <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Work Team</th>
+                <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Working</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -77,18 +81,22 @@
                 <% team1 = match.teams.first.users %>
                 <% team2 = match.teams.second.users %>
                 <% work_team = match.teams.last.users %>
-                <tr class="divide-x divide-gray-300">
-                  <td class="px-2 py-3.5 text-left text-xs font-normal text-gray-600"><%= match.number %></td>
+                <% if @tournament.current_set == match.number %>
+                  <tr class="font-extrabold divide-x divide-gray-300 shadow-md">
+                <% else %>
+                  <tr class="font-normal divide-x divide-gray-300">
+                <% end %>
+                  <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= match.number %></td>
                   <% team1.each do |player| %>
-                    <td class="px-2 py-3.5 text-left text-xs font-normal text-gray-600"><%= player.name_abbreviated %></td>
+                    <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= player.name_abbreviated %></td>
                   <% end %>  
-                  <th scope="col" class="px-1 py-3.5 text-left text-xs font-normal text-gray-600">&nbsp;</th>      
+                  <th scope="col" class="px-1 py-3.5 text-left text-xs text-gray-600">&nbsp;</th>      
                   <% team2.each do |player| %>
-                    <td class="px-2 py-3.5 text-left text-xs font-normal text-gray-600"><%= player.name_abbreviated %></td>
+                    <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= player.name_abbreviated %></td>
                   <% end %>                         
-                  <th scope="col" class="px-2 py-3.5 text-left text-xs font-normal text-gray-900">&nbsp;</th>
+                  <th scope="col" class="px-2 py-3.5 text-left text-xs text-gray-900">&nbsp;</th>
                   <% work_team.each do |player| %>
-                    <td class="px-2 py-3.5 text-left text-xs font-normal text-gray-600"><%= player.name_abbreviated %></td>
+                    <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= player.name_abbreviated %></td>
                   <% end %>                                      
                 </tr>
               <% end %>

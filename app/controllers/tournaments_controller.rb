@@ -1,5 +1,5 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: %i[round_one round_two round_display results process_round edit update destroy]
+  before_action :set_tournament, only: %i[round_one round_two round_display results team_scores_update process_round edit update destroy]
   before_action :round_two_generated, only: %i[round_one round_two]
   def index
     @tournaments = Tournament.all.order(:id)
@@ -21,6 +21,7 @@ class TournamentsController < ApplicationController
   end
 
   def round_display
+    @current_set = @tournament.current_set
     @round = params[:round]
     @court_1_matches = @tournament.matches.where(court: 1, round: params[:round])
     @court_2_matches = @tournament.matches.where(court: 2, round: params[:round])
@@ -32,19 +33,12 @@ class TournamentsController < ApplicationController
     players_gold.shift
     @players_gold = players_gold
     @players_silver = @tournament.player_ranking(2)[1]
-  
   end
 
   def team_scores_update
-    teams_count = request.params['score_data'].length
-    teams_count_array = [*0..teams_count - 1].map(&:to_s)
-    teams_count_array.each do |team_number|
-      team = request.params['score_data'][team_number]
-      team_lookup = Team.find_by(id: team['team_id'])
-      next if team_lookup.work_team == true
-
-      team_lookup.update(score: team['score'])
-    end
+    score_date = request.params['score_data']
+    Team.score_update(score_date)
+    @tournament.update_current_set(score_date)
 
     render json: {}
   end
@@ -55,7 +49,7 @@ class TournamentsController < ApplicationController
       return if @tournament.round_1_finalized #this prevents from doubling up create user_scores
 
       @tournament.create_user_scores(params[:round].to_i)
-      @tournament.update(round_1_finalized: true)
+      @tournament.update(round_1_finalized: true, current_set: 1)
       @tournament.round_two_courts_generate(@tournament.player_ranking(1))
 
       redirect_to round_two_tournament_url(@tournament), notice: "Round 1 successfully processed."

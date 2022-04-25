@@ -45,12 +45,10 @@
 
 <script>
   function display() {
-    console.log("== click on display")
-    window.location.href = "/tournaments/round_display/<%= @tournament.id %>/<%= round %>";
+    window.open("/tournaments/round_display/<%= @tournament.id %>/<%= round %>")
   };
 
   function updateScores(finalize) {
-    console.log("== click")
     var score_data = $('input[name^=team-]').map(function(idx, elem) {
       return { team_id: $(elem).attr('id'), score: $(elem).val() }
     }).get();
@@ -62,8 +60,6 @@
         url: "/tournaments/<%= @tournament.id %>/team_scores_update",
         data: { score_data, finalize },
         success: function (response) {
-          console.log("== finalize: " + finalize);
-          console.log("== success, response: " + response)
           if (finalize == 'update') {
             location.reload(); 
           } else {
