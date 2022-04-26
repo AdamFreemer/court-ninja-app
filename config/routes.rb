@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   end
   get '/tournament/process_round/:id/:round', to: 'tournaments#process_round'
   get '/tournaments/round_display/:id/:round', to: 'tournaments#round_display'
+  get '/tournaments/round_display_single/:id/:round/:court', to: 'tournaments#round_display_single'
+
   resources :users
   devise_for :users
 

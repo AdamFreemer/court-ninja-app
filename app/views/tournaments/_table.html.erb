@@ -26,7 +26,7 @@
         <% team2 = match.teams.second.users %>
         <% work_team = match.teams.last.users %>
         <tr>
-          <td class="px-2 py-4 whitespace-nowrap text-xs text-gray-500"><%= match.number %></td>
+          <td class="px-2 py-4 whitespace-nowrap text-xs font-semibold text-gray-500"><%= match.number %></td>
           <% team1.each do |player| %>
             <td class="px-2 py-4 whitespace-nowrap text-xs text-gray-500"><%= player.name_abbreviated %></td>
           <% end %>

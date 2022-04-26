@@ -1,6 +1,8 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: %i[round_one round_two round_display results team_scores_update process_round edit update destroy]
+  before_action :set_tournament, only: %i[round_one round_two round_display round_display_single results team_scores_update process_round edit update destroy]
   before_action :round_two_generated, only: %i[round_one round_two]
+  before_action :set_display, only: %i[round_display round_display_single]
+
   def index
     @tournaments = Tournament.all.order(:id)
   end
@@ -20,11 +22,14 @@ class TournamentsController < ApplicationController
   def round_two #show round two 
   end
 
-  def round_display
-    @current_set = @tournament.current_set
-    @round = params[:round]
+  def round_display # display both courts
     @court_1_matches = @tournament.matches.where(court: 1, round: params[:round])
     @court_2_matches = @tournament.matches.where(court: 2, round: params[:round])
+  end
+
+  def round_display_single
+    @court = params[:court]
+    @court_matches = @tournament.matches.where(court: @court, round: params[:round])
   end
 
   def results # show results
@@ -99,6 +104,11 @@ class TournamentsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_tournament
     @tournament = Tournament.find(params[:id])
+  end
+
+  def set_display
+    @current_set = @tournament.current_set
+    @round = params[:round]
   end
 
   def round_two_generated
