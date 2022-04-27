@@ -28,6 +28,7 @@ class TournamentsController < ApplicationController
   end
 
   def round_display_single
+    @timer_minutes = 2
     @court = params[:court]
     @court_matches = @tournament.matches.where(court: @court, round: params[:round])
   end
