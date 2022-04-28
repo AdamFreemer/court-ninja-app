@@ -1,5 +1,8 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: %i[round_one round_two round_display round_display_single results team_scores_update process_round edit update destroy]
+  before_action :set_tournament, only: %i[
+    round_one round_two round_display round_display_single results
+    team_scores_update process_round edit update destroy
+  ]
   before_action :round_two_generated, only: %i[round_one round_two]
   before_action :set_display, only: %i[round_display round_display_single]
 
@@ -10,6 +13,7 @@ class TournamentsController < ApplicationController
   def new
     @available_players = User.where(is_ghost_player: false).order(:last_name).map { |u| [u.full_name, u.id] }
     @tournament = Tournament.new
+    @times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   end
 
   def edit
@@ -17,9 +21,17 @@ class TournamentsController < ApplicationController
   end
 
   def round_one #show round one
+    @court_names = [
+      @tournament&.court_names&.first,
+      @tournament&.court_names&.second
+    ]
   end
 
   def round_two #show round two 
+    @court_names = [
+      @tournament&.court_names&.first,
+      @tournament&.court_names&.second
+    ]
   end
 
   def round_display # display both courts
@@ -29,7 +41,7 @@ class TournamentsController < ApplicationController
 
   def round_display_single
     @timer_minutes = 2
-    @court = params[:court]
+    @court = params[:court].to_i
     @court_matches = @tournament.matches.where(court: @court, round: params[:round])
   end
 
@@ -72,18 +84,29 @@ class TournamentsController < ApplicationController
   def create
     @tournament = Tournament.new(tournament_params)
     @tournament.players = params[:tournament][:players].reject(&:blank?).map(&:to_i)
+    @tournament.time = params[:tournament][:time].to_i * 60
+    @tournament.court_names = params[:tournament][:court_names].split(/\s*,\s*/)
 
     if @tournament.save
       tournament = TournamentGenerator.new(@tournament, @tournament.players)
       tournament.generate_round(1)
 
-      redirect_to round_one_tournament_url(@tournament), notice: "Tournament was successfully created."
+      player_count = @tournament.players.count
+      if player_count == 12 || player_count == 13
+        redirect_to round_one_tournament_url(@tournament), notice: "Tournament was successfully created."
+      else
+        redirect_to tournaments_path
+      end
+
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   def update
+    @tournament.time = params[:tournament][:time].to_i * 60
+    @tournament.court_names = params[:tournament][:court_names].split(/\s*,\s*/)
+
     if @tournament.update(tournament_params)
       redirect_to round_one_tournament_url(@tournament), notice: "Tournament was successfully updated."
     else
@@ -105,6 +128,7 @@ class TournamentsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_tournament
     @tournament = Tournament.find(params[:id])
+    @times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   end
 
   def set_display

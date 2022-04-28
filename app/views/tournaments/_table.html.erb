@@ -1,5 +1,15 @@
   <h4 class="text-sm tracking-tight font-extrabold text-gray-900 sm:text-2xl sm:text-3xl">
-    <span class=" ">Court <%= matches.first.court %> : <%= name %></span>
+    <% if round == 1 && court == 1 %>
+      <span class=" "><%= name %> Court</span>
+    <% elsif round == 1 && court == 2 %>
+      <span class=" "><%= name %> Court</span>
+    <% end %>
+
+    <% if round == 2 && court == 1 %>
+      <span class=" "><%= name %> Court: Gold Group</span>
+    <% elsif round == 2 && court == 2 %>
+      <span class=" "><%= name %> Court: Silver Group</span>
+    <% end %>
   </h4>    
   
   <table class="min-w-full divide-y divide-gray-200">

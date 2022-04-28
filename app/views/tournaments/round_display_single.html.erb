@@ -5,7 +5,7 @@
     </div>
 
     <div class="pt-3 text-6xl text-center font-medium text-gray-900">
-    
+
       <div class="timer">
         <span class="minute"></span>:<span class="second"></span>
       </div>
@@ -14,7 +14,12 @@
     <div class="mt-12 sm:mt-8 sm:space-y-0 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0">
       <div class="border border-gray-500 rounded-lg shadow-sm divide-y divide-gray-200">
         <div class="p-6">
-          <h2 class="text-xl text-center font-medium text-gray-900">Court <%= @court %></h2>
+          <% if @court == 1 %>
+            <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament.court_names.first %> Court</h2>
+          <% end %>
+          <% if @court == 2 %>
+            <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament.court_names.second %> Court</h2>
+          <% end %>
           <table class="min-w-full divide-y divide-gray-300">
             <thead class="bg-gray-50">
             <% team_count = [*1..@tournament.matches.where(court: @court).first.teams.first.users.count - 1] %>
@@ -66,7 +71,7 @@
     <div class="float-left space-x-4 space-y-3">
       <button class="btn btn-outline btn-primary btn-sm" onClick="timer.start(1000)">Start</button> 
       <button class="btn btn-outline btn-primary btn-sm" onClick="timer.stop()">Stop</button> 
-      <button class="btn btn-outline btn-primary btn-sm" onClick="timer.reset(60)">Reset</button> 
+      <button class="btn btn-outline btn-primary btn-sm" onClick="timer.reset(<%= 300 %>)">Reset</button> 
     </div> 
   </div>
 </div>

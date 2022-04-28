@@ -15,10 +15,10 @@
   <% if true # @tournament.users.count == 13 %>
     <div class="columns-2 space-y-32">
       <div class="">
-        <%= render "table", name: names[0], tournament: tournament, matches: @tournament.matches.where(court: 1, round: round) %>
+        <%= render "table", name: names[0], tournament: tournament, court: 1, round: round, matches: @tournament.matches.where(court: 1, round: round) %>
       </div>
       <div class="">
-        <%= render "table", name: names[1], tournament: tournament, matches: @tournament.matches.where(court: 2, round: round) %>
+        <%= render "table", name: names[1], tournament: tournament, court: 2, round: round, matches: @tournament.matches.where(court: 2, round: round) %>
       </div>
     </div>  
   <% end %>

@@ -27,6 +27,10 @@ class Tournament < ApplicationRecord
     end
   end
 
+  def court_names_pretty
+    court_names == [] ? '' : court_names.join(', ')
+  end
+
   def player_ranking(round)
     court_1_scores = []
     court_2_scores = []
