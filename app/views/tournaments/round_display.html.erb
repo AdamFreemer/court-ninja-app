@@ -3,11 +3,13 @@
     <div class="text-center">
       <h1 class="text-3xl font-extrabold text-gray-900 sm:text-center">Round <%= @round %></h1>
     </div>
-    <div class="timer">
-      <span class="minute"></span>:<span class="second"></span>
-    </div>    
+    <div class="pt-3 text-6xl text-center font-medium text-gray-900">
+      <div class="timer">
+        <span class="minute"></span>:<span class="second"></span>
+      </div>
+    </div>   
+
     <div class="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-2">
-      
       <div class="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
         <div class="p-6">
           <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament.court_names.first %> Court</h2>
@@ -109,6 +111,13 @@
       </div>
 
     </div>
+
+
+    <div class="float-left space-x-4 space-y-3">
+      <button class="btn btn-outline btn-primary btn-sm" onClick="timer.start(1000)">Start</button> 
+      <button class="btn btn-outline btn-primary btn-sm" onClick="timer.stop()">Stop</button> 
+      <button class="btn btn-outline btn-primary btn-sm" onClick="timer.reset(<%= @tournament.time %>)">Reset</button> 
+    </div> 
   </div>
 </div>
 
@@ -157,6 +166,7 @@
         sec = (typeof(sec) !== 'undefined') ? sec : 0;
         time = sec;
         generateTime(time);
+        
       }
       
       // Change the mode of the timer, count-up (1) or countdown (0)
@@ -198,13 +208,21 @@
   }
 
   var timer;
-  $(document).ready(function(e) {
 
+  function timer_bell() {
+    var audio = document.getElementById("audio");
+    audio.play();
+  }
+
+  $(document).ready(function(e) {
       timer = new _timer(
         function(time) {
+          if(time == 30) {
+            timer_bell()
+          }
           if(time == 0) {
+            timer_bell()
             timer.stop();
-            alert('time out');
           }
         }
       );
@@ -212,10 +230,4 @@
   });
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js"></script>
-<script>
-  $(document).ready(function(e) {
-
-
-  });
-</script>
+<audio id="audio" src="http://www.ufoseries.com/soundEffects/hqAlarmBell.mp3"></audio>

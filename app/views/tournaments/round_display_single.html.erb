@@ -68,7 +68,7 @@
   
     </div>
     <div class="float-left space-x-4 space-y-3">
-      <button class="btn btn-outline btn-primary btn-sm" onClick="timer.start(1000)">Start</button> 
+      <button class="btn btn-outline btn-primary btn-sm" onClick="timer.start(<%= @tournament.time %>)">Start</button> 
       <button class="btn btn-outline btn-primary btn-sm" onClick="timer.stop()">Stop</button> 
       <button class="btn btn-outline btn-primary btn-sm" onClick="timer.reset(<%= @tournament.time %>)">Reset</button> 
     </div> 
