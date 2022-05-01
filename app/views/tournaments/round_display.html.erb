@@ -40,7 +40,7 @@
                 <% team1 = match.teams.first.users %>
                 <% team2 = match.teams.second.users %>
                 <% work_team = match.teams.last.users %>
-                <% if @tournament.current_set == match.number %>
+                <% if @tournament.current_set == match.number && @tournament.rounds_finalized.length != @tournament.rounds %>
                   <tr class="font-extrabold divide-x divide-gray-300 shadow-md">
                 <% else %>
                   <tr class="font-normal divide-x divide-gray-300">

@@ -15,7 +15,7 @@
     <div class="md:grid md:grid-cols-3 md:gap-6">
       <div class="md:col-span-1">
         <label for="courts" id="players-label" class="block text-sm font-medium text-gray-700">Players <span class="text-gray-400">(command+click to select multiple)</span></label>
-        <%= form.select :players, @available_players, { :placeholder => "Please Select" }, multiple: true, id: "players", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md", disabled: tournament.configured %>        
+        <%= form.select :players, @available_players, { :placeholder => "Please Select" }, multiple: true, id: "players", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md", disabled: !tournament.rounds_configured.empty? %>        
       </div>
       <div class="mt-5 md:mt-0 md:col-span-2">
         <form action="#" method="POST">
@@ -46,7 +46,7 @@
             </div>
 
             <div class="col-span-6 sm:col-span-3 lg:col-span-3">
-              <label for="court-names" class="block text-sm font-medium text-gray-700">Court Names (comma separated)</label>
+              <label for="court-names" class="block text-sm font-medium text-gray-700">Court Names (space separated)</label>
               <%= form.text_field :court_names, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
             </div>
 

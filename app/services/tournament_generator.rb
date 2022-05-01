@@ -40,8 +40,11 @@ class TournamentGenerator
         )
       end
     end
+  
+    currently_configured = tournament.rounds_configured
+    currently_configured << t_round.to_i
 
-    tournament.update!(configured: true) if tournament.matches.count.positive?
+    tournament.update!(rounds_configured: currently_configured) if tournament.matches.count.positive?
   end
 
   def associate_tournament_players(tournament, players)

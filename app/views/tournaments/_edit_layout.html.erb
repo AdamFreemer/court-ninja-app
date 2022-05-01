@@ -26,20 +26,23 @@
   <%# buttons %>
 
   <div class="flex float-left space-x-4">
-    <%= link_to 'Back to Tournaments', tournaments_path, class: "inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm" %>
     <button onclick="display('all')" class="btn btn-outline btn-primary btn-sm">Display Courts</button>
     <button onclick="display('1')" class="inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm">Display Court One</button>
     <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm">Display Court Two</button>
   </div>
   <div class="flex float-right space-x-4">
+      <%= link_to 'Back to Tournaments', tournaments_path, class: "inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm" %>
+      <%= link_to "Edit Tournament Info", edit_tournament_path(tournament), class: "inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm" %>
+    <% if @round != 1 %> 
       <%= link_to "Round One", round_one_tournament_path(tournament), class: "inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm" %>
-    <% if @round_two_generated %>
+    <% end %>
+    <% if @round!= 2 && tournament.rounds_configured.include?(2) %>
       <%= link_to "Round Two", round_two_tournament_path(tournament), class: "inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm" %>
     <% end %>
-    <% if (round == 1 && tournament.round_1_finalized == false) || (round == 2 && tournament.round_2_finalized == false) %>
+    <% if (round == 1 && !tournament.rounds_finalized.include?(1)) || (round == 2 && !tournament.rounds_finalized.include?(2)) %>
       <button onclick="updateScores('update')" class="inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm btn-error">Update Scores</button> 
     <% end %>
-    <% if (round == 1 && tournament.round_1_finalized == false) || (round == 2 && tournament.round_2_finalized == false) %>
+    <% if (round == 1 && !tournament.rounds_finalized.include?(1)) || (round == 2 && !tournament.rounds_finalized.include?(2)) %>
       <button onclick="updateScores('finalize')" class="inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm btn-error">Finalize Round <%= round %></button>
     <% end %>
   </div>

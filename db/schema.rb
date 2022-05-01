@@ -64,11 +64,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_04_230543) do
     t.string "zip"
     t.datetime "date"
     t.integer "courts"
+    t.integer "rounds"
     t.integer "team_size"
-    t.boolean "configured", default: false
-    t.boolean "round_1_finalized", default: false
-    t.boolean "round_2_finalized", default: false
-    t.string "players", default: [], array: true
+    t.integer "rounds_configured", default: [], array: true
+    t.integer "rounds_finalized", default: [], array: true
+    t.integer "players", default: [], array: true
     t.string "court_names", default: [], array: true
     t.integer "time"
     t.integer "current_set", default: 1

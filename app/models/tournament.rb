@@ -7,6 +7,16 @@ class Tournament < ApplicationRecord
   has_many :users, through: :tournament_users
   has_many :user_scores
 
+  before_save :set_rounds
+
+  def generate_tournament
+    return false unless players.count == 12 || players.count == 13
+
+    tournament_generator = TournamentGenerator.new(self, players)
+    tournament_generator.generate_round(1)
+    true
+  end
+
   def create_user_scores(round)
     matches.where(round: round).each do |match|
       score = scoring(match)
@@ -60,10 +70,6 @@ class Tournament < ApplicationRecord
     round_two_generation.generate_round(2)
   end
 
-  def results_generate(round_2_sorted)
-    
-  end
-
   def scoring(match)
     # TODO: handle nil scores
     team_1_score = match.teams.find_by(number: 1).score ||= 0
@@ -101,6 +107,14 @@ class Tournament < ApplicationRecord
     end
     # if we find no empty scores, set current_set so no rows are highlighted
     update(current_set: 99) if found_current == false
+  end
+
+  def set_rounds
+    self.rounds = if players.count == 12 || players.count == 13
+                   2
+                 else
+                   1
+                 end
   end
 
   def self.sanitized_of_ghosts_players(player_ids)
