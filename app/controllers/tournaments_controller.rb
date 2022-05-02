@@ -11,13 +11,13 @@ class TournamentsController < ApplicationController
   end
 
   def new
-    @available_players = User.where(is_ghost_player: false).order(:last_name).map { |u| [u.full_name, u.id] }
+    @available_players = User.where(is_ghost_player: false).order(:last_name) #.map { |u| [u.full_name, u.id] }
     @tournament = Tournament.new
     @times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   end
 
   def edit
-    @available_players = User.where(is_ghost_player: false).order(:last_name).map { |u| [u.full_name, u.id] }
+    @available_players = User.where(is_ghost_player: false).order(:last_name) #.map { |u| [u.full_name, u.id] }
   end
 
   def round_one #show round one
