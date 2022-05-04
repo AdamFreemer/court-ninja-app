@@ -28,12 +28,12 @@
             <% team_count = [*1..@tournament.matches.where(court: @court).first.teams.first.users.count - 1] %>
               <tr>
                 <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Set</th>
-                <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Team 1</th>
+                <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Court A</th>
                 <% team_count.each do |team_1| %>
                   <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
                 <% end %>
                 <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
-                <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Team 2</th>
+                <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Court B</th>
                 <% team_count.each do |team_2| %>
                   <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
                 <% end %>

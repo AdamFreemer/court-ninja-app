@@ -66,6 +66,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_04_230543) do
     t.integer "courts"
     t.integer "rounds"
     t.integer "team_size"
+    t.integer "work_group"
     t.integer "rounds_configured", default: [], array: true
     t.integer "rounds_finalized", default: [], array: true
     t.integer "players", default: [], array: true

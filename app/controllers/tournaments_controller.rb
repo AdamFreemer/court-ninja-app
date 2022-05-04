@@ -17,6 +17,8 @@ class TournamentsController < ApplicationController
   end
 
   def edit
+    puts "-================ #{@tournament.time}"
+
     @available_players = User.where(is_ghost_player: false).order(:last_name) #.map { |u| [u.full_name, u.id] }
   end
 
@@ -102,6 +104,7 @@ class TournamentsController < ApplicationController
   end
 
   def update
+        puts "-================ #{@tournament.time}"
     if @tournament.update(tournament_params)
       set_create_update(params)
       @tournament.save

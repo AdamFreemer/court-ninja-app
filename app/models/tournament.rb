@@ -10,7 +10,7 @@ class Tournament < ApplicationRecord
   before_save :set_rounds
 
   def generate_tournament
-    return false unless players.count == 12 || players.count == 13
+    return false unless players.count.between?(10, 14)
 
     tournament_generator = TournamentGenerator.new(self, players)
     tournament_generator.generate_round(1)
@@ -111,10 +111,10 @@ class Tournament < ApplicationRecord
 
   def set_rounds
     self.rounds = if players.count == 12 || players.count == 13
-                   2
-                 else
-                   1
-                 end
+                    2
+                  else
+                    1
+                  end
   end
 
   def self.sanitized_of_ghosts_players(player_ids)

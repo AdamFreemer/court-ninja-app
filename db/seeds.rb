@@ -11,8 +11,15 @@ User.create(email: 'letitiachan@yahoo.com', first_name: 'Sofia', last_name: 'Pey
 User.create(email: 'kierstenmahon@mac.com', first_name: 'Hadley', last_name: 'Mahon', password: 'password', password_confirmation: 'password')
 User.create(email: 'liongitau@gmail.com', first_name: 'Malianna', last_name: 'Liongitau', password: 'password', password_confirmation: 'password')
 User.create(email: 'twschaumkel@gmail.com', first_name: 'Ella', last_name: 'Schaumkel', password: 'password', password_confirmation: 'password')
+User.create(email: 'afreemer@gmail.com', first_name: 'Adam', last_name: 'Freemer', password: 'password', password_confirmation: 'password')
+User.create(email: 'LuckyMak@gmail.com', first_name: 'Lucky', last_name: 'Mak', password: 'password', password_confirmation: 'password')
 
+# Ghost Users
 User.create(email: '_ghost_player1@mail.com', first_name: 'ghost_player1', last_name: '-', password: 'password', password_confirmation: 'password', is_ghost_player: true)
 User.create(email: '_ghost_player2@mail.com', first_name: 'ghost_player2', last_name: '-', password: 'password', password_confirmation: 'password', is_ghost_player: true)
 User.create(email: '_ghost_player3@mail.com', first_name: 'ghost_player3', last_name: '-', password: 'password', password_confirmation: 'password', is_ghost_player: true)
+User.create(email: '_ghost_player4@mail.com', first_name: 'ghost_player4', last_name: '-', password: 'password', password_confirmation: 'password', is_ghost_player: true)
+User.create(email: '_ghost_player5@mail.com', first_name: 'ghost_player5', last_name: '-', password: 'password', password_confirmation: 'password', is_ghost_player: true)
+User.create(email: '_ghost_player6@mail.com', first_name: 'ghost_player6', last_name: '-', password: 'password', password_confirmation: 'password', is_ghost_player: true)
+
 puts "== Created #{User.count} users. ===================="

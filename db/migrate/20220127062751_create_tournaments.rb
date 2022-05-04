@@ -11,6 +11,7 @@ class CreateTournaments < ActiveRecord::Migration[7.0]
       t.integer :courts
       t.integer :rounds
       t.integer :team_size
+      t.integer :work_group
       t.integer :rounds_configured, array: true, default: []
       t.integer :rounds_finalized, array: true, default: []
       t.integer :players, array: true, default: []

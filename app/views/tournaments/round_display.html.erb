@@ -22,12 +22,12 @@
             <% team_count = [*1..@tournament.matches.where(court: 1).first.teams.first.users.count - 1] %>
               <tr>
                 <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Set</th>
-                <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Team 1</th>
+                <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Court A</th>
                 <% team_count.each do |team_1| %>
                   <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">&nbsp;</th>
                 <% end %>
                 <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">&nbsp;</th>
-                <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Team 2</th>
+                <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Court B</th>
                 <% team_count.each do |team_2| %>
                   <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">&nbsp;</th>
                 <% end %>
@@ -72,12 +72,12 @@
             <% team_count = [*1..@tournament.matches.where(court: 1).first.teams.first.users.count - 1] %>
               <tr>
                 <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Set</th>
-                <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Team 1</th>
+                <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Court A</th>
                 <% team_count.each do |team_1| %>
                   <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">&nbsp;</th>
                 <% end %>
                 <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">&nbsp;</th>
-                <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Team 2</th>
+                <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Court B</th>
                 <% team_count.each do |team_2| %>
                   <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">&nbsp;</th>
                 <% end %>
@@ -118,7 +118,7 @@
 
 
     <div class="float-left space-x-4 space-y-3">
-      <button class="btn btn-outline btn-primary btn-sm" onClick="timer.start(1000)">Start</button> 
+      <button class="btn btn-outline btn-primary btn-sm" onClick="timer.start()">Start</button> 
       <button class="btn btn-outline btn-primary btn-sm" onClick="timer.stop()">Stop</button> 
       <button class="btn btn-outline btn-primary btn-sm" onClick="timer.reset(<%= @tournament.time %>)">Reset</button> 
     </div> 
