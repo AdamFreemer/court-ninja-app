@@ -48,11 +48,16 @@ class Tournament < ApplicationRecord
     players.each do |player|
       next if player.is_ghost_player == true
 
-      score = player.user_scores.where(tournament_id: id, round: 1).sum(:score)
-      wins = player.user_scores.where(tournament_id: id, round: 1).sum(:win)
-      court_1_scores << [player.id, player.name_abbreviated, score, wins] if player.user_scores.first.court == 1
-      court_2_scores << [player.id, player.name_abbreviated, score, wins] if player.user_scores.first.court == 2
+      score = player.user_scores.where(tournament_id: id, round: round).sum(:score)
+      wins = player.user_scores.where(tournament_id: id, round: round).sum(:win)
+      if player.user_scores.where(tournament_id: id, round: round, court: 1).count.positive?
+        court_1_scores << [player.id, player.name_abbreviated, score, wins]
+      end
+      if player.user_scores.where(tournament_id: id, round: round, court: 2).count.positive?
+        court_2_scores << [player.id, player.name_abbreviated, score, wins]
+      end
     end
+
     court_1_sorted = court_1_scores.sort_by { |a| [-a[3], -a[2]] }
     court_2_sorted = court_2_scores.sort_by { |a| [-a[3], -a[2]] }
 
@@ -60,14 +65,21 @@ class Tournament < ApplicationRecord
   end
 
   def round_two_courts_generate(round_1_sorted)
-    # i'm pulling in all players, I think should be player_ranking (13) not all players
+    team_counts = player_count_calc(round_1_sorted)
     all_player_ids = players.map(&:to_i)
-    gold_team_ids = (round_1_sorted[0].first(4) + round_1_sorted[1].first(3)).collect(&:first)
+    gold_team_ids = (round_1_sorted[0].first(team_counts[0]) + round_1_sorted[1].first(team_counts[1])).collect(&:first)
     silver_team_ids = all_player_ids - gold_team_ids
     ordered_player_ids = gold_team_ids + silver_team_ids
-    # feed in players to tournament generator combined "gold" team first
+
     round_two_generation = TournamentGenerator.new(self, Tournament.sanitized_of_ghosts_players(ordered_player_ids))
     round_two_generation.generate_round(2)
+  end
+
+  def player_count_calc(player_count)
+    first_team_count = player_count[0].count.even? ? player_count[0].count / 2 : (player_count[0].count.to_f / 2).ceil
+    second_team_count = player_count[1].count.even? ? player_count[1].count / 2 : (player_count[1].count.to_f / 2).ceil
+
+    [first_team_count, second_team_count]
   end
 
   def scoring(match)

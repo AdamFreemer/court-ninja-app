@@ -17,12 +17,11 @@ class TournamentsController < ApplicationController
   end
 
   def edit
-    puts "-================ #{@tournament.time}"
-
     @available_players = User.where(is_ghost_player: false).order(:last_name) #.map { |u| [u.full_name, u.id] }
   end
 
-  def round_one #show round one
+  def round_one
+    # show round one
     @round = 1
     @court_names = [
       @tournament&.court_names&.first,
@@ -30,7 +29,8 @@ class TournamentsController < ApplicationController
     ]
   end
 
-  def round_two #show round two 
+  def round_two
+    # show round two
     @round = 2
     @court_names = [
       @tournament&.court_names&.first,
@@ -38,23 +38,26 @@ class TournamentsController < ApplicationController
     ]
   end
 
-  def round_display # display both courts
-    @court_1_matches = @tournament.matches.where(court: 1, round: params[:round])
-    @court_2_matches = @tournament.matches.where(court: 2, round: params[:round])
-  end
-
-  def round_display_single
-    @timer_minutes = 2
-    @court = params[:court].to_i
-    @court_matches = @tournament.matches.where(court: @court, round: params[:round])
-  end
-
-  def results # show results
+  def results
+    # show results
     players_gold = @tournament.player_ranking(2)[0]
     @players_gold_winner = @tournament.player_ranking(2)[0].first
     players_gold.shift
     @players_gold = players_gold
     @players_silver = @tournament.player_ranking(2)[1]
+  end
+
+  def round_display
+    # show display both courts
+    @court_1_matches = @tournament.matches.where(court: 1, round: params[:round])
+    @court_2_matches = @tournament.matches.where(court: 2, round: params[:round])
+  end
+
+  def round_display_single
+    # show display single
+    @timer_minutes = 2
+    @court = params[:court].to_i
+    @court_matches = @tournament.matches.where(court: @court, round: params[:round])
   end
 
   def team_scores_update
@@ -77,7 +80,6 @@ class TournamentsController < ApplicationController
     @tournament.update(rounds_finalized: rounds_finalized, current_set: round == 1)
     @tournament.round_two_courts_generate(@tournament.player_ranking(1)) if round == 1
 
-  
     case round
     when 1
       redirect_to round_two_tournament_url(@tournament), notice: 'Round 1 successfully processed.'
@@ -104,7 +106,6 @@ class TournamentsController < ApplicationController
   end
 
   def update
-        puts "-================ #{@tournament.time}"
     if @tournament.update(tournament_params)
       set_create_update(params)
       @tournament.save
@@ -165,22 +166,3 @@ class TournamentsController < ApplicationController
     )
   end
 end
-
-
-# t.string "name"
-# t.string "address1"
-# t.string "address2"
-# t.string "city"
-# t.string "state"
-# t.string "zip"
-# t.datetime "date"
-# t.integer "courts"
-# t.integer "team_size"
-# t.string "rounds_configured", default: [], array: true
-# t.string "rounds_finalized", default: [], array: true
-# t.string "players", default: [], array: true
-# t.string "court_names", default: [], array: true
-# t.integer "time"
-# t.integer "current_set", default: 1
-# t.datetime "created_at", null: false
-# t.datetime "updated_at", null: false

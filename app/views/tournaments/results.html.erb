@@ -20,9 +20,9 @@
                 <tr>
                   <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%= @players_gold_winner[1] %></td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= @players_gold_winner[3] %></td>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm"><%= @players_gold_winner[2] %>&nbsp;&nbsp;<span class="text-green-700 font-bold">Winner</span></td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm"><%= @players_gold_winner[2] %>&nbsp;&nbsp;<span class="text-green-700 font-bold">QOTC</span></td>
                 </tr>
-              <% @players_gold.each do |player| %>
+              <% @players_gold.first(2).each do |player| %>
                 <tr>
                   <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%= player[1] %></td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= player[3] %></td>
@@ -46,7 +46,7 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
-              <% @players_silver.each do |player| %>
+              <% @players_silver.first(3).each do |player| %>
                 <tr>
                   <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%= player[1] %></td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= player[3] %></td>
