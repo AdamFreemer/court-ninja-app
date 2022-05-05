@@ -43,7 +43,7 @@ class TournamentGenerator
   end
 
   def players_count_12_14
-    @players.map(&:to_i)
+    player_ids = @players.map(&:to_i)
     ghost_ids = User.where(is_ghost_player: true).collect(&:id)
 
     case players.count
