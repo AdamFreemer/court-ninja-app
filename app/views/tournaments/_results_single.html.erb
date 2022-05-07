@@ -1,0 +1,27 @@
+<div class="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
+  <div class="p-6">
+    <table class="min-w-full divide-y divide-gray-300">
+      <thead class="bg-gray-50">
+        <tr>
+          <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
+          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Wins</th>
+          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Point Differential</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 bg-white">
+          <tr>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%= players_gold_winner[1] %></td>
+            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= players_gold_winner[3] %></td>
+            <td class="whitespace-nowrap px-3 py-4 text-sm"><%= players_gold_winner[2] %>&nbsp;&nbsp;<span class="text-green-700 font-bold">QOTC</span></td>
+          </tr>
+        <% players_gold.first(2).each do |player| %>
+          <tr>
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%= player[1] %></td>
+            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= player[3] %></td>
+            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= player[2] %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 
-<div class="mx-auto">
+<div class="mx-auto mb-32">
   <% if notice.present? %>
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
   <% end %>
@@ -12,7 +12,13 @@
   </h3>       
 
   <%# tables %>
-  <% if true # @tournament.users.count == 13 %>
+  <% if tournament.courts == 1 %>
+    <div class="columns-1">
+      <div class="">
+        <%= render "table", name: names[0], tournament: tournament, court: 1, round: round, matches: @tournament.matches.where(court: 1, round: round) %>
+      </div>
+    </div>  
+  <% elsif tournament.courts == 2 %>
     <div class="columns-2 space-y-32">
       <div class="">
         <%= render "table", name: names[0], tournament: tournament, court: 1, round: round, matches: @tournament.matches.where(court: 1, round: round) %>
@@ -24,7 +30,6 @@
   <% end %>
   
   <%# buttons %>
-
   <div class="flex float-left space-x-4">
     <button onclick="display('all')" class="btn btn-outline btn-primary btn-sm">Display Courts</button>
     <button onclick="display('1')" class="inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm">Display Court One</button>

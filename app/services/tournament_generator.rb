@@ -9,18 +9,24 @@ class TournamentGenerator
 
   def generate_round(round)
     # create_court(tournament, round, court, # players on court, player config, court config)
-    if @players.count.between?(10, 11)
+    if @players.count.between?(8, 9)
       associate_tournament_players(@tournament, @players, round)
-      create_court(tournament, round, 1, PlayerConfigurations.p6, players_count_10_11)
-      create_court(tournament, round, 2, PlayerConfigurations.p6, players_count_10_11)
-      tournament.update(work_group: 0)
+      create_court(tournament, round, 1, PlayerConfigurations.p9, players_count_8_9)
+      tournament.update(work_group: 3, courts: 1)
+    end
+
+    if @players.count == 10
+      associate_tournament_players(@tournament, @players, round)
+      create_court(tournament, round, 1, PlayerConfigurations.p5, players_count_10)
+      create_court(tournament, round, 2, PlayerConfigurations.p5, players_count_10)
+      tournament.update(work_group: 1, courts: 2)
     end
 
     if @players.count.between?(12, 14)
       associate_tournament_players(@tournament, @players, round)
       create_court(tournament, round, 1, PlayerConfigurations.p7, players_count_12_14)
       create_court(tournament, round, 2, PlayerConfigurations.p7, players_count_12_14)
-      tournament.update(work_group: 1)
+      tournament.update(work_group: 1, courts: 2)
     end
 
     currently_configured = tournament.rounds_configured
@@ -29,18 +35,30 @@ class TournamentGenerator
   end
 
   ## Court configurations per player count
-
-  def players_count_10_11
+  def players_count_8_9
     player_ids = @players.map(&:to_i)
     ghost_ids = User.where(is_ghost_player: true).collect(&:id)
 
     case players.count
-    when 10
-      { court1: player_ids.first(5) + [ghost_ids.first], court2: player_ids.last(5) + [ghost_ids.second] }
-    when 11
-      { court1: player_ids.first(6), court2: player_ids.last(5) + [ghost_ids.first] }
+    when 8
+      { court1: player_ids.first(8) + [ghost_ids.first], court2: [] }
+    when 9
+      { court1: player_ids.first(9) }
     end
   end
+
+  def players_count_10
+    player_ids = @players.map(&:to_i)
+    ghost_ids = User.where(is_ghost_player: true).collect(&:id)
+
+    { court1: player_ids.first(5), court2: player_ids.last(5) }
+  end
+
+  # def players_count_11
+  #   player_ids = @players.map(&:to_i)
+
+  #   { court1: player_ids.first(6), court2: player_ids.last(5) + [ghost_ids.first] }
+  # end
 
   def players_count_12_14
     player_ids = @players.map(&:to_i)
