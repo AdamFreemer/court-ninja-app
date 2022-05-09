@@ -9,6 +9,12 @@ class CreateTournaments < ActiveRecord::Migration[7.0]
       t.string   :zip
       t.datetime :date
       t.integer :courts
+      t.string :court_1_name
+      t.string :court_2_name
+      t.string :court_3_name
+      t.string :court_4_name
+      t.string :court_5_name
+      t.string :court_6_name
       t.integer :rounds
       t.integer :team_size
       t.integer :work_group

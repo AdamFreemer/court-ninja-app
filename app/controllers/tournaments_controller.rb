@@ -23,19 +23,11 @@ class TournamentsController < ApplicationController
   def round_one
     # show round one
     @round = 1
-    @court_names = [
-      @tournament&.court_names&.first,
-      @tournament&.court_names&.second
-    ]
   end
 
   def round_two
     # show round two
     @round = 2
-    @court_names = [
-      @tournament&.court_names&.first,
-      @tournament&.court_names&.second
-    ]
   end
 
   def results
@@ -148,7 +140,6 @@ class TournamentsController < ApplicationController
   def set_create_update(params)
     @tournament.players = params[:tournament][:players].reject(&:blank?).map(&:to_i) unless params[:tournament][:players].nil?
     @tournament.time = params[:tournament][:time].to_i * 60
-    @tournament.court_names = params[:tournament][:court_names].gsub(/\s+/m, ' ').strip.split(" ")
   end
 
   def round_two_generated
@@ -161,8 +152,9 @@ class TournamentsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def tournament_params
-    params.fetch(:tournament, [{}]).permit(:name, :address1, :address2, :city, :state, :zip, :date, :players, :courts,
-      :rounds, :team_size, :rounds_configured, :rounds_finalized, :court_names, :time, :current_set
+    params.fetch(:tournament, [{}]).permit(:name, :address1, :address2, :city, :state, :zip, :date, :players,
+      :rounds, :team_size, :rounds_configured, :rounds_finalized, :court_names, :time, :current_set,
+      :court_1_name, :court_2_name, :court_3_name, :court_4_name ,:court_5_name, :court_6_name
     )
   end
 end
