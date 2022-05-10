@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
   # GET /users or /users.json
   def index
-    @users = User.all
+    @users = User.where(is_ghost_player: false)
   end
 
   # GET /users/1 or /users/1.json
@@ -38,7 +38,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to user_url(@user), notice: "User was successfully updated." }
+        format.html { redirect_to users_path, notice: "User was successfully updated." }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -58,13 +58,17 @@ class UsersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def user_params
-      params.fetch(:user, {})
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def user_params
+    params.fetch(:user, [{}]).permit(:email, :first_name, :last_name, :address, :city, :state, :zip, :phone_number,
+      :jersey_number, :position, :gender, :contact_1_name, :contact_1_phone, :contact_1_address, :contact_2_name,
+      :contact_2_phone, :contact_2_address
+    )
+  end
 end
