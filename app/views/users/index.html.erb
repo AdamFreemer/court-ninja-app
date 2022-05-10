@@ -29,8 +29,13 @@
                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">&nbsp;</th>
                   <th scope="col" class="relative px-6 py-3">
-                    <span class="sr-only">Edit</span>
+                    <span class="sr-only">&nbsp;</span>
                   </th>
+                  <th scope="col" class="relative px-6 py-3">
+                    <span class="sr-only">&nbsp;</span>
+                  </th>
+
+                  <%= link_to "Delete", :confirm => "Are you sure?", :method => :delete %>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
@@ -47,6 +52,10 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.position %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       <%= link_to "Edit", edit_user_path(user), class: "text-indigo-600 hover:text-indigo-900" %>
+                    </td>
+
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <%= link_to "Delete", user_path(user), method: :delete %>
                     </td>
                   </tr>
                 <% end %>
