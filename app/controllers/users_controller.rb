@@ -5,7 +5,11 @@ class UsersController < ApplicationController
 
   # GET /users or /users.json
   def index
-    @users = User.where(is_ghost_player: false)
+    if params[:sort]
+      @users = User.where(is_ghost_player: false).order(params[:sort]) #.order(:last_name)
+    else
+      @users = User.where(is_ghost_player: false).order(:id)
+    end
   end
 
   # GET /users/1 or /users/1.json
@@ -26,7 +30,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     respond_to do |format|
-      if @user.save
+      if @user.save(validate: false)
         format.html { redirect_to user_url(@user), notice: "User was successfully created." }
         format.json { render :show, status: :created, location: @user }
       else
