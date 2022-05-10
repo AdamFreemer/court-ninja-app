@@ -15,19 +15,22 @@
       <div class="md:grid md:grid-cols-3 md:gap-6">
         <div class="md:col-span-1">
           <label for="courts" id="players-label" class="block text-md font-medium text-gray-700">Players <span id="players-text" class="text-gray-400"></span>&nbsp;</label>
-          <%= form.collection_check_boxes(:players, @available_players, :id, :full_name) do |player| %>
+          <% @tournament_configured ? player_list = tournament.users : player_list = @available_players %>
+          <%= form.collection_check_boxes(:players, player_list, :id, :full_name) do |player| %>
             <div class="py-0.5">
-              <% if !tournament.rounds_configured.empty? %>
-                <%= player.check_box(class: "w-4 h-4 rounded mx-0 opacity-50 cursor-not-allowed", disabled: true) %>
+              <% if @tournament_configured %>
+              &nbsp;
               <% else %>
                 <%= player.check_box(class: "w-4 h-4 rounded mx-0") %>
               <% end %>
-              <span class="text-sm font-medium text-gray-70 px-1 py-1"><%= player.text %></span>
+              <span class="text-sm font-medium text-gray-70 px-1 py-1">&nbsp;<%= player.text %></span>
             </div>
           <% end %>
           <div class="py-2">
-            <button id="select-all" onclick="selectAll()" class="btn btn-outline btn-primary btn-xs">Select All</button>
-            <button id="select-none" onclick="selectNone()" class="btn btn-outline btn-primary btn-xs">Select None</button>
+            <% if !@tournament_configured %>
+              <button id="select-all" onclick="selectAll()" class="btn btn-outline btn-primary btn-xs">Select All</button>
+              <button id="select-none" onclick="selectNone()" class="btn btn-outline btn-primary btn-xs">Select None</button>
+            <% end %>
           </div>
         </div>
         
@@ -64,9 +67,6 @@
                 <%= form.select :time, @times, { :placeholder => "Please Select" }, id: "time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
               </div>  
             </div>
-            <div class="gap-6 mt-4">
-              <label for="courts" class="block text-sm font-medium text-gray-700"><i>Note: Number of Courts auto adjust depending on Players</i></label>
-            </div> 
             <%= render "form_courts", form: form %>
           </form>
         </div>
@@ -82,10 +82,47 @@
 
 <script>
   $(document).ready(function() { 
+    checkCourtCount(<%= tournament.courts %>);
     $("input:checkbox").change(function() {
       playerSelected();
     }); 
   });
+
+  function playerSelected() {
+    let pS = document.querySelectorAll('input[type="checkbox"]:checked').length;
+    $('#players-label').text(`Players (${pS} selected)`);
+
+    if (pS == 10 || pS == 11 || pS == 12 || pS == 13 || pS == 14 || pS == 15) {
+      courtsCountTwo();
+    } else {
+      courtsCountOne();
+    }    
+  }
+
+  function checkCourtCount(courts_count) {
+    console.log("==== courts: " + courts_count)
+    if (courts_count == "1") {
+      courtsCountOne();
+    } else if (courts_count == "2") {
+      courtsCountTwo();
+    } else {
+      courtsCountOne();
+    }
+  }
+
+  function selectNone() {
+    var checkboxes = $( "[type=checkbox]" );
+    checkboxes.prop('checked', $(this).is(':checked'));
+    playerSelected();
+    event.preventDefault();
+  };
+
+  function selectAll() {
+    var checkboxes = $( "[type=checkbox]" );
+    checkboxes.prop('checked', !$(this).is(':checked'));
+    playerSelected();
+    event.preventDefault();
+  };
 
   function courtsCountOne() {
     $("#court-1-container").show();
@@ -105,28 +142,22 @@
     $("#court-6-container").hide();
   };
 
-  function playerSelected() {
-    let pS = document.querySelectorAll('input[type="checkbox"]:checked').length;
-    $('#players-label').text(`Players (${pS} selected)`);
+  function courtsCountThree() {
+    $("#court-1-container").show();
+    $("#court-2-container").show();
+    $("#court-3-container").show();
+    $("#court-4-container").hide();
+    $("#court-5-container").hide();
+    $("#court-6-container").hide();
+  };  
 
-    if (pS == 10 || pS == 11 || pS == 12 || pS == 13 || pS == 14 || pS == 15) {
-      courtsCountTwo();
-    } else {
-      courtsCountOne();
-    }    
-  }
-
-  function selectNone() {
-    var checkboxes = $( "[type=checkbox]" );
-    checkboxes.prop('checked', $(this).is(':checked'));
-    playerSelected();
-    event.preventDefault();
+  function courtsCountFour() {
+    $("#court-1-container").show();
+    $("#court-2-container").show();
+    $("#court-3-container").show();
+    $("#court-4-container").show();
+    $("#court-5-container").hide();
+    $("#court-6-container").hide();
   };
 
-  function selectAll() {
-    var checkboxes = $( "[type=checkbox]" );
-    checkboxes.prop('checked', !$(this).is(':checked'));
-    playerSelected();
-    event.preventDefault();
-  };
 </script>

@@ -14,10 +14,12 @@ class TournamentsController < ApplicationController
     @available_players = User.where(is_ghost_player: false).order(:last_name) #.map { |u| [u.full_name, u.id] }
     @tournament = Tournament.new
     @times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    @tournament_configured = !@tournament.rounds_configured.empty?
   end
 
   def edit
     @available_players = User.where(is_ghost_player: false).order(:last_name) #.map { |u| [u.full_name, u.id] }
+    @tournament_configured = !@tournament.rounds_configured.empty?
   end
 
   def round_one
