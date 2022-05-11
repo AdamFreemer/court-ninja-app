@@ -36,7 +36,14 @@
       <% matches.each do |match| %>
         <% team1 = match.teams.first.users %>
         <% team2 = match.teams.second.users %>
-        <% work_team = match.teams.last.users %>
+        <% work_team = match.teams.last.users # team3 %>
+
+        <% if match.court == 1 %>
+          <% tabs = PlayerConfigurations.tab[0][match.number - 1] %>
+        <% elsif match.court == 2 %>
+          <% tabs = PlayerConfigurations.tab[1][match.number - 1] %>
+        <% end %>
+
         <tr>
           <td class="px-2 py-4 whitespace-nowrap text-xs font-semibold text-gray-500"><%= match.number %></td>
           <% team1.each do |player| %>
@@ -52,6 +59,7 @@
                 id="<%= team_1.id %>" 
                 class="flex-1 block w-2 px-2 py-2 rounded-l-md rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300" 
                 value="<%= team_1.score %>"
+                tabindex="<%= tabs&.first %>"
               >
             </div>
           </td>         
@@ -67,6 +75,7 @@
                 id="<%= team_2.id %>" 
                 class="flex-1 block w-2 px-2 py-2 rounded-l-md rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300" 
                 value="<%= team_2.score %>"
+                tabindex="<%= tabs&.last %>"
               >
             </div>
           </td> 
