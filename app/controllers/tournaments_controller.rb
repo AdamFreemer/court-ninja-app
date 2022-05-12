@@ -13,7 +13,8 @@ class TournamentsController < ApplicationController
   def new
     @available_players = User.where(is_ghost_player: false).order(:last_name) #.map { |u| [u.full_name, u.id] }
     @tournament = Tournament.new
-    @times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    @tournament_times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    @break_times = [0.5, 1, 1.5]
     @tournament_configured = !@tournament.rounds_configured.empty?
   end
 
@@ -131,7 +132,8 @@ class TournamentsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_tournament
     @tournament = Tournament.find(params[:id])
-    @times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    @tournament_times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    @break_times = [30, 60, 90]
   end
 
   def set_display
@@ -141,7 +143,7 @@ class TournamentsController < ApplicationController
 
   def set_create_update(params)
     @tournament.players = params[:tournament][:players].reject(&:blank?).map(&:to_i) unless params[:tournament][:players].nil?
-    @tournament.time = params[:tournament][:time].to_i * 60
+    @tournament.tournament_time = params[:tournament][:tournament_time2].to_i * 60
   end
 
   def round_two_generated
@@ -155,7 +157,7 @@ class TournamentsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def tournament_params
     params.fetch(:tournament, [{}]).permit(:name, :address1, :address2, :city, :state, :zip, :date, :players,
-      :rounds, :team_size, :rounds_configured, :rounds_finalized, :court_names, :time, :current_set,
+      :rounds, :team_size, :rounds_configured, :rounds_finalized, :court_names, :tournament_time, :break_time, :current_set,
       :court_1_name, :court_2_name, :court_3_name, :court_4_name ,:court_5_name, :court_6_name
     )
   end

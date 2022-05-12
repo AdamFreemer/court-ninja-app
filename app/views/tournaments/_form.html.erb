@@ -28,10 +28,11 @@
           <% end %>
           <div class="py-2">
             <% if !@tournament_configured %>
-              <button id="select-all" onclick="selectAll()" class="btn btn-outline btn-primary btn-xs">Select All</button>
-              <button id="select-none" onclick="selectNone()" class="btn btn-outline btn-primary btn-xs">Select None</button>
+              <button id="select-all" onclick="selectAllPlayers()" class="btn btn-outline btn-primary btn-xs">Select All</button>
+              <button id="select-none" onclick="selectNonePlayers()" class="btn btn-outline btn-primary btn-xs">Select None</button>
             <% end %>
           </div>
+                    
         </div>
         
         <div class="mt-5 md:mt-0 md:col-span-2">
@@ -63,9 +64,13 @@
               </div>
 
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
-                <label for="time" class="block text-sm font-medium text-gray-700">Tournament Time (minutes)<span class="text-gray-400"></span></label>
-                <%= form.select :time, @times, { :placeholder => "Please Select" }, id: "time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+                <label for="tournament-time" class="block text-sm font-medium text-gray-700">Tournament Time (minutes)<span class="text-gray-400"></span></label>
+                <%= form.select :tournament_time, @tournament_times, { :placeholder => "Please Select" }, id: "tournament-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
               </div>  
+              <div class="col-span-6 sm:col-span-3 lg:col-span-3">
+                <label for="break-time" class="block text-sm font-medium text-gray-700">Tournament Break Time (minutes)<span class="text-gray-400"></span></label>
+                <%= form.select :break_time, @break_times, { :placeholder => "Please Select" }, id: "break-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+              </div>               
             </div>
             <%= render "form_courts", form: form %>
           </form>
@@ -80,84 +85,4 @@
   </div>
 <% end %>
 
-<script>
-  $(document).ready(function() { 
-    checkCourtCount(<%= tournament.courts %>);
-    $("input:checkbox").change(function() {
-      playerSelected();
-    }); 
-  });
-
-  function playerSelected() {
-    let pS = document.querySelectorAll('input[type="checkbox"]:checked').length;
-    $('#players-label').text(`Players (${pS} selected)`);
-
-    if (pS == 10 || pS == 11 || pS == 12 || pS == 13 || pS == 14 || pS == 15) {
-      courtsCountTwo();
-    } else {
-      courtsCountOne();
-    }    
-  }
-
-  function checkCourtCount(courts_count) {
-    console.log("==== courts: " + courts_count)
-    if (courts_count == "1") {
-      courtsCountOne();
-    } else if (courts_count == "2") {
-      courtsCountTwo();
-    } else {
-      courtsCountOne();
-    }
-  }
-
-  function selectNone() {
-    var checkboxes = $( "[type=checkbox]" );
-    checkboxes.prop('checked', $(this).is(':checked'));
-    playerSelected();
-    event.preventDefault();
-  };
-
-  function selectAll() {
-    var checkboxes = $( "[type=checkbox]" );
-    checkboxes.prop('checked', !$(this).is(':checked'));
-    playerSelected();
-    event.preventDefault();
-  };
-
-  function courtsCountOne() {
-    $("#court-1-container").show();
-    $("#court-2-container").hide();
-    $("#court-3-container").hide();
-    $("#court-4-container").hide();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
-  };
-
-  function courtsCountTwo() {
-    $("#court-1-container").show();
-    $("#court-2-container").show();
-    $("#court-3-container").hide();
-    $("#court-4-container").hide();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
-  };
-
-  function courtsCountThree() {
-    $("#court-1-container").show();
-    $("#court-2-container").show();
-    $("#court-3-container").show();
-    $("#court-4-container").hide();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
-  };  
-
-  function courtsCountFour() {
-    $("#court-1-container").show();
-    $("#court-2-container").show();
-    $("#court-3-container").show();
-    $("#court-4-container").show();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
-  };
-
-</script>
+<%= render "form_js", tournament: @tournament %>
