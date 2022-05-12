@@ -133,7 +133,7 @@ class TournamentsController < ApplicationController
   def set_tournament
     @tournament = Tournament.find(params[:id])
     @tournament_times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    @break_times = [30, 60, 90]
+    @break_times = [0.5, 1, 1.5]
   end
 
   def set_display
@@ -143,7 +143,6 @@ class TournamentsController < ApplicationController
 
   def set_create_update(params)
     @tournament.players = params[:tournament][:players].reject(&:blank?).map(&:to_i) unless params[:tournament][:players].nil?
-    @tournament.tournament_time = params[:tournament][:tournament_time2].to_i * 60
   end
 
   def round_two_generated

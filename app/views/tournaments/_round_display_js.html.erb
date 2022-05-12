@@ -106,6 +106,6 @@
           }
         }
       );
-      timer.reset(<%= @tournament.tournament_time %>);
+      timer.reset(<%= @tournament.tournament_time * 60 %>);
   });
 </script>
