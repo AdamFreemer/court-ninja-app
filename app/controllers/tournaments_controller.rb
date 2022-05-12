@@ -143,7 +143,6 @@ class TournamentsController < ApplicationController
 
   def set_create_update(params)
     @tournament.players = params[:tournament][:players].reject(&:blank?).map(&:to_i) unless params[:tournament][:players].nil?
-    # @tournament.tournament_time = params[:tournament][:tournament_time2].to_i * 60
   end
 
   def round_two_generated
