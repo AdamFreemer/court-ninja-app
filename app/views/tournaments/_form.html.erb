@@ -16,15 +16,18 @@
         <div class="md:col-span-1">
           <label for="courts" id="players-label" class="block text-md font-medium text-gray-700">Players <span id="players-text" class="text-gray-400"></span>&nbsp;</label>
           <% @tournament_configured ? player_list = tournament.users : player_list = @available_players %>
-          <%= form.collection_check_boxes(:players, player_list, :id, :full_name) do |player| %>
-            <div class="py-0.5">
+          <%= form.collection_check_boxes(:players, player_list, :id, :full_name, disabled: @tournament_configured) do |player| %>
+            <%= player.label class:"text-sm font-medium text-gray-70 py-1" do %>
               <% if @tournament_configured %>
-              &nbsp;
+                <%= player.check_box(class: "w-4 h-4 rounded mx-0", disabled: true) %>
+                <%= hidden_field_tag "tournament[players][]", player.object.id, value: player.object.id  %>
+                <%=%>
               <% else %>
                 <%= player.check_box(class: "w-4 h-4 rounded mx-0") %>
               <% end %>
-              <span class="text-sm font-medium text-gray-70 px-1 py-1">&nbsp;<%= player.text %></span>
-            </div>
+              <%= player.text %>
+              <br />
+            <%end %>
           <% end %>
           <div class="py-2">
             <% if !@tournament_configured %>
@@ -32,12 +35,12 @@
               <button id="select-none" onclick="selectNonePlayers()" class="btn btn-outline btn-primary btn-xs">Select None</button>
             <% end %>
           </div>
-                    
+
         </div>
-        
+
         <div class="mt-5 md:mt-0 md:col-span-2">
           <form action="#" method="POST">
-            <div class="grid grid-cols-6 gap-6">           
+            <div class="grid grid-cols-6 gap-6">
               <div class="col-span-6 sm:col-span-6">
                 <label for="name" class="block text-sm font-medium text-gray-700">Tournament Name</label>
                 <%= form.text_field :name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
@@ -66,11 +69,11 @@
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                 <label for="tournament-time" class="block text-sm font-medium text-gray-700">Tournament Time (minutes)<span class="text-gray-400"></span></label>
                 <%= form.select :tournament_time, @tournament_times, { :placeholder => "Please Select" }, id: "tournament-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
-              </div>  
+              </div>
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                 <label for="break-time" class="block text-sm font-medium text-gray-700">Tournament Break Time (minutes)<span class="text-gray-400"></span></label>
                 <%= form.select :break_time, @break_times, { :placeholder => "Please Select" }, id: "break-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
-              </div>               
+              </div>
             </div>
             <%= render "form_courts", form: form %>
           </form>

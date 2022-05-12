@@ -156,9 +156,10 @@ class TournamentsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def tournament_params
-    params.fetch(:tournament, [{}]).permit(:name, :address1, :address2, :city, :state, :zip, :date, :players,
-      :rounds, :team_size, :rounds_configured, :rounds_finalized, :court_names, :tournament_time, :break_time, :current_set,
-      :court_1_name, :court_2_name, :court_3_name, :court_4_name ,:court_5_name, :court_6_name
+    params.fetch(:tournament).permit(
+      :name, :address1, :address2, :city, :state, :zip, :date, :rounds, :team_size,
+      :rounds_configured, :rounds_finalized, :court_names, :tournament_time, :break_time, :current_set,
+      :court_1_name, :court_2_name, :court_3_name, :court_4_name, :court_5_name, :court_6_name, players: []
     )
   end
 end
