@@ -1,0 +1,62 @@
+require:
+  - rubocop-performance
+  - rubocop-rails
+
+AllCops:
+  Exclude:
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - '.git/**/*'
+    - 'db/**/*'
+  DefaultFormatter: progress
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  StyleGuideBaseURL: https://rubystyle.guide
+  EnabledByDefault: true
+  DisabledByDefault: false
+  NewCops: enable
+  TargetRubyVersion: 2.7
+
+Rails/UnknownEnv:
+  Environments:
+    - production
+    - development
+    - test
+    - staging
+
+Bundler/GemComment:
+  Enabled: false
+
+Lint/ConstantResolution:
+  Enabled: false
+
+Metrics:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Copyright:
+  Enabled: false
+
+Style/DisableCopsWithinSourceCodeDirective:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/DocumentationMethod:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/InlineComment:
+  Enabled: false
+
+Style/MethodCallWithArgsParentheses:
+  Enabled: false
+
+Style/MissingElse:
+  Enabled: false
