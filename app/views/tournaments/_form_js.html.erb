@@ -1,8 +1,4 @@
 <script>
-  var tournamentSets = localStorage['tournamentSets'];
-  var tournyTime = localStorage['tournyTime'];
-  var tournyBreakTime = localStorage['tournyBreakTime'];
-
   $(document).ready(function() { 
     // On load set court count to 1
     setDefaultCourtCount(<%= tournament.courts %>);
@@ -52,19 +48,24 @@
     switch (pSelected) {
     case 0:
       localStorage['tournamentSets'] = 0
+      localStorage['tournamentRounds'] = 1
       break;
     case 7:
       localStorage['tournamentSets'] = 7
+      localStorage['tournamentRounds'] = 1
       break;
     case 8:
     case 9:
       localStorage['tournamentSets'] = 12
+      localStorage['tournamentRounds'] = 1
       break;
     case 10:
       localStorage['tournamentSets'] = 5
+      localStorage['tournamentRounds'] = 2
       break;
     case 11:
       localStorage['tournamentSets'] = 0
+      localStorage['tournamentRounds'] = 1
       break;
     case 12:
     case 13:
@@ -72,6 +73,7 @@
     case 15:
     case 16:
       localStorage['tournamentSets'] = 7
+      localStorage['tournamentRounds'] = 2
       break;
     }    
   }
@@ -86,8 +88,9 @@
     var tournyTime = parseFloat(localStorage['tournyTime']).toFixed(1);
     var tournyBreakTime = parseFloat(localStorage['tournyBreakTime']).toFixed(1);
     var tournamentSets = parseFloat(localStorage['tournamentSets']).toFixed(1);
+    var tournamentRounds = parseFloat(localStorage['tournamentRounds']).toFixed(1);
 
-    totalTourneyTime = (tournyTime * tournamentSets) + ((tournamentSets - 1) * tournyBreakTime)
+    totalTourneyTime = ((tournyTime * tournamentSets) + ((tournamentSets - 1) * tournyBreakTime)) * tournamentRounds
     if (localStorage['tournamentSets'] == 0) {
       $('#tourny-time').text("--")
     } else {
