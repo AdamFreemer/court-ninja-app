@@ -16,7 +16,7 @@
     <div class="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-2">
       <div class="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
         <div class="p-6">
-          <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament.court_names.first %> Court</h2>
+          <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_1_name %> Court</h2>
           <table class="min-w-full divide-y divide-gray-300>
             <thead class="bg-gray-50">
             <% team_count = [*1..@tournament.matches.where(court: 1).first.teams.first.users.count - 1] %>
@@ -66,7 +66,7 @@
 
       <div class="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
         <div class="p-6">
-          <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament.court_names.second %> Court</h2>
+          <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_2_name %> Court</h2>
           <table class="min-w-full divide-y divide-gray-300>
             <thead class="bg-gray-50">
             <% team_count = [*1..@tournament.matches.where(court: 1).first.teams.first.users.count - 1] %>

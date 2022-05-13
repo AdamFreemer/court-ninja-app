@@ -38,10 +38,10 @@
   <div class="flex float-right space-x-4">
       <%= link_to 'Back to Tournaments', tournaments_path, class: "inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm" %>
       <%= link_to "Edit Tournament Info", edit_tournament_path(tournament), class: "inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm" %>
-    <% if @round != 1 %> 
+    <% if round != 1 %> 
       <%= link_to "Round One", round_one_tournament_path(tournament), class: "inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm" %>
     <% end %>
-    <% if @round!= 2 && tournament.rounds_configured.include?(2) %>
+    <% if round!= 2 && tournament.rounds_configured.include?(2) %>
       <%= link_to "Round Two", round_two_tournament_path(tournament), class: "inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm" %>
     <% end %>
     <% if (round == 1 && !tournament.rounds_finalized.include?(1)) || (round == 2 && !tournament.rounds_finalized.include?(2)) %>

@@ -18,10 +18,10 @@
       <div class="border border-gray-500 rounded-lg shadow-sm divide-y divide-gray-200">
         <div class="p-6">
           <% if @court == 1 %>
-            <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament.court_names.first %> Court</h2>
+            <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_1_name %> Court</h2>
           <% end %>
           <% if @court == 2 %>
-            <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament.court_names.second %> Court</h2>
+            <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_2_name %> Court</h2>
           <% end %>
           <table class="min-w-full divide-y divide-gray-300">
             <thead class="bg-gray-50">
