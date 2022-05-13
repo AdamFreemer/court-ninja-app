@@ -45,10 +45,10 @@
       <%= link_to "Round Two", round_two_tournament_path(tournament), class: "inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm" %>
     <% end %>
     <% if (round == 1 && !tournament.rounds_finalized.include?(1)) || (round == 2 && !tournament.rounds_finalized.include?(2)) %>
-      <button onclick="updateScores('update')" class="inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm btn-error">Update Scores</button> 
+      <button id="update-scores" onclick="updateScores('update')" class="inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm btn-error">Update Scores</button> 
     <% end %>
     <% if (round == 1 && !tournament.rounds_finalized.include?(1)) || (round == 2 && !tournament.rounds_finalized.include?(2)) %>
-      <button onclick="updateScores('finalize')" class="inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm btn-error">Finalize Round <%= round %></button>
+      <button id="finalize-round" onclick="updateScores('finalize')" class="inline-flex items-center px-2.5 py-1.5 btn btn-outline btn-primary btn-sm btn-error">Finalize Round <%= round %></button>
     <% end %>
   </div>
 </div>
@@ -75,8 +75,10 @@
         data: { score_data, finalize },
         success: function (response) {
           if (finalize == 'update') {
+            $('#update-scores').addClass("loading")
             location.reload(); 
           } else {
+            $('#finalize-round').addClass("loading")
             window.location.href = "/tournament/process_round/<%= @tournament.id %>/<%= round %>";
           }
         }
