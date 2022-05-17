@@ -92,7 +92,7 @@ class TournamentsController < ApplicationController
 
     case round
     when 1
-      redirect_to administration_tournament_url(@tournament, 1), notice: 'Round 1 successfully processed.'
+      redirect_to administration_tournament_url(@tournament, 2), notice: 'Round 1 successfully processed.'
     when 2
       redirect_to results_tournament_url(@tournament), notice: 'Round 2 successfully processed.'
     else
