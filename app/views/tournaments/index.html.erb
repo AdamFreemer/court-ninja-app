@@ -45,10 +45,10 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament&.rounds_finalized.join(', ') %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <% if tournament.rounds_configured.include?(1) %>
-                      <%= link_to "Round One", round_one_tournament_path(tournament), class: "text-indigo-600 hover:text-indigo-900" %> |
+                      <%= link_to "Round 1", administration_tournament_path(tournament, 1), class: "text-indigo-600 hover:text-indigo-900" %> |
                     <% end %>
                     <% if tournament.rounds_configured.include?(2) %>
-                      <%= link_to "Round Two", round_two_tournament_path(tournament), class: "text-indigo-600 hover:text-indigo-900" %> | 
+                      <%= link_to "Round 2", administration_tournament_path(tournament, 2), class: "text-indigo-600 hover:text-indigo-900" %> | 
                     <% end %>
                     <% if tournament.rounds_finalized.include?(tournament.rounds_configured.last.to_i) %>
                       <%= link_to "Results", results_tournament_path(tournament), class: "text-indigo-600 hover:text-indigo-900" %> | 

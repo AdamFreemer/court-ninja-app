@@ -106,6 +106,59 @@
           }
         }
       );
+      // dial home for scoring updates and timer operation status
+      activePolling(); 
+      // make sure timer is reset on load
+      timer.stop();
       timer.reset(<%= @tournament.tournament_time * 60 %>);
   });
+
+  function activePolling() {  
+      $.ajax({
+          type: "GET",
+          url: "/tournaments/<%= @tournament.id %>/status",
+          success: function (response) {
+            const currentSet = document.querySelector('#current-set');
+
+            if (response.timer_status == "start") {
+              timer.start();
+            } else if (response.timer_status == "reset") {
+              timer.stop();
+              timer.reset(<%= @tournament.tournament_time * 60 %>);
+            }
+
+            if (currentSet.dataset.currentSet != response.current_set) {
+              location.reload()
+            }            
+          }
+      })
+      setTimeout(activePolling, 3000);
+  }
+
+  function timerStatus() {
+    $.ajax({
+        type: "GET",
+        url: "/tournaments/<%= @tournament.id %>/check_timer",
+        success: function (response) {
+          if (response.timer_status == "start") {
+            timer.start();
+          } else if (response.timer_status == "reset") {
+            timer.stop();
+            timer.reset(<%= @tournament.tournament_time * 60 %>);
+          }
+        }
+    })
+  };  
+
+  function checkSet() {
+    $.ajax({
+        type: "GET",
+        url: "/tournaments/<%= @tournament.id %>/check_set",
+        success: function (response) {
+          // #current-set is the highlighted row on last page render (as set per the Tournament object on the server)
+          // response.current_set is the live updated set number polled every 3 seconds from the tourny admin page
+
+        }
+    })
+  };
 </script>

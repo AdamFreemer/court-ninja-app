@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: teams
+#
+#  id            :bigint           not null, primary key
+#  number        :integer
+#  score         :integer
+#  work_team     :boolean
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  tournament_id :integer
+#
 class Team < ApplicationRecord
   belongs_to :tournament
 

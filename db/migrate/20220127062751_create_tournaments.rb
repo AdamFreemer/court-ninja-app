@@ -25,6 +25,7 @@ class CreateTournaments < ActiveRecord::Migration[7.0]
       t.integer :tournament_time
       t.integer :break_time
       t.integer :current_set, default: 1
+      t.string :timer_status, default: "reset"
 
       t.timestamps
     end

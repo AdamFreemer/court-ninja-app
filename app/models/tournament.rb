@@ -1,5 +1,38 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: tournaments
+#
+#  id                :bigint           not null, primary key
+#  address1          :string
+#  address2          :string
+#  break_time        :integer
+#  city              :string
+#  court_1_name      :string
+#  court_2_name      :string
+#  court_3_name      :string
+#  court_4_name      :string
+#  court_5_name      :string
+#  court_6_name      :string
+#  court_names       :string           default([]), is an Array
+#  courts            :integer
+#  current_set       :integer          default(1)
+#  date              :datetime
+#  name              :string
+#  players           :integer          default([]), is an Array
+#  rounds            :integer
+#  rounds_configured :integer          default([]), is an Array
+#  rounds_finalized  :integer          default([]), is an Array
+#  state             :string
+#  team_size         :integer
+#  timer_status      :string           default("reset")
+#  tournament_time   :integer
+#  work_group        :integer
+#  zip               :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#
 class Tournament < ApplicationRecord
   has_many :teams
   has_many :matches

@@ -1,6 +1,6 @@
 <%# This is the audio for the bell ringer that executes from the display_js file %>
 <audio id="audio" src="http://www.ufoseries.com/soundEffects/hqAlarmBell.mp3"></audio>
-<%= render "round_display_js" %>
+<%= render "display_js" %>
 
 <div class="bg-white">
   <div class="max-w-full mx-auto py-10 px-6 sm:px-6 lg:px-8">
@@ -47,7 +47,7 @@
                 <% team2 = match.teams.second.users %>
                 <% work_team = match.teams.last.users %>
                 <% if @tournament.current_set == match.number %>
-                  <tr class="font-extrabold divide-x divide-gray-300 shadow-md">
+                  <tr id="current-set" data-current-set="<%= match.number %>" class="font-extrabold divide-x divide-gray-300 shadow-md">
                 <% else %>
                   <tr class="font-normal divide-x divide-gray-300">
                 <% end %>
@@ -71,11 +71,6 @@
       </div>
   
     </div>
-    <div class="float-left space-x-4 space-y-3">
-      <button class="btn btn-outline btn-primary btn-sm" onClick="timer.start()">Start</button> 
-      <button class="btn btn-outline btn-primary btn-sm" onClick="timer.stop()">Stop</button> 
-      <button class="btn btn-outline btn-primary btn-sm" onClick="timer.reset(<%= @tournament.tournament_time * 60 %>)">Reset</button> 
-    </div> 
   </div>
 </div>
  

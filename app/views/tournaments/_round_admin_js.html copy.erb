@@ -1,0 +1,158 @@
+<script>
+  // This code runs the timer on the round display pages
+  // It also has the ringer bell that goes off at 30s and 0s.
+  // This needs to be refactored into ES6 from the cryptic old js it written in from where taken.
+  function _timer(callback) {
+      var time = 20;     //  The default time of the timer
+      var mode = 0;     //    Mode: count up or count down
+      var status = 0;    //    Status: timer is running or stoped
+      var timer_id;    //    This is used by setInterval function
+      
+      // this will start the timer ex. start the timer with 1 second interval timer.start(1000) 
+      this.start = function(interval) {
+          interval = (typeof(interval) !== 'undefined') ? interval : 1000;
+          if(status == 0) {
+            status = 1;
+            timer_id = setInterval(function() {
+              switch(mode) {
+                default:
+                if(time) {
+                  time--;
+                  generateTime();
+                  if(typeof(callback) === 'function') callback(time);
+                }
+                break;
+                
+                case 1:
+                if (time < 86400) {
+                  time++;
+                  generateTime();
+                  if(typeof(callback) === 'function') callback(time);
+                }
+                break;
+              }
+            }, interval);
+          }
+      }
+      //  Same as the name, this will stop or pause the timer ex. timer.stop()
+      this.stop = function() {
+        if(status == 1) {
+          status = 0;
+          clearInterval(timer_id);
+        }
+      }
+      // Reset the timer to zero or reset it to your own custom time ex. reset to zero second timer.reset(0)
+      this.reset = function(sec) {
+        sec = (typeof(sec) !== 'undefined') ? sec : 0;
+        time = sec;
+        generateTime(time);
+        
+      }
+      
+      // Change the mode of the timer, count-up (1) or countdown (0)
+      this.mode = function(tmode) {
+        mode = tmode;
+      }
+      
+      // This methode return the current value of the timer
+      this.getTime = function() {
+        return time;
+      }
+      
+      // This methode return the current mode of the timer count-up (1) or countdown (0)
+      this.getMode = function() {
+        return mode;
+      }
+      
+      // This methode return the status of the timer running (1) or stoped (1)
+      this.getStatus
+      {
+          return status;
+      }
+      
+      // This methode will render the time variable to hour:minute:second format
+      function generateTime()
+      {
+        var second = time % 60;
+        var minute = Math.floor(time / 60) % 60;
+        var hour = Math.floor(time / 3600) % 60;
+        
+        second = (second < 10) ? '0'+second : second;
+        minute = (minute < 10) ? +minute : minute;
+        hour = (hour < 10) ? '0'+hour : hour;
+        
+        $('div.timer span.second').html(second);
+        $('div.timer span.minute').html(minute);
+        $('div.timer span.hour').html(hour);
+      }
+  }
+
+  var timer;
+
+  function timer_bell() {
+    var audio = document.getElementById("audio");
+    audio.play();
+  }
+
+  $(document).ready(function(e) {
+      localStorage['timerOperation'] = "reset"
+      timer = new _timer(
+        function(time) {
+          if(time == 30) {
+            timer_bell()
+          }
+          if(time == 0) {
+            timer_bell()
+            timer.stop();
+          }
+        }
+      );
+      timer.reset(<%= @tournament.tournament_time * 60 %>);
+      activePolling(); 
+      console.log("localStorage['timerOperation']: " + localStorage['timerOperation']) 
+  });
+
+  function activePolling() {  
+      // This code polls the server for set / match updates and timer functionality
+      timerStatus();
+      checkSet();
+      setTimeout(activePolling, 3000);
+  }
+
+  function timerStatus() {
+    $.ajax({
+        type: "GET",
+        url: "/tournaments/<%= @tournament.id %>/check_timer",
+        success: function (response) {
+          console.log("== check_timer: " + response.timer_status)
+          if (response.timer_status == "start" && localStorage['timerOperation'] == "reset") {
+            console.log("== timer.start()")
+            timer.start();
+            localStorage['timerOperation'] = "start"
+
+          } else if (response.timer_status == "reset" && localStorage['timerOperation'] == "start") {
+            timer.stop();
+            timer.reset(<%= @tournament.tournament_time * 60 %>);
+            localStorage['timerOperation'] = "reset"
+            // timer.reset(<%= @tournament.tournament_time * 60 %>);
+            console.log("== timer false")
+          }
+        }
+    })
+  };  
+
+  function checkSet() {
+    $.ajax({
+        type: "GET",
+        url: "/tournaments/<%= @tournament.id %>/check_set",
+        success: function (response) {
+          // #current-set is the highlighted row on last page render (as set per the Tournament object on the server)
+          // response.current_set is the live updated set number polled every 3 seconds from the tourny admin page
+          const currentSet = document.querySelector('#current-set');
+          if (currentSet.dataset.currentSet != response.current_set) {
+            location.reload()
+          }
+        }
+    })
+  };
+</script>

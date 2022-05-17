@@ -1,0 +1,115 @@
+<% round = params[:round].to_i %>
+
+<%= render "display_js" %>
+<div class="mx-auto mb-32">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+  <h1 class="text-xl tracking-tight font-extrabold text-gray-900 sm:text-3xl md:text-4xl">
+    <span class="block text-indigo-700 md:inline"><%= @tournament.name %> Administration : Round <%= round %></span>
+  </h1>
+  <h3 class="pb-1 text-md tracking-tight font-extrabold text-gray-900 sm:text-2xl md:text-3xl">
+    <span class="block text-indigo-400 sm:inline"><%= @tournament.city %>, <%= @tournament.state %></span>
+  </h3>       
+
+  <div class="pb-2 pt-3 text-2xl text-left font-medium text-gray-900">
+    <div class="timer">
+      Timer: <span class="minute"></span>:<span class="second"></span>
+    </div>
+  </div>
+
+  <%# tables %>
+  <% if @tournament.courts == 1 %>
+    <div class="columns-1">
+      <div class="">
+        <%= render "table", tournament: @tournament, court: 1, round: round, matches: @tournament.matches.where(court: 1, round: round) %>
+      </div>
+    </div>  
+  <% elsif @tournament.courts == 2 %>
+    <div class="columns-2 space-y-32">
+      <div class="">
+        <%= render "table", tournament: @tournament, court: 1, round: round, matches: @tournament.matches.where(court: 1, round: round) %>
+      </div>
+      <div class="">
+        <%= render "table", tournament: @tournament, court: 2, round: round, matches: @tournament.matches.where(court: 2, round: round) %>
+      </div>
+    </div>  
+  <% end %>
+  
+  <%# buttons %>
+  <div class="space-y-4 flow-root">
+    <div class="float-left space-x-4 space-y-4">
+      <button onclick="timerOperation('start');" class="inline-flex items-center btn btn-success btn-sm hover:text-rose-50">Timer Start</button>
+      <button onclick="timerOperation('reset');" class="inline-flex items-center btn btn-error btn-sm hover:text-rose-50">Timer Reset</button>
+      <button onclick="display('all')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Courts</button>
+      <button onclick="display('1')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 1</button>
+      <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 2</button>
+    </div>
+    <div class="float-right space-x-4">
+      <%= link_to 'Back to Tournaments', tournaments_path, class: "inline-flex items-center px-2.5 py-1.5 btn btn-primary btn-sm" %>
+      <%= link_to "Edit Tournament Info", edit_tournament_path(@tournament), class: "inline-flex items-center px-2.5 py-1.5 btn btn-primary btn-sm" %>
+      <% if round != 1 %> 
+        <%= link_to "Round One", administration_tournament_path(@tournament, 1), class: "inline-flex items-center px-2.5 py-1.5 btn btn-primary btn-sm" %>
+      <% end %>
+      <% if round != 2 && @tournament.rounds_configured.include?(2) %>
+        <%= link_to "Round Two", administration_tournament_path(@tournament, 2), class: "inline-flex items-center px-2.5 py-1.5 btn btn-primary btn-sm" %>
+      <% end %>
+      <% if (round == 1 && !@tournament.rounds_finalized.include?(1)) || (round == 2 && !@tournament.rounds_finalized.include?(2)) %>
+        <button id="update-scores" onclick="updateScores('update')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">Update Scores</button> 
+      <% end %>
+      <% if (round == 1 && !@tournament.rounds_finalized.include?(1)) || (round == 2 && !@tournament.rounds_finalized.include?(2)) %>
+        <button id="finalize-round" onclick="updateScores('finalize')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">Finalize Round <%= round %></button>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  function timerOperation(operation) {
+    console.log('== operation: ' + operation)
+    url = "/tournaments/timer_operation/<%= @tournament.id %>/" + operation
+    $.ajax({
+      type: "POST",
+      url: "/tournaments/timer_operation",
+      data: {
+        id: <%= @tournament.id %>, 
+        operation: operation, 
+      },
+      success: function (response) {
+        console.log('== timer operation response: ' + response.timer_status)
+      }
+    })
+  };
+
+  function display(court) {
+    if (court == 'all') {
+      window.open("/tournaments/display_double/<%= @tournament.id %>/<%= round %>")
+    } else {
+      window.open("/tournaments/display_single/<%= @tournament.id %>/<%= round %>/" + court)
+    }
+  };
+
+  function updateScores(finalize) {
+    var score_data = $('input[name^=team-]').map(function(idx, elem) {
+      return { team_id: $(elem).attr('id'), score: $(elem).val() }
+    }).get();
+
+    event.preventDefault();
+
+    $.ajax({
+        type: "POST",
+        url: "/tournaments/<%= @tournament.id %>/team_scores_update",
+        data: { score_data, finalize },
+        success: function (response) {
+          if (finalize == 'update') {
+            $('#update-scores').addClass("loading")
+            location.reload(); 
+          } else {
+            $('#finalize-round').addClass("loading")
+            window.location.href = "/tournament/process_round/<%= @tournament.id %>/<%= round %>";
+          }
+        }
+    })
+  };
+</script>

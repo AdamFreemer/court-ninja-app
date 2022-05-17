@@ -80,6 +80,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_04_230543) do
     t.integer "tournament_time"
     t.integer "break_time"
     t.integer "current_set", default: 1
+    t.string "timer_status", default: "reset"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
