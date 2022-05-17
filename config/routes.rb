@@ -15,7 +15,6 @@ Rails.application.routes.draw do
   get '/tournament/process_round/:id/:round', to: 'tournaments#process_round'
   post '/tournaments/timer_operation', to: 'tournaments#timer_operation'
 
-  resources :users
   devise_for :users
 
   root 'tournaments#index'

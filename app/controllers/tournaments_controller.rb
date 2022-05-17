@@ -1,4 +1,5 @@
 class TournamentsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_tournament, only: %i[ status timer_operation
     administration display_single display_double results
     team_scores_update process_round edit update destroy
@@ -57,8 +58,8 @@ class TournamentsController < ApplicationController
   end
 
   def status
-    render json: { 
-      timer_status: @tournament.timer_status, 
+    render json: {
+      timer_status: @tournament.timer_status,
       current_set: @tournament.current_set
     }
   end
