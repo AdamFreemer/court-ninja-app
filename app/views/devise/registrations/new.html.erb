@@ -1,41 +1,42 @@
-<div class="container mx-auto">
-  <div class="text-center text-2xl">Log In</div>
-
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  
-    <%= render "devise/shared/error_messages", resource: resource %>
-    <div class="">
-      <div class="field text-center">
-        <label class="block text-grey-darker text-sm font-bold mb-2" for="username">
-          Email
-        </label>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "shadow appearance-none border rounded py-2 px-4 text-grey-darker" %>
-      </div>
-
-      <div class="field text-center">
-        <label class="block text-grey-darker text-sm font-bold mb-2" for="username">
-          Password
-        </label>
-        <% if @minimum_password_length %>
-        <em>(<%= @minimum_password_length %> characters minimum)</em>
-        <% end %><br />
-        <%= f.password_field :password, autocomplete: "new-password", class: "shadow appearance-none border rounded py-2 px-4 text-grey-darker"  %>
-      </div>
-      <br>
-      <div class="field text-center">
-        <label class="block text-grey-darker text-sm font-bold mb-2" for="username">
-          Password Confirmation
-        </label>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "shadow appearance-none border rounded py-2 px-4 text-grey-darker"  %>
-      </div>
-
-      <div class="actions">
-        <%= f.submit "Sign up" %>
+<div class="devise-view">
+  <div class="flex items-center min-h-screen">
+    <div class="flex-1 h-full max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
+      <div class="flex flex-col md:flex-row">
+        <div class="h-32 md:h-auto md:w-1/2">
+          <%= image_tag "sign-up.jpg", class: "object-cover w-full h-full", alt: "Signup" %>
+        </div>
+        <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
+          <div class="w-full">
+            <h1 class="text-5xl uppercase text-center px-1 pt-1 font-bold">QOTC</h1>
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+              <%= render "devise/shared/error_messages", resource: resource %>
+              <div class="py-4">
+                <%= f.label :first_name, "First Name", class: "block text-sm" %>
+                <%= f.text_field :first_name, autofocus: true, class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500" %>
+              </div>
+              <div class="pb-4">
+                <%= f.label :last_name, "Last Name", class: "block text-sm" %>
+                <%= f.text_field :last_name, class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500" %>
+              </div>
+              <div class="pb-4">
+                <%= f.label :email, "Email", class: "block text-sm" %>
+                <%= f.email_field :email, class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500" %>
+              </div>
+              <div class="pb-4">
+                <%= f.label :password, "Password", class: "block text-sm", autocomplete: "new-password" %>
+                <%= f.password_field :password, class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500" %>
+              </div>
+              <div>
+                <%= f.label :password_confirmation, "Password Confirmation", class: "block text-sm", autocomplete: "new-password" %>
+                <%= f.password_field :password_confirmation, class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500" %>
+              </div>
+              <%= f.submit "Sign Up", class: "block w-full px-2 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-500 border border-transparent rounded-lg active:bg-blue-500 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue" %>
+            <% end %>
+            <hr class="my-8" />
+            <%= render "devise/shared/links" %>
+          </div>
+        </div>
       </div>
     </div>
-  <% end %>
-  <br>
-  <div class="text-center text-xl"><%= render "devise/shared/links" %></div>
-  
-
+  </div>
 </div>
