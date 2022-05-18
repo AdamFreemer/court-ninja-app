@@ -27,12 +27,13 @@ class TournamentsController < ApplicationController
   end
 
   def results
+    rounds = @tournament.rounds
     # show results
-    players_gold = @tournament.player_ranking(2)[0]
-    @players_gold_winner = @tournament.player_ranking(2)[0].first
+    players_gold = @tournament.player_ranking(rounds)[0]
+    @players_gold_winner = @tournament.player_ranking(rounds)[0].first
     players_gold.shift
     @players_gold = players_gold
-    @players_silver = @tournament.player_ranking(2)[1]
+    @players_silver = @tournament.player_ranking(rounds)[1]
   end
 
   def display_double
@@ -76,8 +77,6 @@ class TournamentsController < ApplicationController
     render json: { timer_status: @tournament.timer_status}
   end
 
-
-
   def process_round
     # params: :id / :round
     round = params[:round].to_i
@@ -88,12 +87,13 @@ class TournamentsController < ApplicationController
     rounds_finalized = @tournament.rounds_finalized
     rounds_finalized << round
     @tournament.update(rounds_finalized: rounds_finalized, current_set: round == 1)
-    @tournament.round_two_courts_generate(@tournament.player_ranking(1)) if round == 1
+    @tournament.round_two_courts_generate(@tournament.player_ranking(1)) if round == 1 && @tournament.rounds > 1
 
-    case round
-    when 1
+    if round == 1 && @tournament.rounds > 1
       redirect_to administration_tournament_url(@tournament, 2), notice: 'Round 1 successfully processed.'
-    when 2
+    elsif round == 1 && @tournament.rounds == 1
+      redirect_to results_tournament_url(@tournament), notice: 'Round successfully processed.'
+    elsif round == 2
       redirect_to results_tournament_url(@tournament), notice: 'Round 2 successfully processed.'
     else
       redirect_to tournaments_path

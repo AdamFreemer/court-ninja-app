@@ -12,21 +12,21 @@ class TournamentGenerator
     if @players.count.between?(8, 9)
       associate_tournament_players(@tournament, @players, round)
       create_court(tournament, round, 1, PlayerConfigurations.p9, players_count_8_9)
-      tournament.update(work_group: 3, courts: 1)
+      tournament.update(work_group: 3, courts: 1, rounds: 1)
     end
 
     if @players.count == 10
       associate_tournament_players(@tournament, @players, round)
       create_court(tournament, round, 1, PlayerConfigurations.p5, players_count_10)
       create_court(tournament, round, 2, PlayerConfigurations.p5, players_count_10)
-      tournament.update(work_group: 1, courts: 2)
+      tournament.update(work_group: 1, courts: 2, rounds: 2)
     end
 
     if @players.count.between?(12, 14)
       associate_tournament_players(@tournament, @players, round)
       create_court(tournament, round, 1, PlayerConfigurations.p7, players_count_12_14)
       create_court(tournament, round, 2, PlayerConfigurations.p7, players_count_12_14)
-      tournament.update(work_group: 1, courts: 2)
+      tournament.update(work_group: 1, courts: 2, rounds: 2)
     end
 
     currently_configured = tournament.rounds_configured

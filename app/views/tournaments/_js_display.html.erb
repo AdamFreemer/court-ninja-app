@@ -125,6 +125,12 @@
             } else if (response.timer_status == "reset") {
               timer.stop();
               timer.reset(<%= @tournament.tournament_time * 60 %>);
+            } else if (response.timer_status == "break") {
+              timer.stop();
+              timer.reset(<%= @tournament.tournament_time * 60 %>);
+              // hide tournament timer
+              // show break timer
+              // start break timer
             }
 
             if (currentSet.dataset.currentSet != response.current_set) {

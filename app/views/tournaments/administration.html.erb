@@ -1,6 +1,6 @@
 <% round = params[:round].to_i %>
+<%= render "js_administration", round: round %>
 
-<%= render "display_js" %>
 <div class="mx-auto mb-32">
   <% if notice.present? %>
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
@@ -13,10 +13,13 @@
     <span class="block text-indigo-400 sm:inline"><%= @tournament.city %>, <%= @tournament.state %></span>
   </h3>       
 
-  <div class="pb-2 pt-3 text-2xl text-left font-medium text-gray-900">
+  <div class="pb-6 pt-3 text-2xl text-left font-medium text-gray-700">
     <div class="timer">
       Timer: <span class="minute"></span>:<span class="second"></span>
     </div>
+    <button onclick="timerOperation('start');" class="inline-flex items-center btn btn-success btn-xs hover:text-rose-50">Timer Start</button>
+    <button onclick="timerOperation('pause');" class="inline-flex items-center btn btn-warning btn-xs hover:text-rose-50">Timer Pause</button>
+    <button onclick="timerOperation('reset');" class="inline-flex items-center btn btn-error btn-xs hover:text-rose-50">Timer Reset</button>  
   </div>
 
   <%# tables %>
@@ -40,11 +43,11 @@
   <%# buttons %>
   <div class="space-y-4 flow-root">
     <div class="float-left space-x-4 space-y-4">
-      <button onclick="timerOperation('start');" class="inline-flex items-center btn btn-success btn-sm hover:text-rose-50">Timer Start</button>
-      <button onclick="timerOperation('reset');" class="inline-flex items-center btn btn-error btn-sm hover:text-rose-50">Timer Reset</button>
-      <button onclick="display('all')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Courts</button>
-      <button onclick="display('1')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 1</button>
-      <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 2</button>
+      <button onclick="display('1')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court <%= @tournament.courts > 1 ? 1 : "" %></button>
+      <% if @tournament.courts > 1 %> 
+        <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 2</button>
+        <button onclick="display('all')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Both Courts</button>
+      <% end %>      
     </div>
     <div class="float-right space-x-4">
       <%= link_to 'Back to Tournaments', tournaments_path, class: "inline-flex items-center px-2.5 py-1.5 btn btn-primary btn-sm" %>
@@ -59,57 +62,10 @@
         <button id="update-scores" onclick="updateScores('update')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">Update Scores</button> 
       <% end %>
       <% if (round == 1 && !@tournament.rounds_finalized.include?(1)) || (round == 2 && !@tournament.rounds_finalized.include?(2)) %>
-        <button id="finalize-round" onclick="updateScores('finalize')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">Finalize Round <%= round %></button>
+        <button id="finalize-round" onclick="updateScores('finalize')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">
+          Finalize Round <%= @tournament.rounds > 1 ? round : "" %>
+        </button>
       <% end %>
     </div>
   </div>
 </div>
-
-<script>
-  function timerOperation(operation) {
-    console.log('== operation: ' + operation)
-    url = "/tournaments/timer_operation/<%= @tournament.id %>/" + operation
-    $.ajax({
-      type: "POST",
-      url: "/tournaments/timer_operation",
-      data: {
-        id: <%= @tournament.id %>, 
-        operation: operation, 
-      },
-      success: function (response) {
-        console.log('== timer operation response: ' + response.timer_status)
-      }
-    })
-  };
-
-  function display(court) {
-    if (court == 'all') {
-      window.open("/tournaments/display_double/<%= @tournament.id %>/<%= round %>")
-    } else {
-      window.open("/tournaments/display_single/<%= @tournament.id %>/<%= round %>/" + court)
-    }
-  };
-
-  function updateScores(finalize) {
-    var score_data = $('input[name^=team-]').map(function(idx, elem) {
-      return { team_id: $(elem).attr('id'), score: $(elem).val() }
-    }).get();
-
-    event.preventDefault();
-
-    $.ajax({
-        type: "POST",
-        url: "/tournaments/<%= @tournament.id %>/team_scores_update",
-        data: { score_data, finalize },
-        success: function (response) {
-          if (finalize == 'update') {
-            $('#update-scores').addClass("loading")
-            location.reload(); 
-          } else {
-            $('#finalize-round').addClass("loading")
-            window.location.href = "/tournament/process_round/<%= @tournament.id %>/<%= round %>";
-          }
-        }
-    })
-  };
-</script>
