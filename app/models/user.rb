@@ -51,6 +51,8 @@ class User < ApplicationRecord
 
   has_many :user_scores
 
+  attr_accessor :role
+
   def full_name
     "#{last_name}, #{first_name}"
   end
