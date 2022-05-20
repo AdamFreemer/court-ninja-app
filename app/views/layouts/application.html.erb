@@ -16,11 +16,15 @@
   </head>
 
   <body>
-    <%= render 'layouts/header' %>
-    <main class="px-8">
-      <%= render 'layouts/alerts' %>
+    <% if current_user %>
+      <%= render 'layouts/header' %>
+      <main class="px-8">
+        <%= render 'layouts/alerts' %>
+        <%= yield %>
+      </main>
+    <% else %>
       <%= yield %>
-    </main>
+    <% end %>
   </body>
 </html>
 
