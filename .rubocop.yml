@@ -28,6 +28,9 @@ Rails/UnknownEnv:
 Bundler/GemComment:
   Enabled: false
 
+Layout/LineLength:
+  Max: 200
+
 Lint/ConstantResolution:
   Enabled: false
 

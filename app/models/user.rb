@@ -4,6 +4,7 @@
 #
 #  id                     :bigint           not null, primary key
 #  address                :string
+#  admin                  :boolean          default(FALSE)
 #  city                   :string
 #  contact_1_address      :string
 #  contact_1_name         :string

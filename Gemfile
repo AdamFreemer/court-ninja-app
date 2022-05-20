@@ -4,20 +4,17 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.4'
 gem 'rails', '~> 7.0.1'
 
-gem 'cocoon'
-
-gem 'devise'
-
+gem 'cocoon', '~> 1.1'
+gem 'devise', '~> 4.8'
+gem 'importmap-rails', '~> 1.0'
 gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.6.4'
-# Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
-gem 'importmap-rails'
-# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem 'turbo-rails'
-# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+gem 'sassc-rails', '~> 2.1'
+gem 'sprockets-rails', '~> 3.4'
+gem 'stimulus-rails', '~> 1.0'
+gem 'trestle', '~> 0.9'
+gem 'turbo-rails', '~> 1.0'
 
-gem 'sprockets-rails'
-gem 'stimulus-rails'
 # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
 gem 'tailwindcss-rails'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
@@ -36,7 +33,6 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
 # Use Sass to process CSS
-# gem "sassc-rails"
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
