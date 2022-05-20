@@ -113,7 +113,10 @@ GEM
     digest (3.1.0)
     digest (3.1.0-java)
     erubi (1.10.0)
+    ffi (1.15.5)
     ffi (1.15.5-java)
+    ffi (1.15.5-x64-mingw32)
+    ffi (1.15.5-x86-mingw32)
     globalid (1.0.0)
       activesupport (>= 5.0)
     i18n (1.10.0)
@@ -127,6 +130,18 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
+    kaminari (1.2.2)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.2.2)
+      kaminari-activerecord (= 1.2.2)
+      kaminari-core (= 1.2.2)
+    kaminari-actionview (1.2.2)
+      actionview
+      kaminari-core (= 1.2.2)
+    kaminari-activerecord (1.2.2)
+      activerecord
+      kaminari-core (= 1.2.2)
+    kaminari-core (1.2.2)
     launchy (2.5.0)
       addressable (~> 2.7)
     letter_opener (1.8.1)
@@ -256,6 +271,16 @@ GEM
       rubocop (>= 1.7.0, < 2.0)
     ruby-progressbar (1.11.0)
     rubyzip (2.3.2)
+    sassc (2.4.0)
+      ffi (~> 1.9)
+    sassc (2.4.0-x64-mingw32)
+      ffi (~> 1.9)
+    sassc-rails (2.1.2)
+      railties (>= 4.0.0)
+      sassc (>= 2.0)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     select2-rails (4.0.13)
     selenium-webdriver (4.1.0)
       childprocess (>= 0.5, < 5.0)
@@ -279,7 +304,16 @@ GEM
     tailwindcss-rails (2.0.8-x64-mingw32)
       railties (>= 6.0.0)
     thor (1.2.1)
+    tilt (2.0.10)
     timeout (0.2.0)
+    trestle (0.9.6)
+      activemodel (>= 4.2.0)
+      kaminari (>= 1.1.0)
+      railties (>= 4.2.0)
+      sprockets-rails (>= 2.0.0)
+    trestle-auth (0.4.4)
+      bcrypt (~> 3.1.7)
+      trestle (~> 0.9.0, >= 0.9.3)
     turbo-rails (1.0.1)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
@@ -322,11 +356,11 @@ DEPENDENCIES
   binding_of_caller (~> 1.0)
   bootsnap
   capybara
-  cocoon
+  cocoon (~> 1.1)
   debug
-  devise
-  importmap-rails
-  jbuilder
+  devise (~> 4.8)
+  importmap-rails (~> 1.0)
+  jbuilder (~> 2.11)
   letter_opener (~> 1.7)
   pg (~> 1.1)
   pry-byebug
@@ -338,12 +372,15 @@ DEPENDENCIES
   rubocop (~> 1.29.1)
   rubocop-performance (~> 1.9)
   rubocop-rails (~> 2.9)
-  select2-rails
+  sassc-rails (~> 2.1)
+  select2-rails (~> 4.0)
   selenium-webdriver
-  sprockets-rails
-  stimulus-rails
-  tailwindcss-rails
-  turbo-rails
+  sprockets-rails (~> 3.4)
+  stimulus-rails (~> 1.0)
+  tailwindcss-rails (~> 2.0)
+  trestle (~> 0.9)
+  trestle-auth (~> 0.4)
+  turbo-rails (~> 1.0)
   tzinfo-data
   web-console (>= 4.1.0)
   webdrivers
