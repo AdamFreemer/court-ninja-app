@@ -1,0 +1,30 @@
+<%
+  def class_for_background_color(key)
+    case key
+    when 'alert' then 'bg-green-50'
+    when 'notice' then 'bg-green-50'
+    when 'warning' then 'bg-yellow-50'
+    when 'error' then 'bg-red-50'
+    end
+  end
+
+  def class_for_text_color(key)
+    case key
+    when 'alert' then 'text-green-500'
+    when 'notice' then 'text-green-500'
+    when 'warning' then 'text-yellow-500'
+    when 'error' then 'text-red-500'
+    end
+  end
+%>
+<% flash.each do |key, value| %>
+  <div data-controller="flash" class="flex items-center w-full my-3 py-3 px-5 rounded-lg <%= class_for_background_color(key) %> <%= class_for_text_color(key) %>">
+    <div class="mr-4 w-full text-center text-bold"><%= value %></div>
+
+    <button type="button" data-action="flash#dismiss">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+<% end %>

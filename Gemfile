@@ -7,22 +7,19 @@ gem 'rails', '~> 7.0.1'
 gem 'cocoon', '~> 1.1'
 gem 'devise', '~> 4.8'
 gem 'importmap-rails', '~> 1.0'
+gem 'jbuilder', '~> 2.11'
 gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.6.4'
+gem 'redis', '~> 4.0'
 gem 'sassc-rails', '~> 2.1'
+gem 'select2-rails', '~> 4.0'
 gem 'sprockets-rails', '~> 3.4'
 gem 'stimulus-rails', '~> 1.0'
+gem 'tailwindcss-rails', '~> 2.0'
 gem 'trestle', '~> 0.9'
+gem 'trestle-auth', '~> 0.4'
 gem 'turbo-rails', '~> 1.0'
 
-# Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
-gem 'tailwindcss-rails'
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem 'jbuilder'
-# Use Redis adapter to run Action Cable in production
-gem 'redis', '~> 4.0'
-
-gem 'select2-rails'
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
