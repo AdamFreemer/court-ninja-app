@@ -11,7 +11,7 @@ gem 'jbuilder', '~> 2.11'
 gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.6.4'
 gem 'redis', '~> 4.0'
-gem 'sassc-rails', '~> 2.1'
+# gem 'sassc-rails', '~> 2.1' # conflicts with tailwindcss
 gem 'select2-rails', '~> 4.0'
 gem 'sprockets-rails', '~> 3.4'
 gem 'stimulus-rails', '~> 1.0'
