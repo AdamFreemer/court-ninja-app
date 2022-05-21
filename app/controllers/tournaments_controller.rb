@@ -1,5 +1,4 @@
 class TournamentsController < ApplicationController
-  before_action :authenticate_user!, only: %i[index]
   before_action :set_tournament, only: %i[ status timer_operation
     administration display_single display_double results
     team_scores_update process_round edit update destroy
