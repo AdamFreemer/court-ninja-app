@@ -1,26 +1,26 @@
-<div class="grid grid-cols-6 gap-6 mt-6"> 
-  <div id="court-1-container" class="col-span-6 sm:col-span-6 lg:col-span-2">
+<div class="grid grid-cols-6 gap-6 mt-6">
+  <div data-courts-target="courtOneContainer" class="col-span-6 sm:col-span-6 lg:col-span-2 hidden">
     <label for="courts" class="block text-sm font-medium text-gray-700">Court 1 Name</label>
     <%= form.text_field :court_1_name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
   </div>
-  <div id="court-2-container" class="col-span-6 sm:col-span-6 lg:col-span-2">
+  <div data-courts-target="courtTwoContainer" class="col-span-6 sm:col-span-6 lg:col-span-2 hidden">
     <label for="courts" class="block text-sm font-medium text-gray-700">Court 2 Name</label>
     <%= form.text_field :court_2_name, id: "court-2-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
   </div>
-  <div id="court-3-container" class="col-span-6 sm:col-span-6 lg:col-span-2">
+  <div data-courts-target="courtThreeContainer" class="col-span-6 sm:col-span-6 lg:col-span-2 hidden">
     <label for="courts" class="block text-sm font-medium text-gray-700">Court 3 Name</label>
     <%= form.text_field :court_3_name, id: "court-3-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-  </div>            
-  <div id="court-4-container" class="col-span-6 sm:col-span-6 lg:col-span-2">
+  </div>
+  <div data-courts-target="courtFourContainer" class="col-span-6 sm:col-span-6 lg:col-span-2 hidden">
     <label for="courts" class="block text-sm font-medium text-gray-700">Court 4 Name</label>
     <%= form.text_field :court_4_name, id: "court-4-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
   </div>
-  <div id="court-5-container" class="col-span-6 sm:col-span-6 lg:col-span-2">
+  <div data-courts-target="courtFiveContainer" class="col-span-6 sm:col-span-6 lg:col-span-2 hidden">
     <label for="courts" class="block text-sm font-medium text-gray-700">Court 5 Name</label>
     <%= form.text_field :court_5_name, id: "court-5-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
   </div>
-  <div id="court-6-container" class="col-span-6 sm:col-span-6 lg:col-span-2">
+  <div data-courts-target="courtSixContainer" class="col-span-6 sm:col-span-6 lg:col-span-2 hidden">
     <label for="courts" class="block text-sm font-medium text-gray-700">Court 6 Name</label>
     <%= form.text_field :court_6_name, id: "court-6-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-  </div>            
+  </div>
 </div>

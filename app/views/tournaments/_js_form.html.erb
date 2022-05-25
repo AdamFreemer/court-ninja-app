@@ -1,16 +1,13 @@
 <script>
-  $(document).ready(function() { 
-    // On load set court count to 1
-    setDefaultCourtCount(<%= tournament.courts %>);
-    // On load set session data
-    setDefaultSessionData();
-    // Show / hide courts according to players checked and update session data
-    $("input:checkbox").change(function() { playersSelectedChange(); }); 
-    // Update session data on tournament time changes
-    tournyTimeChangeListener();
-    tournyBreakTimeChangeListener();
-    // Update page with current total tournament time
-    updateTournyTimeOnPageListener();
+  $(document).ready(function() {
+    // // On load set session data
+    // setDefaultSessionData();
+    // // Show / hide courts according to players checked and update session data
+    // $("input:checkbox").change(function() { playersSelectedChange(); });
+    // // Update session data on tournament time changes
+    // tournyBreakTimeChangeListener();
+    // // Update page with current total tournament time
+    // updateTournyTimeOnPageListener();
   });
 
   function setDefaultSessionData() {
@@ -23,13 +20,13 @@
   function tournyTimeChangeListener() {
     $('#tournament-time').change(function () {
       localStorage['tournyTime'] = $('#tournament-time').val();
-    });   
+    });
   }
 
   function tournyBreakTimeChangeListener() {
     $('#break-time').change(function () {
       localStorage['tournyBreakTime'] = $('#break-time').val();
-    });       
+    });
   }
 
   function playersSelectedChange() {
@@ -41,8 +38,8 @@
       courtsCountTwo();
     } else {
       courtsCountOne();
-    }    
-  } 
+    }
+  }
 
   function processPlayersSelected(pSelected) {
     switch (pSelected) {
@@ -75,13 +72,13 @@
       localStorage['tournamentSets'] = 7
       localStorage['tournamentRounds'] = 2
       break;
-    }    
+    }
   }
 
   function updateTournyTimeOnPageListener() {
     $('#tournament-time, #break-time, input:checkbox').change(function () {
       updateTournyTimeOnPage();
-    });      
+    });
   }
 
   function updateTournyTimeOnPage() {
@@ -96,7 +93,7 @@
     } else {
       $('#tourny-time').text(totalTourneyTime + " minutes")
     }
-  }  
+  }
 
   function selectNonePlayers() {
     let pSelected = document.querySelectorAll('input[type="checkbox"]:checked').length;
@@ -118,51 +115,5 @@
     playersSelectedChange();
     updateTournyTimeOnPage();
     event.preventDefault();
-  };
-
-  function setDefaultCourtCount(courts_count) {
-    if (courts_count == "1") {
-      courtsCountOne();
-    } else if (courts_count == "2") {
-      courtsCountTwo();
-    } else {
-      courtsCountOne();
-    }
-  }  
-
-  function courtsCountOne() {
-    $("#court-1-container").show();
-    $("#court-2-container").hide();
-    $("#court-3-container").hide();
-    $("#court-4-container").hide();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
-  };
-
-  function courtsCountTwo() {
-    $("#court-1-container").show();
-    $("#court-2-container").show();
-    $("#court-3-container").hide();
-    $("#court-4-container").hide();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
-  };
-
-  function courtsCountThree() {
-    $("#court-1-container").show();
-    $("#court-2-container").show();
-    $("#court-3-container").show();
-    $("#court-4-container").hide();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
-  };  
-
-  function courtsCountFour() {
-    $("#court-1-container").show();
-    $("#court-2-container").show();
-    $("#court-3-container").show();
-    $("#court-4-container").show();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
   };
 </script>

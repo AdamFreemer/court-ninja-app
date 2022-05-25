@@ -1,3 +1,4 @@
+<div data-controller="tournaments courts" data-loader-num-courts-value="<%= tournament.courts %>">
 <%= form_with(model: tournament, class: "contents") do |form| %>
   <% if tournament.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
@@ -68,11 +69,11 @@
 
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                 <label for="tournament-time" class="block text-sm font-medium text-gray-700">Tournament Time (minutes)<span class="text-gray-400"></span></label>
-                <%= form.select :tournament_time, @tournament_times, { :placeholder => "Please Select" }, id: "tournament-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+                <%= form.select :tournament_time, @tournament_times, { :placeholder => "Please Select" }, id: 'tournament-time', class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md", "data-tournaments-target": "tournamentTime", "data-action": "change->tournaments#changeTournamentTime" %>
               </div>
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                 <label for="break-time" class="block text-sm font-medium text-gray-700">Tournament Break Time (minutes)<span class="text-gray-400"></span></label>
-                <%= form.select :break_time, @break_times, { :placeholder => "Please Select" }, id: "break-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+                <%= form.select :break_time, @break_times, { :placeholder => "Please Select" }, id: "break-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md", "data-tournaments-target": "tournyBreakTime", "data-action": "change->tournaments#changeTourneyBreakTime" %>
               </div>
             </div>
             <%= render "form_courts", form: form %>
@@ -87,5 +88,4 @@
     </div>
   </div>
 <% end %>
-
-<%= render "js_form", tournament: @tournament %>
+</div>
