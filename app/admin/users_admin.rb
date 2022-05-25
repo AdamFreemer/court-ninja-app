@@ -20,4 +20,13 @@ Trestle.resource(:users) do
     column :admin
     actions
   end
+
+  form do
+    text_field :email
+    text_field :first_name
+    text_field :last_name
+
+    hidden_field :password, { value: 'password123' }
+    hidden_field :password_confirmation, { value: 'password123' }
+  end
 end
