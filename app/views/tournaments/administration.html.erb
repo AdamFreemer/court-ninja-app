@@ -9,7 +9,11 @@
     <span class="block text-indigo-400 sm:inline"><%= @tournament.city %>, <%= @tournament.state %></span>
   </h3>
 
-  <div data-controller="timer" data-timer-status-value="reset" data-timer-time-value="300" class="pb-6 pt-3 text-2xl text-left font-medium text-gray-700">
+  <div data-controller="timer" 
+    data-timer-status-value="reset" 
+    data-timer-tournament-time-value="<%= @tournament.tournament_time * 60 %>" 
+    data-timer-break-time-value="<%= @tournament.break_time * 60 %>" 
+    class="pb-6 pt-3 text-2xl text-left font-medium text-gray-700">
     <div class="timer">
       Timer: <span data-timer-target="minute"></span>:<span data-timer-target="second"></span>
     </div>
