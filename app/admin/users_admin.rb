@@ -6,6 +6,10 @@ Trestle.resource(:users) do
     end
   end
 
+  collection do
+    model.where(is_ghost_player: false)
+  end
+
   menu do
     item :users, icon: 'fa fa-users'
   end
