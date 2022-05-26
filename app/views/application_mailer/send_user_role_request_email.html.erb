@@ -1,0 +1,5 @@
+<%= "#{@user.first_name} #{@user.last_name}" %> has requested to be a <%= @user_role_request.role %>.
+<br>
+<%= link_to "Approve", approve_user_role_request_url(@user_role_request.id) %>
+<br>
+<%= link_to "Deny", deny_user_role_request_url(@user_role_request.id) %>

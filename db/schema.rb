@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_20_212238) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_26_221232) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -106,6 +106,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_20_212238) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_role_requests", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "role"
+    t.string "status", default: "pending"
+    t.bigint "processed_by_id"
+    t.datetime "processed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["processed_by_id"], name: "index_user_role_requests_on_processed_by_id"
+    t.index ["user_id"], name: "index_user_role_requests_on_user_id"
+  end
+
   create_table "user_scores", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "tournament_set_id"
@@ -159,6 +171,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_20_212238) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "admin", default: false
+    t.boolean "player", default: false
+    t.boolean "coach", default: false
+    t.boolean "tournament_organizer", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -177,4 +192,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_20_212238) do
   add_foreign_key "user_scores", "users"
   add_foreign_key "user_traits", "traits"
   add_foreign_key "user_traits", "users"
+  add_foreign_key "user_role_requests", "users"
+  add_foreign_key "user_role_requests", "users", column: "processed_by_id"
 end

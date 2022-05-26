@@ -11,11 +11,14 @@ Trestle.resource(:users) do
   end
 
   menu do
-    item :users, icon: 'fa fa-users'
+    item :users, icon: 'fa fa-users', priority: 1
   end
 
   scope :all, -> { User.all }, default: true
   scope :admin, -> { User.where(admin: true) }
+  scope :players, -> { User.where(player: true) }
+  scope :coaches, -> { User.where(coach: true) }
+  scope :tournament_organizer, -> { User.where(tournament_organizer: true) }
 
   table do
     column :first_name

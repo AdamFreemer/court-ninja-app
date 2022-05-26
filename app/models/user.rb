@@ -6,6 +6,7 @@
 #  address                :string
 #  admin                  :boolean          default(FALSE)
 #  city                   :string
+#  coach                  :boolean          default(FALSE)
 #  contact_1_address      :string
 #  contact_1_name         :string
 #  contact_1_phone        :string
@@ -20,11 +21,13 @@
 #  jersey_number          :string
 #  last_name              :string
 #  phone_number           :string
+#  player                 :boolean          default(FALSE)
 #  position               :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  state                  :string
+#  tournament_organizer   :boolean          default(FALSE)
 #  zip                    :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null

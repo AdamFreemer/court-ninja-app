@@ -11,7 +11,6 @@ gem 'jbuilder', '~> 2.11'
 gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.6.4'
 gem 'redis', '~> 4.0'
-# gem 'sassc-rails', '~> 2.1' # conflicts with tailwindcss
 gem 'select2-rails', '~> 4.0'
 gem 'sprockets-rails', '~> 3.4'
 gem 'stimulus-rails', '~> 1.0'
@@ -50,6 +49,7 @@ group :development do
   gem 'rubocop', '~> 1.29.1', require: false
   gem 'rubocop-performance', '~> 1.9', require: false
   gem 'rubocop-rails', '~> 2.9', require: false
+  gem 'sassc-rails', '~> 2.1' # conflicts with tailwindcss
   gem 'web-console', '>= 4.1.0'
 end
 
