@@ -6,6 +6,10 @@ Trestle.resource(:users) do
     end
   end
 
+  collection do
+    model.where(is_ghost_player: false)
+  end
+
   menu do
     item :users, icon: 'fa fa-users'
   end
@@ -19,5 +23,25 @@ Trestle.resource(:users) do
     column :email
     column :admin
     actions
+  end
+
+  form do |u|
+    text_field :email
+    text_field :first_name
+    text_field :last_name
+
+    if u.new_record?
+      hidden_field :password, { value: 'password123' }
+      hidden_field :password_confirmation, { value: 'password123' }
+    end
+  end
+
+  # Ignore the password parameters if they are blank
+  update_instance do |instance, attrs|
+    if attrs[:password].blank?
+      attrs.delete(:password)
+      attrs.delete(:password_confirmation) if attrs[:password_confirmation].blank?
+    end
+    instance.assign_attributes(attrs)
   end
 end
