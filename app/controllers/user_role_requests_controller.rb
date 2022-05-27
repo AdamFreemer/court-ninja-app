@@ -15,6 +15,10 @@ class UserRoleRequestsController < ApplicationController
   def deny
     @user_role_request.update!(status: 'denied', processed_at: Time.current, processed_by_id: current_user.id)
     ApplicationMailer.send_role_request_processed_email(@user_role_request).deliver_now
+    user = @user_role_request.user
+    user.coach = false if @user_role_request.role == 'Coach'
+    user.tournament_organizer = false if @user_role_request.role == 'Tournament Organizer'
+    user.save!
     redirect_to @user_role_request.user
   end
 
