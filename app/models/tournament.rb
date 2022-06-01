@@ -7,7 +7,7 @@
 #  id                :bigint           not null, primary key
 #  address1          :string
 #  address2          :string
-#  break_time        :integer
+#  break_time        :float
 #  city              :string
 #  court_1_name      :string
 #  court_2_name      :string
@@ -26,8 +26,8 @@
 #  rounds_finalized  :integer          default([]), is an Array
 #  state             :string
 #  team_size         :integer
-#  timer_status      :string           default("reset")
-#  tournament_time   :integer
+#  timer_state       :string           default("initial")
+#  tournament_time   :float
 #  work_group        :integer
 #  zip               :string
 #  created_at        :datetime         not null

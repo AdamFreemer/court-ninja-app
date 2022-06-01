@@ -1,3 +1,11 @@
+puts "== Creating Users..."
+
+# Admins
+User.create(email: 'dmbrooking@gmail.com', first_name: 'Dan', last_name: 'Broking', password: 'password', password_confirmation: 'password', admin: true)
+User.create(email: 'adam@freemer.com', first_name: 'Adam', last_name: 'Freemer', password: 'password', password_confirmation: 'password', admin: true)
+User.create(email: 'lucky@2629consulting.com', first_name: 'Lucky', last_name: 'Makropoulos', password: 'password', password_confirmation: 'password', admin: true)
+
+# Lucky Team
 User.create(email: 'sfaisal2007@yahoo.com', first_name: 'Olivia', last_name: 'Luey', password: 'password', password_confirmation: 'password')
 User.create(email: 'bollinger.ohana@gmail.com', first_name: 'Brooklyn', last_name: 'Bollinger', password: 'password', password_confirmation: 'password')
 User.create(email: 'hi@regandaniels.com', first_name: 'Julia', last_name: 'Qaqundah', password: 'password', password_confirmation: 'password')

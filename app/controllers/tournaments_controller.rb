@@ -1,5 +1,5 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: %i[ status timer_operation
+  before_action :set_tournament, only: %i[status
     administration display_single display_double results
     team_scores_update process_round edit update destroy
   ]
@@ -66,25 +66,22 @@ class TournamentsController < ApplicationController
     score_date = request.params['score_data']
     Team.score_update(score_date)
     @tournament.update_current_set(score_date)
-    @tournament.update!(timer_status: "reset")
+    @tournament.update!(timer_state: "reset")
     render json: {}
   end
 
   def status
     render json: {
-      timer_status: @tournament.timer_status,
+      timer_status: @tournament.timer_state,
       current_set: @tournament.current_set
     }
   end
 
   def timer_operation
+    binding.pry
     operation = params[:operation]
 
-    if operation == "start"
-      @tournament.timer_status = "start"
-    elsif operation == "reset"
-      @tournament.timer_status = "reset"
-    end
+    @tournament.update!(state: params[:state], mode: params[:mode])
     @tournament.save
 
     render json: { timer_status: @tournament.timer_status}

@@ -171,19 +171,19 @@
     setTimeout(activeTimerPolling, 3000);
   }
 
-  $(document).ready(function(e) {
-    timer = new _timer(
-      function(time) {}
-    );
+  // $(document).ready(function(e) {
+  //   timer = new _timer(
+  //     function(time) {}
+  //   );
 
-    // make sure timer is reset on load
-    // first on server
-    timerOperation('reset');
-    // then on page
-    timer.stop();
-    timer.reset(<%= @tournament.tournament_time * 60 %>);
+  //   // make sure timer is reset on load
+  //   // first on server
+  //   timerOperation('reset');
+  //   // then on page
+  //   timer.stop();
+  //   timer.reset(<%= @tournament.tournament_time * 60 %>);
 
-    // dial home for scoring updates and timer operation status
-    activeTimerPolling();
-  });
+  //   // dial home for scoring updates and timer operation status
+  //   activeTimerPolling();
+  // });
 </script>

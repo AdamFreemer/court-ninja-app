@@ -1,5 +1,5 @@
 <% round = params[:round].to_i %>
-<%# <%= render "js_administration", round: round %> %>
+<%# render "js_administration", round: round %> %>
 
 <div class="mx-auto mb-32">
   <h1 class="text-xl tracking-tight font-extrabold text-gray-900 sm:text-3xl md:text-4xl">
@@ -10,9 +10,11 @@
   </h3>
 
   <div data-controller="timer" 
-    data-timer-status-value="reset" 
-    data-timer-tournament-time-value="<%= @tournament.tournament_time * 60 %>" 
+    data-timer-tournament-id-value="<%= @tournament.id %>" 
     data-timer-break-time-value="<%= @tournament.break_time * 60 %>" 
+    data-timer-tournament-timer-state-value="<%= @tournament.timer_state %>" 
+    data-timer-tournament-timer-value="<%= @tournament.break_time * 60 %>" 
+    data-timer-tournament-time-value="<%= @tournament.tournament_time * 60 %>" 
     class="pb-6 pt-3 text-2xl text-left font-medium text-gray-700">
     <div class="timer">
       Timer: <span data-timer-target="minute"></span>:<span data-timer-target="second"></span>
