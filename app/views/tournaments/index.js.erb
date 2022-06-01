@@ -1,0 +1,9 @@
+console.log("==== hellO!")
+
+container = $('#index');
+
+<% @tournaments.each do |tournament| %>
+  container.prepend( "<%= j render( :partial => 'tournaments/index') %>" );
+<% end %>
+
+window.location.reload();

@@ -39,6 +39,8 @@ class Tournament < ApplicationRecord
   has_many :tournament_users
   has_many :users, through: :tournament_users
   has_many :user_scores
+  
+  scope :before_today, -> { where("created_at < ?", 1.days.ago) }
 
   def generate_tournament
     return false unless players.count.between?(8, 14)
@@ -89,10 +91,21 @@ class Tournament < ApplicationRecord
       end
     end
 
+
     court_1_sorted = court_1_scores.sort_by { |a| [-a[3], -a[2]] }
     court_2_sorted = court_2_scores.sort_by { |a| [-a[3], -a[2]] }
+    # binding.pry
+    [normalized_score(court_1_sorted), normalized_score(court_2_sorted)]
+  end
 
-    [court_1_sorted, court_2_sorted]
+  def normalized_score(court_sorted)
+    lowest_score = court_sorted.collect { |arr| arr[2] }.min
+    return true if court_sorted == []
+    return court_sorted unless lowest_score.negative? 
+    
+    court_sorted.each do |player|
+      player[2] = player[2] + lowest_score&.abs
+    end
   end
 
   def round_two_courts_generate(round_1_sorted)
