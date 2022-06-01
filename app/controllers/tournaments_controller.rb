@@ -7,20 +7,17 @@ class TournamentsController < ApplicationController
   before_action :round_two_generated, only: %i[administration]
 
   def index
-    # binding.pry
     if params[:filter] == "before-today"
-      puts "== before today"
       @tournaments = Tournament.before_today.order(:id)      
     elsif params[:filter] == "all"
-      puts "== all"
       @tournaments = Tournament.all.order(:id)
     else
-      puts "== catch all"
-      @tournaments = Tournament.all.order(:id)
+      @tournaments = Tournament.before_today.order(:id)
     end   
+
     respond_to do |format|
-      format.js {render layout: false}
-      format.html { render 'index'} # I had to tell rails to use the index by default if it's a html request. 
+      format.js { render layout: false }
+      format.html { render 'index' } 
     end
   end
 

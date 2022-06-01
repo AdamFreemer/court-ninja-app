@@ -90,11 +90,9 @@ class Tournament < ApplicationRecord
         court_2_scores << [player.id, player.name_abbreviated, score, wins]
       end
     end
-
-
     court_1_sorted = court_1_scores.sort_by { |a| [-a[3], -a[2]] }
     court_2_sorted = court_2_scores.sort_by { |a| [-a[3], -a[2]] }
-    # binding.pry
+
     [normalized_score(court_1_sorted), normalized_score(court_2_sorted)]
   end
 
