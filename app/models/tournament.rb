@@ -41,7 +41,7 @@ class Tournament < ApplicationRecord
   has_many :user_scores
   
   scope :before_today, -> { where("created_at < ?", 1.days.ago) }
-  scope :today, -> { where("created_at > ?", 1.days.ago) }
+  scope :today, -> { where("created_at > ?", DateTime.now.beginning_of_day) }
 
   def generate_tournament
     return false unless players.count.between?(8, 14)
