@@ -8,13 +8,13 @@ class TournamentsController < ApplicationController
 
   def index
     if params[:filter] == "before-today"
-      @tournaments = Tournament.before_today.order(:id)
+      @tournaments = Tournament.before_today.order(created_at: :desc)
     elsif params[:filter] == "today"
-      @tournaments = Tournament.today.order(:id)   
+      @tournaments = Tournament.today.order(created_at: :desc) 
     elsif params[:filter] == "all"
-      @tournaments = Tournament.all.order(:id)
+      @tournaments = Tournament.all.order(created_at: :desc)
     else
-      @tournaments = Tournament.today.order(:id)
+      @tournaments = Tournament.today.order(created_at: :desc)
     end   
 
     respond_to do |format|
