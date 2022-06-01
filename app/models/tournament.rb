@@ -103,7 +103,7 @@ class Tournament < ApplicationRecord
     return court_sorted unless lowest_score.negative? 
     
     court_sorted.each do |player|
-      player[2] = player[2] + lowest_score&.abs
+      player[2] = player[2] + lowest_score&.abs + 1
     end
   end
 
