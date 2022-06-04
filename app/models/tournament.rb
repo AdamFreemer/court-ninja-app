@@ -7,7 +7,7 @@
 #  id                :bigint           not null, primary key
 #  address1          :string
 #  address2          :string
-#  break_time        :integer
+#  break_time        :decimal(5, 1)
 #  city              :string
 #  court_1_name      :string
 #  court_2_name      :string
@@ -26,8 +26,10 @@
 #  rounds_finalized  :integer          default([]), is an Array
 #  state             :string
 #  team_size         :integer
-#  timer_status      :string           default("reset")
-#  tournament_time   :integer
+#  timer_mode        :string
+#  timer_state       :string           default("initial")
+#  timer_time        :integer
+#  tournament_time   :decimal(5, 1)
 #  work_group        :integer
 #  zip               :string
 #  created_at        :datetime         not null
@@ -39,6 +41,9 @@ class Tournament < ApplicationRecord
   has_many :tournament_users
   has_many :users, through: :tournament_users
   has_many :user_scores
+  
+  scope :before_today, -> { where("created_at < ?", 1.days.ago) }
+  scope :today, -> { where("created_at > ?", DateTime.now.beginning_of_day) }
 
   def generate_tournament
     return false unless players.count.between?(8, 14)
@@ -69,7 +74,15 @@ class Tournament < ApplicationRecord
   end
 
   def court_names_pretty
-    court_names == [] ? '' : court_names.join(', ')
+    courts = []
+    courts << court_1_name if court_1_name
+    courts << ", #{court_2_name}" if court_2_name.present?
+    courts << ", #{court_3_name}" if court_3_name.present?
+    courts << ", #{court_4_name}" if court_4_name.present?
+    courts << ", #{court_5_name}" if court_5_name.present?
+    courts << ", #{court_6_name}" if court_6_name.present?
+
+    courts.join
   end
 
   def player_ranking(round)
@@ -88,11 +101,20 @@ class Tournament < ApplicationRecord
         court_2_scores << [player.id, player.name_abbreviated, score, wins]
       end
     end
-
     court_1_sorted = court_1_scores.sort_by { |a| [-a[3], -a[2]] }
     court_2_sorted = court_2_scores.sort_by { |a| [-a[3], -a[2]] }
 
-    [court_1_sorted, court_2_sorted]
+    [normalized_score(court_1_sorted), normalized_score(court_2_sorted)]
+  end
+
+  def normalized_score(court_sorted)
+    lowest_score = court_sorted.collect { |arr| arr[2] }.min
+    return true if court_sorted == []
+    return court_sorted unless lowest_score.negative? 
+    
+    court_sorted.each do |player|
+      player[2] = player[2] + lowest_score&.abs + 1
+    end
   end
 
   def round_two_courts_generate(round_1_sorted)

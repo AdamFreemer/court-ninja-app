@@ -13,46 +13,28 @@
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Players</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Set Length</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Set Time</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Break Time</th>
                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Court Names</th>
                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Configured Rounds</th>
                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Finalized Rounds</th>
-                  <th scope="col" class="relative px-6 py-3">
-                    <span class="sr-only">Edit</span>
+                  <th scope="col" class="px-6 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div data-controller="filter">
+                      <select name="filter" data-action="change->filter#change" id="filter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="today">Today</option>
+                        <option value="before-today">Before Today</option>
+                        <option value="all">All</option>
+                      </select>                      
+                    </div>
                   </th>
                 </tr>
               </thead>
-              <tbody>
-                <% @tournaments.each do |tournament| %>
-                  <tr class="bg-grey">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.id %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.created_at.strftime("%B %d, %Y") %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.name %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= "#{tournament.city}, #{tournament.state}" %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament.players.count %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament.court_names_pretty %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament&.rounds_configured.join(', ') %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament&.rounds_finalized.join(', ') %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <% if tournament.rounds_configured.include?(1) %>
-                      <%= link_to "Round 1", administration_tournament_path(tournament, 1), class: "text-indigo-600 hover:text-indigo-900" %> |
-                    <% end %>
-                    <% if tournament.rounds_configured.include?(2) %>
-                      <%= link_to "Round 2", administration_tournament_path(tournament, 2), class: "text-indigo-600 hover:text-indigo-900" %> |
-                    <% end %>
-                    <% if tournament.rounds_finalized.include?(tournament.rounds_configured.last.to_i) %>
-                      <%= link_to "Results", results_tournament_path(tournament), class: "text-indigo-600 hover:text-indigo-900" %> |
-                    <% end %>
-                      <%= link_to "Edit", edit_tournament_path(tournament), class: "text-indigo-600 hover:text-indigo-900" %>
-                    </td>
-                  </tr>
-                <% end %>
+              <tbody id="tournaments-container">
+                <%= render "index" %>
               </tbody>
             </table>
           </div>

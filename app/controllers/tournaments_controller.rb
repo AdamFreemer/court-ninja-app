@@ -1,20 +1,33 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: %i[ status timer_operation
+  before_action :set_tournament, only: %i[status
     administration display_single display_double results
-    team_scores_update process_round edit update destroy
+    team_scores_update process_round edit update destroy timer_operation
   ]
   before_action :set_display, only: %i[display_single display_double]
   before_action :round_two_generated, only: %i[administration]
 
   def index
-    @tournaments = Tournament.all.order(:id)
+    if params[:filter] == "before-today"
+      @tournaments = Tournament.before_today.order(created_at: :desc)
+    elsif params[:filter] == "today"
+      @tournaments = Tournament.today.order(created_at: :desc) 
+    elsif params[:filter] == "all"
+      @tournaments = Tournament.all.order(created_at: :desc)
+    else
+      @tournaments = Tournament.today.order(created_at: :desc)
+    end   
+
+    respond_to do |format|
+      format.js { render layout: false }
+      format.html { render 'index' } 
+    end
   end
 
   def new
     @available_players = User.where(is_ghost_player: false).order(:last_name) #.map { |u| [u.full_name, u.id] }
     @tournament = Tournament.new
     @tournament_times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    @break_times = [0.5, 1, 1.5]
+    @break_times = [0.1, 0.5, 1, 1.5]
     @tournament_configured = !@tournament.rounds_configured.empty?
   end
 
@@ -53,28 +66,29 @@ class TournamentsController < ApplicationController
     score_date = request.params['score_data']
     Team.score_update(score_date)
     @tournament.update_current_set(score_date)
-    @tournament.update!(timer_status: "reset")
+    @tournament.update!(timer_state: "reset")
     render json: {}
   end
 
   def status
     render json: {
-      timer_status: @tournament.timer_status,
-      current_set: @tournament.current_set
+      current_set: @tournament.current_set,
+      timer_state: @tournament.timer_state,
+      timer_mode: @tournament.timer_mode,
+      timer_time: @tournament.timer_time
     }
   end
 
   def timer_operation
-    operation = params[:operation]
+    puts "== Timer Updated"
+    puts "== Timer Time: #{params[:time]}"
+    @tournament.update!(timer_state: params[:state], timer_mode: params[:mode], timer_time: params[:time])
 
-    if operation == "start"
-      @tournament.timer_status = "start"
-    elsif operation == "reset"
-      @tournament.timer_status = "reset"
-    end
-    @tournament.save
-
-    render json: { timer_status: @tournament.timer_status}
+    render json: { 
+      timer_state: @tournament.timer_state, 
+      timer_mode: @tournament.timer_mode,
+      timer_time: @tournament.timer_time 
+    }
   end
 
   def process_round
@@ -103,7 +117,6 @@ class TournamentsController < ApplicationController
   def create
     @tournament = Tournament.new(tournament_params)
     set_create_update(params)
-
     if @tournament.save
       if @tournament.generate_tournament
         redirect_to administration_tournament_url(@tournament, 1), notice: "Tournament was successfully created."
@@ -148,7 +161,7 @@ class TournamentsController < ApplicationController
   def set_tournament
     @tournament = Tournament.find(params[:id])
     @tournament_times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    @break_times = [0.5, 1, 1.5]
+    @break_times = [0.1, 0.5, 1, 1.5]
   end
 
   def set_display
