@@ -5,7 +5,8 @@
       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.created_at.strftime("%b %e, %Y | %l:%M %p") %></td>
       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= "#{tournament.city}, #{tournament.state}" %></td>
       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament.players.count %></td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament.tournament_time %>m</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament.break_time %>m</td>
       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament.court_names_pretty %></td>
       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament&.rounds_configured.join(', ') %></td>
       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament&.rounds_finalized.join(', ') %></td>

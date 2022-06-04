@@ -7,7 +7,7 @@
 #  id                :bigint           not null, primary key
 #  address1          :string
 #  address2          :string
-#  break_time        :float
+#  break_time        :decimal(5, 1)
 #  city              :string
 #  court_1_name      :string
 #  court_2_name      :string
@@ -26,8 +26,10 @@
 #  rounds_finalized  :integer          default([]), is an Array
 #  state             :string
 #  team_size         :integer
+#  timer_mode        :string
 #  timer_state       :string           default("initial")
-#  tournament_time   :float
+#  timer_time        :integer
+#  tournament_time   :decimal(5, 1)
 #  work_group        :integer
 #  zip               :string
 #  created_at        :datetime         not null
@@ -72,7 +74,15 @@ class Tournament < ApplicationRecord
   end
 
   def court_names_pretty
-    court_names == [] ? '' : court_names.join(', ')
+    courts = []
+    courts << court_1_name if court_1_name
+    courts << ", #{court_2_name}" if court_2_name.present?
+    courts << ", #{court_3_name}" if court_3_name.present?
+    courts << ", #{court_4_name}" if court_4_name.present?
+    courts << ", #{court_5_name}" if court_5_name.present?
+    courts << ", #{court_6_name}" if court_6_name.present?
+
+    courts.join
   end
 
   def player_ranking(round)

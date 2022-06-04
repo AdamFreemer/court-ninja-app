@@ -1,5 +1,5 @@
 <% round = params[:round].to_i %>
-<%# render "js_administration", round: round %> %>
+<%= render "js_administration", round: round %>
 
 <div class="mx-auto mb-32">
   <h1 class="text-xl tracking-tight font-extrabold text-gray-900 sm:text-3xl md:text-4xl">
@@ -10,7 +10,8 @@
   </h3>
 
   <div data-controller="timer" 
-    data-timer-tournament-id-value="<%= @tournament.id %>" 
+    data-timer-tournament-id-value="<%= @tournament.id %>"
+    data-timer-tournament-round-value="<%= round %>" 
     data-timer-break-time-value="<%= @tournament.break_time * 60 %>" 
     data-timer-tournament-timer-state-value="<%= @tournament.timer_state %>" 
     data-timer-tournament-timer-value="<%= @tournament.break_time * 60 %>" 
@@ -21,7 +22,7 @@
     </div>
     <button data-action="timer#start" class="inline-flex items-center btn btn-success btn-xs hover:text-rose-50">Timer Start</button>
     <button data-action="timer#pause" class="inline-flex items-center btn btn-warning btn-xs hover:text-rose-50">Timer Pause</button>
-    <button data-action="timer#reset" class="inline-flex items-center btn btn-error btn-xs hover:text-rose-50">Timer Reset</button>
+    <button data-action="timer#reset" class="inline-flex items-center btn btn-alert btn-xs hover:text-rose-50">Timer Reset</button>
   </div>
 
   <%# tables %>
@@ -61,7 +62,7 @@
         <%= link_to "Round Two", administration_tournament_path(@tournament, 2), class: "inline-flex items-center px-2.5 py-1.5 btn btn-primary btn-sm" %>
       <% end %>
       <% if (round == 1 && !@tournament.rounds_finalized.include?(1)) || (round == 2 && !@tournament.rounds_finalized.include?(2)) %>
-        <button id="update-scores" onclick="updateScores('update')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">Update Scores</button>
+        <button id="update-scores" data-action="timer#start" onclick="updateScores('update')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">Update Scores</button>
       <% end %>
       <% if (round == 1 && !@tournament.rounds_finalized.include?(1)) || (round == 2 && !@tournament.rounds_finalized.include?(2)) %>
         <button id="finalize-round" onclick="updateScores('finalize')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">

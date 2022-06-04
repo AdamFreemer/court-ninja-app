@@ -1,72 +1,94 @@
 <%# This is the audio for the bell ringer that executes from the js_display file %>
 <audio id="audio" src="http://www.ufoseries.com/soundEffects/hqAlarmBell.mp3"></audio>
-<%= render "js_display" %>
+<%# render "js_display" %>
 
 <div class="bg-white">
   <div class="max-w-full mx-auto py-10 px-6 sm:px-6 lg:px-8">
+
     <div class="text-center">
       <h1 class="text-3xl font-extrabold text-gray-900 sm:text-center">Round <%= @round %></h1>
     </div>
 
-    <%= render "display_timer" %>
+    <div data-controller="display"
+      data-display-tournament-id-value="<%= @tournament.id %>"
+      data-display-tournament-round-value="<%= @round %>" 
+      data-display-tournament-current-set-value="<%= @tournament.current_set %>"
+      data-display-break-time-value="<%= @tournament.break_time * 60 %>" 
+      data-display-tournament-timer-state-value="<%= @tournament.timer_state %>" 
+      data-display-tournament-timer-value="0" 
+      data-display-tournament-time-value="<%= @tournament.tournament_time * 60 %>"   
+    > 
+      <div class="pt-3 text-6xl text-center font-medium text-gray-900">
+        <div data-display-target="progress" class="radial-progress text-accent-focus" style="--size:12rem; --value:100;">
+          <div class="timer">
+            <span data-display-target="minute" class="text-6xl"></span>:<span data-display-target="second" class="text-6xl"></span>
+          </div>
+        </div>
 
-    <div class="mt-12 sm:mt-8 sm:space-y-0 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0">
-      <div class="border border-gray-500 rounded-lg shadow-sm divide-y divide-gray-200">
-        <div class="p-6">
-          <% if @court == 1 %>
-            <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_1_name %> Court</h2>
-          <% end %>
-          <% if @court == 2 %>
-            <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_2_name %> Court</h2>
-          <% end %>
-          <table class="min-w-full divide-y divide-gray-300">
-            <thead class="bg-gray-50">
-            <% team_count = [*1..@tournament.matches.where(court: @court).first.teams.first.users.count - 1] %>
-              <tr>
-                <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Set</th>
-                <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Court A</th>
-                <% team_count.each do |team_1| %>
+      </div>    
+
+    <div class="text-center space-y-2">
+      <span data-display-target="syncing" id="syncing" class="pt-3 text-2xl text-center font-medium text-gray-900">Syncing...</span>
+    </div>
+
+      <div class="mt-12 sm:mt-8 sm:space-y-0 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0">
+        <div class="border border-gray-500 rounded-lg shadow-sm divide-y divide-gray-200">
+          <div class="p-6">
+            <% if @court == 1 %>
+              <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_1_name %> Court</h2>
+            <% end %>
+            <% if @court == 2 %>
+              <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_2_name %> Court</h2>
+            <% end %>
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+              <% team_count = [*1..@tournament.matches.where(court: @court).first.teams.first.users.count - 1] %>
+                <tr>
+                  <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Set</th>
+                  <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Court A</th>
+                  <% team_count.each do |team_1| %>
+                    <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
+                  <% end %>
                   <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
-                <% end %>
-                <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
-                <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Court B</th>
-                <% team_count.each do |team_2| %>
+                  <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Court B</th>
+                  <% team_count.each do |team_2| %>
+                    <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
+                  <% end %>
                   <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
-                <% end %>
-                <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
-                <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Working</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <% @court_matches.each do |match| %>
-                <% team1 = match.teams.first.users %>
-                <% team2 = match.teams.second.users %>
-                <% work_team = match.teams.last.users %>
-                <% if @tournament.current_set == match.number %>
-                  <tr id="current-set" data-current-set="<%= match.number %>" class="font-extrabold divide-x divide-gray-300 shadow-md">
-                <% else %>
-                  <tr class="font-normal divide-x divide-gray-300">
-                <% end %>
-                  <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= match.number %></td>
-                  <% team1.each do |player| %>
-                    <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
-                  <% end %>  
-                  <th scope="col" class="px-1 py-3.5 text-left text-md font-normal text-gray-600">&nbsp;</th>      
-                  <% team2.each do |player| %>
-                    <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
-                  <% end %>                         
-                  <th scope="col" class="px-2 py-3.5 text-left text-md text-gray-900">&nbsp;</th>
-                  <% work_team.each do |player| %>
-                    <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
-                  <% end %>                                      
+                  <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Working</th>
                 </tr>
-              <% end %>
-            </tbody>
-          </table>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <% @court_matches.each do |match| %>
+                  <% team1 = match.teams.first.users %>
+                  <% team2 = match.teams.second.users %>
+                  <% work_team = match.teams.last.users %>
+                  <% if @tournament.current_set == match.number %>
+                    <tr id="current-set" data-current-set="<%= match.number %>" class="font-extrabold divide-x divide-gray-300 shadow-md">
+                  <% else %>
+                    <tr class="font-normal divide-x divide-gray-300">
+                  <% end %>
+                    <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= match.number %></td>
+                    <% team1.each do |player| %>
+                      <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
+                    <% end %>  
+                    <th scope="col" class="px-1 py-3.5 text-left text-md font-normal text-gray-600">&nbsp;</th>      
+                    <% team2.each do |player| %>
+                      <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
+                    <% end %>                         
+                    <th scope="col" class="px-2 py-3.5 text-left text-md text-gray-900">&nbsp;</th>
+                    <% work_team.each do |player| %>
+                      <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
+                    <% end %>                                      
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-  
     </div>
+
   </div>
 </div>
  

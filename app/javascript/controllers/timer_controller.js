@@ -3,19 +3,14 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static values = { 
     tournamentId: Number,
+    tournamentRound: Number,
     breakTime: Number, 
-    tournamentTime: Number,
-    tournamentTimer: Number, 
-    tournamentTimerState: String, // initial, run, stop, reset | initial is on tourney load to not auto-start on tourney creation
-    tournamentTimerMode: { type: String, default: "break" }, // break, tournament
+    tournamentTime: Number, // static value for Tournament Time
+    tournamentTimer: Number, // Actual countdown timer value
+    tournamentTimerState: String, // "run", "stop", "initial"
+    tournamentTimerMode: { type: String, default: "break" }, // "break" or "run"
   }
   static targets = [ "minute", "second" ]
-
-  // tournament state management
-  // state = "initial", mode = "break" (New Tournament created) |  tournament display page holds with break time displayed
-  // state = "run", mode = "break" (Tournament countdown) | Initial click to start break countdown
-  // state = 'run", mode = "tournament" (Tournament start) | Tournament started 
-
 
   connect() {
     console.log("breakTime: ", this.breakTimeValue)
@@ -25,15 +20,31 @@ export default class extends Controller {
     console.log("tournamentTimerMode: ", this.tournamentTimerModeValue)
     this.generateTime();
     this.autoStart();
-
   }
 
   start() {
-    this.timerOperation("initial", "run");
-    // this.tournamentTimerModeValue = "run"
-    // this.timer = setInterval(() => {
-    //   this.update();
-    // }, 1000);
+    console.log("== start mode " + this.timer)
+    let mode;
+    this.tournamentTimerStateValue == "initial" ? mode = "break" : mode = this.tournamentTimerModeValue;
+    this.timerOperation("run", mode, this.tournamentTimerValue);
+    this.timer = setInterval(() => {
+      this.update();
+    }, 1000);
+  }
+
+  pause() {
+    console.log("== pause" + "mode: " + this.tournamentTimerModeValue)
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+    this.timerOperation("stop", this.tournamentTimerModeValue, this.tournamentTimerValue);
+  }
+
+  reset() {
+    console.log("== reset" + "mode: " + this.tournamentTimerModeValue)
+    clearInterval(this.timer);
+    this.timerOperation("stop", "break", this.breakTimeValue);
+    this.generateTime();
   }
 
   autoStart() {
@@ -42,21 +53,22 @@ export default class extends Controller {
     }
   }
 
-  pause() {
-    if (this.timer) {
-      clearInterval(this.timer);
-    }
-    console.log("== pause")
-  }
-
   update() {
     this.tournamentTimerValue--
     this.generateTime();
-
-    if (this.tournamentTimerValue == 0 && this.tournamentTimerMode == "break") {
-
-    } else if (this.tournamentTimerValue == 0 && this.tournamentTimerMode == "tournament") {
-
+    if (this.tournamentTimerValue == 0 && this.tournamentTimerModeValue == "break") {
+      clearInterval(this.timer);
+      this.tournamentTimerValue = this.tournamentTimeValue;
+      this.timerOperation("run", "tournament", this.tournamentTimerValue);
+      this.timer = setInterval(() => {
+        this.update();
+      }, 1000);
+    } else if (this.tournamentTimerValue == 0 && this.tournamentTimerModeValue == "tournament") {
+      clearInterval(this.timer);
+      this.timerOperation("stop", "break", 0);
+      this.tournamentTimerValue = 0;
+    } else {
+      this.timerOperation(this.tournamentTimerStateValue, this.tournamentTimerModeValue, this.tournamentTimerValue);
     }
   }
 
@@ -71,13 +83,12 @@ export default class extends Controller {
     this.secondTarget.innerHTML = second
   }
 
-  reset() {
-    console.log("== reset")
-  }
+  timerOperation(state, mode, time) {
+    console.log('== timerOperation: ' + state + '/' + mode)
+    this.tournamentTimerStateValue = state;
+    this.tournamentTimerModeValue = mode;
+    this.tournamentTimerValue = time;
 
-
-  timerOperation(state, mode) {
-    console.log('== operation server update: ' + state + '/' + mode)
     $.ajax({
       type: "POST",
       url: "/tournaments/timer_operation",
@@ -88,9 +99,10 @@ export default class extends Controller {
         id: this.tournamentIdValue,
         state: state,
         mode: mode,
+        time: time,
       },
       success: function (response) {
-        console.log('== timer operation response: ' + response.timer_status)
+        console.log('== timer operation response: ' + response.timer_state + ' | ' + response.timer_mode)
       }
     })
   };
