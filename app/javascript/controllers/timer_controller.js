@@ -3,7 +3,8 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static values = { 
     tournamentId: Number,
-    tournamentRound: Number,
+    tournamentCurrentRoundLocal: Number,
+    tournamentCurrentRoundServer: Number,
     breakTime: Number, 
     tournamentTime: Number, // static value for Tournament Time
     tournamentTimer: Number, // Actual countdown timer value
