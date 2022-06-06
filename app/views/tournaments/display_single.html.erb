@@ -11,25 +11,26 @@
 
     <div data-controller="display"
       data-display-tournament-id-value="<%= @tournament.id %>"
-      data-display-tournament-round-value="<%= @round %>" 
+      data-display-tournament-current-round-local-value="<%= @round %>"
+      data-display-tournament-current-round-server-value="<%= @round %>"
       data-display-tournament-current-set-value="<%= @tournament.current_set %>"
+      data-display-tournament-current-court-value="<%= @court %>" 
       data-display-break-time-value="<%= @tournament.break_time * 60 %>" 
       data-display-tournament-timer-state-value="<%= @tournament.timer_state %>" 
       data-display-tournament-timer-value="0" 
       data-display-tournament-time-value="<%= @tournament.tournament_time * 60 %>"   
-    > 
+      > 
       <div class="pt-3 text-6xl text-center font-medium text-gray-900">
         <div data-display-target="progress" class="radial-progress text-accent-focus" style="--size:12rem; --value:100;">
           <div class="timer">
             <span data-display-target="minute" class="text-6xl"></span>:<span data-display-target="second" class="text-6xl"></span>
           </div>
         </div>
-
       </div>    
 
-    <div class="text-center space-y-2">
-      <span data-display-target="syncing" id="syncing" class="pt-3 text-2xl text-center font-medium text-gray-900">Syncing...</span>
-    </div>
+      <div class="text-center space-y-2">
+        <span data-display-target="syncing" id="syncing" class="pt-3 text-2xl text-center font-medium text-gray-900">Syncing...</span>
+      </div>
 
       <div class="mt-12 sm:mt-8 sm:space-y-0 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0">
         <div class="border border-gray-500 rounded-lg shadow-sm divide-y divide-gray-200">
@@ -59,16 +60,12 @@
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <% @court_matches.each do |match| %>
-                  <% team1 = match.teams.first.users %>
-                  <% team2 = match.teams.second.users %>
-                  <% work_team = match.teams.last.users %>
-                  <% if @tournament.current_set == match.number %>
-                    <tr id="current-set" data-current-set="<%= match.number %>" class="font-extrabold divide-x divide-gray-300 shadow-md">
-                  <% else %>
-                    <tr class="font-normal divide-x divide-gray-300">
-                  <% end %>
-                    <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= match.number %></td>
+                <% @court_matches.each do |set| %>
+                  <% team1 = set.teams.first.users %>
+                  <% team2 = set.teams.second.users %>
+                  <% work_team = set.teams.last.users %>
+                    <tr id="<%= set.number %>" data-display-target="set" class="divide-x divide-gray-300 ">
+                    <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= set.number %></td>
                     <% team1.each do |player| %>
                       <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
                     <% end %>  

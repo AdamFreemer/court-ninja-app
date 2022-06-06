@@ -46,3 +46,43 @@ User.create(email: 'bre.c@gmail.com', first_name: 'Bre', last_name: 'Coach', pas
 User.create(email: 'mikey.c@gmail.com', first_name: 'Mikey', last_name: 'Coach', password: 'password', password_confirmation: 'password')
 
 puts "== Created #{User.count} users. ===================="
+
+
+# Olivia 	Luey 	sfaisal2007@yahoo.com 		
+# Julia 	Qaqundah 	hi@regandaniels.com 		
+# Maddy 	Ho 	marcy.l.lim@gmail.com 		
+# Clare 	Wang 	carol@comebuyusa.com 		
+# Samantha 	Hegel 	campme00@hotmail.com 		
+# Maddy 	Kim 	kanoti.kim@gmail.com 		
+# Catey 	Robertson 	chrisbrobertson@gmail.com 		
+# Sofia 	Peypoch 	letitiachan@yahoo.com 		
+# Hadley 	Mahon 	kierstenmahon@mac.com 		
+# Cassidy 	P 	cassidy.p@gmail.com 		
+# Adrianna 	A 	adrianna.a@gmail.com 		
+# Sophie 	P 	sophie.p@gmail.com 		
+# Sophie 	M 	sophie.m@gmail.com 		
+# Rube 	R 	rube.r@gmail.com 		
+# Claire 	S 	claire.s@gmail.com 		
+# Alley 	K 	alley.k@gmail.com 		
+# Lily 	K 	lily.k@gmail.com 		
+# Poemma 	U 	poemma.u@gmail.com 		
+# Abby 	M 	abby.m@gmail.com 		
+# Bre 	Coach 	bre.c@gmail.com 		
+# Mikey 	Coach 	mikey.c@gmail.com 		
+# Adam 	Freemer 	adam@freemer.com 		
+# Lucky 	Makropoulos 	lucky@2629consulting.com 		
+# Dan 	Brooking 	dmbrooking@gmail.com 		
+# Gia 	R 	gia.k@gmail.com
+# Gel 	Leano 	coachgel@test.com 		
+# Tyler/16K 	Y 	tyler@test.com 		
+# Lauren/16K 	D 	lauren@test.com 		
+# Naomi/16K 	W 	naomi@test.com 		
+# AnaLee/16K 	R 	analee@test.com 		
+# Evelyn/16K 	W 	evelyn@test.com 		
+# Jessica/16K 	A 	jessica@test.com 		
+# Gianna/16K 	H 	gianna@test.com 		
+# Kendall/16K 	L 	kendall@test.com 		
+# Are/16K 	M 	are@test.com 		
+# Mila/16K 	C 	mila@test.com 		
+# Kylie/16K 	Y 	kylie@test.com 		
+# Mika/16K

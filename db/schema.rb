@@ -79,10 +79,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_20_212238) do
     t.string "court_names", default: [], array: true
     t.decimal "tournament_time", precision: 5, scale: 1
     t.decimal "break_time", precision: 5, scale: 1
-    t.integer "timer_time"
+    t.integer "timer_time", default: 0
     t.string "timer_state", default: "initial"
-    t.string "timer_mode"
+    t.string "timer_mode", default: "break"
     t.integer "current_set", default: 1
+    t.integer "current_round", default: 1
+    t.boolean "tournament_completed", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

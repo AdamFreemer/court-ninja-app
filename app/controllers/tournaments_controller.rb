@@ -1,5 +1,5 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: %i[status
+  before_action :set_tournament, only: %i[status tournament_status
     administration display_single display_double results
     team_scores_update process_round edit update destroy timer_operation
   ]
@@ -66,16 +66,18 @@ class TournamentsController < ApplicationController
     score_date = request.params['score_data']
     Team.score_update(score_date)
     @tournament.update_current_set(score_date)
-    @tournament.update!(timer_state: "reset")
+    # @tournament.update!(timer_state: "reset")
     render json: {}
   end
 
   def status
     render json: {
       current_set: @tournament.current_set,
+      current_round: @tournament.current_round,
       timer_state: @tournament.timer_state,
       timer_mode: @tournament.timer_mode,
-      timer_time: @tournament.timer_time
+      timer_time: @tournament.timer_time,
+      tournament_completed: @tournament.tournament_completed
     }
   end
 
@@ -92,23 +94,29 @@ class TournamentsController < ApplicationController
   end
 
   def process_round
-    # params: :id / :round
-    round = params[:round].to_i
+    round = params[:round].to_i # params: :id / :round
     if @tournament.rounds_finalized.include?(round)
       redirect_to round_one_tournament_url(@tournament), notice: 'Round already processed.'
     end
+    # Check rounds_finalized array if it contains current round which means round already finalized, if not, process round
     @tournament.create_user_scores(round)
+    # Grab current rounds finalized, push in current round just finalized (if first round, rounds_finalized will be empty to start)
     rounds_finalized = @tournament.rounds_finalized
     rounds_finalized << round
-    @tournament.update(rounds_finalized: rounds_finalized, current_set: round == 1)
+    @tournament.update(
+      tournament_completed: tournament_status, 
+      rounds_finalized: rounds_finalized, 
+      current_set: 1, 
+      current_round: round + 1
+    )
     @tournament.round_two_courts_generate(@tournament.player_ranking(1)) if round == 1 && @tournament.rounds > 1
 
-    if round == 1 && @tournament.rounds > 1
-      redirect_to administration_tournament_url(@tournament, 2), notice: 'Round 1 successfully processed.'
-    elsif round == 1 && @tournament.rounds == 1
+    if round == 1 && @tournament.rounds == 1 # Keeping round number agnostic if 1 round tournament
       redirect_to results_tournament_url(@tournament), notice: 'Round successfully processed.'
-    elsif round == 2
-      redirect_to results_tournament_url(@tournament), notice: 'Round 2 successfully processed.'
+    elsif @tournament.rounds > round # when current round is less than total rounds 
+      redirect_to administration_tournament_url(@tournament, round + 1), notice: "Round #{round} successfully processed."
+    elsif rounds_finalized.count == @tournament.rounds # when all rounds finalized == total rounds as per tournament generation
+      redirect_to results_tournament_url(@tournament), notice: 'Tournament results processed.'
     else
       redirect_to tournaments_path
     end
@@ -156,6 +164,12 @@ class TournamentsController < ApplicationController
   end
 
   private
+
+  def tournament_status
+    return true if @tournament.rounds_finalized.count == @tournament.rounds
+
+    false
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_tournament
