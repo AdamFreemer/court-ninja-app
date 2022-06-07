@@ -26,8 +26,8 @@ class TournamentTeam < ApplicationRecord
   has_many :tournament_team_users
   has_many :users, through: :tournament_team_users
 
-  has_many :match_tournament_teams
-  has_many :matches, through: :match_tournament_teams
+  has_many :tournament_set_tournament_teams
+  has_many :tournament_sets, through: :tournament_set_tournament_teams
 
   has_many :user_scores
 

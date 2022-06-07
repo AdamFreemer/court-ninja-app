@@ -31,7 +31,7 @@ class TournamentGenerator
 
     currently_configured = tournament.rounds_configured
     currently_configured << round.to_i
-    tournament.update!(rounds_configured: currently_configured) if tournament.matches.count.positive?
+    tournament.update!(rounds_configured: currently_configured) if tournament.tournament_sets.count.positive?
   end
 
   ## Court configurations per player count
@@ -84,21 +84,21 @@ class TournamentGenerator
 
   def create_court(tournament, round, court, configuration, players_count)
     round_count = configuration.length - 1
-    (0..round_count).each do |match|
-      number = match + 1
-      create_match(
+    (0..round_count).each do |tournament_set|
+      number = tournament_set + 1
+      create_tournament_set(
         tournament,
         number,
         round,
         court,
-        configuration[match],
+        configuration[tournament_set],
         court == 1 ? players_count[:court1] : players_count[:court2]
       )
     end
   end
 
-  def create_match(tournament, number, round, court, config, team_ids)
-    match = Match.create(
+  def create_tournament_set(tournament, number, round, court, config, team_ids)
+    tournament_set = TournamentSet.create(
       tournament_id: tournament.id,
       number: number,
       court: court,
@@ -123,8 +123,8 @@ class TournamentGenerator
       end
     end
 
-    match.tournament_teams << team1
-    match.tournament_teams << team2
-    match.tournament_teams << work_team if config.length == 3
+    tournament_set.tournament_teams << team1
+    tournament_set.tournament_teams << team2
+    tournament_set.tournament_teams << work_team if config.length == 3
   end
 end

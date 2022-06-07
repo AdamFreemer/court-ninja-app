@@ -14,24 +14,25 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_20_212238) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "match_tournament_teams", force: :cascade do |t|
-    t.bigint "match_id"
+  create_table "tournament_set_tournament_teams", force: :cascade do |t|
+    t.bigint "tournament_set_id"
     t.bigint "tournament_team_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["match_id"], name: "index_match_tournament_teams_on_match_id"
-    t.index ["tournament_team_id"], name: "index_match_tournament_teams_on_tournament_team_id"
+    t.index ["tournament_set_id"], name: "index_tournament_set_tournament_teams_on_tournament_set_id"
+    t.index ["tournament_team_id"], name: "index_tournament_set_tournament_teams_on_tournament_team_id"
   end
 
-  create_table "matches", force: :cascade do |t|
+  create_table "tournament_sets", force: :cascade do |t|
+    t.bigint "tournament_id"
     t.string "zip"
     t.integer "number"
     t.integer "court"
     t.integer "round"
-    t.integer "tournament_id"
     t.integer "ghost_players", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["tournament_id"], name: "index_tournament_sets_on_tournament_id"
   end
 
   create_table "tournament_team_users", force: :cascade do |t|
@@ -54,10 +55,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_20_212238) do
   end
 
   create_table "tournament_users", force: :cascade do |t|
-    t.integer "tournament_id"
-    t.integer "user_id"
+    t.bigint "tournament_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["tournament_id"], name: "index_tournament_users_on_tournament_id"
+    t.index ["user_id"], name: "index_tournament_users_on_user_id"
   end
 
   create_table "tournaments", force: :cascade do |t|
@@ -104,10 +107,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_20_212238) do
   end
 
   create_table "user_scores", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "match_id"
-    t.integer "team_id"
-    t.integer "tournament_id"
+    t.bigint "user_id"
+    t.bigint "tournament_set_id"
+    t.bigint "tournament_team_id"
+    t.bigint "tournament_id"
     t.integer "score"
     t.integer "court"
     t.integer "round"
@@ -115,13 +118,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_20_212238) do
     t.integer "loss"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["tournament_id"], name: "index_user_scores_on_tournament_id"
+    t.index ["tournament_set_id"], name: "index_user_scores_on_tournament_set_id"
+    t.index ["tournament_team_id"], name: "index_user_scores_on_tournament_team_id"
+    t.index ["user_id"], name: "index_user_scores_on_user_id"
   end
 
   create_table "user_traits", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "trait_id"
+    t.bigint "user_id"
+    t.bigint "trait_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["trait_id"], name: "index_user_traits_on_trait_id"
+    t.index ["user_id"], name: "index_user_traits_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -154,9 +163,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_20_212238) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "match_tournament_teams", "matches"
-  add_foreign_key "match_tournament_teams", "tournament_teams"
+  add_foreign_key "tournament_set_tournament_teams", "tournament_sets"
+  add_foreign_key "tournament_set_tournament_teams", "tournament_teams"
+  add_foreign_key "tournament_sets", "tournaments"
   add_foreign_key "tournament_team_users", "tournament_teams"
   add_foreign_key "tournament_team_users", "users"
   add_foreign_key "tournament_teams", "tournaments"
+  add_foreign_key "tournament_users", "tournaments"
+  add_foreign_key "tournament_users", "users"
+  add_foreign_key "user_scores", "tournament_sets"
+  add_foreign_key "user_scores", "tournament_teams"
+  add_foreign_key "user_scores", "tournaments"
+  add_foreign_key "user_scores", "users"
+  add_foreign_key "user_traits", "traits"
+  add_foreign_key "user_traits", "users"
 end

@@ -22,7 +22,7 @@
             <% end %>
             <table class="min-w-full divide-y divide-gray-300">
               <thead class="bg-gray-50">
-              <% team_count = [*1..@tournament.matches.where(court: @court).first.tournament_teams.first.users.count - 1] %>
+              <% team_count = [*1..@tournament.tournament_sets.where(court: @court).first.tournament_teams.first.users.count - 1] %>
                 <tr>
                   <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Set</th>
                   <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Court A</th>
@@ -39,7 +39,7 @@
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <% @court_matches.each do |set| %>
+                <% @court_sets.each do |set| %>
                   <% team1 = set.tournament_teams.first.users %>
                   <% team2 = set.tournament_teams.second.users %>
                   <% work_team = set.tournament_teams.last.users %>
