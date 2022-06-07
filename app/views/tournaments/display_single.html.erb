@@ -44,19 +44,19 @@
                   <% team2 = set.teams.second.users %>
                   <% work_team = set.teams.last.users %>
                     <tr id="<%= set.number %>" data-display-target="set" class="divide-x divide-gray-300 ">
-                    <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= set.number %></td>
-                    <% team1.each do |player| %>
-                      <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
-                    <% end %>  
-                    <th scope="col" class="px-1 py-3.5 text-left text-md font-normal text-gray-600">&nbsp;</th>      
-                    <% team2.each do |player| %>
-                      <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
-                    <% end %>                         
-                    <th scope="col" class="px-2 py-3.5 text-left text-md text-gray-900">&nbsp;</th>
-                    <% work_team.each do |player| %>
-                      <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
-                    <% end %>                                      
-                  </tr>
+                      <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= set.number %></td>
+                      <% team1.each do |player| %>
+                        <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
+                      <% end %>  
+                      <th scope="col" class="px-1 py-3.5 text-left text-md font-normal text-gray-600">&nbsp;</th>      
+                      <% team2.each do |player| %>
+                        <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
+                      <% end %>                         
+                      <th scope="col" class="px-2 py-3.5 text-left text-md text-gray-900">&nbsp;</th>
+                      <% work_team.each do |player| %>
+                        <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
+                      <% end %>                                      
+                    </tr>
                 <% end %>
               </tbody>
             </table>
