@@ -4,34 +4,38 @@
 #
 # Table name: tournaments
 #
-#  id                :bigint           not null, primary key
-#  address1          :string
-#  address2          :string
-#  break_time        :integer
-#  city              :string
-#  court_1_name      :string
-#  court_2_name      :string
-#  court_3_name      :string
-#  court_4_name      :string
-#  court_5_name      :string
-#  court_6_name      :string
-#  court_names       :string           default([]), is an Array
-#  courts            :integer
-#  current_set       :integer          default(1)
-#  date              :datetime
-#  name              :string
-#  players           :integer          default([]), is an Array
-#  rounds            :integer
-#  rounds_configured :integer          default([]), is an Array
-#  rounds_finalized  :integer          default([]), is an Array
-#  state             :string
-#  team_size         :integer
-#  timer_status      :string           default("reset")
-#  tournament_time   :integer
-#  work_group        :integer
-#  zip               :string
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  id                   :bigint           not null, primary key
+#  address1             :string
+#  address2             :string
+#  break_time           :decimal(5, 1)
+#  city                 :string
+#  court_1_name         :string
+#  court_2_name         :string
+#  court_3_name         :string
+#  court_4_name         :string
+#  court_5_name         :string
+#  court_6_name         :string
+#  court_names          :string           default([]), is an Array
+#  courts               :integer
+#  current_round        :integer          default(1)
+#  current_set          :integer          default(1)
+#  date                 :datetime
+#  name                 :string
+#  players              :integer          default([]), is an Array
+#  rounds               :integer
+#  rounds_configured    :integer          default([]), is an Array
+#  rounds_finalized     :integer          default([]), is an Array
+#  state                :string
+#  team_size            :integer
+#  timer_mode           :string           default("break")
+#  timer_state          :string           default("initial")
+#  timer_time           :integer          default(0)
+#  tournament_completed :boolean          default(FALSE)
+#  tournament_time      :decimal(5, 1)
+#  work_group           :integer
+#  zip                  :string
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
 #
 class Tournament < ApplicationRecord
   has_many :teams
@@ -72,7 +76,15 @@ class Tournament < ApplicationRecord
   end
 
   def court_names_pretty
-    court_names == [] ? '' : court_names.join(', ')
+    courts = []
+    courts << court_1_name if court_1_name
+    courts << ", #{court_2_name}" if court_2_name.present?
+    courts << ", #{court_3_name}" if court_3_name.present?
+    courts << ", #{court_4_name}" if court_4_name.present?
+    courts << ", #{court_5_name}" if court_5_name.present?
+    courts << ", #{court_6_name}" if court_6_name.present?
+
+    courts.join
   end
 
   def player_ranking(round)
@@ -156,12 +168,12 @@ class Tournament < ApplicationRecord
         current_set = no_score_team.matches.first.number
         # if we find a blank score, we update tournament.current_set and mark found_current
         # which will break out of loop on next pass
-        update(current_set: current_set)
+        update(current_set: current_set, timer_state: "run")
         found_current = true
       end
     end
     # if we find no empty scores, set current_set so no rows are highlighted
-    update(current_set: 99) if found_current == false
+    update(current_set: 0) if found_current == false
   end
 
   def self.sanitized_of_ghosts_players(player_ids)

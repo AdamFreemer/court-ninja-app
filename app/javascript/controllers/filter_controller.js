@@ -5,7 +5,6 @@ export default class extends Controller {
   }
 
   change() {
-    console.log('== index filter call made')
     let e = document.getElementById("filter");
     let filter = e.value;
 
@@ -19,7 +18,6 @@ export default class extends Controller {
         filter: filter,
       },
       success: function (response) {
-        // window.location.reload();
       }
     })
   }

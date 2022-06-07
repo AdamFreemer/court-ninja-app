@@ -9,13 +9,20 @@
     <span class="block text-indigo-400 sm:inline"><%= @tournament.city %>, <%= @tournament.state %></span>
   </h3>
 
-  <div class="pb-6 pt-3 text-2xl text-left font-medium text-gray-700">
+  <div data-controller="admin" 
+    data-admin-tournament-id-value="<%= @tournament.id %>"
+    data-admin-tournament-round-value="<%= round %>" 
+    data-admin-break-time-value="<%= @tournament.break_time * 60 %>" 
+    data-admin-tournament-timer-state-value="<%= @tournament.timer_state %>" 
+    data-admin-tournament-timer-value="<%= @tournament.break_time * 60 %>" 
+    data-admin-tournament-time-value="<%= @tournament.tournament_time * 60 %>" 
+    class="pb-6 pt-3 text-2xl text-left font-medium text-gray-700">
     <div class="timer">
-      Timer: <span class="minute"></span>:<span class="second"></span>
+      Timer: <span data-admin-target="minute"></span>:<span data-admin-target="second"></span>
     </div>
-    <button onclick="timerOperation('start');" class="inline-flex items-center btn btn-success btn-xs hover:text-rose-50">Timer Start</button>
-    <button onclick="timerOperation('pause');" class="inline-flex items-center btn btn-warning btn-xs hover:text-rose-50">Timer Pause</button>
-    <button onclick="timerOperation('reset');" class="inline-flex items-center btn btn-error btn-xs hover:text-rose-50">Timer Reset</button>
+    <button data-action="admin#start" class="inline-flex items-center btn btn-success btn-xs hover:text-rose-50">Timer Start</button>
+    <button data-action="admin#pause" class="inline-flex items-center btn btn-warning btn-xs hover:text-rose-50">Timer Pause</button>
+    <button data-action="admin#reset" class="inline-flex items-center btn btn-alert btn-xs hover:text-rose-50">Timer Reset</button>
   </div>
 
   <%# tables %>

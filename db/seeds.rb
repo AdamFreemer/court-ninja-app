@@ -1,3 +1,11 @@
+puts "== Creating Users..."
+
+# Admins
+User.create(email: 'dmbrooking@gmail.com', first_name: 'Dan', last_name: 'Broking', password: 'password', password_confirmation: 'password', admin: true)
+User.create(email: 'adam@freemer.com', first_name: 'Adam', last_name: 'Freemer', password: 'password', password_confirmation: 'password', admin: true)
+User.create(email: 'lucky@2629consulting.com', first_name: 'Lucky', last_name: 'Makropoulos', password: 'password', password_confirmation: 'password', admin: true)
+
+# Lucky Team
 User.create(email: 'sfaisal2007@yahoo.com', first_name: 'Olivia', last_name: 'Luey', password: 'password', password_confirmation: 'password')
 User.create(email: 'bollinger.ohana@gmail.com', first_name: 'Brooklyn', last_name: 'Bollinger', password: 'password', password_confirmation: 'password')
 User.create(email: 'hi@regandaniels.com', first_name: 'Julia', last_name: 'Qaqundah', password: 'password', password_confirmation: 'password')
@@ -36,5 +44,20 @@ User.create(email: 'poemma.u@gmail.com', first_name: 'Poemma', last_name: 'U', p
 User.create(email: 'abby.m@gmail.com', first_name: 'Abby', last_name: 'M', password: 'password', password_confirmation: 'password')
 User.create(email: 'bre.c@gmail.com', first_name: 'Bre', last_name: 'Coach', password: 'password', password_confirmation: 'password')
 User.create(email: 'mikey.c@gmail.com', first_name: 'Mikey', last_name: 'Coach', password: 'password', password_confirmation: 'password')
+
+# 2nd Guest Team
+User.create(email: 'coachgel@test.com', first_name: 'Gel', last_name: 'Leano', password: 'password', password_confirmation: 'password')
+User.create(email: 'tyler@test.com', first_name: 'Tyler/16K', last_name: 'Y', password: 'password', password_confirmation: 'password')
+User.create(email: 'lauren@test.com', first_name: 'Lauren/16K', last_name: 'D', password: 'password', password_confirmation: 'password')
+User.create(email: 'naomi@test.com', first_name: 'Naomi/16K', last_name: 'W', password: 'password', password_confirmation: 'password')
+User.create(email: 'analee@test.com', first_name: 'AnaLee/16K', last_name: 'R', password: 'password', password_confirmation: 'password')
+User.create(email: 'evelyn@test.com', first_name: 'Evelyn/16K', last_name: 'W', password: 'password', password_confirmation: 'password')
+User.create(email: 'jessica@test.com', first_name: 'Jessica/16K', last_name: 'A', password: 'password', password_confirmation: 'password')
+User.create(email: 'gianna@test.com', first_name: 'Gianna/16K', last_name: 'H', password: 'password', password_confirmation: 'password')
+User.create(email: 'kendall@test.com', first_name: 'Kendall/16K', last_name: 'L', password: 'password', password_confirmation: 'password')
+User.create(email: 'are@test.com', first_name: 'Are/16K ', last_name: 'M', password: 'password', password_confirmation: 'password')
+User.create(email: 'mila@test.com ', first_name: 'Mila/16K', last_name: 'C', password: 'password', password_confirmation: 'password')
+User.create(email: 'kylie@test.com', first_name: 'Kylie/16K', last_name: 'Y', password: 'password', password_confirmation: 'password')
+User.create(email: 'mika@test.com', first_name: 'Mika/16K', last_name: 'N', password: 'password', password_confirmation: 'password')
 
 puts "== Created #{User.count} users. ===================="

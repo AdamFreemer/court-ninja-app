@@ -1,6 +1,6 @@
 <%# This is the audio for the bell ringer that executes from the js_display file %>
 <audio id="audio" src="http://www.ufoseries.com/soundEffects/hqAlarmBell.mp3"></audio>
-<%= render "js_display" %>
+<div id="courts" data-courts="double"></div>
 
 <div class="bg-white">
   <div class="max-w-full mx-auto py-24 px-6 sm:px-6 lg:px-8">
@@ -33,16 +33,16 @@
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <% @court_1_matches.each do |match| %>
-                <% team1 = match.teams.first.users %>
-                <% team2 = match.teams.second.users %>
-                <% work_team = match.teams.last.users %>
-                <% if @tournament.current_set == match.number %>
-                  <tr id="current-set" data-current-set="<%= match.number %>" class="font-extrabold divide-x divide-gray-300 shadow-md">
+              <% @court_1_matches.each do |set| %>
+                <% team1 = set.teams.first.users %>
+                <% team2 = set.teams.second.users %>
+                <% work_team = set.teams.last.users %>
+                <% if @tournament.current_set == set.number %>
+                  <tr id="current-set" data-current-set="<%= set.number %>" class="font-extrabold divide-x divide-gray-300 shadow-md">
                 <% else %>
                   <tr class="font-normal divide-x divide-gray-300">
                 <% end %>
-                  <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= match.number %></td>
+                  <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= set.number %></td>
                   <% team1.each do |player| %>
                     <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= player.name_abbreviated %></td>
                   <% end %>  
@@ -83,16 +83,16 @@
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <% @court_2_matches.each do |match| %>
-                <% team1 = match.teams.first.users %>
-                <% team2 = match.teams.second.users %>
-                <% work_team = match.teams.last.users %>
-                <% if @tournament.current_set == match.number %>
-                  <tr id="current-set" data-current-set="<%= match.number %>" class="font-extrabold divide-x divide-gray-300 shadow-md">
+              <% @court_2_matches.each do |set| %>
+                <% team1 = set.teams.first.users %>
+                <% team2 = set.teams.second.users %>
+                <% work_team = set.teams.last.users %>
+                <% if @tournament.current_set == set.number %>
+                  <tr id="current-set" data-current-set="<%= set.number %>" class="font-extrabold divide-x divide-gray-300 shadow-md">
                 <% else %>
                   <tr class="font-normal divide-x divide-gray-300">
                 <% end %>
-                  <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= match.number %></td>
+                  <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= set.number %></td>
                   <% team1.each do |player| %>
                     <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= player.name_abbreviated %></td>
                   <% end %>  
@@ -110,7 +110,7 @@
           </table>
         </div>
       </div>
-
+      </div>
     </div>
 
   </div>

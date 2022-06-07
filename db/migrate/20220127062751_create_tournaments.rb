@@ -22,11 +22,14 @@ class CreateTournaments < ActiveRecord::Migration[7.0]
       t.integer :rounds_finalized, array: true, default: []
       t.integer :players, array: true, default: []
       t.string :court_names, array: true, default: []
-      t.integer :tournament_time
-      t.integer :break_time
+      t.decimal :tournament_time, precision: 5, scale: 1
+      t.decimal :break_time, precision: 5, scale: 1
+      t.integer :timer_time, default: 0
+      t.string :timer_state, default: "initial"
+      t.string :timer_mode, default: "break"
       t.integer :current_set, default: 1
-      t.string :timer_status, default: "reset"
-
+      t.integer :current_round, default: 1
+      t.boolean :tournament_completed, default: false
       t.timestamps
     end
   end
