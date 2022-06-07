@@ -37,11 +37,7 @@
                 <% team1 = set.teams.first.users %>
                 <% team2 = set.teams.second.users %>
                 <% work_team = set.teams.last.users %>
-                <% if @tournament.current_set == set.number %>
-                  <tr id="current-set" data-current-set="<%= set.number %>" class="font-extrabold divide-x divide-gray-300 shadow-md">
-                <% else %>
-                  <tr class="font-normal divide-x divide-gray-300">
-                <% end %>
+                <tr id="<%= set.number %>" data-display-target="set" class="divide-x divide-gray-300 ">
                   <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= set.number %></td>
                   <% team1.each do |player| %>
                     <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= player.name_abbreviated %></td>
@@ -87,11 +83,7 @@
                 <% team1 = set.teams.first.users %>
                 <% team2 = set.teams.second.users %>
                 <% work_team = set.teams.last.users %>
-                <% if @tournament.current_set == set.number %>
-                  <tr id="current-set" data-current-set="<%= set.number %>" class="font-extrabold divide-x divide-gray-300 shadow-md">
-                <% else %>
-                  <tr class="font-normal divide-x divide-gray-300">
-                <% end %>
+                <tr id="<%= set.number %>" data-display-target="set" class="divide-x divide-gray-300 ">
                   <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= set.number %></td>
                   <% team1.each do |player| %>
                     <td class="px-2 py-3.5 text-left text-xs text-gray-600"><%= player.name_abbreviated %></td>
