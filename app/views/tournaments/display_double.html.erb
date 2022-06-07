@@ -62,7 +62,7 @@
           <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_2_name %> Court</h2>
           <table class="min-w-full divide-y divide-gray-300>
             <thead class="bg-gray-50">
-            <% team_count = [*1..@tournament.sets.where(court: 1).first.tournament_teams.first.users.count - 1] %>
+            <% team_count = [*1..@tournament.tournament_sets.where(court: 1).first.tournament_teams.first.users.count - 1] %>
               <tr>
                 <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Set</th>
                 <th scope="col" class="px-1 py-3.5 text-left text-xs font-semibold text-gray-600">Court A</th>
