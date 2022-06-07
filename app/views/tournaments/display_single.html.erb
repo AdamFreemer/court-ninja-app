@@ -1,6 +1,6 @@
 <%# This is the audio for the bell ringer that executes from the js_display file %>
 <audio id="audio" src="http://www.ufoseries.com/soundEffects/hqAlarmBell.mp3"></audio>
-<%# render "js_display" %>
+<div id="courts" data-courts="single"></div>
 
 <div class="bg-white">
   <div class="max-w-full mx-auto py-10 px-6 sm:px-6 lg:px-8">
@@ -9,28 +9,7 @@
       <h1 class="text-3xl font-extrabold text-gray-900 sm:text-center">Round <%= @round %></h1>
     </div>
 
-    <div data-controller="display"
-      data-display-tournament-id-value="<%= @tournament.id %>"
-      data-display-tournament-current-round-local-value="<%= @round %>"
-      data-display-tournament-current-round-server-value="<%= @round %>"
-      data-display-tournament-current-set-value="<%= @tournament.current_set %>"
-      data-display-tournament-current-court-value="<%= @court %>" 
-      data-display-break-time-value="<%= @tournament.break_time * 60 %>" 
-      data-display-tournament-timer-state-value="<%= @tournament.timer_state %>" 
-      data-display-tournament-timer-value="0" 
-      data-display-tournament-time-value="<%= @tournament.tournament_time * 60 %>"   
-      > 
-      <div class="pt-3 text-6xl text-center font-medium text-gray-900">
-        <div data-display-target="progress" class="radial-progress text-accent-focus" style="--size:12rem; --value:100;">
-          <div class="timer">
-            <span data-display-target="minute" class="text-6xl"></span>:<span data-display-target="second" class="text-6xl"></span>
-          </div>
-        </div>
-      </div>    
-
-      <div class="text-center space-y-2">
-        <span data-display-target="syncing" id="syncing" class="pt-3 text-2xl text-center font-medium text-gray-900">Syncing...</span>
-      </div>
+      <%= render "display_timer" %>
 
       <div class="mt-12 sm:mt-8 sm:space-y-0 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0">
         <div class="border border-gray-500 rounded-lg shadow-sm divide-y divide-gray-200">

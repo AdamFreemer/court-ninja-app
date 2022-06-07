@@ -9,20 +9,20 @@
     <span class="block text-indigo-400 sm:inline"><%= @tournament.city %>, <%= @tournament.state %></span>
   </h3>
 
-  <div data-controller="timer" 
-    data-timer-tournament-id-value="<%= @tournament.id %>"
-    data-timer-tournament-round-value="<%= round %>" 
-    data-timer-break-time-value="<%= @tournament.break_time * 60 %>" 
-    data-timer-tournament-timer-state-value="<%= @tournament.timer_state %>" 
-    data-timer-tournament-timer-value="<%= @tournament.break_time * 60 %>" 
-    data-timer-tournament-time-value="<%= @tournament.tournament_time * 60 %>" 
+  <div data-controller="admin" 
+    data-admin-tournament-id-value="<%= @tournament.id %>"
+    data-admin-tournament-round-value="<%= round %>" 
+    data-admin-break-time-value="<%= @tournament.break_time * 60 %>" 
+    data-admin-tournament-timer-state-value="<%= @tournament.timer_state %>" 
+    data-admin-tournament-timer-value="<%= @tournament.break_time * 60 %>" 
+    data-admin-tournament-time-value="<%= @tournament.tournament_time * 60 %>" 
     class="pb-6 pt-3 text-2xl text-left font-medium text-gray-700">
     <div class="timer">
-      Timer: <span data-timer-target="minute"></span>:<span data-timer-target="second"></span>
+      Timer: <span data-admin-target="minute"></span>:<span data-admin-target="second"></span>
     </div>
-    <button data-action="timer#start" class="inline-flex items-center btn btn-success btn-xs hover:text-rose-50">Timer Start</button>
-    <button data-action="timer#pause" class="inline-flex items-center btn btn-warning btn-xs hover:text-rose-50">Timer Pause</button>
-    <button data-action="timer#reset" class="inline-flex items-center btn btn-alert btn-xs hover:text-rose-50">Timer Reset</button>
+    <button data-action="admin#start" class="inline-flex items-center btn btn-success btn-xs hover:text-rose-50">Timer Start</button>
+    <button data-action="admin#pause" class="inline-flex items-center btn btn-warning btn-xs hover:text-rose-50">Timer Pause</button>
+    <button data-action="admin#reset" class="inline-flex items-center btn btn-alert btn-xs hover:text-rose-50">Timer Reset</button>
   </div>
 
   <%# tables %>
@@ -62,7 +62,7 @@
         <%= link_to "Round Two", administration_tournament_path(@tournament, 2), class: "inline-flex items-center px-2.5 py-1.5 btn btn-primary btn-sm" %>
       <% end %>
       <% if (round == 1 && !@tournament.rounds_finalized.include?(1)) || (round == 2 && !@tournament.rounds_finalized.include?(2)) %>
-        <button id="update-scores" data-action="timer#start" onclick="updateScores('update')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">Update Scores</button>
+        <button id="update-scores" onclick="updateScores('update')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">Update Scores</button>
       <% end %>
       <% if (round == 1 && !@tournament.rounds_finalized.include?(1)) || (round == 2 && !@tournament.rounds_finalized.include?(2)) %>
         <button id="finalize-round" onclick="updateScores('finalize')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">

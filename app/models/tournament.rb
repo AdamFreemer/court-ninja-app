@@ -168,7 +168,7 @@ class Tournament < ApplicationRecord
         current_set = no_score_team.matches.first.number
         # if we find a blank score, we update tournament.current_set and mark found_current
         # which will break out of loop on next pass
-        update(current_set: current_set)
+        update(current_set: current_set, timer_state: "run")
         found_current = true
       end
     end

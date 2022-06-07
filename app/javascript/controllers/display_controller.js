@@ -14,11 +14,11 @@ export default class extends Controller {
     tournamentTimerState: String, // "run", "stop", "initial"
     tournamentTimerMode: String, // "break" or "run"
   }
-  static targets = [ "minute", "second", "progress", "syncing", "set" ]
+  static targets = [ "minute", "second", "progress", "syncing", "set", "status" ]
 
   connect() {
     this.connectStatus();
-    this.generateTime();
+    this.updatePage();
     this.autoStart();
   }
 
@@ -41,9 +41,8 @@ export default class extends Controller {
         this.tournamentCurrentRoundServerValue = response.current_round;
       }
     })
-    this.generateTime();
-
-    // Highlights current set row, unhighlights others
+    this.updatePage();
+    // highlight current set row, unhighlight others
     this.setTargets.forEach((element, index) => {
       if ((element.id) == (this.tournamentCurrentSetValue)) {
         element.classList.add('font-extrabold');
@@ -54,24 +53,28 @@ export default class extends Controller {
       }    
     });
     // redirect to next round or results page
+    const whichCourt = document.getElementById('courts').dataset.courts
     if (this.tournamentCompletedValue == true) {
       window.location.href = "/tournaments/" + this.tournamentIdValue + "/results";
-    } else if (this.tournamentCurrentRoundServerValue != this.tournamentCurrentRoundLocalValue) {
+    } else if ((this.tournamentCurrentRoundServerValue != this.tournamentCurrentRoundLocalValue) && whichCourt == "single") {
       window.location.href = "/tournaments/display_single/" + this.tournamentIdValue + "/" + this.tournamentCurrentRoundServerValue + "/" + this.tournamentCurrentCourtValue
-    }              
+    } else if ((this.tournamentCurrentRoundServerValue != this.tournamentCurrentRoundLocalValue) && whichCourt == "double") {
+      window.location.href = "/tournaments/display_double/" + this.tournamentIdValue + "/" + this.tournamentCurrentRoundServerValue
+    }        
   }
 
-  generateTime() {  
-    let second = this.tournamentTimerValue % 60;
-    let minute = Math.floor(this.tournamentTimerValue / 60) % 60;
+  updatePage() {  
+    // circular progress -- update progress
     if (this.tournamentTimerModeValue == "tournament") {
       let progress = Math.abs(Math.round((this.tournamentTimerValue / this.tournamentTimeValue) * 100))
       this.progressTarget.style.setProperty('--value', progress)
+      this.statusTarget.innerHTML = "PLAY"
     } else {
       let progress = Math.abs(Math.round((this.tournamentTimerValue / this.breakTimeValue) * 100))
       this.progressTarget.style.setProperty('--value', progress)
+      this.statusTarget.innerHTML = "GET READY"
     }    
-    // circular progress color and zero reset to full
+    // circular progress -- update color and state
     if (this.tournamentTimerValue == 0 || this.tournamentTimerStateValue == "stop") {
       this.progressTarget.style.setProperty('--value', 100)
       this.progressTarget.classList.remove('text-accent-focus');
@@ -81,10 +84,13 @@ export default class extends Controller {
       this.progressTarget.classList.add('text-accent-focus');
     }
     // timer update
+    let second = this.tournamentTimerValue % 60;
+    let minute = Math.floor(this.tournamentTimerValue / 60) % 60;
     second = (second < 10) ? '0'+ second : second;
     minute = (minute < 10) ? + minute : minute;
     this.minuteTarget.innerHTML = minute
     this.secondTarget.innerHTML = second
+    // On initial load if connection is slow syncing... will be displayed until removed below
     document.getElementById("syncing").style.display = 'none';
   }
 
