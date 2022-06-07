@@ -43,8 +43,8 @@ class User < ApplicationRecord
   has_many :tournament_users
   has_many :tournaments, through: :tournament_users
 
-  has_many :team_users
-  has_many :teams, through: :team_users
+  has_many :tournament_team_users
+  has_many :tournament_teams, through: :tournament_team_users
 
   has_many :user_traits
   has_many :traits, through: :user_traits

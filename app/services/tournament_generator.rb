@@ -31,7 +31,7 @@ class TournamentGenerator
 
     currently_configured = tournament.rounds_configured
     currently_configured << round.to_i
-    tournament.update!(rounds_configured: currently_configured) if tournament.matches.count.positive?
+    tournament.update!(rounds_configured: currently_configured) if tournament.tournament_sets.count.positive?
   end
 
   ## Court configurations per player count
@@ -84,28 +84,28 @@ class TournamentGenerator
 
   def create_court(tournament, round, court, configuration, players_count)
     round_count = configuration.length - 1
-    (0..round_count).each do |match|
-      number = match + 1
-      create_match(
+    (0..round_count).each do |tournament_set|
+      number = tournament_set + 1
+      create_tournament_set(
         tournament,
         number,
         round,
         court,
-        configuration[match],
+        configuration[tournament_set],
         court == 1 ? players_count[:court1] : players_count[:court2]
       )
     end
   end
 
-  def create_match(tournament, number, round, court, config, team_ids)
-    match = Match.create(
+  def create_tournament_set(tournament, number, round, court, config, team_ids)
+    tournament_set = TournamentSet.create(
       tournament_id: tournament.id,
       number: number,
       court: court,
       round: round
     )
-    team1 = Team.create(number: 1, tournament_id: tournament.id)
-    team2 = Team.create(number: 2, tournament_id: tournament.id)
+    team1 = TournamentTeam.create(number: 1, tournament_id: tournament.id)
+    team2 = TournamentTeam.create(number: 2, tournament_id: tournament.id)
 
     config[0].each do |config_player_number|
       team1.users << User.find(team_ids[config_player_number - 1])
@@ -117,14 +117,14 @@ class TournamentGenerator
 
     if config.length == 3
       # We only create work team if 3rd element in config array (work team player ids) exists
-      work_team = Team.create(number: 3, tournament_id: tournament.id, work_team: true)
+      work_team = TournamentTeam.create(number: 3, tournament_id: tournament.id, work_team: true)
       config[2].each do |config_player_number|
         work_team.users << User.find(team_ids[config_player_number - 1])
       end
     end
 
-    match.teams << team1
-    match.teams << team2
-    match.teams << work_team if config.length == 3
+    tournament_set.tournament_teams << team1
+    tournament_set.tournament_teams << team2
+    tournament_set.tournament_teams << work_team if config.length == 3
   end
 end

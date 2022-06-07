@@ -2,7 +2,7 @@
 
 # == Schema Information
 #
-# Table name: teams
+# Table name: tournament_teams
 #
 #  id            :bigint           not null, primary key
 #  number        :integer
@@ -10,16 +10,24 @@
 #  work_team     :boolean
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  tournament_id :integer
+#  tournament_id :bigint
 #
-class Team < ApplicationRecord
+# Indexes
+#
+#  index_tournament_teams_on_tournament_id  (tournament_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (tournament_id => tournaments.id)
+#
+class TournamentTeam < ApplicationRecord
   belongs_to :tournament
 
-  has_many :team_users
-  has_many :users, through: :team_users
+  has_many :tournament_team_users
+  has_many :users, through: :tournament_team_users
 
-  has_many :match_teams
-  has_many :matches, through: :match_teams
+  has_many :tournament_set_tournament_teams
+  has_many :tournament_sets, through: :tournament_set_tournament_teams
 
   has_many :user_scores
 

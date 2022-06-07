@@ -10,16 +10,16 @@ class TournamentsController < ApplicationController
     if params[:filter] == "before-today"
       @tournaments = Tournament.before_today.order(created_at: :desc)
     elsif params[:filter] == "today"
-      @tournaments = Tournament.today.order(created_at: :desc) 
+      @tournaments = Tournament.today.order(created_at: :desc)
     elsif params[:filter] == "all"
       @tournaments = Tournament.all.order(created_at: :desc)
     else
       @tournaments = Tournament.today.order(created_at: :desc)
-    end   
+    end
 
     respond_to do |format|
       format.js { render layout: false }
-      format.html { render 'index' } 
+      format.html { render 'index' }
     end
   end
 
@@ -51,20 +51,20 @@ class TournamentsController < ApplicationController
 
   def display_double
     # show display both courts
-    @court_1_matches = @tournament.matches.where(court: 1, round: params[:round])
-    @court_2_matches = @tournament.matches.where(court: 2, round: params[:round])
+    @court_1_sets = @tournament.tournament_sets.where(court: 1, round: params[:round])
+    @court_2_sets = @tournament.tournament_sets.where(court: 2, round: params[:round])
   end
 
   def display_single
     # show display single
     @timer_minutes = 2
     @court = params[:court].to_i
-    @court_matches = @tournament.matches.where(court: @court, round: params[:round])
+    @court_sets = @tournament.tournament_sets.where(court: @court, round: params[:round])
   end
 
   def team_scores_update
     score_date = request.params['score_data']
-    Team.score_update(score_date)
+    TournamentTeam.score_update(score_date)
     @tournament.update_current_set(score_date)
     # @tournament.update!(timer_state: "reset")
     render json: {}
@@ -86,10 +86,10 @@ class TournamentsController < ApplicationController
     puts "== Timer Time: #{params[:time]}"
     @tournament.update!(timer_state: params[:state], timer_mode: params[:mode], timer_time: params[:time])
 
-    render json: { 
-      timer_state: @tournament.timer_state, 
+    render json: {
+      timer_state: @tournament.timer_state,
       timer_mode: @tournament.timer_mode,
-      timer_time: @tournament.timer_time 
+      timer_time: @tournament.timer_time
     }
   end
 
@@ -104,16 +104,16 @@ class TournamentsController < ApplicationController
     rounds_finalized = @tournament.rounds_finalized
     rounds_finalized << round
     @tournament.update(
-      tournament_completed: tournament_status, 
-      rounds_finalized: rounds_finalized, 
-      current_set: 1, 
+      tournament_completed: tournament_status,
+      rounds_finalized: rounds_finalized,
+      current_set: 1,
       current_round: round + 1
     )
     @tournament.round_two_courts_generate(@tournament.player_ranking(1)) if round == 1 && @tournament.rounds > 1
 
     if round == 1 && @tournament.rounds == 1 # Keeping round number agnostic if 1 round tournament
       redirect_to results_tournament_url(@tournament), notice: 'Round successfully processed.'
-    elsif @tournament.rounds > round # when current round is less than total rounds 
+    elsif @tournament.rounds > round # when current round is less than total rounds
       redirect_to administration_tournament_url(@tournament, round + 1), notice: "Round #{round} successfully processed."
     elsif rounds_finalized.count == @tournament.rounds # when all rounds finalized == total rounds as per tournament generation
       redirect_to results_tournament_url(@tournament), notice: 'Tournament results processed.'
@@ -188,7 +188,7 @@ class TournamentsController < ApplicationController
   end
 
   def round_two_generated
-    @round_two_generated = if Tournament.find(params[:id]).matches.where(round: 2).count.positive?
+    @round_two_generated = if Tournament.find(params[:id]).tournament_sets.where(round: 2).count.positive?
                              true
                            else
                              false
