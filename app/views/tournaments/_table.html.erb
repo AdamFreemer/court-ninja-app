@@ -10,11 +10,11 @@
     <% elsif round == 2 && court == 2 %>
       <span class=" "><%= tournament.court_2_name %> Court: Silver Group</span>
     <% end %>
-  </h4>    
-  
+  </h4>
+
   <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-gray-50">
-    <% team_count = [*1..tournament.matches.where(court: 1).first.teams.first.users.count - 1] %>
+    <% team_count = [*1..tournament.matches.where(court: 1).first.tournament_teams.first.users.count - 1] %>
       <tr>
         <th scope="col" class="px-1 py-3.5 text-left text-sm font-semibold text-gray-600">Set</th>
         <th scope="col" class="px-1 py-3.5 text-left text-sm font-semibold text-gray-600">Court A</th>
@@ -34,9 +34,9 @@
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
       <% matches.each do |match| %>
-        <% team1 = match.teams.first.users %>
-        <% team2 = match.teams.second.users %>
-        <% work_team = match.teams.last.users # team3 %>
+        <% team1 = match.tournament_teams.first.users %>
+        <% team2 = match.tournament_teams.second.users %>
+        <% work_team = match.tournament_teams.last.users # team3 %>
 
         <% if match.court == 1 %>
           <% tabs = PlayerConfigurations.tab[0][match.number - 1] %>
@@ -51,39 +51,39 @@
           <% end %>
           <td class="px-2 py-4 whitespace-nowrap text-xs text-gray-500">
             <div class="mt-1 flex rounded-md shadow-sm">
-              <% team_1 = match.teams.find_by(number: 1) %>
-              <% team_2 = match.teams.find_by(number: 2) %>
-              <input 
-                type="text" 
-                name="<%= "team-#{team_1.id}" %>" 
-                id="<%= team_1.id %>" 
-                class="flex-1 block w-2 px-2 py-2 rounded-l-md rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300" 
+              <% team_1 = match.tournament_teams.find_by(number: 1) %>
+              <% team_2 = match.tournament_teams.find_by(number: 2) %>
+              <input
+                type="text"
+                name="<%= "team-#{team_1.id}" %>"
+                id="<%= team_1.id %>"
+                class="flex-1 block w-2 px-2 py-2 rounded-l-md rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300"
                 value="<%= team_1.score %>"
                 tabindex="<%= tabs&.first %>"
               >
             </div>
-          </td>         
+          </td>
           <% team2.each do |player| %>
             <td class="px-2 py-4 whitespace-nowrap text-xs text-gray-500"><%= player.name_abbreviated %></td>
-          <% end %>                         
-      
+          <% end %>
+
           <td class="px-2 py-4 whitespace-nowrap text-sm text-gray-500">
             <div class="mt-1 flex rounded-md shadow-sm">
-              <input 
-                type="text" 
-                name="<%= "team-#{team_2.id}" %>" 
-                id="<%= team_2.id %>" 
-                class="flex-1 block w-2 px-2 py-2 rounded-l-md rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300" 
+              <input
+                type="text"
+                name="<%= "team-#{team_2.id}" %>"
+                id="<%= team_2.id %>"
+                class="flex-1 block w-2 px-2 py-2 rounded-l-md rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300"
                 value="<%= team_2.score %>"
                 tabindex="<%= tabs&.last %>"
               >
             </div>
-          </td> 
+          </td>
           <% if tournament.work_group > 0 %>
             <% work_team.each do |player| %>
               <td class="px-2 py-4 whitespace-nowrap text-xs text-gray-500"><%= player.name_abbreviated %></td>
-            <% end %>                         
-          <% end %>         
+            <% end %>
+          <% end %>
         </tr>
       <% end %>
     </tbody>

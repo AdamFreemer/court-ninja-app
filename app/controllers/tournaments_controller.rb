@@ -10,16 +10,16 @@ class TournamentsController < ApplicationController
     if params[:filter] == "before-today"
       @tournaments = Tournament.before_today.order(created_at: :desc)
     elsif params[:filter] == "today"
-      @tournaments = Tournament.today.order(created_at: :desc) 
+      @tournaments = Tournament.today.order(created_at: :desc)
     elsif params[:filter] == "all"
       @tournaments = Tournament.all.order(created_at: :desc)
     else
       @tournaments = Tournament.today.order(created_at: :desc)
-    end   
+    end
 
     respond_to do |format|
       format.js { render layout: false }
-      format.html { render 'index' } 
+      format.html { render 'index' }
     end
   end
 
@@ -64,7 +64,7 @@ class TournamentsController < ApplicationController
 
   def team_scores_update
     score_date = request.params['score_data']
-    Team.score_update(score_date)
+    TournamentTeam.score_update(score_date)
     @tournament.update_current_set(score_date)
     # @tournament.update!(timer_state: "reset")
     render json: {}

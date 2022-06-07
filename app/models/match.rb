@@ -16,7 +16,7 @@
 #
 class Match < ApplicationRecord
   belongs_to :tournament
-  has_many :match_teams
-  has_many :teams, through: :match_teams
+  has_many :match_tournament_teams
+  has_many :tournament_teams, through: :match_tournament_teams
   has_many :user_scores
 end

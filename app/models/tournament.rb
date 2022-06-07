@@ -43,7 +43,7 @@ class Tournament < ApplicationRecord
   has_many :tournament_users
   has_many :users, through: :tournament_users
   has_many :user_scores
-  
+
   scope :before_today, -> { where("created_at < ?", 1.days.ago) }
   scope :today, -> { where("created_at > ?", DateTime.now.beginning_of_day) }
 
@@ -58,7 +58,7 @@ class Tournament < ApplicationRecord
   def create_user_scores(round)
     matches.where(round: round).each do |match|
       score = scoring(match)
-      match.teams.each do |team|
+      match.tournament_teams.each do |team|
         next if team.work_team
 
         team.users.each do |user|
@@ -112,8 +112,8 @@ class Tournament < ApplicationRecord
   def normalized_score(court_sorted)
     lowest_score = court_sorted.collect { |arr| arr[2] }.min
     return true if court_sorted == []
-    return court_sorted unless lowest_score.negative? 
-    
+    return court_sorted unless lowest_score.negative?
+
     court_sorted.each do |player|
       player[2] = player[2] + lowest_score&.abs + 1
     end
@@ -139,8 +139,8 @@ class Tournament < ApplicationRecord
 
   def scoring(match)
     # TODO: handle nil scores
-    team_1_score = match.teams.find_by(number: 1).score ||= 0
-    team_2_score = match.teams.find_by(number: 2).score ||= 0
+    team_1_score = match.tournament_teams.find_by(number: 1).score ||= 0
+    team_2_score = match.tournament_teams.find_by(number: 2).score ||= 0
     score_delta = (team_1_score - team_2_score).abs
 
     if team_1_score > team_2_score
@@ -164,7 +164,7 @@ class Tournament < ApplicationRecord
       break if found_current
 
       if score_data[team_number]['score'] == ''
-        no_score_team = Team.find(score_data[team_number][:team_id])
+        no_score_team = TournamentTeam.find(score_data[team_number][:team_id])
         current_set = no_score_team.matches.first.number
         # if we find a blank score, we update tournament.current_set and mark found_current
         # which will break out of loop on next pass

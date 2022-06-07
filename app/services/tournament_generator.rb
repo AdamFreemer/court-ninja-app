@@ -104,8 +104,8 @@ class TournamentGenerator
       court: court,
       round: round
     )
-    team1 = Team.create(number: 1, tournament_id: tournament.id)
-    team2 = Team.create(number: 2, tournament_id: tournament.id)
+    team1 = TournamentTeam.create(number: 1, tournament_id: tournament.id)
+    team2 = TournamentTeam.create(number: 2, tournament_id: tournament.id)
 
     config[0].each do |config_player_number|
       team1.users << User.find(team_ids[config_player_number - 1])
@@ -117,14 +117,14 @@ class TournamentGenerator
 
     if config.length == 3
       # We only create work team if 3rd element in config array (work team player ids) exists
-      work_team = Team.create(number: 3, tournament_id: tournament.id, work_team: true)
+      work_team = TournamentTeam.create(number: 3, tournament_id: tournament.id, work_team: true)
       config[2].each do |config_player_number|
         work_team.users << User.find(team_ids[config_player_number - 1])
       end
     end
 
-    match.teams << team1
-    match.teams << team2
-    match.teams << work_team if config.length == 3
+    match.tournament_teams << team1
+    match.tournament_teams << team2
+    match.tournament_teams << work_team if config.length == 3
   end
 end
