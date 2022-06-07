@@ -64,7 +64,7 @@ class Tournament < ApplicationRecord
         team.users.each do |user|
           user.user_scores.create(
             tournament_id: tournament_set.tournament.id,
-            tournament_set_id: tournament_set.id, team_id: team.id,
+            tournament_set_id: tournament_set.id, tournament_team_id: team.id,
             court: tournament_set.court, round: tournament_set.round,
             score: team.number == 1 ? score[:team1][:score] : score[:team2][:score],
             win: team.number == 1 ? score[:team1][:win] : score[:team2][:win],
