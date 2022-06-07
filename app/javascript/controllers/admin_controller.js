@@ -19,7 +19,7 @@ export default class extends Controller {
     console.log("tournamentTimer: ", this.tournamentTimerValue)
     console.log("tournamentTimerState: ", this.tournamentTimerStateValue)
     console.log("tournamentTimerMode: ", this.tournamentTimerModeValue)
-    this.generateTime();
+    this.updatePage();
     this.autoStart();
   }
 
@@ -45,18 +45,21 @@ export default class extends Controller {
     console.log("== reset" + "mode: " + this.tournamentTimerModeValue)
     clearInterval(this.timer);
     this.timerOperation("stop", "break", this.breakTimeValue);
-    this.generateTime();
+    this.updatePage();
   }
 
   autoStart() {
     if (!this.timer && !this.tournamentTimerStateValue == "initial") {
       this.start();
     }
+    if (this.tournamentTimerStateValue == "run") {
+      this.start();
+    }
   }
 
   update() {
     this.tournamentTimerValue--
-    this.generateTime();
+    this.updatePage();
     if (this.tournamentTimerValue == 0 && this.tournamentTimerModeValue == "break") {
       clearInterval(this.timer);
       this.tournamentTimerValue = this.tournamentTimeValue;
@@ -73,7 +76,7 @@ export default class extends Controller {
     }
   }
 
-  generateTime() {  
+  updatePage() {  
     let time;
     this.tournamentTimerState == "initial" ? time = this.breakTimeValue : time  = this.tournamentTimerValue;
     let second = this.tournamentTimerValue % 60;

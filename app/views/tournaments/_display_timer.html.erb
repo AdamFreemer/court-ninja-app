@@ -1,0 +1,23 @@
+<div data-controller="display"
+  data-display-tournament-id-value="<%= @tournament.id %>"
+  data-display-tournament-current-round-local-value="<%= @round %>"
+  data-display-tournament-current-round-server-value="<%= @round %>"
+  data-display-tournament-current-set-value="<%= @tournament.current_set %>"
+  data-display-tournament-current-court-value="<%= @court %>" 
+  data-display-break-time-value="<%= @tournament.break_time * 60 %>" 
+  data-display-tournament-timer-state-value="<%= @tournament.timer_state %>" 
+  data-display-tournament-timer-value="0" 
+  data-display-tournament-time-value="<%= @tournament.tournament_time * 60 %>"   
+  > 
+  <div class="pt-3 text-6xl text-center font-medium text-gray-900">
+    <div data-display-target="status" id="status" class="pt-3 py-3.5 text-6xl text-center font-medium text-gray-900"></div>
+    <div data-display-target="progress" class="radial-progress text-accent-focus" style="--size:12rem; --value:100;">
+      <div class="timer">
+        <span data-display-target="minute" class="text-6xl"></span>:<span data-display-target="second" class="text-6xl"></span>
+      </div>
+    </div>
+  </div>    
+
+  <div class="text-center space-y-2">
+    <span data-display-target="syncing" id="syncing" class="pt-3 text-2xl text-center font-medium text-gray-900">Syncing...</span>
+  </div>
