@@ -3,7 +3,7 @@ class TournamentGenerator
   attr_accessor :tournament, :players
 
   def initialize(tournament, players)
-    @players = players
+    @players = players.shuffle
     @tournament = tournament
   end
 
