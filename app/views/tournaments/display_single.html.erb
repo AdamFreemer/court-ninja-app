@@ -35,7 +35,9 @@
                     <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
                   <% end %>
                   <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
-                  <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Working</th>
+                  <% if @tournament.work_group > 0 %>
+                    <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Working</th>
+                  <% end %>
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
@@ -53,8 +55,10 @@
                         <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
                       <% end %>
                       <th scope="col" class="px-2 py-3.5 text-left text-md text-gray-900">&nbsp;</th>
-                      <% work_team.each do |player| %>
-                        <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
+                      <% if @tournament.work_group > 0 %>
+                        <% work_team.each do |player| %>
+                          <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
+                        <% end %>
                       <% end %>
                     </tr>
                 <% end %>

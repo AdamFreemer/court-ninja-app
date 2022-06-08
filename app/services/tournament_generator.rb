@@ -5,6 +5,8 @@ class TournamentGenerator
   def initialize(tournament, players)
     @players = players.shuffle
     @tournament = tournament
+    @player_ids = @players.map(&:to_i)
+    @ghost_ids = User.where(is_ghost_player: true).collect(&:id)
   end
 
   def generate_round(round)
@@ -22,6 +24,13 @@ class TournamentGenerator
       tournament.update(work_group: 1, courts: 2, rounds: 2)
     end
 
+    if @players.count == 11
+      associate_tournament_players(@tournament, @players, round)
+      create_court(tournament, round, 1, PlayerConfigurations.p6, players_count_11)
+      create_court(tournament, round, 2, PlayerConfigurations.p6, players_count_11)
+      tournament.update(work_group: 0, courts: 2, rounds: 2)
+    end    
+
     if @players.count.between?(12, 14)
       associate_tournament_players(@tournament, @players, round)
       create_court(tournament, round, 1, PlayerConfigurations.p7, players_count_12_14)
@@ -36,41 +45,30 @@ class TournamentGenerator
 
   ## Court configurations per player count
   def players_count_8_9
-    player_ids = @players.map(&:to_i)
-    ghost_ids = User.where(is_ghost_player: true).collect(&:id)
-
     case players.count
     when 8
-      { court1: player_ids.first(8) + [ghost_ids.first], court2: [] }
+      { court1: @player_ids.first(8) + [@ghost_ids.first], court2: [] }
     when 9
-      { court1: player_ids.first(9) }
+      { court1: @player_ids.first(9) }
     end
   end
 
   def players_count_10
-    player_ids = @players.map(&:to_i)
-    ghost_ids = User.where(is_ghost_player: true).collect(&:id)
-
-    { court1: player_ids.first(5), court2: player_ids.last(5) }
+    { court1: @player_ids.first(5), court2: @player_ids.last(5) }
   end
 
-  # def players_count_11
-  #   player_ids = @players.map(&:to_i)
-
-  #   { court1: player_ids.first(6), court2: player_ids.last(5) + [ghost_ids.first] }
-  # end
+  def players_count_11
+    { court1: @player_ids.first(6), court2: @player_ids.last(5) + [@ghost_ids.first] }
+  end
 
   def players_count_12_14
-    player_ids = @players.map(&:to_i)
-    ghost_ids = User.where(is_ghost_player: true).collect(&:id)
-
     case players.count
     when 12
-      { court1: player_ids.first(6) + ghost_ids.first(1), court2: player_ids.last(6) + ghost_ids.last(1) }
+      { court1: @player_ids.first(6) + @ghost_ids.first(1), court2: @player_ids.last(6) + @ghost_ids.last(1) }
     when 13
-      { court1: player_ids.first(7), court2: player_ids.last(6) + ghost_ids.last(1) }
+      { court1: @player_ids.first(7), court2: @player_ids.last(6) + @ghost_ids.last(1) }
     when 14
-      { court1: player_ids.first(7), court2: player_ids.last(7) }
+      { court1: @player_ids.first(7), court2: @player_ids.last(7) }
     end
   end
 
@@ -111,7 +109,6 @@ class TournamentGenerator
       team1.users << User.find(team_ids[config_player_number - 1])
     end
     config[1].each do |config_player_number|
-      puts "====================== #{team_ids[config_player_number - 1]}"
       team2.users << User.find(team_ids[config_player_number - 1])
     end
 
