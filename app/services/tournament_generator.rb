@@ -43,6 +43,13 @@ class TournamentGenerator
     tournament.update!(rounds_configured: currently_configured) if tournament.tournament_sets.count.positive?
   end
 
+  if @players.count == 15
+    associate_tournament_players(@tournament, @players, round)
+    create_court(tournament, round, 1, PlayerConfigurations.p5, players_count_11)
+    create_court(tournament, round, 2, PlayerConfigurations.p5, players_count_11)
+    tournament.update(work_group: 0, courts: 3, rounds: 2)
+  end    
+
   ## Court configurations per player count
   def players_count_8_9
     case players.count
@@ -70,6 +77,10 @@ class TournamentGenerator
     when 14
       { court1: @player_ids.first(7), court2: @player_ids.last(7) }
     end
+  end
+
+  def players_count_15
+    { court1: @player_ids.first(5), court2: @player_ids.last(5), court3: @player_ids.last(5) }
   end
 
   def associate_tournament_players(tournament, players, round)
