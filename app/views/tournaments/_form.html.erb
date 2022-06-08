@@ -13,17 +13,17 @@
   <div class="space-y-6">
     <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
       <div class="md:grid md:grid-cols-3 md:gap-6">
-        <div class="md:col-span-1 max-h-96 overflow-y-auto">
+        <div class="md:col-span-1 max-h-96 overflow-y-auto border-[1px] p-2">
           <label for="courts" id="players-label" class="block text-md font-medium text-gray-700">Players <span id="players-text" class="text-gray-400"></span>&nbsp;</label>
           <% @tournament_configured ? player_list = tournament.users : player_list = @available_players %>
           <%= form.collection_check_boxes(:players, player_list, :id, :full_name, disabled: @tournament_configured) do |player| %>
             <%= player.label class:"text-sm font-medium text-gray-70 py-1" do %>
               <% if @tournament_configured %>
-                <%= player.check_box(class: "w-4 h-4 rounded mx-0", disabled: true) %>
+                <%= player.check_box(class: "w-4 h-4 rounded mx-0 ml-1 mr-1", disabled: true) %>
                 <%= hidden_field_tag "tournament[players][]", player.object.id, value: player.object.id  %>
                 <%=%>
               <% else %>
-                <%= player.check_box(class: "w-4 h-4 rounded mx-0") %>
+                <%= player.check_box(class: "w-4 h-4 rounded mx-0 ml-1 mr-1") %>
               <% end %>
               <%= player.text %>
               <br />
