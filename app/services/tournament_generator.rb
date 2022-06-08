@@ -41,14 +41,7 @@ class TournamentGenerator
     currently_configured = tournament.rounds_configured
     currently_configured << round.to_i
     tournament.update!(rounds_configured: currently_configured) if tournament.tournament_sets.count.positive?
-  end
-
-  if @players.count == 15
-    associate_tournament_players(@tournament, @players, round)
-    create_court(tournament, round, 1, PlayerConfigurations.p5, players_count_11)
-    create_court(tournament, round, 2, PlayerConfigurations.p5, players_count_11)
-    tournament.update(work_group: 0, courts: 3, rounds: 2)
-  end    
+  end   
 
   ## Court configurations per player count
   def players_count_8_9
