@@ -1,9 +1,13 @@
 puts "== Creating Users..."
 
 # Admins
-User.create(email: 'dmbrooking@gmail.com', first_name: 'Dan', last_name: 'Broking', password: 'password', password_confirmation: 'password', admin: true)
-User.create(email: 'adam@freemer.com', first_name: 'Adam', last_name: 'Freemer', password: 'password', password_confirmation: 'password', admin: true)
-User.create(email: 'lucky@2629consulting.com', first_name: 'Lucky', last_name: 'Makropoulos', password: 'password', password_confirmation: 'password', admin: true)
+dan = User.create(email: 'dmbrooking@gmail.com', first_name: 'Dan', last_name: 'Broking', password: 'password', password_confirmation: 'password')
+adam = User.create(email: 'adam@freemer.com', first_name: 'Adam', last_name: 'Freemer', password: 'password', password_confirmation: 'password')
+lucky = User.create(email: 'lucky@2629consulting.com', first_name: 'Lucky', last_name: 'Makropoulos', password: 'password', password_confirmation: 'password')
+
+[dan, adam, lucky].each do |user|
+  user.add_role :admin
+end
 
 # Lucky Team
 User.create(email: 'sfaisal2007@yahoo.com', first_name: 'Olivia', last_name: 'Luey', password: 'password', password_confirmation: 'password')

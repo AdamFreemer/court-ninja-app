@@ -1,6 +1,6 @@
 Trestle.resource(:users) do
   before_action do
-    unless current_user.admin?
+    unless current_user.has_role?(:admin)
       flash[:error] = I18n.t('admin.flash.unauthorized')
       redirect_to main_app.root_url
     end
@@ -15,13 +15,15 @@ Trestle.resource(:users) do
   end
 
   scope :all, -> { User.all }, default: true
-  scope :admin, -> { User.where(admin: true) }
+  scope :admin, -> { User.with_role :admin }
 
   table do
     column :first_name
     column :last_name
     column :email
-    column :admin
+    column :admin do |u|
+      u.has_role?(:admin)
+    end
     actions
   end
 
