@@ -4,7 +4,6 @@
 #
 #  id                     :bigint           not null, primary key
 #  address                :string
-#  admin                  :boolean          default(FALSE)
 #  city                   :string
 #  contact_1_address      :string
 #  contact_1_name         :string
@@ -35,6 +34,7 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
+  rolify
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
