@@ -61,7 +61,7 @@ class Tournament < ApplicationRecord
   scope :today, -> { where("created_at > ?", DateTime.now.beginning_of_day) }
 
   def generate_tournament
-    return false unless players.count.between?(8, 14)
+    return false unless players.count.between?(8, 15)
 
     tournament_generator = TournamentGenerator.new(self, players)
     tournament_generator.generate_round(1)

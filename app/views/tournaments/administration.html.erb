@@ -41,6 +41,18 @@
         <%= render "table", tournament: @tournament, court: 2, round: round, tournament_sets: @tournament.tournament_sets.where(court: 2, round: round) %>
       </div>
     </div>
+  <% elsif @tournament.courts == 3 %>
+    <div class="columns-3 space-y-32">
+      <div class="">
+        <%= render "table", tournament: @tournament, court: 1, round: round, tournament_sets: @tournament.tournament_sets.where(court: 1, round: round) %>
+      </div>
+      <div class="">
+        <%= render "table", tournament: @tournament, court: 2, round: round, tournament_sets: @tournament.tournament_sets.where(court: 2, round: round) %>
+      </div>
+      <div class="">
+        <%= render "table", tournament: @tournament, court: 3, round: round, tournament_sets: @tournament.tournament_sets.where(court: 3, round: round) %>
+      </div>      
+    </div>
   <% end %>
   <%# buttons %>
   <br>
@@ -49,6 +61,7 @@
       <button onclick="display('1')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court <%= @tournament.courts > 1 ? 1 : "" %></button>
       <% if @tournament.courts > 1 %>
         <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 2</button>
+        <button onclick="display('3')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 3</button>
         <button onclick="display('all')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Both Courts</button>
       <% end %>
     </div>

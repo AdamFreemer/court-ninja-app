@@ -37,7 +37,9 @@
     $('#players-label').text(`Players (${pSelected} selected)`);
     processPlayersSelected(pSelected);
 
-    if (pSelected == 10 || pSelected == 11 || pSelected == 12 || pSelected == 13 || pSelected == 14 || pSelected == 15) {
+    if (pSelected == 15) {
+      courtsCountThree();
+    } else if (pSelected == 10 || pSelected == 11 || pSelected == 12 || pSelected == 13 || pSelected == 14) {
       courtsCountTwo();
     } else {
       courtsCountOne();
@@ -71,6 +73,8 @@
     case 13:
     case 14:
     case 15:
+      localStorage['tournamentSets'] = 5
+      localStorage['tournamentRounds'] = 2
     case 16:
       localStorage['tournamentSets'] = 7
       localStorage['tournamentRounds'] = 2
@@ -125,6 +129,8 @@
       courtsCountOne();
     } else if (courts_count == "2") {
       courtsCountTwo();
+    } else if (courts_count == "3") {
+      courtsCountThree();
     } else {
       courtsCountOne();
     }

@@ -11,6 +11,7 @@ class TournamentGenerator
 
   def generate_round(round)
     # create_court(tournament, round, court, # players on court, player config, court config)
+    # 1 create court for each court per round (15 player has 3 courts of 5 i.e. 3 create_court's)
     if @players.count.between?(8, 9)
       associate_tournament_players(@tournament, @players, round)
       create_court(tournament, round, 1, PlayerConfigurations.p9, players_count_8_9)
@@ -38,6 +39,14 @@ class TournamentGenerator
       tournament.update(work_group: 1, courts: 2, rounds: 2)
     end
 
+    if @players.count == 15
+      associate_tournament_players(@tournament, @players, round)
+      create_court(tournament, round, 1, PlayerConfigurations.p5, players_count_15)
+      create_court(tournament, round, 2, PlayerConfigurations.p5, players_count_15)
+      create_court(tournament, round, 3, PlayerConfigurations.p5, players_count_15)
+      tournament.update(work_group: 1, courts: 3, rounds: 2)
+    end   
+
     currently_configured = tournament.rounds_configured
     currently_configured << round.to_i
     tournament.update!(rounds_configured: currently_configured) if tournament.tournament_sets.count.positive?
@@ -49,7 +58,7 @@ class TournamentGenerator
     when 8
       { court1: @player_ids.first(8) + [@ghost_ids.first], court2: [] }
     when 9
-      { court1: @player_ids.first(9) }
+      { court1: @player_ids.first(9), court2: [] }
     end
   end
 
@@ -73,7 +82,7 @@ class TournamentGenerator
   end
 
   def players_count_15
-    { court1: @player_ids.first(5), court2: @player_ids.last(5), court3: @player_ids.last(5) }
+    { court1: @player_ids[0..4], court2: @player_ids[5..9], court3: @player_ids[10..14] }
   end
 
   def associate_tournament_players(tournament, players, round)
@@ -85,8 +94,22 @@ class TournamentGenerator
   end
 
   def create_court(tournament, round, court, configuration, players_count)
-    round_count = configuration.length - 1
-    (0..round_count).each do |tournament_set|
+    player_ids = if court == 1
+                   players_count[:court1]
+                 elsif court == 2
+                   players_count[:court2]
+                 elsif court == 3
+                   players_count[:court3]
+                 elsif court == 4
+                   players_count[:court4]
+                 elsif court == 5
+                   players_count[:court5]
+                 elsif court == 6
+                   players_count[:court6]
+                 end
+
+    set_count = configuration.length - 1
+    (0..set_count).each do |tournament_set|
       number = tournament_set + 1
       create_tournament_set(
         tournament,
@@ -94,12 +117,12 @@ class TournamentGenerator
         round,
         court,
         configuration[tournament_set],
-        court == 1 ? players_count[:court1] : players_count[:court2]
+        player_ids
       )
     end
   end
 
-  def create_tournament_set(tournament, number, round, court, config, team_ids)
+  def create_tournament_set(tournament, number, round, court, config, player_ids)
     tournament_set = TournamentSet.create(
       tournament_id: tournament.id,
       number: number,
@@ -110,17 +133,17 @@ class TournamentGenerator
     team2 = TournamentTeam.create(number: 2, tournament_id: tournament.id)
 
     config[0].each do |config_player_number|
-      team1.users << User.find(team_ids[config_player_number - 1])
+      team1.users << User.find(player_ids[config_player_number - 1])
     end
     config[1].each do |config_player_number|
-      team2.users << User.find(team_ids[config_player_number - 1])
+      team2.users << User.find(player_ids[config_player_number - 1])
     end
 
     if config.length == 3
       # We only create work team if 3rd element in config array (work team player ids) exists
       work_team = TournamentTeam.create(number: 3, tournament_id: tournament.id, work_team: true)
       config[2].each do |config_player_number|
-        work_team.users << User.find(team_ids[config_player_number - 1])
+        work_team.users << User.find(player_ids[config_player_number - 1])
       end
     end
 
