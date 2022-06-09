@@ -17,7 +17,7 @@
 
   <body>
     <% if current_user %>
-      <% unless action_name == "display_double" || action_name == "display_single" %>
+      <% unless action_name == "display_double" || action_name == "display_single" || action_name == "results" %>
         <%= render 'layouts/header' %>
       <% end %>
       <main class="px-8">
