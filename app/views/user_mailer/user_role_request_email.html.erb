@@ -1,12 +1,16 @@
 <table id="layout" border="0" cellspacing="0" cellpadding="0" width="600" style="margin: 10px auto;text-align: left;">
   <tr>
     <td id="content" style="background: #ffffff;line-height: 1.25em;padding: 10px 20px 30px 40px;vertical-align: top;">
-      <p><%= "#{@user.first_name} #{@user.last_name}" %> has requested to be a <%= @user_role_request.roles.pluck(:name).first %>.</p>
+      <p><%= "#{@user.first_name} #{@user.last_name}" %> has requested to be a <%=@user_role_request.roles.map(&:name).join(', ') %>.</p>
     </td>
   </tr>
   <tr>
-    <td id="content" style="background: #ffffff;line-height: 1.25em;padding: 10px 20px 30px 40px;vertical-align: top;display: flex;justify-content: space-evenly;">
+    <td id="content" style="background: #ffffff;line-height: 1.25em;padding: 10px 20px 30px 40px;vertical-align: top">
       <%= link_to "Approve", approve_user_role_request_url(@user_role_request.id) %>
+    </td>
+  </tr>
+  <tr>
+    <td id="content" style="background: #ffffff;line-height: 1.25em;padding: 10px 20px 30px 40px;vertical-align: top">
       <%= link_to "Deny", deny_user_role_request_url(@user_role_request.id) %>
     </td>
   </tr>

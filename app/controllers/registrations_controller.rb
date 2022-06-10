@@ -8,5 +8,6 @@ class RegistrationsController < Devise::RegistrationsController
 
     req = UserRoleRequest.create!(user_id: resource.id)
     req.add_role(params['user']['role'])
+    req.send_user_role_request_email
   end
 end

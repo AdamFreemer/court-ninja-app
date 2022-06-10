@@ -23,8 +23,6 @@
 class UserRoleRequest < ApplicationRecord
   rolify
 
-  after_create :send_user_role_request_email
-
   belongs_to :user
   belongs_to :processed_by, class_name: 'User', optional: true
 
