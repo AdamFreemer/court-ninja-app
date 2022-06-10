@@ -75,7 +75,7 @@
                   <div class="col-span-6 sm:col-span-3">
                     <label for="first-name" class="block text-sm font-medium text-gray-700">Gender</label>
                     <%= form.text_field :gender, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-                  </div>              
+                  </div>
 
                 </div>
               </div>
@@ -90,7 +90,7 @@
                 <div class="grid grid-cols-6 gap-6">
                   <div class="col-span-6 sm:col-span-3">
                     <h2 class="text-lg leading-6 font-medium text-gray-900">Contact 1</h2>
-                  </div><br>                
+                  </div><br>
                   <div class="col-span-6 sm:col-span-3">
                     <label for="first-name" class="block text-sm font-medium text-gray-700">Name</label>
                     <%= form.text_field :contact_1_name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
@@ -100,7 +100,7 @@
                     <label for="last-name" class="block text-sm font-medium text-gray-700">Phone</label>
                     <%= form.text_field :contact_1_phone, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
                   </div>
-            
+
                   <div class="col-span-6 sm:col-span-3">
                     <label for="first-name" class="block text-sm font-medium text-gray-700">Address</label>
                     <%= form.text_field :contact_1_address, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
@@ -115,7 +115,7 @@
                 <div class="grid grid-cols-6 gap-6">
                   <div class="col-span-6 sm:col-span-3">
                     <h2 class="text-lg leading-6 font-medium text-gray-900">Contact 2</h2>
-                  </div><br>                
+                  </div><br>
                   <div class="col-span-6 sm:col-span-3">
                     <label for="first-name" class="block text-sm font-medium text-gray-700">Name</label>
                     <%= form.text_field :contact_2_name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
@@ -125,7 +125,7 @@
                     <label for="last-name" class="block text-sm font-medium text-gray-700">Phone</label>
                     <%= form.text_field :contact_2_phone, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
                   </div>
-            
+
                   <div class="col-span-6 sm:col-span-3">
                     <label for="first-name" class="block text-sm font-medium text-gray-700">Address</label>
                     <%= form.text_field :contact_2_address, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
@@ -140,7 +140,7 @@
 
     <div class="mt-6">
       <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
-      <%= link_to "Back to users", users_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+      <%= link_to "Back to users", users_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" unless current_user&.is_player? %>
     </div>
 
   </div>

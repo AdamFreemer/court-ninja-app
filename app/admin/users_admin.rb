@@ -1,4 +1,8 @@
 Trestle.resource(:users) do
+  menu do
+    item :users, icon: 'fa fa-users', priority: 1
+  end
+
   before_action do
     unless current_user.has_role?(:admin)
       flash[:error] = I18n.t('admin.flash.unauthorized')
@@ -10,12 +14,10 @@ Trestle.resource(:users) do
     model.where(is_ghost_player: false)
   end
 
-  menu do
-    item :users, icon: 'fa fa-users'
-  end
-
   scope :all, -> { User.all }, default: true
-  scope :admin, -> { User.with_role :admin }
+  Role.all.each do |role|
+    scope role.name.downcase.to_sym, -> { User.with_role(role.name) }
+  end
 
   table do
     column :first_name
