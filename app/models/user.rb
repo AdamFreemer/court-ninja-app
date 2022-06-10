@@ -37,19 +37,20 @@ class User < ApplicationRecord
   rolify
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
 
-  has_many :tournament_users
+  has_many :tournament_users, dependent: :destroy
   has_many :tournaments, through: :tournament_users
 
-  has_many :tournament_team_users
+  has_many :tournament_team_users, dependent: :destroy
   has_many :tournament_teams, through: :tournament_team_users
 
-  has_many :user_traits
+  has_many :user_traits, dependent: :destroy
   has_many :traits, through: :user_traits
 
-  has_many :user_scores
+  has_many :user_scores, dependent: :destroy
+
+  attr_accessor :role
 
   def full_name
     "#{last_name}, #{first_name}"

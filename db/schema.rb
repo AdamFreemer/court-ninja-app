@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_09_134040) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_10_202931) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,6 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_134040) do
     t.bigint "resource_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "show_on_signup_form", default: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
@@ -116,6 +117,25 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_134040) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_role_requests", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "status", default: "pending"
+    t.bigint "processed_by_id"
+    t.datetime "processed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["processed_by_id"], name: "index_user_role_requests_on_processed_by_id"
+    t.index ["user_id"], name: "index_user_role_requests_on_user_id"
+  end
+
+  create_table "user_role_requests_roles", id: false, force: :cascade do |t|
+    t.bigint "user_role_request_id"
+    t.bigint "role_id"
+    t.index ["role_id"], name: "index_user_role_requests_roles_on_role_id"
+    t.index ["user_role_request_id", "role_id"], name: "index_user_role_requests_roles_on_user_role_request_and_role"
+    t.index ["user_role_request_id"], name: "index_user_role_requests_roles_on_user_role_request_id"
+  end
+
   create_table "user_scores", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "tournament_set_id"
@@ -188,6 +208,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_134040) do
   add_foreign_key "tournament_teams", "tournaments"
   add_foreign_key "tournament_users", "tournaments"
   add_foreign_key "tournament_users", "users"
+  add_foreign_key "user_role_requests", "users"
+  add_foreign_key "user_role_requests", "users", column: "processed_by_id"
   add_foreign_key "user_scores", "tournament_sets"
   add_foreign_key "user_scores", "tournament_teams"
   add_foreign_key "user_scores", "tournaments"
