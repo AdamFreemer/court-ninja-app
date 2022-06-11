@@ -1,8 +1,9 @@
 class UserRoleRequestsController < ApplicationController
-  before_action :check_authorization
   before_action :set_user_role_request
 
   def approve
+    return unless current_user.is_admin?
+
     @user_role_request.update!(status: 'approved', processed_at: Time.current, processed_by_id: current_user.id)
     user = @user_role_request.user
     @user_role_request.roles.each do |role|
@@ -14,6 +15,8 @@ class UserRoleRequestsController < ApplicationController
   end
 
   def deny
+    return unless current_user.is_admin?
+
     @user_role_request.update!(status: 'denied', processed_at: Time.current, processed_by_id: current_user.id)
     UserMailer.role_request_processed_email(@user_role_request).deliver_now
     user = @user_role_request.user
@@ -28,9 +31,5 @@ class UserRoleRequestsController < ApplicationController
 
   def set_user_role_request
     @user_role_request = UserRoleRequest.find(params[:id])
-  end
-
-  def check_authorization
-    raise User::NotAuthorized unless current_user.is_admin?
   end
 end
