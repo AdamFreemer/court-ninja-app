@@ -37,6 +37,9 @@ Lint/ConstantResolution:
 Metrics:
   Enabled: false
 
+Rails/I18nLocaleTexts:
+  Enabled: false
+
 Style/ClassAndModuleChildren:
   Enabled: false
 
