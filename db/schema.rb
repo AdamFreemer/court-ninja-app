@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_10_202931) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_15_143337) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_10_202931) do
     t.boolean "show_on_signup_form", default: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "invite_code"
+    t.boolean "active", default: true
+    t.bigint "coach_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coach_id"], name: "index_teams_on_coach_id"
   end
 
   create_table "tournament_set_tournament_teams", force: :cascade do |t|
@@ -200,6 +211,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_10_202931) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  add_foreign_key "teams", "users", column: "coach_id"
   add_foreign_key "tournament_set_tournament_teams", "tournament_sets"
   add_foreign_key "tournament_set_tournament_teams", "tournament_teams"
   add_foreign_key "tournament_sets", "tournaments"

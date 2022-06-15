@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: 'registrations' }
 
   resources :users
+  resources :teams
 
-  root 'tournaments#index'
+  root 'dashboard#index'
 end

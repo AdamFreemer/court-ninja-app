@@ -50,6 +50,8 @@ class User < ApplicationRecord
 
   has_many :user_scores, dependent: :destroy
 
+  has_many :teams, foreign_key: :coach_id, dependent: :nullify
+
   attr_accessor :role
 
   def full_name
