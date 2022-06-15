@@ -20,7 +20,7 @@
             <% if @court == 2 %>
               <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_2_name %> Court</h2>
             <% end %>
-            <table class="min-w-full divide-y divide-gray-300 border-2 border-sky-500">
+            <table class="min-w-full divide-y divide-gray-300 border-2 border-b-green-500">
               <thead class="bg-gray-50">
               <% team_count = [*1..@tournament.tournament_sets.where(court: @court).first.tournament_teams.first.users.count - 1] %>
                 <tr class="divide-x divide-gray-300">

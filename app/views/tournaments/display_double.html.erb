@@ -14,7 +14,7 @@
       <div class="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
         <div class="p-6">
           <h2 class="py-3 text-xl text-center font-medium text-gray-900"><%= @tournament&.court_1_name %> Court</h2>
-          <table class="min-w-full divide-y divide-gray-300 border-2 border-sky-500">
+          <table class="min-w-full divide-y divide-gray-300 border-2 border-b-green-500">
             <thead class="bg-gray-50">
             <% team_count = [*1..@tournament.tournament_sets.where(court: 1).first.tournament_teams.first.users.count - 1] %>
               <tr class="divide-x divide-gray-300">
@@ -64,7 +64,7 @@
       <div class="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
         <div class="p-6">
           <h2 class="py-3 text-xl text-center font-medium text-gray-900"><%= @tournament&.court_2_name %> Court</h2>
-          <table class="min-w-full divide-y divide-gray-300 border-2 border-sky-500">
+          <table class="min-w-full divide-y divide-gray-300 border-2 border-b-green-500">
             <thead class="bg-gray-50">
             <% team_count = [*1..@tournament.tournament_sets.where(court: 1).first.tournament_teams.first.users.count - 1] %>
               <tr class="divide-x divide-gray-300">
