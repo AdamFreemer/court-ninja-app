@@ -62,15 +62,19 @@ class TournamentsController < ApplicationController
     @players_silver = @tournament.player_ranking(rounds)[1]
   end
 
+  def display_triple
+    @court_1_sets = @tournament.tournament_sets.where(court: 1, round: params[:round])
+    @court_2_sets = @tournament.tournament_sets.where(court: 2, round: params[:round])
+    @court_3_sets = @tournament.tournament_sets.where(court: 3, round: params[:round])
+  end
+
   def display_double
-    # show display both courts
     @court_1_sets = @tournament.tournament_sets.where(court: 1, round: params[:round])
     @court_2_sets = @tournament.tournament_sets.where(court: 2, round: params[:round])
   end
 
   def display_single
-    # show display single
-    @timer_minutes = 2
+    # display any court based on court param passed along
     @court = params[:court].to_i
     @court_sets = @tournament.tournament_sets.where(court: @court, round: params[:round])
   end

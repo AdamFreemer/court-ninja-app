@@ -69,6 +69,7 @@ class Tournament < ApplicationRecord
   end
 
   def create_user_scores(round)
+    # this method is non-idempotent
     tournament_sets.where(round: round).each do |tournament_set|
       score = scoring(tournament_set)
       tournament_set.tournament_teams.each do |team|
@@ -101,30 +102,49 @@ class Tournament < ApplicationRecord
   end
 
   def player_ranking(round)
-    court_1_scores = []
-    court_2_scores = []
+    # This method is idempotent
+    court_1_scores = []; court_2_scores = []; court_3_scores = []; court_4_scores = []; court_5_scores = []; court_6_scores = []
     players = User.where(id: users)
     players.each do |player|
       next if player.is_ghost_player == true
 
       score = player.user_scores.where(tournament_id: id, round: round).sum(:score)
-      wins = player.user_scores.where(tournament_id: id, round: round).sum(:win)
+      wins = player.user_scores.where(tournament_id: id, round: round).sum(:win)   
+
       if player.user_scores.where(tournament_id: id, round: round, court: 1).count.positive?
         court_1_scores << [player.id, player.name_abbreviated, score, wins]
       end
       if player.user_scores.where(tournament_id: id, round: round, court: 2).count.positive?
         court_2_scores << [player.id, player.name_abbreviated, score, wins]
       end
+      if player.user_scores.where(tournament_id: id, round: round, court: 3).count.positive?
+        court_3_scores << [player.id, player.name_abbreviated, score, wins]
+      end     
+      if player.user_scores.where(tournament_id: id, round: round, court: 4).count.positive?
+        court_4_scores << [player.id, player.name_abbreviated, score, wins]
+      end   
+      if player.user_scores.where(tournament_id: id, round: round, court: 5).count.positive?
+        court_5_scores << [player.id, player.name_abbreviated, score, wins]
+      end 
+      if player.user_scores.where(tournament_id: id, round: round, court: 6).count.positive?
+        court_6_scores << [player.id, player.name_abbreviated, score, wins]
+      end 
     end
-    court_1_sorted = court_1_scores.sort_by { |a| [-a[3], -a[2]] }
-    court_2_sorted = court_2_scores.sort_by { |a| [-a[3], -a[2]] }
 
-    [normalized_score(court_1_sorted), normalized_score(court_2_sorted)]
+    court_1_sorted = normalized_score(court_1_scores.sort_by { |a| [-a[3], -a[2]] }) 
+    court_2_sorted = normalized_score(court_2_scores.sort_by { |a| [-a[3], -a[2]] })
+    courts >= 3 ? court_3_sorted = normalized_score(court_3_scores.sort_by { |a| [-a[3], -a[2]] }) : court_3_sorted = []
+    courts >= 4 ? court_4_sorted = normalized_score(court_4_scores.sort_by { |a| [-a[3], -a[2]] }) : court_4_sorted = []
+    courts >= 5 ? court_5_sorted = normalized_score(court_5_scores.sort_by { |a| [-a[3], -a[2]] }) : court_5_sorted = []
+    courts == 6 ? court_6_sorted = normalized_score(court_6_scores.sort_by { |a| [-a[3], -a[2]] }) : court_6_sorted = []
+
+    [court_1_sorted, court_2_sorted, court_3_sorted, court_4_sorted, court_5_sorted, court_6_sorted]
   end
 
   def normalized_score(court_sorted)
+    # this method raises the score floor to 1, to eliminate negative scores being displayed
     lowest_score = court_sorted.collect { |arr| arr[2] }.min
-    return true if court_sorted == []
+    return [] if court_sorted == []
     return court_sorted unless lowest_score.negative?
 
     court_sorted.each do |player|
@@ -133,21 +153,62 @@ class Tournament < ApplicationRecord
   end
 
   def round_two_courts_generate(round_1_sorted)
-    team_counts = player_count_calc(round_1_sorted)
     all_player_ids = players.map(&:to_i)
-    gold_team_ids = (round_1_sorted[0].first(team_counts[0]) + round_1_sorted[1].first(team_counts[1])).collect(&:first)
-    silver_team_ids = all_player_ids - gold_team_ids
-    ordered_player_ids = gold_team_ids + silver_team_ids
+    # right now we don't care how many players for 2 courts, for 3 courts, we need to be more granular on how
+    # we pick players from courts in round 1 to populate on round 2
+    if courts <= 2
+      binding.pry
+      next_round_player_alloc = player_count_calc(round_1_sorted)
+      gold_team_ids = (round_1_sorted[0].first(next_round_player_alloc[0]) + round_1_sorted[1].first(team_counts[1])).collect(&:first)
+      silver_team_ids = all_player_ids - gold_team_ids
+      ordered_player_ids = gold_team_ids + silver_team_ids      
+    elsif courts == 3 && players.count == 15
+      binding.pry
+      gold_team = round_1_sorted[0].first(2) + round_1_sorted[1].first(2) +  round_1_sorted[2].first(2)
+      # take top 2 from each court for gold, highest scoring player for last player. 
+      team_counts = player_count_calc_three_court(round_1_sorted)
+      # gold_team_ids = 
+    end
 
     round_two_generation = TournamentGenerator.new(self, Tournament.sanitized_of_ghosts_players(ordered_player_ids))
     round_two_generation.generate_round(2)
   end
 
-  def player_count_calc(player_count)
+  def player_count_calc(court_player_config)
+    if courts <= 2 
+      court1_players_count = court_player_config[0].count.even? ? court_player_config[0].count / 2 : (court_player_config[0].count.to_f / 2).ceil
+      court2_players_count = court_player_config[0].count - court1_count
+      court3_players_count = []
+    elsif courts == 3
+      if configuration == "p5"
+        court1_players_count = 2
+        court2_players_count = 2
+        court3_players_count = 1
+      elsif configuration == "p7"
+      elsif configuration == "p7"
+      end
+    end
+    [court1_players_count, court2_players_count, court3_players_count]
+  end
+
+  def player_count_calc_three_court(player_count)
+
     first_team_count = player_count[0].count.even? ? player_count[0].count / 2 : (player_count[0].count.to_f / 2).ceil
     second_team_count = player_count[1].count.even? ? player_count[1].count / 2 : (player_count[1].count.to_f / 2).ceil
 
+
     [first_team_count, second_team_count]
+  end
+
+  def pick_remaining_best_players(round, drop_first_x_players)
+    # drop_first_x_players = first x players from each court (i.e. first 2 for 5 player games)
+    remaining_players = []
+    players_ranked = player_ranking(round)
+    players_ranked.each do |court|
+      binding.pry
+      remaining_players << court.drop(drop_first_x_players)
+    end
+    remaining_players
   end
 
   def scoring(tournament_set)
