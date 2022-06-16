@@ -10,13 +10,17 @@ class UsersController < ApplicationController
       end
   end
 
-  def show; end
+  def show
+    @teams = @user.teams
+  end
 
   def new
     @user = User.new
   end
 
-  def edit; end
+  def edit
+    @teams = @user.teams
+  end
 
   def create
     @user = User.new(user_params)
