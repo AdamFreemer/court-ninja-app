@@ -8,5 +8,12 @@ class CreateTeams < ActiveRecord::Migration[7.0]
       t.references :coach, index: true, foreign_key: { to_table: :users }
       t.timestamps
     end
+
+    create_table :player_teams do |t|
+      t.references :team, foreign_key: true
+      t.references :player, index: true, foreign_key: { to_table: :users }
+
+      t.timestamps
+    end
   end
 end

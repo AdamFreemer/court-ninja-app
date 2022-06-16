@@ -1,4 +1,6 @@
 class TeamsController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:verify]
+
   def show; end
 
   def new
@@ -19,17 +21,14 @@ class TeamsController < ApplicationController
     end
   end
 
-  # def update
-  #   respond_to do |format|
-  #     if @user.update(user_params)
-  #       format.html { redirect_to users_path, notice: 'User was successfully updated.' }
-  #       format.json { render :show, status: :ok, location: @user }
-  #     else
-  #       format.html { render :edit, status: :unprocessable_entity }
-  #       format.json { render json: @user.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
+  def verify
+    @team = Team.find_by(invite_code: params[:invite_code])
+
+    render json: {
+      team_name: @team&.name,
+      status: @team.present? ? 'success' : 'failure'
+    }
+  end
 
   private
 

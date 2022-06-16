@@ -20,7 +20,11 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: 'registrations' }
 
   resources :users
-  resources :teams
+  resources :teams do
+    collection do
+      get 'verify'
+    end
+  end
 
   root 'dashboard#index'
 end
