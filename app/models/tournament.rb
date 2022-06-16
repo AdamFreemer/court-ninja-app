@@ -16,6 +16,8 @@
 #  court_5_name         :string
 #  court_6_name         :string
 #  court_names          :string           default([]), is an Array
+#  court_side_a_name    :string
+#  court_side_b_name    :string
 #  courts               :integer
 #  current_round        :integer          default(1)
 #  current_set          :integer          default(1)

@@ -75,6 +75,16 @@
                 <%= form.select :break_time, @break_times, { :placeholder => "Please Select" }, id: "break-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
               </div>
             </div>
+            <div class="grid grid-cols-6 gap-6 mt-6"> 
+              <div id="court-side-a" class="col-span-6 sm:col-span-6 lg:col-span-2">
+                <label for="courts" class="block text-sm font-medium text-gray-700">Court Side A Name</label>
+                <%= form.text_field :court_side_a_name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>
+              <div id="court-side-b" class="col-span-6 sm:col-span-6 lg:col-span-2">
+                <label for="courts" class="block text-sm font-medium text-gray-700">Court Side B Name</label>
+                <%= form.text_field :court_side_b_name, id: "court-2-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>           
+            </div>            
             <%= render "form_courts", form: form %>
           </form>
         </div>
