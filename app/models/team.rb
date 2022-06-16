@@ -20,9 +20,12 @@
 #  fk_rails_...  (coach_id => users.id)
 #
 class Team < ApplicationRecord
-  belongs_to :coach, class_name: 'User', inverse_of: :teams
-
   after_create :generate_invite_code
+
+  belongs_to :coach, class_name: 'User', inverse_of: :teams_coached
+
+  has_many :player_teams, dependent: :destroy
+  has_many :players, through: :player_teams
 
   scope :active, -> { where(active: true) }
   validates :invite_code, uniqueness: { scope: :active } # rubocop:disable Rails/UniqueValidationWithoutIndex
@@ -30,7 +33,8 @@ class Team < ApplicationRecord
   def generate_invite_code
     code = [*('A'..'Z'), *('0'..'9')].sample(6).join
     update!(invite_code: code)
-  rescue StandardError
+  rescue StandardError => e
+    Rails.logger.info(e)
     generate_invite_code
   end
 end

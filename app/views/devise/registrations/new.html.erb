@@ -1,4 +1,4 @@
-<div class="devise-view">
+<div class="devise-view" data-controller="invite">
   <div class="flex items-center min-h-screen">
     <div class="flex-1 h-full max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
       <div class="flex flex-col md:flex-row">
@@ -30,9 +30,19 @@
                 <%= f.label :password_confirmation, "Password Confirmation", class: "block text-sm", autocomplete: "new-password" %>
                 <%= f.password_field :password_confirmation, class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500" %>
               </div>
+              <div class="pb-4">
+                <%= f.label :invite_code, "Invite Code?", class: "block text-sm" %>
+                <%= f.text_field :invite_code, class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500", data: {'invite-target': 'inviteCode', action: 'input->invite#lookupInviteCode' } %>
+              </div>
+              <div class="pb-4 text-center text-sm hidden" data-invite-target="teamNameContainer">
+                You will be joining <span data-invite-target="teamName" class="text-blue-500 font-bold"></span>.
+              </div>
+              <div class="pb-4 text-center text-sm text-red-500 hidden" data-invite-target="error">
+                Invite code invalid.
+              </div>
               <div>
                 <%= f.label :role, "Select Your Role", class: "block text-sm" %>
-                <%= f.select :role, Role.where(show_on_signup_form: true).pluck(:name).map(&:capitalize), {}, { class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500" } %>
+                <%= f.select :role, Role.where(show_on_signup_form: true).order(name: :desc).pluck(:name).map(&:capitalize), {}, { class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500" } %>
               </div>
               <%= f.submit "Sign Up", class: "block w-full px-2 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-500 border border-transparent rounded-lg active:bg-blue-500 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue" %>
             <% end %>
