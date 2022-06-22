@@ -7,7 +7,9 @@ class TeamsController < ApplicationController
     @team = Team.new
   end
 
-  def edit; end
+  def edit
+    @team = Team.find(params[:id])
+  end
 
   def create
     @team = Team.new(team_params)
@@ -21,6 +23,18 @@ class TeamsController < ApplicationController
     end
   end
 
+  def update
+    @team = Team.find(params[:id])
+
+    respond_to do |format|
+      if @team.update(team_params)
+        format.html { redirect_to root_url, notice: 'Team was successfully updated.' }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+      end
+    end
+  end
+
   def verify
     @team = Team.find_by(invite_code: params[:invite_code])
 
@@ -30,9 +44,15 @@ class TeamsController < ApplicationController
     }
   end
 
+  def join
+    @team = Team.find_by(invite_code: params[:invite_code])
+    current_user.teams << @team
+    current_user.save!
+  end
+
   private
 
   def team_params
-    params.fetch(:team, [{}]).permit(:name, :description, :coach_id)
+    params.fetch(:team, [{}]).permit(:name, :description, :coach_id, :active)
   end
 end
