@@ -2,68 +2,105 @@
 <%= render "js_administration", round: round %>
 
 <div class="mx-auto mb-32">
-  <h1 class="text-xl tracking-tight font-extrabold text-gray-900 sm:text-3xl md:text-4xl">
-    <span class="block text-indigo-700 md:inline"><%= @tournament.name %> Administration : Round <%= round %></span>
-  </h1>
-  <h3 class="pb-1 text-md tracking-tight font-extrabold text-gray-900 sm:text-2xl md:text-3xl">
-    <span class="block text-indigo-400 sm:inline"><%= @tournament.city %>, <%= @tournament.state %></span>
-  </h3>
-
-  <div data-controller="admin" 
-    data-admin-tournament-id-value="<%= @tournament.id %>"
-    data-admin-tournament-round-value="<%= round %>" 
-    data-admin-break-time-value="<%= @tournament.break_time * 60 %>" 
-    data-admin-tournament-timer-state-value="<%= @tournament.timer_state %>" 
-    data-admin-tournament-timer-value="<%= @tournament.break_time * 60 %>" 
-    data-admin-tournament-time-value="<%= @tournament.tournament_time * 60 %>" 
-    class="pb-6 pt-3 text-2xl text-left font-medium text-gray-700">
-    <div class="timer">
-      Timer: <span data-admin-target="minute"></span>:<span data-admin-target="second"></span>
+  <div class="flex">
+  <div class="w-1/3">
+    <div data-controller="admin" 
+      data-admin-tournament-id-value="<%= @tournament.id %>"
+      data-admin-tournament-round-value="<%= round %>" 
+      data-admin-break-time-value="<%= @tournament.break_time * 60 %>" 
+      data-admin-tournament-timer-state-value="<%= @tournament.timer_state %>" 
+      data-admin-tournament-timer-value="<%= @tournament.break_time * 60 %>" 
+      data-admin-tournament-time-value="<%= @tournament.tournament_time * 60 %>"  
+      class="pb-6 pt-3 text-2xl text-left font-medium text-gray-700">
+      <div class="timer">
+        Timer: <span data-admin-target="minute"></span>:<span data-admin-target="second"></span>
+      </div>
+      <button data-action="admin#start" class="inline-flex items-center btn btn-success btn-xs hover:text-rose-50">Timer Start</button>
+      <button data-action="admin#pause" class="inline-flex items-center btn btn-warning btn-xs hover:text-rose-50">Timer Pause</button>
+      <button data-action="admin#reset" class="inline-flex items-center btn btn-alert btn-xs hover:text-rose-50">Timer Reset</button>
     </div>
-    <button data-action="admin#start" class="inline-flex items-center btn btn-success btn-xs hover:text-rose-50">Timer Start</button>
-    <button data-action="admin#pause" class="inline-flex items-center btn btn-warning btn-xs hover:text-rose-50">Timer Pause</button>
-    <button data-action="admin#reset" class="inline-flex items-center btn btn-alert btn-xs hover:text-rose-50">Timer Reset</button>
+  </div>
+  <div class="w-1/3">
+    <h1 class="text-center text-xl tracking-tight font-extrabold text-gray-900 sm:text-3xl md:text-4xl">
+      <span class="block text-indigo-700 md:inline"><%= @tournament.name %> Administration : Round <%= round %></span>
+    </h1>
+    <h3 class="text-center pb-1 text-md tracking-tight font-extrabold text-gray-900 sm:text-2xl md:text-3xl">
+      <span class="block text-indigo-400 sm:inline"><%= @tournament.city %>, <%= @tournament.state %></span>
+    </h3>
+  </div>
+  <div class="w-1/3">
   </div>
 
-  <%# tables %>
+  </div>
+  <%# table layouts for different court counts TODO: refactor %>
   <% if @tournament.courts == 1 %>
-    <div class="columns-1">
-      <div class="">
+    <div class="flex">
+      <div class="w-full">
         <%= render "table", tournament: @tournament, court: 1, round: round, tournament_sets: @tournament.tournament_sets.where(court: 1, round: round) %>
       </div>
     </div>
   <% elsif @tournament.courts == 2 %>
-    <div class="columns-2">
-      <div class="">
+    <div class="flex space-x-5">
+      <div class="w-1/2">
         <%= render "table", tournament: @tournament, court: 1, round: round, tournament_sets: @tournament.tournament_sets.where(court: 1, round: round) %>
       </div>
-      <div class="">
+      <div class="w-1/2">
         <%= render "table", tournament: @tournament, court: 2, round: round, tournament_sets: @tournament.tournament_sets.where(court: 2, round: round) %>
       </div>
     </div>
   <% elsif @tournament.courts == 3 %>
-    <div class="columns-3 space-y-32">
-      <div class="">
+    <div class="flex space-x-5">
+      <div class="w-1/2">
         <%= render "table", tournament: @tournament, court: 1, round: round, tournament_sets: @tournament.tournament_sets.where(court: 1, round: round) %>
       </div>
-      <div class="">
+      <div class="w-1/2">
         <%= render "table", tournament: @tournament, court: 2, round: round, tournament_sets: @tournament.tournament_sets.where(court: 2, round: round) %>
       </div>
-      <div class="">
+    </div>
+    <br>
+    <div class="flex">
+      <div class="w-1/4"></div>     
+      <div class="w-1/2">
         <%= render "table", tournament: @tournament, court: 3, round: round, tournament_sets: @tournament.tournament_sets.where(court: 3, round: round) %>
       </div>      
+      <div class="w-1/4"></div> 
+    </div>
+  <% elsif @tournament.courts == 4 %>
+    <div class="flex space-x-5">
+      <div class="w-1/2">
+        <%= render "table", tournament: @tournament, court: 1, round: round, tournament_sets: @tournament.tournament_sets.where(court: 1, round: round) %>
+      </div>
+      <div class="w-1/2">
+        <%= render "table", tournament: @tournament, court: 2, round: round, tournament_sets: @tournament.tournament_sets.where(court: 2, round: round) %>
+      </div>
+    </div>
+    <br>
+    <div class="flex space-x-5">
+      <div class="w-1/2">
+        <%= render "table", tournament: @tournament, court: 1, round: round, tournament_sets: @tournament.tournament_sets.where(court: 3, round: round) %>
+      </div>
+      <div class="w-1/2">
+        <%= render "table", tournament: @tournament, court: 2, round: round, tournament_sets: @tournament.tournament_sets.where(court: 4, round: round) %>
+      </div>
     </div>
   <% end %>
+
   <%# buttons %>
   <br>
   <div class="flow-root">
     <div class="float-left space-x-4">
       <button onclick="display('1')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court <%= @tournament.courts > 1 ? 1 : "" %></button>
-      <% if @tournament.courts > 1 %>
+      <% if @tournament.courts == 2 %>
+        <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 2</button>
+      <% elsif @tournament.courts == 3 %>
         <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 2</button>
         <button onclick="display('3')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 3</button>
-        <button onclick="display('all')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Both Courts</button>
+      <% elsif @tournament.courts == 4 %>
+        <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 2</button>
+        <button onclick="display('3')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 3</button>
+        <button onclick="display('4')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 4</button>
       <% end %>
+      <button onclick="display('all')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display All Courts</button>
     </div>
     <div class="float-right space-x-4">
       <%= link_to 'Back to Tournaments', tournaments_path, class: "inline-flex items-center px-2.5 py-1.5 btn btn-primary btn-sm" %>

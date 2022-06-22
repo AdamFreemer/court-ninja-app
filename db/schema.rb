@@ -123,7 +123,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_02_001543) do
     t.string "timer_state", default: "initial"
     t.string "timer_mode", default: "break"
     t.integer "current_set", default: 1
-    t.integer "current_round", default: 1
+    t.integer "current_round", default: 0
     t.boolean "tournament_completed", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

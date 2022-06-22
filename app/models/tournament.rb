@@ -9,6 +9,7 @@
 #  address2             :string
 #  break_time           :decimal(5, 1)
 #  city                 :string
+#  configuration        :string
 #  court_1_name         :string
 #  court_2_name         :string
 #  court_3_name         :string
@@ -19,7 +20,7 @@
 #  court_side_a_name    :string
 #  court_side_b_name    :string
 #  courts               :integer
-#  current_round        :integer          default(1)
+#  current_round        :integer          default(0)
 #  current_set          :integer          default(1)
 #  date                 :datetime
 #  name                 :string
@@ -60,12 +61,37 @@ class Tournament < ApplicationRecord
   scope :before_today, -> { where("created_at < ?", 1.days.ago) }
   scope :today, -> { where("created_at > ?", DateTime.now.beginning_of_day) }
 
-  def generate_tournament
-    return false unless players.count.between?(8, 15)
+  after_save :associate_players
 
-    tournament_generator = TournamentGenerator.new(self, players)
-    tournament_generator.generate_round(1)
+  def generate_tournament # This is for new tournament only
+    tg = TournamentGenerator.new(self, players)
+    tg.generate_round(1)
     true
+  end
+
+  def generate
+    return false unless players.count.between?(6, 27)
+
+    ordered_player_ids = if self.current_round == 0 # new tournament, just use newly created self.players
+                           players
+                         else # self.player_ranking returns ranked court array
+                          PlayerConfigs.player_court_distributor(player_ranking(self.current_round))
+                         end
+    generate_round = TournamentGenerator.new(self, ordered_player_ids)
+    generate_round.generate_round(current_round + 1)
+    # binding.pry
+    # all_player_ids = players.map(&:to_i)
+    # if courts <= 2
+    #   next_round_player_alloc = player_count_calc(round_1_sorted)
+    #   gold_team_ids = (round_1_sorted[0].first(next_round_player_alloc[0]) + round_1_sorted[1].first(team_counts[1])).collect(&:first)
+    #   silver_team_ids = all_player_ids - gold_team_ids
+    #   ordered_player_ids = gold_team_ids + silver_team_ids      
+    # elsif courts == 3 && player_config
+    #   gold_team = round_1_sorted[0].first(2) + round_1_sorted[1].first(2) +  round_1_sorted[2].first(2)
+    #   # take top 2 from each court for gold, highest scoring player for last player. 
+    #   # team_counts = 
+    #   # gold_team_ids = 
+    # end
   end
 
   def create_user_scores(round)
@@ -152,64 +178,7 @@ class Tournament < ApplicationRecord
     end
   end
 
-  def round_two_courts_generate(round_1_sorted)
-    all_player_ids = players.map(&:to_i)
-    # right now we don't care how many players for 2 courts, for 3 courts, we need to be more granular on how
-    # we pick players from courts in round 1 to populate on round 2
-    if courts <= 2
-      binding.pry
-      next_round_player_alloc = player_count_calc(round_1_sorted)
-      gold_team_ids = (round_1_sorted[0].first(next_round_player_alloc[0]) + round_1_sorted[1].first(team_counts[1])).collect(&:first)
-      silver_team_ids = all_player_ids - gold_team_ids
-      ordered_player_ids = gold_team_ids + silver_team_ids      
-    elsif courts == 3 && players.count == 15
-      binding.pry
-      gold_team = round_1_sorted[0].first(2) + round_1_sorted[1].first(2) +  round_1_sorted[2].first(2)
-      # take top 2 from each court for gold, highest scoring player for last player. 
-      team_counts = player_count_calc_three_court(round_1_sorted)
-      # gold_team_ids = 
-    end
 
-    round_two_generation = TournamentGenerator.new(self, Tournament.sanitized_of_ghosts_players(ordered_player_ids))
-    round_two_generation.generate_round(2)
-  end
-
-  def player_count_calc(court_player_config)
-    if courts <= 2 
-      court1_players_count = court_player_config[0].count.even? ? court_player_config[0].count / 2 : (court_player_config[0].count.to_f / 2).ceil
-      court2_players_count = court_player_config[0].count - court1_count
-      court3_players_count = []
-    elsif courts == 3
-      if configuration == "p5"
-        court1_players_count = 2
-        court2_players_count = 2
-        court3_players_count = 1
-      elsif configuration == "p7"
-      elsif configuration == "p7"
-      end
-    end
-    [court1_players_count, court2_players_count, court3_players_count]
-  end
-
-  def player_count_calc_three_court(player_count)
-
-    first_team_count = player_count[0].count.even? ? player_count[0].count / 2 : (player_count[0].count.to_f / 2).ceil
-    second_team_count = player_count[1].count.even? ? player_count[1].count / 2 : (player_count[1].count.to_f / 2).ceil
-
-
-    [first_team_count, second_team_count]
-  end
-
-  def pick_remaining_best_players(round, drop_first_x_players)
-    # drop_first_x_players = first x players from each court (i.e. first 2 for 5 player games)
-    remaining_players = []
-    players_ranked = player_ranking(round)
-    players_ranked.each do |court|
-      binding.pry
-      remaining_players << court.drop(drop_first_x_players)
-    end
-    remaining_players
-  end
 
   def scoring(tournament_set)
     # TODO: handle nil scores
@@ -253,5 +222,14 @@ class Tournament < ApplicationRecord
   def self.sanitized_of_ghosts_players(player_ids)
     ghost_users_ids = User.where(is_ghost_player: true).collect(&:id)
     player_ids.map(&:to_i) - ghost_users_ids
+  end
+
+  private
+
+  def associate_players
+    self.users = []
+    players.each do |player|
+      self.users << User.find(player)
+    end
   end
 end

@@ -36,14 +36,6 @@
     let pSelected = document.querySelectorAll('input[type="checkbox"]:checked').length;
     $('#players-label').text(`Players (${pSelected} selected)`);
     processPlayersSelected(pSelected);
-
-    if (pSelected == 15) {
-      courtsCountThree();
-    } else if (pSelected == 10 || pSelected == 11 || pSelected == 12 || pSelected == 13 || pSelected == 14) {
-      courtsCountTwo();
-    } else {
-      courtsCountOne();
-    }    
   } 
 
   function processPlayersSelected(pSelected) {
@@ -51,34 +43,74 @@
     case 0:
       localStorage['tournamentSets'] = 0
       localStorage['tournamentRounds'] = 1
+      courtsCountOne();
+      break;
+    case 6:
+      localStorage['tournamentSets'] = 10
+      localStorage['tournamentRounds'] = 1
+      courtsCountOne();
       break;
     case 7:
       localStorage['tournamentSets'] = 7
       localStorage['tournamentRounds'] = 1
+      courtsCountOne();
       break;
     case 8:
     case 9:
       localStorage['tournamentSets'] = 12
       localStorage['tournamentRounds'] = 1
+      courtsCountOne();
       break;
     case 10:
       localStorage['tournamentSets'] = 5
       localStorage['tournamentRounds'] = 2
+      courtsCountTwo();
       break;
     case 11:
       localStorage['tournamentSets'] = 10
       localStorage['tournamentRounds'] = 2
+      courtsCountTwo();
       break;
     case 12:
     case 13:
     case 14:
-    case 15:
-      localStorage['tournamentSets'] = 5
-      localStorage['tournamentRounds'] = 2
-    case 16:
       localStorage['tournamentSets'] = 7
       localStorage['tournamentRounds'] = 2
+      courtsCountTwo();
+      break;      
+    case 15:
+      localStorage['tournamentSets'] = 5
+      localStorage['tournamentRounds'] = 3
+      courtsCountThree();
       break;
+    case 16:
+    case 17:
+      localStorage['tournamentSets'] = 7
+      localStorage['tournamentRounds'] = 2
+      courtsCountTwo();
+      break;    
+    case 18:
+    case 19:
+    case 20:
+    case 21:
+      localStorage['tournamentSets'] = 7
+      localStorage['tournamentRounds'] = 3
+      courtsCountThree();
+      break;      
+    case 22:
+    case 23:
+    case 24:
+      localStorage['tournamentSets'] = 10
+      localStorage['tournamentRounds'] = 3
+      courtsCountFour();
+      break;      
+    case 25:
+      localStorage['tournamentSets'] = 12
+      localStorage['tournamentRounds'] = 2
+      courtsCountThree();
+      break;
+    case 26:
+    case 27:
     }    
   }
 
