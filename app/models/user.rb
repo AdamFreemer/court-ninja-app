@@ -61,6 +61,10 @@ class User < ApplicationRecord
     "#{last_name}, #{first_name}"
   end
 
+  def initials
+    "#{first_name[0]}#{last_name[0]}"
+  end
+
   def name_abbreviated
     if is_ghost_player
       '--'
