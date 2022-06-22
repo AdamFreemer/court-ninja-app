@@ -71,7 +71,9 @@ class TournamentsController < ApplicationController
   end
 
   def status
+    scores = @tournament.tournament_teams.collect { |t| [t.id, t.score] }
     render json: {
+      scores: scores,
       current_set: @tournament.current_set,
       current_round: @tournament.current_round,
       timer_state: @tournament.timer_state,

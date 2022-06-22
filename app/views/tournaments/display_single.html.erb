@@ -20,23 +20,26 @@
             <% if @court == 2 %>
               <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_2_name %> Court</h2>
             <% end %>
-            <table class="min-w-full divide-y divide-gray-300">
+            <table class="min-w-full divide-y divide-gray-300 border-2 border-b-green-500">
               <thead class="bg-gray-50">
               <% team_count = [*1..@tournament.tournament_sets.where(court: @court).first.tournament_teams.first.users.count - 1] %>
-                <tr>
-                  <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Set</th>
-                  <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Court A</th>
+                <tr class="divide-x divide-gray-300">
+                  <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600">Set</th>
+                  <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600">Court A</th>
                   <% team_count.each do |team_1| %>
                     <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
                   <% end %>
-                  <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
-                  <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Court B</th>
+                  <th scope="col" class="px-2 py-3.5 text-center text-md font-semibold text-gray-600">Score</th>
+                  <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600">Court B</th>
                   <% team_count.each do |team_2| %>
-                    <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
+                    <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
                   <% end %>
-                  <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
+                  <th scope="col" class="px-2 py-3.5 text-center text-md font-semibold text-gray-600">Score</th>  
                   <% if @tournament.work_group > 0 %>
-                    <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">Working</th>
+                    <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600">Working</th>
+                    <% (1..(@tournament.work_group - 1)).each do |blank| %>
+                      <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-600">&nbsp;</th>
+                    <% end %>              
                   <% end %>
                 </tr>
               </thead>
@@ -45,20 +48,20 @@
                   <% team1 = set.tournament_teams.first.users %>
                   <% team2 = set.tournament_teams.second.users %>
                   <% work_team = set.tournament_teams.last.users %>
-                    <tr id="<%= set.number %>" data-display-target="set" class="divide-x divide-gray-300 ">
+                    <tr id="<%= set.number %>" data-display-target="set" class="divide-x divide-gray-300">
                       <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= set.number %></td>
                       <% team1.each do |player| %>
                         <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
                       <% end %>
-                      <th scope="col" class="px-1 py-3.5 text-left text-md font-normal text-gray-600">&nbsp;</th>
+                      <td id="<%= set.tournament_teams.first.id %>" data-display-target="team" class="px-2 py-3.5 text-center text-md text-gray-600"><%= set.tournament_teams.first.score %></td>
                       <% team2.each do |player| %>
                         <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
                       <% end %>
-                      <th scope="col" class="px-2 py-3.5 text-left text-md text-gray-900">&nbsp;</th>
+                      <td id="<%= set.tournament_teams.second.id %>" data-display-target="team" class="px-2 py-3.5 text-center text-md text-gray-600"><%= set.tournament_teams.second.score %></td>
                       <% if @tournament.work_group > 0 %>
                         <% work_team.each do |player| %>
                           <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
-                        <% end %>
+                        <% end %>                     
                       <% end %>
                     </tr>
                 <% end %>

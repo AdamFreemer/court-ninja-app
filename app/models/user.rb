@@ -48,12 +48,21 @@ class User < ApplicationRecord
   has_many :user_traits, dependent: :destroy
   has_many :traits, through: :user_traits
 
+  has_many :player_teams, dependent: :destroy, foreign_key: :player_id
+  has_many :teams, through: :player_teams
+
   has_many :user_scores, dependent: :destroy
 
-  attr_accessor :role
+  has_many :teams_coached, foreign_key: :coach_id, dependent: :nullify, class_name: 'Team'
+
+  attr_accessor :role, :invite_code
 
   def full_name
     "#{last_name}, #{first_name}"
+  end
+
+  def initials
+    "#{first_name[0]}#{last_name[0]}"
   end
 
   def name_abbreviated

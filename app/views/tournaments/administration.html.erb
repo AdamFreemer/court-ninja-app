@@ -33,7 +33,7 @@
       </div>
     </div>
   <% elsif @tournament.courts == 2 %>
-    <div class="columns-2 space-y-32">
+    <div class="columns-2">
       <div class="">
         <%= render "table", tournament: @tournament, court: 1, round: round, tournament_sets: @tournament.tournament_sets.where(court: 1, round: round) %>
       </div>
@@ -42,10 +42,10 @@
       </div>
     </div>
   <% end %>
-
   <%# buttons %>
-  <div class="space-y-4 flow-root">
-    <div class="float-left space-x-4 space-y-4">
+  <br>
+  <div class="flow-root">
+    <div class="float-left space-x-4">
       <button onclick="display('1')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court <%= @tournament.courts > 1 ? 1 : "" %></button>
       <% if @tournament.courts > 1 %>
         <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 2</button>

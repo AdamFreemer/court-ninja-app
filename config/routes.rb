@@ -20,6 +20,12 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: 'registrations' }
 
   resources :users
+  resources :teams, except: :index do
+    collection do
+      get 'verify'
+      post 'join'
+    end
+  end
 
-  root 'tournaments#index'
+  root 'dashboard#index'
 end
