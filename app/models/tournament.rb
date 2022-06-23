@@ -63,35 +63,17 @@ class Tournament < ApplicationRecord
 
   after_save :associate_players
 
-  def generate_tournament # This is for new tournament only
-    tg = TournamentGenerator.new(self, players)
-    tg.generate_round(1)
-    true
-  end
-
   def generate
     return false unless players.count.between?(6, 27)
+    return false if current_round == 1 && players.count.between?(6, 9)
 
     ordered_player_ids = if self.current_round == 0 # new tournament, just use newly created self.players
                            players
-                         else # self.player_ranking returns ranked court array
-                          PlayerConfigs.player_court_distributor(player_ranking(self.current_round))
+                         else                       # self.player_ranking returns ranked court array
+                          PlayerConfigs.player_court_distributor(player_ranking(self.current_round), players)
                          end
     generate_round = TournamentGenerator.new(self, ordered_player_ids)
     generate_round.generate_round(current_round + 1)
-    # binding.pry
-    # all_player_ids = players.map(&:to_i)
-    # if courts <= 2
-    #   next_round_player_alloc = player_count_calc(round_1_sorted)
-    #   gold_team_ids = (round_1_sorted[0].first(next_round_player_alloc[0]) + round_1_sorted[1].first(team_counts[1])).collect(&:first)
-    #   silver_team_ids = all_player_ids - gold_team_ids
-    #   ordered_player_ids = gold_team_ids + silver_team_ids      
-    # elsif courts == 3 && player_config
-    #   gold_team = round_1_sorted[0].first(2) + round_1_sorted[1].first(2) +  round_1_sorted[2].first(2)
-    #   # take top 2 from each court for gold, highest scoring player for last player. 
-    #   # team_counts = 
-    #   # gold_team_ids = 
-    # end
   end
 
   def create_user_scores(round)

@@ -58,32 +58,30 @@ module PlayerConfigs
 
   # Decision engine based on player count for pulling players from each court
   # for next round generation.
-  def self.player_court_distributor(round_sorted)
+  def self.player_court_distributor(round_sorted, players)
     case round_sorted.flatten(1).count
-    when 6 # players_count_6
-
-    when 7 # players_count_7
-
-    when 8 # players_count_8_9
-
-    when 9
-
     when 10 # players_count_10
-
+      gold_ids = (round_sorted[0].first(3) + round_sorted[1].first(2)).collect(&:first).sort
+      silver_ids = (players - gold_ids).sort
+      gold_ids + silver_ids
     when 11 # players_count_11_12
-      binding.pry
-      gold_ids = (round_sorted(0).first(3) + round_sorted(1).first(3)).collect(&:first)
-      silver_ids = (round_sorted(0).last(3) + round_sorted(1).last(3)).collect(&:first)
-      # { court1: player_ids.first(6), court2: player_ids.last(5) + [@ghost_ids.first] }
-
+      gold_ids = (round_sorted[0].first(3) + round_sorted[1].first(3)).collect(&:first).sort
+      silver_ids = (players - gold_ids).sort
+      gold_ids + silver_ids
     when 12
-
+      gold_ids = (round_sorted[0].first(3) + round_sorted[1].first(3)).collect(&:first).sort
+      silver_ids = (players - gold_ids).sort
+      gold_ids + silver_ids
     when 13 # players_count_13_14
-
+      gold_ids = (round_sorted[0].first(4) + round_sorted[1].first(3)).collect(&:first).sort
+      silver_ids = (players - gold_ids).sort
+      gold_ids + silver_ids
     when 14
-
+      gold_ids = (round_sorted[0].first(4) + round_sorted[1].first(3)).collect(&:first).sort
+      silver_ids = (players - gold_ids).sort
+      gold_ids + silver_ids
     when 15 # players_count_15
-
+      gold_ids = (round_sorted[0].first(4) + round_sorted[1].first(3)).collect(&:first).sort
     when 16 # players_count_16_17
 
     when 17
@@ -116,48 +114,48 @@ module PlayerConfigs
     when 6 # players_count_6
       { court1: players[:ids], court2: [] }
     when 7 # players_count_7
-      { court1: player_ids, court2: [] }
+      { court1: players[:ids], court2: [] }
     when 8 # players_count_8_9
-      { court1: player_ids.first(8) + [@ghost_ids.first], court2: [] }
+      { court1: players[:ids].first(8) + [players[:ghosts].first], court2: [] }
     when 9
-      { court1: player_ids.first(9), court2: [] }
+      { court1: players[:ids].first(9), court2: [] }
     when 10 # players_count_10
-      { court1: player_ids.first(5), court2: player_ids.last(5) }
+      { court1: players[:ids].first(5), court2: players[:ids].last(5) }
     when 11 # players_count_11_12
       # binding.pry
       { court1: players[:ids].first(6), court2: players[:ids].last(5) + [players[:ghosts].first] }
     when 12
-      { court1: player_ids.first(6), court2: player_ids.last(6) }
+      { court1: players[:ids].first(6), court2: players[:ids].last(6) }
     when 13 # players_count_13_14
-      { court1: player_ids.first(7), court2: player_ids.last(6) + [@ghost_ids.last(1)] }
+      { court1: players[:ids].first(7), court2: players[:ids].last(6) + [players[:ghosts].last(1)] }
     when 14
-      { court1: player_ids.first(7), court2: player_ids.last(7) }
+      { court1: players[:ids].first(7), court2: players[:ids].last(7) }
     when 15 # players_count_15
-      { court1: player_ids[0..4], court2: player_ids[5..9], court3: player_ids[10..14] }
+      { court1: players[:ids][0..4], court2: players[:ids][5..9], court3: players[:ids][10..14] }
     when 16 # players_count_16_17
-      { court1: player_ids.first(8) + [@ghost_ids.first], court2: player_ids.last(8) + [@ghost_ids.last(1)] }
+      { court1: players[:ids].first(8) + [players[:ghosts].first], court2: players[:ids].last(8) + [players[:ghosts].last(1)] }
     when 17
-      { court1: player_ids.first(9), court2: player_ids.last(8) + @ghost_ids.last(1) }
+      { court1: players[:ids].first(9), court2: players[:ids].last(8) + players[:ghosts].last(1) }
     when 18 # players_count_18_21
-      { court1: player_ids[0..5] + [@ghost_ids.first], court2: player_ids[6..11] + [@ghost_ids.second], court3: player_ids[12..17] + [@ghost_ids.last(1)] }
+      { court1: players[:ids][0..5] + [players[:ghosts].first], court2: players[:ids][6..11] + [players[:ghosts].second], court3: players[:ids][12..17] + [players[:ghosts].last(1)] }
     when 19
-      { court1: player_ids[0..6], court2: player_ids[7..12] + [@ghost_ids.first], court3: player_ids[13..18] + [@ghost_ids.last(1)] }
+      { court1: players[:ids][0..6], court2: players[:ids][7..12] + [players[:ghosts].first], court3: players[:ids][13..18] + [players[:ghosts].last(1)] }
     when 20
-      { court1: player_ids[0..6], court2: player_ids[7..13], court3: player_ids[14..19] + [@ghost_ids.last(1)] }
+      { court1: players[:ids][0..6], court2: players[:ids][7..13], court3: players[:ids][14..19] + [players[:ghosts].last(1)] }
     when 21
-      { court1: player_ids[0..6], court2: player_ids[7..13], court3: player_ids[14..20] }
+      { court1: players[:ids][0..6], court2: players[:ids][7..13], court3: players[:ids][14..20] }
     when 22 # players_count_22_24
-      { court1: player_ids[0..5], court2: player_ids[6..11], court3: player_ids[12..16] + [@ghost_ids.first], court4: player_ids[17..21] + [@ghost_ids.last(1)] }
+      { court1: players[:ids][0..5], court2: players[:ids][6..11], court3: players[:ids][12..16] + [players[:ghosts].first], court4: players[:ids][17..21] + [players[:ghosts].last(1)] }
     when 23
-      { court1: player_ids[0..5], court2: player_ids[6..11], court3: player_ids[12..17], court4: player_ids[18..22] + [@ghost_ids.last(1)] }
+      { court1: players[:ids][0..5], court2: players[:ids][6..11], court3: players[:ids][12..17], court4: players[:ids][18..22] + [players[:ghosts].last(1)] }
     when 24
-      { court1: player_ids[0..5], court2: player_ids[6..11], court3: player_ids[12..17], court4: player_ids[18..23] }
+      { court1: players[:ids][0..5], court2: players[:ids][6..11], court3: players[:ids][12..17], court4: players[:ids][18..23] }
     when 25 # players_count_25_27
-      { court1: player_ids[0..8], court2: player_ids[9..16] + [@ghost_ids.first], court3: player_ids[17..24] + [@ghost_ids.last(1)] }
+      { court1: players[:ids][0..8], court2: players[:ids][9..16] + [players[:ghosts].first], court3: players[:ids][17..24] + [players[:ghosts].last(1)] }
     when 26
-      { court1: player_ids[0..8], court2: player_ids[9..17], court3: player_ids[18..25] + [@ghost_ids.last(1)] }
+      { court1: players[:ids][0..8], court2: players[:ids][9..17], court3: players[:ids][18..25] + [players[:ghosts].last(1)] }
     when 27
-      { court1: player_ids[0..8], court2: player_ids[9..17], court3: player_ids[18..26] }
+      { court1: players[:ids][0..8], court2: players[:ids][9..17], court3: players[:ids][18..26] }
     end
   end  
 
