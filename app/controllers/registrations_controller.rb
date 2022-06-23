@@ -11,7 +11,7 @@ class RegistrationsController < Devise::RegistrationsController
     return unless %w[Coach Organization].include?(params['user']['role'])
 
     req = UserRoleRequest.create!(user_id: resource.id)
-    req.add_role(params['user']['role'])
+    req.add_role(params['user']['role'].downcase)
     req.send_user_role_request_email
   end
 end
