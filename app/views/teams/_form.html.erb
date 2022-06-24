@@ -25,7 +25,7 @@
       <%= form.text_field :description, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
     </div>
 
-    <% if current_page?(edit_team_path) %>
+    <% if !current_page?(new_team_path) %>
       <div class="form-check">
         <%= form.check_box :active, class: "w-4 h-4 rounded mx-0 ml-1 mr-1" %>
         <label class="form-check-label inline-block text-sm font-medium text-gray-70" for="active">Active?</label>
