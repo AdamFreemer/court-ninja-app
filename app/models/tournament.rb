@@ -72,8 +72,8 @@ class Tournament < ApplicationRecord
                          else                       # self.player_ranking returns ranked court array
                           PlayerConfigs.player_court_distributor(player_ranking(self.current_round), players)
                          end
-    generate_round = TournamentGenerator.new(self, ordered_player_ids)
-    generate_round.generate_round(current_round + 1)
+    round = TournamentGenerator.new(self, ordered_player_ids)
+    round.generate_round(current_round + 1)
   end
 
   def create_user_scores(round)

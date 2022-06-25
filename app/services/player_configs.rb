@@ -56,55 +56,149 @@ module PlayerConfigs
     ]
   end
 
-  # Decision engine based on player count for pulling players from each court
-  # for next round generation.
   def self.player_court_distributor(round_sorted, players)
+    # Ranking decision engine based on player count for each round.
+    # Returned is a single array of player / user ids in descending performance order.
+    # Tournament generator divides up on a first-in bases per court (i.e. first 5 players in array fill
+    # first court of 15 player / 3 court tournament)
     case round_sorted.flatten(1).count
-    when 10 # players_count_10
+    # court count starts at 10 when multiple court / multiple rounds start
+    when 10
+      # Method: Top 3 court 1, top 2 court 2, followed by remaining
       gold_ids = (round_sorted[0].first(3) + round_sorted[1].first(2)).collect(&:first).sort
       silver_ids = (players - gold_ids).sort
       gold_ids + silver_ids
-    when 11 # players_count_11_12
+    when 11
+      # Method: Top 3 both courts, followed by remaining
       gold_ids = (round_sorted[0].first(3) + round_sorted[1].first(3)).collect(&:first).sort
       silver_ids = (players - gold_ids).sort
       gold_ids + silver_ids
     when 12
+      # Method: Top 3 both courts, followed by remaining
       gold_ids = (round_sorted[0].first(3) + round_sorted[1].first(3)).collect(&:first).sort
       silver_ids = (players - gold_ids).sort
       gold_ids + silver_ids
-    when 13 # players_count_13_14
+    when 13
+      # Method: Top 4 court 1, top 3 court 2, followed by remaining
       gold_ids = (round_sorted[0].first(4) + round_sorted[1].first(3)).collect(&:first).sort
       silver_ids = (players - gold_ids).sort
       gold_ids + silver_ids
     when 14
+      # Method: Top 4 court 1, top 3 court 2, followed by remaining
       gold_ids = (round_sorted[0].first(4) + round_sorted[1].first(3)).collect(&:first).sort
       silver_ids = (players - gold_ids).sort
       gold_ids + silver_ids
-    when 15 # players_count_15
-      gold_ids = (round_sorted[0].first(4) + round_sorted[1].first(3)).collect(&:first).sort
-    when 16 # players_count_16_17
-
+    when 15
+      # Method: Top 3 court leaders, combine remaining in descending order
+      top_court_ids = (round_sorted[0].first + round_sorted[1].first + round_sorted[2].first).collect(&:first)
+      remaining_player_ids = (round_sorted[0].last(4) + round_sorted[1].last(4) + round_sorted[2].last(4)).sort_by { |a| [-a[3], -a[2]] }.collect(&:first)
+      top_court_ids + remaining_player_ids
+    when 16
+      # Method: Top 5 court 1, top 4 court 2, followed by remaining
+      gold_ids = (round_sorted[0].first(5) + round_sorted[1].first(4)).collect(&:first).sort
+      silver_ids = (players - gold_ids).sort
+      gold_ids + silver_ids
     when 17
-
-    when 18 # players_count_18_21
-
+      # Method: Top 5 court 1, top 4 court 2, followed by remaining
+      gold_ids = (round_sorted[0].first(5) + round_sorted[1].first(4)).collect(&:first).sort
+      silver_ids = (players - gold_ids).sort
+      gold_ids + silver_ids
+    when 18
+      # Method: Top 3 court leaders, combine remaining in descending order
+      top_court_ids = (round_sorted[0].first + round_sorted[1].first + round_sorted[2].first).collect(&:first)
+      remaining_player_ids = (
+        round_sorted[0].last(6) + 
+        round_sorted[1].last(6) + 
+        round_sorted[2].last(6)
+      ).sort_by { |a| [-a[3], -a[2]] }.collect(&:first)
+      top_court_ids + remaining_player_ids
     when 19
- 
+      # Method: Top 3 court leaders, combine remaining in descending order
+      top_court_ids = (round_sorted[0].first + round_sorted[1].first + round_sorted[2].first).collect(&:first)
+      remaining_player_ids = (
+        round_sorted[0].last(6) + 
+        round_sorted[1].last(5) + 
+        round_sorted[2].last(5)
+      ).sort_by { |a| [-a[3], -a[2]] }.collect(&:first)
+      top_court_ids + remaining_player_ids
     when 20
-
+      # Method: Top 3 court leaders, combine remaining in descending order
+      top_court_ids = (round_sorted[0].first + round_sorted[1].first + round_sorted[2].first).collect(&:first)
+      remaining_player_ids = (
+        round_sorted[0].last(6) + 
+        round_sorted[1].last(6) + 
+        round_sorted[2].last(5)
+      ).sort_by { |a| [-a[3], -a[2]] }.collect(&:first)
+      top_court_ids + remaining_player_ids
     when 21
-
-    when 22 # players_count_22_24
-      
+      # Method: Top 3 court leaders, combine remaining in descending order
+      top_court_ids = (round_sorted[0].first + round_sorted[1].first + round_sorted[2].first).collect(&:first)
+      remaining_player_ids = (
+        round_sorted[0].last(6) + 
+        round_sorted[1].last(6) + 
+        round_sorted[2].last(6)
+      ).sort_by { |a| [-a[3], -a[2]] }.collect(&:first)
+      top_court_ids + remaining_player_ids
+    when 22
+      # Method: Top 4 court leaders, combine remaining in descending order
+      top_court_ids = (round_sorted[0].first + round_sorted[1].first + round_sorted[2].first + round_sorted[3].first).collect(&:first)
+      remaining_player_ids = (
+        round_sorted[0].last(5) + 
+        round_sorted[1].last(5) + 
+        round_sorted[2].last(4) + 
+        round_sorted[3].last(4)
+      ).sort_by { |a| [-a[3], -a[2]] }.collect(&:first)
+      top_court_ids + remaining_player_ids     
     when 23
-     
+      # Method: Top 4 court leaders, combine remaining in descending order
+      top_court_ids = (round_sorted[0].first + round_sorted[1].first + round_sorted[2].first + round_sorted[3].first).collect(&:first)
+      remaining_player_ids = (
+        round_sorted[0].last(5) + 
+        round_sorted[1].last(5) + 
+        round_sorted[2].last(5) + 
+        round_sorted[3].last(4)
+      ).sort_by { |a| [-a[3], -a[2]] }.collect(&:first)
+      top_court_ids + remaining_player_ids    
     when 24
-   
-    when 25 # players_count_25_27
- 
-
+      # Method: Top 4 court leaders, combine remaining in descending order
+      top_court_ids = (round_sorted[0].first + round_sorted[1].first + round_sorted[2].first + round_sorted[3].first).collect(&:first)
+      remaining_player_ids = (
+        round_sorted[0].last(5) + 
+        round_sorted[1].last(5) + 
+        round_sorted[2].last(5) + 
+        round_sorted[3].last(5)
+      ).sort_by { |a| [-a[3], -a[2]] }.collect(&:first)
+      top_court_ids + remaining_player_ids
+    when 25
+      # Method: Top 4 court leaders, combine remaining in descending order
+      gold_ids = (round_sorted[0].first(3) + round_sorted[1].first(3) + round_sorted[2].first(3)).collect(&:first).sort
+      silver_ids = (
+        (round_sorted[0].last(6) - round_sorted[0].last(3)) +
+        (round_sorted[1].last(5) - round_sorted[0].last(3)) +
+        (round_sorted[2].last(5) - round_sorted[0].last(3))
+      ).collect(&:first).sort
+      bronze_ids = (players - gold_ids).sort
+      gold_ids + silver_ids
+    when 26
+      # Method: Top 4 court leaders, combine remaining in descending order
+      gold_ids = (round_sorted[0].first(3) + round_sorted[1].first(3) + round_sorted[2].first(3)).collect(&:first).sort
+      silver_ids = (
+        (round_sorted[0].last(6) - round_sorted[0].last(3)) +
+        (round_sorted[1].last(6) - round_sorted[0].last(3)) +
+        (round_sorted[2].last(5) - round_sorted[0].last(3))
+      ).collect(&:first).sort
+      bronze_ids = (players - gold_ids).sort
+      gold_ids + silver_ids
     when 27
-
+      # Method: Top 4 court leaders, combine remaining in descending order
+      gold_ids = (round_sorted[0].first(3) + round_sorted[1].first(3) + round_sorted[2].first(3)).collect(&:first).sort
+      silver_ids = (
+        (round_sorted[0].last(6) - round_sorted[0].last(3)) +
+        (round_sorted[1].last(6) - round_sorted[0].last(3)) +
+        (round_sorted[2].last(6) - round_sorted[0].last(3))
+      ).collect(&:first).sort
+      bronze_ids = (players - gold_ids).sort
+      gold_ids + silver_ids
     end
   end
 
@@ -122,7 +216,6 @@ module PlayerConfigs
     when 10 # players_count_10
       { court1: players[:ids].first(5), court2: players[:ids].last(5) }
     when 11 # players_count_11_12
-      # binding.pry
       { court1: players[:ids].first(6), court2: players[:ids].last(5) + [players[:ghosts].first] }
     when 12
       { court1: players[:ids].first(6), court2: players[:ids].last(6) }

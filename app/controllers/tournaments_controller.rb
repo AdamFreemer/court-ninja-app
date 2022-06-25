@@ -109,23 +109,23 @@ class TournamentsController < ApplicationController
   end
 
   def process_round
-    # binding.pry
     round = params[:round].to_i # params: :id / :round
-    if @tournament.rounds_finalized.include?(@tournament.current_round)
-      redirect_to round_one_tournament_url(@tournament), notice: 'Round already processed.'
+    if @tournament.rounds_finalized.include?(round)
+      redirect_to administration_tournament_url(@tournament, round), notice: 'Round already processed.'
     end
     # Check rounds_finalized array if it contains current round which means round already finalized, if not, process round
     @tournament.create_user_scores(round)
     # Grab current rounds finalized, push in current round just finalized (if first round, rounds_finalized will be empty to start)
     rounds_finalized = @tournament.rounds_finalized
-    rounds_finalized << @tournament.current_round
+    rounds_finalized << round
+    @tournament.generate unless @tournament.rounds_finalized.count >= @tournament.rounds
     @tournament.update(
       tournament_completed: tournament_status,
       rounds_finalized: rounds_finalized,
       current_set: 1,
-      current_round: @tournament.current_round + 1
+      current_round: rounds_finalized == @tournament.rounds ? round : round + 1
     )
-    @tournament.generate unless @tournament.tournament_completed
+
     # This logic determines when final round is completed and go to results page
     if round == 1 && @tournament.rounds == 1 # Keeping round number agnostic if 1 round tournament
       redirect_to results_tournament_url(@tournament), notice: 'Round successfully processed.'

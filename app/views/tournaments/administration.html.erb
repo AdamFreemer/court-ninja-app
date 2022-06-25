@@ -114,7 +114,7 @@
       <% if (round == 1 && !@tournament.rounds_finalized.include?(1)) || (round == 2 && !@tournament.rounds_finalized.include?(2)) %>
         <button id="update-scores" onclick="updateScores('update')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">Update Scores</button>
       <% end %>
-      <% if (round == 1 && !@tournament.rounds_finalized.include?(1)) || (round == 2 && !@tournament.rounds_finalized.include?(2)) %>
+      <% if (@tournament.rounds_finalized.count < @tournament.rounds) %>
         <button id="finalize-round" onclick="updateScores('finalize')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">
           Finalize Round <%= @tournament.rounds > 1 ? round : "" %>
         </button>
