@@ -24,7 +24,13 @@ class TournamentsController < ApplicationController
   end
 
   def new
-    @available_players = User.where(is_ghost_player: false).order(:last_name) #.map { |u| [u.full_name, u.id] }
+    @available_players =
+      if current_user&.is_coach?
+        players = current_user.teams_coached.map(&:players)
+        players.flatten!.sort_by(&:last_name)
+      else
+        User.where(is_ghost_player: false).order(:last_name)
+      end
     @tournament = Tournament.new
     @tournament_times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     @break_times = [0.1, 0.5, 1, 1.5]
@@ -32,12 +38,17 @@ class TournamentsController < ApplicationController
   end
 
   def edit
-    @available_players = User.where(is_ghost_player: false).order(:last_name) #.map { |u| [u.full_name, u.id] }
+    @available_players =
+      if current_user&.is_coach?
+        players = current_user.teams_coached.map(&:players)
+        players.flatten!.sort_by(&:last_name)
+      else
+        User.where(is_ghost_player: false).order(:last_name)
+      end
     @tournament_configured = !@tournament.rounds_configured.empty?
   end
 
-  def administration
-  end
+  def administration; end
 
   def results
     rounds = @tournament.rounds
