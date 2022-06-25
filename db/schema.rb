@@ -14,6 +14,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_005514) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "player_teams", force: :cascade do |t|
+    t.bigint "team_id"
+    t.bigint "player_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["player_id"], name: "index_player_teams_on_player_id"
+    t.index ["team_id"], name: "index_player_teams_on_team_id"
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string "name"
     t.string "resource_type"
@@ -23,6 +32,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_005514) do
     t.boolean "show_on_signup_form", default: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "invite_code"
+    t.boolean "active", default: true
+    t.bigint "coach_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coach_id"], name: "index_teams_on_coach_id"
   end
 
   create_table "tournament_set_tournament_teams", force: :cascade do |t|
@@ -202,6 +222,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_005514) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  add_foreign_key "player_teams", "teams"
+  add_foreign_key "player_teams", "users", column: "player_id"
+  add_foreign_key "teams", "users", column: "coach_id"
   add_foreign_key "tournament_set_tournament_teams", "tournament_sets"
   add_foreign_key "tournament_set_tournament_teams", "tournament_teams"
   add_foreign_key "tournament_sets", "tournaments"
