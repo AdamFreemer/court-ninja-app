@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_02_001543) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_02_222055) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -109,7 +109,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_02_001543) do
     t.string "court_4_name"
     t.string "court_5_name"
     t.string "court_6_name"
-    t.string "configuration"
     t.integer "rounds"
     t.integer "team_size"
     t.integer "work_group"
@@ -130,6 +129,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_02_001543) do
     t.string "court_side_a_name"
     t.string "court_side_b_name"
     t.bigint "created_by_id"
+    t.string "configuration"
     t.index ["created_by_id"], name: "index_tournaments_on_created_by_id"
   end
 

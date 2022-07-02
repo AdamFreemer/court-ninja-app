@@ -15,7 +15,6 @@ class CreateTournaments < ActiveRecord::Migration[7.0]
       t.string :court_4_name
       t.string :court_5_name
       t.string :court_6_name
-      t.string :configuration
       t.integer :rounds
       t.integer :team_size
       t.integer :work_group
