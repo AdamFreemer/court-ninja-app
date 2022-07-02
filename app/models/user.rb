@@ -55,6 +55,8 @@ class User < ApplicationRecord
 
   has_many :teams_coached, foreign_key: :coach_id, dependent: :nullify, class_name: 'Team'
 
+  has_many :tournaments_run, foreign_key: :created_by_id, dependent: :nullify, class_name: 'Tournament'
+
   attr_accessor :role, :invite_code
 
   def full_name

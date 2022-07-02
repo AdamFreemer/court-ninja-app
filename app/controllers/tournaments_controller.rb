@@ -17,6 +17,8 @@ class TournamentsController < ApplicationController
       @tournaments = Tournament.today.order(created_at: :desc)
     end
 
+    @tournaments = @tournaments.where(created_by_id: current_user.id) if current_user.is_coach?
+
     respond_to do |format|
       format.js { render layout: false }
       format.html { render 'index' }
@@ -137,10 +139,12 @@ class TournamentsController < ApplicationController
 
   def create
     @tournament = Tournament.new(tournament_params)
+    @tournament.created_by = current_user
+
     set_create_update(params)
     if @tournament.save
       if @tournament.generate_tournament
-        redirect_to administration_tournament_url(@tournament, 1), notice: "Tournament was successfully created."
+        redirect_to administration_tournament_url(@tournament, 1), notice: 'Tournament was successfully created.'
       else
         redirect_to tournaments_path
       end
