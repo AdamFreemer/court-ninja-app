@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_16_005514) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_02_001543) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -128,6 +128,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_005514) do
     t.datetime "updated_at", null: false
     t.string "court_side_a_name"
     t.string "court_side_b_name"
+    t.bigint "created_by_id"
+    t.index ["created_by_id"], name: "index_tournaments_on_created_by_id"
   end
 
   create_table "traits", force: :cascade do |t|
@@ -233,6 +235,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_005514) do
   add_foreign_key "tournament_teams", "tournaments"
   add_foreign_key "tournament_users", "tournaments"
   add_foreign_key "tournament_users", "users"
+  add_foreign_key "tournaments", "users", column: "created_by_id"
   add_foreign_key "user_role_requests", "users"
   add_foreign_key "user_role_requests", "users", column: "processed_by_id"
   add_foreign_key "user_scores", "tournament_sets"
