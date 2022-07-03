@@ -10,21 +10,29 @@ class TournamentsController < ApplicationController
     if params[:filter] == "before-today"
       @tournaments = Tournament.before_today.order(created_at: :desc)
     elsif params[:filter] == "today"
-      @tournaments = Tournament.today.order(created_at: :desc) 
+      @tournaments = Tournament.today.order(created_at: :desc)
     elsif params[:filter] == "all"
       @tournaments = Tournament.all.order(created_at: :desc)
     else
       @tournaments = Tournament.today.order(created_at: :desc)
-    end   
+    end
+
+    @tournaments = @tournaments.where(created_by_id: current_user.id) if current_user.is_coach?
 
     respond_to do |format|
       format.js { render layout: false }
-      format.html { render 'index' } 
+      format.html { render 'index' }
     end
   end
 
   def new
-    @available_players = User.where(is_ghost_player: false).order(:last_name) #.map { |u| [u.full_name, u.id] }
+    @available_players =
+      if current_user&.is_coach?
+        players = current_user.teams_coached.map(&:players)
+        players.flatten!.sort_by(&:last_name)
+      else
+        User.where(is_ghost_player: false).order(:last_name)
+      end
     @tournament = Tournament.new
     @tournament_times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     @break_times = [0.1, 0.5, 1, 1.5]
@@ -32,12 +40,17 @@ class TournamentsController < ApplicationController
   end
 
   def edit
-    @available_players = User.where(is_ghost_player: false).order(:last_name) #.map { |u| [u.full_name, u.id] }
+    @available_players =
+      if current_user&.is_coach?
+        players = current_user.teams_coached.map(&:players)
+        players.flatten!.sort_by(&:last_name)
+      else
+        User.where(is_ghost_player: false).order(:last_name)
+      end
     @tournament_configured = !@tournament.rounds_configured.empty?
   end
 
-  def administration
-  end
+  def administration; end
 
   def results
     rounds = @tournament.rounds
@@ -51,27 +64,29 @@ class TournamentsController < ApplicationController
 
   def display_double
     # show display both courts
-    @court_1_matches = @tournament.matches.where(court: 1, round: params[:round])
-    @court_2_matches = @tournament.matches.where(court: 2, round: params[:round])
+    @court_1_sets = @tournament.tournament_sets.where(court: 1, round: params[:round])
+    @court_2_sets = @tournament.tournament_sets.where(court: 2, round: params[:round])
   end
 
   def display_single
     # show display single
     @timer_minutes = 2
     @court = params[:court].to_i
-    @court_matches = @tournament.matches.where(court: @court, round: params[:round])
+    @court_sets = @tournament.tournament_sets.where(court: @court, round: params[:round])
   end
 
   def team_scores_update
     score_date = request.params['score_data']
-    Team.score_update(score_date)
+    TournamentTeam.score_update(score_date)
     @tournament.update_current_set(score_date)
     # @tournament.update!(timer_state: "reset")
     render json: {}
   end
 
   def status
+    scores = @tournament.tournament_teams.collect { |t| [t.id, t.score] }
     render json: {
+      scores: scores,
       current_set: @tournament.current_set,
       current_round: @tournament.current_round,
       timer_state: @tournament.timer_state,
@@ -86,10 +101,10 @@ class TournamentsController < ApplicationController
     puts "== Timer Time: #{params[:time]}"
     @tournament.update!(timer_state: params[:state], timer_mode: params[:mode], timer_time: params[:time])
 
-    render json: { 
-      timer_state: @tournament.timer_state, 
+    render json: {
+      timer_state: @tournament.timer_state,
       timer_mode: @tournament.timer_mode,
-      timer_time: @tournament.timer_time 
+      timer_time: @tournament.timer_time
     }
   end
 
@@ -104,16 +119,16 @@ class TournamentsController < ApplicationController
     rounds_finalized = @tournament.rounds_finalized
     rounds_finalized << round
     @tournament.update(
-      tournament_completed: tournament_status, 
-      rounds_finalized: rounds_finalized, 
-      current_set: 1, 
+      tournament_completed: tournament_status,
+      rounds_finalized: rounds_finalized,
+      current_set: 1,
       current_round: round + 1
     )
     @tournament.round_two_courts_generate(@tournament.player_ranking(1)) if round == 1 && @tournament.rounds > 1
 
     if round == 1 && @tournament.rounds == 1 # Keeping round number agnostic if 1 round tournament
       redirect_to results_tournament_url(@tournament), notice: 'Round successfully processed.'
-    elsif @tournament.rounds > round # when current round is less than total rounds 
+    elsif @tournament.rounds > round # when current round is less than total rounds
       redirect_to administration_tournament_url(@tournament, round + 1), notice: "Round #{round} successfully processed."
     elsif rounds_finalized.count == @tournament.rounds # when all rounds finalized == total rounds as per tournament generation
       redirect_to results_tournament_url(@tournament), notice: 'Tournament results processed.'
@@ -124,10 +139,12 @@ class TournamentsController < ApplicationController
 
   def create
     @tournament = Tournament.new(tournament_params)
+    @tournament.created_by = current_user
+
     set_create_update(params)
     if @tournament.save
       if @tournament.generate_tournament
-        redirect_to administration_tournament_url(@tournament, 1), notice: "Tournament was successfully created."
+        redirect_to administration_tournament_url(@tournament, 1), notice: 'Tournament was successfully created.'
       else
         redirect_to tournaments_path
       end
@@ -188,7 +205,7 @@ class TournamentsController < ApplicationController
   end
 
   def round_two_generated
-    @round_two_generated = if Tournament.find(params[:id]).matches.where(round: 2).count.positive?
+    @round_two_generated = if Tournament.find(params[:id]).tournament_sets.where(round: 2).count.positive?
                              true
                            else
                              false
@@ -198,7 +215,7 @@ class TournamentsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def tournament_params
     params.fetch(:tournament).permit(
-      :name, :address1, :address2, :city, :state, :zip, :date, :rounds, :team_size,
+      :name, :address1, :address2, :city, :state, :zip, :date, :rounds, :team_size, :court_side_a_name, :court_side_b_name,
       :rounds_configured, :rounds_finalized, :court_names, :tournament_time, :break_time, :current_set,
       :court_1_name, :court_2_name, :court_3_name, :court_4_name, :court_5_name, :court_6_name, players: []
     )

@@ -4,7 +4,6 @@
 #
 #  id                     :bigint           not null, primary key
 #  address                :string
-#  admin                  :boolean          default(FALSE)
 #  city                   :string
 #  contact_1_address      :string
 #  contact_1_name         :string
@@ -35,24 +34,37 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
+  rolify
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
 
-  has_many :tournament_users
+  has_many :tournament_users, dependent: :destroy
   has_many :tournaments, through: :tournament_users
 
-  has_many :team_users
-  has_many :teams, through: :team_users
+  has_many :tournament_team_users, dependent: :destroy
+  has_many :tournament_teams, through: :tournament_team_users
 
-  has_many :user_traits
+  has_many :user_traits, dependent: :destroy
   has_many :traits, through: :user_traits
 
-  has_many :user_scores
+  has_many :player_teams, dependent: :destroy, foreign_key: :player_id
+  has_many :teams, through: :player_teams
+
+  has_many :user_scores, dependent: :destroy
+
+  has_many :teams_coached, foreign_key: :coach_id, dependent: :nullify, class_name: 'Team'
+
+  has_many :tournaments_run, foreign_key: :created_by_id, dependent: :nullify, class_name: 'Tournament'
+
+  attr_accessor :role, :invite_code
 
   def full_name
     "#{last_name}, #{first_name}"
+  end
+
+  def initials
+    "#{first_name[0]}#{last_name[0]}"
   end
 
   def name_abbreviated

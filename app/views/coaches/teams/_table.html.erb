@@ -1,0 +1,26 @@
+<table class="min-w-full divide-y divide-gray-200">
+  <thead class="bg-gray-50">
+    <tr>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invite Code</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% current_user.teams_coached.each do |t| %>
+    <tr class="hover:bg-gray-100 <%= t.active? ? 'bg-white text-gray-900' : 'bg-gray-200 text-gray-400' %>">
+      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium hover:underline"><%= link_to t.name, edit_team_path(t.id) %></td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium"><%= t.description %></td>
+      <td class="px-6 py-4 whitespace-nowrap text-lg font-medium text-blue-500"><%= t.invite_code %></td>
+      <td class="px-6 py-4 whitespace-nowrap flex gap-2">
+        <a href="<%= edit_team_path(t.id) %>">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        </a>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

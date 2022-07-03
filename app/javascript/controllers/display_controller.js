@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { 
+    tournamentScores: Array, // team_id, score
     tournamentId: Number,
     tournamentCompleted: Boolean,
     tournamentCurrentRoundServer: Number,
@@ -14,7 +15,7 @@ export default class extends Controller {
     tournamentTimerState: String, // "run", "stop", "initial"
     tournamentTimerMode: String, // "break" or "run"
   }
-  static targets = [ "minute", "second", "progress", "syncing", "set", "status" ]
+  static targets = [ "minute", "second", "progress", "syncing", "set", "status", "team" ]
 
   connect() {
     this.connectStatus();
@@ -33,6 +34,7 @@ export default class extends Controller {
       type: "GET",
       url: "/tournaments/" + this.tournamentIdValue + "/status",
       success: (response) => {
+        this.tournamentScoresValue = response.scores;
         this.tournamentCompletedValue = response.tournament_completed;
         this.tournamentTimerValue = response.timer_time;
         this.tournamentTimerModeValue = response.timer_mode;
@@ -52,6 +54,16 @@ export default class extends Controller {
         element.classList.remove('shadow-md');
       }    
     });
+
+    this.teamTargets.forEach((element, index) => {
+      this.tournamentScoresValue.forEach((score, index) => {
+        if (element.id == score[0]) {
+          element.innerHTML = score[1];
+        }
+      });  
+    });
+
+    this.connectStatus();
     // redirect to next round or results page
     const whichCourt = document.getElementById('courts').dataset.courts
     if (this.tournamentCompletedValue == true) {
@@ -95,14 +107,15 @@ export default class extends Controller {
   }
 
   connectStatus() {
-    console.log("Id: ", this.tournamentIdValue)
-    console.log("breakTime: ", this.breakTimeValue)
-    console.log("tournamentTime: ", this.tournamentTimeValue)
-    console.log("tournamentTimer: ", this.tournamentTimerValue)
-    console.log("tournamentTimerState: ", this.tournamentTimerStateValue)
-    console.log("tournamentTimerMode: ", this.tournamentTimerModeValue)
-    console.log("tournamentRoundServer: ", this.tournamentCurrentRoundServerValue)
-    console.log("tournamentRoundLocalValue: ", this.tournamentCurrentRoundLocalValue)
-    console.log("tournamentCurrentCourtValue: ", this.tournamentCurrentCourtValue)
+    // console.log("Scores: ", this.tournamentScoresValue);
+    // console.log("Id: ", this.tournamentIdValue)
+    // console.log("breakTime: ", this.breakTimeValue)
+    // console.log("tournamentTime: ", this.tournamentTimeValue)
+    // console.log("tournamentTimer: ", this.tournamentTimerValue)
+    // console.log("tournamentTimerState: ", this.tournamentTimerStateValue)
+    // console.log("tournamentTimerMode: ", this.tournamentTimerModeValue)
+    // console.log("tournamentRoundServer: ", this.tournamentCurrentRoundServerValue)
+    // console.log("tournamentRoundLocalValue: ", this.tournamentCurrentRoundLocalValue)
+    // console.log("tournamentCurrentCourtValue: ", this.tournamentCurrentCourtValue)
   }
 }
