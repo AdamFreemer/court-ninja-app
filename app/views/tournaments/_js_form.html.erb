@@ -1,5 +1,5 @@
 <script>
-  $(document).ready(function() { 
+  $(document).ready(function() {  
     // On load set court count to 1
     setDefaultCourtCount(<%= tournament.courts %>);
     // On load set session data
@@ -39,6 +39,20 @@
   } 
 
   function processPlayersSelected(pSelected) {
+    // Limits saving and adds warning when user role is coach (needs expansion for future roles)
+    const userIsCoach = "<%= current_user.has_role?(:coach) %>"
+    console.log("-- userIsCoach: ", userIsCoach)
+    console.log("-- pSelected: ", pSelected)
+    if (userIsCoach == "true" && pSelected >= 14) {
+      console.log("-- coach limit reached")
+      $("#save-button").prop("disabled", true).addClass("opacity-50").addClass("cursor-not-allowed");
+      $("#max-players").text(" Warning: Maximum player count limit is 14");
+    } else {
+      $("#save-button").prop("disabled", false).removeClass("opacity-50").removeClass("cursor-not-allowed");
+      $("#max-players").text("");
+    }
+
+    // Shows courts dependent on player count selected
     switch (pSelected) {
     case 0:
       localStorage['tournamentSets'] = 0

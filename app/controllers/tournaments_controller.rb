@@ -26,6 +26,7 @@ class TournamentsController < ApplicationController
   end
 
   def new
+    current_user&.is_coach? ? @max_players = 14 : @max_players = 14 
     @available_players =
       if current_user&.is_coach?
         players = current_user.teams_coached.map(&:players)
@@ -40,6 +41,7 @@ class TournamentsController < ApplicationController
   end
 
   def edit
+    current_user&.is_coach? ? @max_players = 14 : @max_players = 14 
     @available_players =
       if current_user&.is_coach?
         players = current_user.teams_coached.map(&:players)
