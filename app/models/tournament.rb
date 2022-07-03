@@ -9,6 +9,7 @@
 #  address2             :string
 #  break_time           :decimal(5, 1)
 #  city                 :string
+#  configuration        :string
 #  court_1_name         :string
 #  court_2_name         :string
 #  court_3_name         :string
@@ -19,7 +20,7 @@
 #  court_side_a_name    :string
 #  court_side_b_name    :string
 #  courts               :integer
-#  current_round        :integer          default(1)
+#  current_round        :integer          default(0)
 #  current_set          :integer          default(1)
 #  date                 :datetime
 #  name                 :string
@@ -60,15 +61,23 @@ class Tournament < ApplicationRecord
   scope :before_today, -> { where("created_at < ?", 1.days.ago) }
   scope :today, -> { where("created_at > ?", DateTime.now.beginning_of_day) }
 
-  def generate_tournament
-    return false unless players.count.between?(8, 14)
+  after_save :associate_players
 
-    tournament_generator = TournamentGenerator.new(self, players)
-    tournament_generator.generate_round(1)
-    true
+  def generate
+    return false unless players.count.between?(6, 27)
+    return false if current_round == 1 && players.count.between?(6, 9)
+
+    ordered_player_ids = if self.current_round == 0 # new tournament, just use newly created self.players
+                           players
+                         else                       # self.player_ranking returns ranked court array
+                          PlayerConfigs.player_court_distributor(player_ranking(self.current_round), players)
+                         end
+    round = TournamentGenerator.new(self, ordered_player_ids)
+    round.generate_round(current_round + 1)
   end
 
   def create_user_scores(round)
+    # this method is non-idempotent
     tournament_sets.where(round: round).each do |tournament_set|
       score = scoring(tournament_set)
       tournament_set.tournament_teams.each do |team|
@@ -101,30 +110,49 @@ class Tournament < ApplicationRecord
   end
 
   def player_ranking(round)
-    court_1_scores = []
-    court_2_scores = []
+    # This method is idempotent
+    court_1_scores = []; court_2_scores = []; court_3_scores = []; court_4_scores = []; court_5_scores = []; court_6_scores = []
     players = User.where(id: users)
     players.each do |player|
       next if player.is_ghost_player == true
 
       score = player.user_scores.where(tournament_id: id, round: round).sum(:score)
-      wins = player.user_scores.where(tournament_id: id, round: round).sum(:win)
+      wins = player.user_scores.where(tournament_id: id, round: round).sum(:win)   
+
       if player.user_scores.where(tournament_id: id, round: round, court: 1).count.positive?
         court_1_scores << [player.id, player.name_abbreviated, score, wins]
       end
       if player.user_scores.where(tournament_id: id, round: round, court: 2).count.positive?
         court_2_scores << [player.id, player.name_abbreviated, score, wins]
       end
+      if player.user_scores.where(tournament_id: id, round: round, court: 3).count.positive?
+        court_3_scores << [player.id, player.name_abbreviated, score, wins]
+      end     
+      if player.user_scores.where(tournament_id: id, round: round, court: 4).count.positive?
+        court_4_scores << [player.id, player.name_abbreviated, score, wins]
+      end   
+      if player.user_scores.where(tournament_id: id, round: round, court: 5).count.positive?
+        court_5_scores << [player.id, player.name_abbreviated, score, wins]
+      end 
+      if player.user_scores.where(tournament_id: id, round: round, court: 6).count.positive?
+        court_6_scores << [player.id, player.name_abbreviated, score, wins]
+      end 
     end
-    court_1_sorted = court_1_scores.sort_by { |a| [-a[3], -a[2]] }
-    court_2_sorted = court_2_scores.sort_by { |a| [-a[3], -a[2]] }
 
-    [normalized_score(court_1_sorted), normalized_score(court_2_sorted)]
+    court_1_sorted = normalized_score(court_1_scores.sort_by { |a| [-a[3], -a[2]] }) 
+    court_2_sorted = normalized_score(court_2_scores.sort_by { |a| [-a[3], -a[2]] })
+    courts >= 3 ? court_3_sorted = normalized_score(court_3_scores.sort_by { |a| [-a[3], -a[2]] }) : court_3_sorted = []
+    courts >= 4 ? court_4_sorted = normalized_score(court_4_scores.sort_by { |a| [-a[3], -a[2]] }) : court_4_sorted = []
+    courts >= 5 ? court_5_sorted = normalized_score(court_5_scores.sort_by { |a| [-a[3], -a[2]] }) : court_5_sorted = []
+    courts == 6 ? court_6_sorted = normalized_score(court_6_scores.sort_by { |a| [-a[3], -a[2]] }) : court_6_sorted = []
+
+    [court_1_sorted, court_2_sorted, court_3_sorted, court_4_sorted, court_5_sorted, court_6_sorted]
   end
 
   def normalized_score(court_sorted)
+    # this method raises the score floor to 1, to eliminate negative scores being displayed
     lowest_score = court_sorted.collect { |arr| arr[2] }.min
-    return true if court_sorted == []
+    return [] if court_sorted == []
     return court_sorted unless lowest_score.negative?
 
     court_sorted.each do |player|
@@ -132,23 +160,7 @@ class Tournament < ApplicationRecord
     end
   end
 
-  def round_two_courts_generate(round_1_sorted)
-    team_counts = player_count_calc(round_1_sorted)
-    all_player_ids = players.map(&:to_i)
-    gold_team_ids = (round_1_sorted[0].first(team_counts[0]) + round_1_sorted[1].first(team_counts[1])).collect(&:first)
-    silver_team_ids = all_player_ids - gold_team_ids
-    ordered_player_ids = gold_team_ids + silver_team_ids
 
-    round_two_generation = TournamentGenerator.new(self, Tournament.sanitized_of_ghosts_players(ordered_player_ids))
-    round_two_generation.generate_round(2)
-  end
-
-  def player_count_calc(player_count)
-    first_team_count = player_count[0].count.even? ? player_count[0].count / 2 : (player_count[0].count.to_f / 2).ceil
-    second_team_count = player_count[1].count.even? ? player_count[1].count / 2 : (player_count[1].count.to_f / 2).ceil
-
-    [first_team_count, second_team_count]
-  end
 
   def scoring(tournament_set)
     # TODO: handle nil scores
@@ -192,5 +204,14 @@ class Tournament < ApplicationRecord
   def self.sanitized_of_ghosts_players(player_ids)
     ghost_users_ids = User.where(is_ghost_player: true).collect(&:id)
     player_ids.map(&:to_i) - ghost_users_ids
+  end
+
+  private
+
+  def associate_players
+    self.users = []
+    players.each do |player|
+      self.users << User.find(player)
+    end
   end
 end

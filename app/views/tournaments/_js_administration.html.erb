@@ -1,7 +1,7 @@
 <script>
   function display(court) {
     if (court == 'all') {
-      window.open("/tournaments/display_double/<%= @tournament.id %>/<%= round %>")
+      window.open("/tournaments/display_multiple/<%= @tournament.id %>/<%= round %>")
     } else {
       window.open("/tournaments/display_single/<%= @tournament.id %>/<%= round %>/" + court)
     }

@@ -1,5 +1,5 @@
 <script>
-  $(document).ready(function() { 
+  $(document).ready(function() {  
     // On load set court count to 1
     setDefaultCourtCount(<%= tournament.courts %>);
     // On load set session data
@@ -36,45 +36,95 @@
     let pSelected = document.querySelectorAll('input[type="checkbox"]:checked').length;
     $('#players-label').text(`Players (${pSelected} selected)`);
     processPlayersSelected(pSelected);
-
-    if (pSelected == 10 || pSelected == 11 || pSelected == 12 || pSelected == 13 || pSelected == 14 || pSelected == 15) {
-      courtsCountTwo();
-    } else {
-      courtsCountOne();
-    }    
   } 
 
   function processPlayersSelected(pSelected) {
+    // Limits saving and adds warning when user role is coach (needs expansion for future roles)
+    const userIsCoach = "<%= current_user.has_role?(:coach) %>"
+    console.log("-- userIsCoach: ", userIsCoach)
+    console.log("-- pSelected: ", pSelected)
+    if (userIsCoach == "true" && pSelected >= 14) {
+      console.log("-- coach limit reached")
+      $("#save-button").prop("disabled", true).addClass("opacity-50").addClass("cursor-not-allowed");
+      $("#max-players").text(" Warning: Maximum player count limit is 14");
+    } else {
+      $("#save-button").prop("disabled", false).removeClass("opacity-50").removeClass("cursor-not-allowed");
+      $("#max-players").text("");
+    }
+
+    // Shows courts dependent on player count selected
     switch (pSelected) {
     case 0:
       localStorage['tournamentSets'] = 0
       localStorage['tournamentRounds'] = 1
+      courtsCountOne();
+      break;
+    case 6:
+      localStorage['tournamentSets'] = 10
+      localStorage['tournamentRounds'] = 1
+      courtsCountOne();
       break;
     case 7:
       localStorage['tournamentSets'] = 7
       localStorage['tournamentRounds'] = 1
+      courtsCountOne();
       break;
     case 8:
     case 9:
       localStorage['tournamentSets'] = 12
       localStorage['tournamentRounds'] = 1
+      courtsCountOne();
       break;
     case 10:
       localStorage['tournamentSets'] = 5
       localStorage['tournamentRounds'] = 2
+      courtsCountTwo();
       break;
     case 11:
       localStorage['tournamentSets'] = 10
       localStorage['tournamentRounds'] = 2
+      courtsCountTwo();
       break;
     case 12:
     case 13:
     case 14:
-    case 15:
-    case 16:
       localStorage['tournamentSets'] = 7
       localStorage['tournamentRounds'] = 2
+      courtsCountTwo();
+      break;      
+    case 15:
+      localStorage['tournamentSets'] = 5
+      localStorage['tournamentRounds'] = 3
+      courtsCountThree();
       break;
+    case 16:
+    case 17:
+      localStorage['tournamentSets'] = 7
+      localStorage['tournamentRounds'] = 2
+      courtsCountTwo();
+      break;    
+    case 18:
+    case 19:
+    case 20:
+    case 21:
+      localStorage['tournamentSets'] = 7
+      localStorage['tournamentRounds'] = 3
+      courtsCountThree();
+      break;      
+    case 22:
+    case 23:
+    case 24:
+      localStorage['tournamentSets'] = 10
+      localStorage['tournamentRounds'] = 3
+      courtsCountFour();
+      break;      
+    case 25:
+      localStorage['tournamentSets'] = 12
+      localStorage['tournamentRounds'] = 2
+      courtsCountThree();
+      break;
+    case 26:
+    case 27:
     }    
   }
 
@@ -125,6 +175,8 @@
       courtsCountOne();
     } else if (courts_count == "2") {
       courtsCountTwo();
+    } else if (courts_count == "3") {
+      courtsCountThree();
     } else {
       courtsCountOne();
     }

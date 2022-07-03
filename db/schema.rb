@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_02_001543) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_02_222055) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -122,13 +122,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_02_001543) do
     t.string "timer_state", default: "initial"
     t.string "timer_mode", default: "break"
     t.integer "current_set", default: 1
-    t.integer "current_round", default: 1
+    t.integer "current_round", default: 0
     t.boolean "tournament_completed", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "court_side_a_name"
     t.string "court_side_b_name"
     t.bigint "created_by_id"
+    t.string "configuration"
     t.index ["created_by_id"], name: "index_tournaments_on_created_by_id"
   end
 
