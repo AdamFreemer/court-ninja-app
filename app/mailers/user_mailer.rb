@@ -11,6 +11,6 @@ class UserMailer < ApplicationMailer
   def role_request_processed_email(user_role_request)
     @user_role_request = user_role_request
     @user = user_role_request.user
-    mail(to: @user.email, subject: "Role Request #{user_role_request.status.capitalize}")
+    mail(to: @user.email, subject: "Role Request #{user_role_request.status&.capitalize}")
   end
 end
