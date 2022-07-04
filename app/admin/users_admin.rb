@@ -15,9 +15,10 @@ Trestle.resource(:users) do
   end
 
   scope :all, -> { User.all }, default: true
-  Role.all.each do |role|
-    scope role.name.downcase.to_sym, -> { User.with_role(role.name) }
-  end
+  # Comment out 19-21 when rebuilding db
+  # Role.all.each do |role|
+  #   scope role.name.downcase.to_sym, -> { User.with_role(role.name) }
+  # end
 
   table do
     column :first_name

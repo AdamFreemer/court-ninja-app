@@ -71,7 +71,7 @@ export default class extends Controller {
     } else if ((this.tournamentCurrentRoundServerValue != this.tournamentCurrentRoundLocalValue) && whichCourt == "single") {
       window.location.href = "/tournaments/display_single/" + this.tournamentIdValue + "/" + this.tournamentCurrentRoundServerValue + "/" + this.tournamentCurrentCourtValue
     } else if ((this.tournamentCurrentRoundServerValue != this.tournamentCurrentRoundLocalValue) && whichCourt == "double") {
-      window.location.href = "/tournaments/display_double/" + this.tournamentIdValue + "/" + this.tournamentCurrentRoundServerValue
+      window.location.href = "/tournaments/display_multiple/" + this.tournamentIdValue + "/" + this.tournamentCurrentRoundServerValue
     }        
   }
 

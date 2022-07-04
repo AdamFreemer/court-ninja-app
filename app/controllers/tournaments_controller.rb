@@ -1,9 +1,9 @@
 class TournamentsController < ApplicationController
   before_action :set_tournament, only: %i[status tournament_status
-    administration display_single display_double results
+    administration display_single display_multiple results
     team_scores_update process_round edit update destroy timer_operation
   ]
-  before_action :set_display, only: %i[display_single display_double]
+  before_action :set_display, only: %i[display_single display_multiple]
   before_action :round_two_generated, only: %i[administration]
 
   def index
@@ -26,6 +26,7 @@ class TournamentsController < ApplicationController
   end
 
   def new
+    current_user&.is_coach? ? @max_players = 14 : @max_players = 14 
     @available_players =
       if current_user&.is_coach?
         players = current_user.teams_coached.map(&:players)
@@ -40,6 +41,7 @@ class TournamentsController < ApplicationController
   end
 
   def edit
+    current_user&.is_coach? ? @max_players = 14 : @max_players = 14 
     @available_players =
       if current_user&.is_coach?
         players = current_user.teams_coached.map(&:players)
@@ -62,17 +64,17 @@ class TournamentsController < ApplicationController
     @players_silver = @tournament.player_ranking(rounds)[1]
   end
 
-  def display_double
-    # show display both courts
-    @court_1_sets = @tournament.tournament_sets.where(court: 1, round: params[:round])
-    @court_2_sets = @tournament.tournament_sets.where(court: 2, round: params[:round])
-  end
+
 
   def display_single
-    # show display single
-    @timer_minutes = 2
+    # display any court based on court param passed along
     @court = params[:court].to_i
     @court_sets = @tournament.tournament_sets.where(court: @court, round: params[:round])
+  end
+
+  def display_multiple
+    @court_1_sets = @tournament.tournament_sets.where(court: 1, round: params[:round])
+    @court_2_sets = @tournament.tournament_sets.where(court: 2, round: params[:round])
   end
 
   def team_scores_update
@@ -111,26 +113,27 @@ class TournamentsController < ApplicationController
   def process_round
     round = params[:round].to_i # params: :id / :round
     if @tournament.rounds_finalized.include?(round)
-      redirect_to round_one_tournament_url(@tournament), notice: 'Round already processed.'
+      redirect_to administration_tournament_url(@tournament, round), notice: 'Round already processed.'
     end
     # Check rounds_finalized array if it contains current round which means round already finalized, if not, process round
     @tournament.create_user_scores(round)
     # Grab current rounds finalized, push in current round just finalized (if first round, rounds_finalized will be empty to start)
     rounds_finalized = @tournament.rounds_finalized
     rounds_finalized << round
+    @tournament.generate unless @tournament.rounds_finalized.count >= @tournament.rounds
     @tournament.update(
       tournament_completed: tournament_status,
       rounds_finalized: rounds_finalized,
       current_set: 1,
-      current_round: round + 1
+      current_round: rounds_finalized == @tournament.rounds ? round : round + 1
     )
-    @tournament.round_two_courts_generate(@tournament.player_ranking(1)) if round == 1 && @tournament.rounds > 1
 
+    # This logic determines when final round is completed and go to results page
     if round == 1 && @tournament.rounds == 1 # Keeping round number agnostic if 1 round tournament
       redirect_to results_tournament_url(@tournament), notice: 'Round successfully processed.'
     elsif @tournament.rounds > round # when current round is less than total rounds
       redirect_to administration_tournament_url(@tournament, round + 1), notice: "Round #{round} successfully processed."
-    elsif rounds_finalized.count == @tournament.rounds # when all rounds finalized == total rounds as per tournament generation
+    elsif @tournament.tournament_completed # when all rounds finalized == total rounds as per tournament generation
       redirect_to results_tournament_url(@tournament), notice: 'Tournament results processed.'
     else
       redirect_to tournaments_path
@@ -143,8 +146,9 @@ class TournamentsController < ApplicationController
 
     set_create_update(params)
     if @tournament.save
-      if @tournament.generate_tournament
-        redirect_to administration_tournament_url(@tournament, 1), notice: 'Tournament was successfully created.'
+      if @tournament.generate
+        @tournament.update(current_round: 1)
+        redirect_to administration_tournament_url(@tournament, 1), notice: "Tournament was successfully created."
       else
         redirect_to tournaments_path
       end
@@ -158,7 +162,7 @@ class TournamentsController < ApplicationController
       set_create_update(params)
       @tournament.save
       if @tournament.rounds_configured.empty?
-        if @tournament.generate_tournament
+        if @tournament.generate
           redirect_to tournaments_path, notice: "Tournament updated and round one successfully created."
         else
           redirect_to tournaments_path, notice: "Tournament was successfully updated (no rounds created)."
