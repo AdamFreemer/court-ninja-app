@@ -12,13 +12,13 @@
     <% current_user.teams_coached.each do |c| %>
       <% c.players.each do |p| %>
         <tr class="hover:bg-gray-100 <%= c.active? ? 'bg-white text-gray-900' : 'bg-gray-200 text-gray-400' %>">
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-left">
-            <div class="w-[40px] aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-sm border-2 border-gray-600 text-gray-600"><%= p.initials %></div>
+          <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-left">
+            <div class="w-[30px] aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-xs border-2 border-gray-600 text-gray-600"><%= p.initials %></div>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-left"><%= p.full_name %></td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-left"><%= c.name %></td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-left"><%= p.jersey_number %></td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-left"><%= p.position %></td>
+          <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-left"><%= p.full_name %></td>
+          <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-left"><%= c.name %></td>
+          <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-left"><%= p.jersey_number %></td>
+          <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-left"><%= p.position %></td>
         </tr>
       <% end %>
     <% end %>
