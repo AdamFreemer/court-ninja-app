@@ -100,7 +100,9 @@
         <button onclick="display('3')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 3</button>
         <button onclick="display('4')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 4</button>
       <% end %>
-      <button onclick="display('all')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display All Courts</button>
+      <% if @tournament.courts > 1 %>
+        <button onclick="display('all')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display All Courts</button>
+      <% end %>
     </div>
     <div class="float-right space-x-4">
       <%= link_to 'Back to Tournaments', tournaments_path, class: "inline-flex items-center px-2.5 py-1.5 btn btn-primary btn-sm" %>
