@@ -41,10 +41,7 @@
   function processPlayersSelected(pSelected) {
     // Limits saving and adds warning when user role is coach (needs expansion for future roles)
     const userIsCoach = "<%= current_user.has_role?(:coach) %>"
-    console.log("-- userIsCoach: ", userIsCoach)
-    console.log("-- pSelected: ", pSelected)
-    if (userIsCoach == "true" && pSelected >= 14) {
-      console.log("-- coach limit reached")
+    if (userIsCoach == "true" && pSelected > 14) {
       $("#save-button").prop("disabled", true).addClass("opacity-50").addClass("cursor-not-allowed");
       $("#max-players").text(" Warning: Maximum player count limit is 14");
     } else {
