@@ -51,6 +51,7 @@ class TournamentsController < ApplicationController
         User.where(is_ghost_player: false).order(:last_name)
       end
     @tournament_configured = !@tournament.rounds_configured.empty?
+    @player_names = @tournament.users.collect { |player| player.name_abbreviated }
   end
 
   def administration; end

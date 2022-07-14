@@ -1,4 +1,4 @@
-<% if @tournaments %>
+<% if @tournaments.where(adhoc: true) %>
   <% @tournaments.where(adhoc: true).each do |tournament| %>
     <tr class="bg-grey">
       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.name %></td>
@@ -25,3 +25,4 @@
     </tr>
   <% end %>
 <% end %>
+  
