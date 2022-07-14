@@ -4,6 +4,7 @@
 #
 #  id                     :bigint           not null, primary key
 #  address                :string
+#  adhoc                  :boolean          default(FALSE)
 #  city                   :string
 #  contact_1_address      :string
 #  contact_1_name         :string
@@ -18,6 +19,7 @@
 #  is_ghost_player        :boolean          default(FALSE)
 #  jersey_number          :string
 #  last_name              :string
+#  nick_name              :string
 #  phone_number           :string
 #  position               :string
 #  remember_created_at    :datetime
@@ -70,6 +72,8 @@ class User < ApplicationRecord
   def name_abbreviated
     if is_ghost_player
       '--'
+    elsif adhoc
+      nick_name.capitalize
     else
       "#{first_name&.capitalize} #{last_name[0]&.capitalize}"
     end

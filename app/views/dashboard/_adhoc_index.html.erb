@@ -1,5 +1,5 @@
-<% if @tournaments.where(adhoc: false) %>
-  <% @tournaments.where(adhoc: false).each do |tournament| %>
+<% if @tournaments %>
+  <% @tournaments.where(adhoc: true).each do |tournament| %>
     <tr class="bg-grey">
       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.name %></td>
       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.created_at.strftime("%b %e, %Y | %l:%M %p") %></td>

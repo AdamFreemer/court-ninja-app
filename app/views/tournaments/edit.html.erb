@@ -1,5 +1,8 @@
 <div class="mx-auto md:w-2/3 w-full">
   <h1 class="font-bold text-4xl">Editing Tournament</h1>
-
-  <%= render "form", tournament: @tournament %>
+  <% if @tournament.adhoc %>
+    <%= render "form_adhoc", tournament: @tournament %>
+  <% else %>
+    <%= render "form", tournament: @tournament %>
+  <% end %>
 </div>
