@@ -26,15 +26,16 @@ class TournamentsController < ApplicationController
   end
 
   def new
-    current_user&.is_coach? ? @max_players = 14 : @max_players = 14 
+    @type = params[:type]
     @available_players =
-      if current_user&.is_coach?
+      if @type == 'adhoc'
+        []
+      elsif current_user&.is_coach?
         players = current_user.teams_coached.map(&:players)
         players.flatten!.sort_by(&:last_name)
       else
         User.where(is_ghost_player: false).order(:last_name)
       end
-    @type = params[:type]
     @tournament = Tournament.new
     @tournament_times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     @break_times = [0.1, 0.5, 1, 1.5]
@@ -42,9 +43,10 @@ class TournamentsController < ApplicationController
   end
 
   def edit
-    current_user&.is_coach? ? @max_players = 14 : @max_players = 14 
     @available_players =
-      if current_user&.is_coach?
+      if @tournament.adhoc
+        []
+      elsif current_user&.is_coach?
         players = current_user.teams_coached.map(&:players)
         players.flatten!.sort_by(&:last_name)
       else
