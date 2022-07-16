@@ -27,11 +27,14 @@ export default class extends Controller {
   }
   
   playerInput() {
-    var players = 0;
-    $('.player-field').each(function() {
-       if ($(this).val() != "") {
-         players++
-       }
+    let players = 0;
+    const playerFields = document.getElementsByClassName('player-field')
+    console.log(playerFields)
+    playerFields.each(function() {
+      console.log("playerField: " + this)
+      //  if ($(this).val() != "") {
+      //    players++
+      //  }
     });    
     console.log("--- players: " + players)
     this.processPlayersSelected(players)
@@ -129,38 +132,38 @@ export default class extends Controller {
   }  
 
   courtsCountOne() {
-    $("#court-1-container").show();
-    $("#court-2-container").hide();
-    $("#court-3-container").hide();
-    $("#court-4-container").hide();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
+    document.getElementById("court-1-container").style.display = 'block';
+    document.getElementById("court-2-container").style.visibility = 'none';
+    document.getElementById("court-3-container").style.visibility = 'none';
+    document.getElementById("court-4-container").style.visibility = 'none';
+    document.getElementById("court-5-container").style.visibility = 'none';
+    document.getElementById("court-6-container").style.visibility = 'none';
   };
 
   courtsCountTwo() {
-    $("#court-1-container").show();
-    $("#court-2-container").show();
-    $("#court-3-container").hide();
-    $("#court-4-container").hide();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
+    document.getElementById("court-1-container").style.display = 'block';
+    document.getElementById("court-2-container").style.display = 'block';
+    document.getElementById("court-3-container").style.visibility = 'none';
+    document.getElementById("court-4-container").style.visibility = 'none';
+    document.getElementById("court-5-container").style.visibility = 'none';
+    document.getElementById("court-6-container").style.visibility = 'none';
   };
 
   courtsCountThree() {
-    $("#court-1-container").show();
-    $("#court-2-container").show();
-    $("#court-3-container").show();
-    $("#court-4-container").hide();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
+    document.getElementById("court-1-container").style.display = 'block';
+    document.getElementById("court-2-container").style.display = 'block';
+    document.getElementById("court-3-container").style.display = 'block';
+    document.getElementById("court-4-container").style.visibility = 'none';
+    document.getElementById("court-5-container").style.visibility = 'none';
+    document.getElementById("court-6-container").style.visibility = 'none';
   };  
 
   courtsCountFour() {
-    $("#court-1-container").show();
-    $("#court-2-container").show();
-    $("#court-3-container").show();
-    $("#court-4-container").show();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
+    document.getElementById("court-1-container").style.display = 'block';
+    document.getElementById("court-2-container").style.display = 'block';
+    document.getElementById("court-3-container").style.display = 'block';
+    document.getElementById("court-4-container").style.display = 'block';
+    document.getElementById("court-5-container").style.visibility = 'none';
+    document.getElementById("court-6-container").style.visibility = 'none';
   };  
 }
