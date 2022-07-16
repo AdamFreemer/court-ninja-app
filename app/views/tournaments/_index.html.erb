@@ -1,27 +1,15 @@
-<% if @tournaments.where(adhoc: false) %>
-  <% @tournaments.where(adhoc: false).each do |tournament| %>
-    <tr class="bg-grey">
-      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.name %></td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.created_at.strftime("%b %e, %Y | %l:%M %p") %></td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= "#{tournament.city}, #{tournament.state}" %></td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament.players.count %></td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament.tournament_time %>m</td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament.break_time %>m</td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament.court_names_pretty %></td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament&.rounds_configured.join(', ') %></td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= tournament&.rounds_finalized.join(', ') %></td>
-      <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-      <% if tournament.rounds_configured.include?(1) %>
-        <%= link_to "Round 1", administration_tournament_path(tournament, 1), class: "text-indigo-600 hover:text-indigo-900" %> |
-      <% end %>
-      <% if tournament.rounds_configured.include?(2) %>
-        <%= link_to "Round 2", administration_tournament_path(tournament, 2), class: "text-indigo-600 hover:text-indigo-900" %> |
-      <% end %>
-      <% if tournament.rounds_finalized.include?(tournament.rounds_configured.last.to_i) %>
-        <%= link_to "Results", results_tournament_path(tournament), class: "text-indigo-600 hover:text-indigo-900" %> |
-      <% end %>
-        <%= link_to "Edit", edit_tournament_path(tournament), class: "text-indigo-600 hover:text-indigo-900" %>
-      </td>
-    </tr>
-  <% end %>
-<% end %>
+<div class="mx-auto">
+  <div class="pb-6 flex items-center flow-root">
+    <h2 class="font-bold text-3xl text-center float-left">My Tournaments</h2>
+    <%= link_to 'New Adhoc Tournament <Beta>', new_tournament_path(type: "adhoc"), class: "float-right px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+    <%= link_to 'New Tournament', new_tournament_path(type: "standard"), class: "mr-4 float-right px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+  </div>
+
+  <%= render "tournaments/tournaments", tournaments: @tournaments.where(adhoc: false) %>
+  <br>
+  <div class="pb-6 flex justify-between items-center">
+    <h2 class="font-bold text-3xl">My Adhoc Tournaments</h2>
+  </div>
+
+  <%= render "tournaments/tournaments", tournaments: @tournaments.where(adhoc: true) %>
+</div>
