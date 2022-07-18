@@ -12,6 +12,8 @@
 #  contact_2_address      :string
 #  contact_2_name         :string
 #  contact_2_phone        :string
+#  current_sign_in_at     :datetime
+#  current_sign_in_ip     :string
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  first_name             :string
@@ -19,12 +21,15 @@
 #  is_ghost_player        :boolean          default(FALSE)
 #  jersey_number          :string
 #  last_name              :string
+#  last_sign_in_at        :datetime
+#  last_sign_in_ip        :string
 #  nick_name              :string
 #  phone_number           :string
 #  position               :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  sign_in_count          :integer          default(0), not null
 #  state                  :string
 #  zip                    :string
 #  created_at             :datetime         not null
@@ -39,7 +44,7 @@ class User < ApplicationRecord
   rolify
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :trackable
 
   has_many :tournament_users, dependent: :destroy
   has_many :tournaments, through: :tournament_users
