@@ -1,4 +1,9 @@
 class RegistrationsController < Devise::RegistrationsController
+  def new
+    @invite_code = params[:invite_code]
+    super
+  end
+
   def create
     super
     team = Team.find_by(invite_code: params['user']['invite_code']) if params['user']['invite_code'].present?
