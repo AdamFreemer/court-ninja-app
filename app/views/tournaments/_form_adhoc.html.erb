@@ -1,7 +1,6 @@
 <h3 class="block text-md font-small text-gray-500 italic">
-Note: Player name uniqueness not functional nor estimated tournament times.
-  <%# Tournament time: <span id="tourny-time">0</span><br><span class="text-rose-500" id="max-players">&nbsp;</span> %>
-</h2>
+  <div id="duplicate-notice" class="text-rose-500">&nbsp;</div>
+</h3>
 
 <%= form_with(model: tournament, class: "contents") do |form| %>
   <% if tournament.errors.any? %>
