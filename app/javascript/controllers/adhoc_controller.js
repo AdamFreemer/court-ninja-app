@@ -1,53 +1,43 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { 
-  }
-  
-  static targets = [
-    "input",
-    "player1",
-    "player2",
-    "player3",
-    "player4",
-    "player5",
-    "player6",
-    "player7",
-    "player8",
-    "player9",
-    "player10",
-    "player11",
-    "player12",
-    "player13",
-    "player14"
-  ]
-
   connect() {
-    this.setDefaultCourtCount();
+    this.setDefaultCourtCount(0);
   }
   
   playerInput() {
-    var players = 0;
-    $('.player-field').each(function() {
-       if ($(this).val() != "") {
-         players++
-       }
-    });    
-    console.log("--- players: " + players)
-    this.processPlayersSelected(players)
+    const playerFields = document.getElementsByClassName("player-field");
+    const players = []
+    for (let i = 0; i < playerFields.length; i++) {
+      if (playerFields[i].value.length > 0) {
+        players.push(playerFields[i].value.toLowerCase())
+      } 
+    }
+
+    const findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index)
+    this.duplicateNamesNotice(findDuplicates(players).length)
+    this.processPlayersSelected(players.length)
   }
 
-  setDefaultCourtCount(courts_count) {
-    if (courts_count == "1") {
+  setDefaultCourtCount(courtsCount) {
+    if (courtsCount == "1") {
       this.courtsCountOne();
-    } else if (courts_count == "2") {
+    } else if (courtsCount == "2") {
       this.courtsCountTwo();
-    } else if (courts_count == "3") {
+    } else if (courtsCount == "3") {
       this.courtsCountThree();
     } else {
       this.courtsCountOne();
     }
   }  
+
+  duplicateNamesNotice(duplicateCount) {
+    if (duplicateCount > 0) {
+      document.getElementById('duplicate-notice').innerHTML = "Warning: one or more of your player names are duplicates"
+    } else {
+      document.getElementById('duplicate-notice').innerHTML = "&nbsp;"
+    }
+  }
 
   processPlayersSelected(pSelected) {
     // Limits saving and adds warning when user role is coach (needs expansion for future roles)
@@ -129,38 +119,38 @@ export default class extends Controller {
   }  
 
   courtsCountOne() {
-    $("#court-1-container").show();
-    $("#court-2-container").hide();
-    $("#court-3-container").hide();
-    $("#court-4-container").hide();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
+    document.getElementById("court-1-container").style.display = 'block';
+    document.getElementById("court-2-container").style.display = 'none';
+    document.getElementById("court-3-container").style.display = 'none';
+    document.getElementById("court-4-container").style.display = 'none';
+    document.getElementById("court-5-container").style.display = 'none';
+    document.getElementById("court-6-container").style.display = 'none';
   };
 
   courtsCountTwo() {
-    $("#court-1-container").show();
-    $("#court-2-container").show();
-    $("#court-3-container").hide();
-    $("#court-4-container").hide();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
+    document.getElementById("court-1-container").style.display = 'block';
+    document.getElementById("court-2-container").style.display = 'block';
+    document.getElementById("court-3-container").style.display = 'none';
+    document.getElementById("court-4-container").style.display = 'none';
+    document.getElementById("court-5-container").style.display = 'none';
+    document.getElementById("court-6-container").style.display = 'none';
   };
 
   courtsCountThree() {
-    $("#court-1-container").show();
-    $("#court-2-container").show();
-    $("#court-3-container").show();
-    $("#court-4-container").hide();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
+    document.getElementById("court-1-container").style.display = 'block';
+    document.getElementById("court-2-container").style.display = 'block';
+    document.getElementById("court-3-container").style.display = 'block';
+    document.getElementById("court-4-container").style.display = 'none';
+    document.getElementById("court-5-container").style.display = 'none';
+    document.getElementById("court-6-container").style.display = 'none';
   };  
 
   courtsCountFour() {
-    $("#court-1-container").show();
-    $("#court-2-container").show();
-    $("#court-3-container").show();
-    $("#court-4-container").show();
-    $("#court-5-container").hide();
-    $("#court-6-container").hide();
+    document.getElementById("court-1-container").style.display = 'block';
+    document.getElementById("court-2-container").style.display = 'block';
+    document.getElementById("court-3-container").style.display = 'block';
+    document.getElementById("court-4-container").style.display = 'block';
+    document.getElementById("court-5-container").style.display = 'none';
+    document.getElementById("court-6-container").style.display = 'none';
   };  
 }
