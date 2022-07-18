@@ -32,8 +32,52 @@ Trestle.resource(:users) do
 
   form do |u|
     text_field :email
-    text_field :first_name
-    text_field :last_name
+    row do
+      col(sm: 6) { text_field :first_name, label: 'First Name' }
+      col(sm: 6) { text_field :last_name, label: 'Last Name' }
+    end
+
+    text_field :phone_number, label: 'Phone Number'
+
+    text_field :address
+    row do
+      col(sm: 6) { text_field :city }
+      col(sm: 3) { text_field :state }
+      col(sm: 3) { text_field :zip }
+    end
+
+    divider
+
+    h5 'Player Info'
+    row do
+      col(sm: 6) { text_field :nick_name, label: 'Nickname' }
+      col(sm: 6) { text_field :gender }
+    end
+    row do
+      col(sm: 6) { text_field :position }
+      col(sm: 6) { text_field :jersey_number, label: 'Jersey Number' }
+    end
+
+    divider
+
+    h5 'Contact'
+    row do
+      col(sm: 6) { text_field :contact_1_name, label: 'Contact #1 Name' }
+      col(sm: 6) { text_field :contact_2_name, label: 'Contact #2 Name' }
+    end
+    row do
+      col(sm: 6) { text_field :contact_1_address, label: 'Contact #1 Address' }
+      col(sm: 6) { text_field :contact_2_address, label: 'Contact #2 Address' }
+    end
+    row do
+      col(sm: 6) { text_field :contact_1_phone, label: 'Contact #1 Phone' }
+      col(sm: 6) { text_field :contact_2_phone, label: 'Contact #2 Phone' }
+    end
+
+    divider
+
+    h5 'Admin'
+    static_field :last_sign_in_at if u.last_sign_in_at?
 
     if u.new_record?
       hidden_field :password, { value: 'password123' }
