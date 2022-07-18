@@ -148,6 +148,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
+    mailsafe (0.3.1)
     marcel (1.0.2)
     matrix (0.4.2)
     method_source (1.0.0)
@@ -349,6 +350,7 @@ DEPENDENCIES
   importmap-rails (~> 1.0)
   jbuilder (~> 2.11)
   letter_opener (~> 1.7)
+  mailsafe (~> 0.3)
   pg (~> 1.1)
   pry-byebug
   pry-rails
