@@ -103,4 +103,8 @@ Rails.application.configure do
     authentication: 'plain',
     enable_starttls_auto: true
   }
+
+  Mailsafe.setup do |config|
+    config.prefix_email_subject_with_rails_env = true
+  end
 end
