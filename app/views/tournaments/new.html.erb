@@ -1,7 +1,8 @@
 <div class="mx-auto md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">New tournament</h1>
-  <h1 class="block text-md font-medium text-gray-800">
-    Tournament time: <span id="tourny-time">0</span><br><span class="text-rose-500" id="max-players">&nbsp;</span>
-  </h1>
-  <%= render "form", tournament: @tournament %>
+  <h1 class="font-bold text-4xl">New <%= @type == 'adhoc' ? 'Adhoc ' : '' %>Tournament</h1>
+  <% if @type == "adhoc" %>
+    <%= render "form_adhoc", tournament: @tournament %>
+  <% else %>
+    <%= render "form", tournament: @tournament %>
+  <% end %>
 </div>

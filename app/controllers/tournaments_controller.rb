@@ -26,9 +26,11 @@ class TournamentsController < ApplicationController
   end
 
   def new
-    current_user&.is_coach? ? @max_players = 14 : @max_players = 14 
+    @type = params[:type]
     @available_players =
-      if current_user&.is_coach?
+      if @type == 'adhoc'
+        []
+      elsif current_user&.is_coach?
         players = current_user.teams_coached.map(&:players)
         players.flatten!.sort_by(&:last_name)
       else
@@ -41,15 +43,17 @@ class TournamentsController < ApplicationController
   end
 
   def edit
-    current_user&.is_coach? ? @max_players = 14 : @max_players = 14 
     @available_players =
-      if current_user&.is_coach?
+      if @tournament.adhoc
+        []
+      elsif current_user&.is_coach?
         players = current_user.teams_coached.map(&:players)
         players.flatten!.sort_by(&:last_name)
       else
         User.where(is_ghost_player: false).order(:last_name)
       end
     @tournament_configured = !@tournament.rounds_configured.empty?
+    @player_names = @tournament.users.collect { |player| player.name_abbreviated }
   end
 
   def administration; end
@@ -63,8 +67,6 @@ class TournamentsController < ApplicationController
     @players_gold = players_gold
     @players_silver = @tournament.player_ranking(rounds)[1]
   end
-
-
 
   def display_single
     # display any court based on court param passed along
@@ -205,7 +207,26 @@ class TournamentsController < ApplicationController
   end
 
   def set_create_update(params)
-    @tournament.players = params[:tournament][:players].reject(&:blank?).map(&:to_i) unless params[:tournament][:players].nil?
+    if params[:tournament][:adhoc] == 'true'
+      create_adhoc_players(params[:tournament])
+    else
+      @tournament.players = params[:tournament][:players].reject(&:blank?).map(&:to_i) unless params[:tournament][:players].nil?
+    end
+  end
+
+  def create_adhoc_players(tournament_params)
+    player_nick_names = []
+    player_ids = []
+    tournament_params.each do |key, value|
+      player_nick_names << value if key.include?('player') && value.length.positive?
+    end
+
+    player_nick_names.each do |player_nick_name|
+      player = User.create!(adhoc: true, email: "#{random_email}@gmail.com", nick_name: player_nick_name, password: 'password', password_confirmation: 'password')
+      player_ids << player.id
+    end
+
+    @tournament.assign_attributes(players: player_ids, adhoc: true)
   end
 
   def round_two_generated
@@ -214,6 +235,11 @@ class TournamentsController < ApplicationController
                            else
                              false
                            end
+  end
+
+  def random_email
+    reg = [('a'..'z'), ('A'..'Z')].map(&:to_a).flatten
+    (0...50).map { reg[rand(reg.length)] }.join
   end
 
   # Only allow a list of trusted parameters through.

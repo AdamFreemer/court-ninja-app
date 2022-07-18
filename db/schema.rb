@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_02_222055) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_09_055729) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -130,6 +130,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_02_222055) do
     t.string "court_side_b_name"
     t.bigint "created_by_id"
     t.string "configuration"
+    t.boolean "adhoc", default: false
     t.index ["created_by_id"], name: "index_tournaments_on_created_by_id"
   end
 
@@ -213,6 +214,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_02_222055) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "adhoc", default: false
+    t.string "nick_name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

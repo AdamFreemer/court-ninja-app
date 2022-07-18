@@ -1,6 +1,6 @@
-<h1 class="block text-md font-medium text-gray-800">
-  Tournament time: <span id="tourny-time">0</span><br><span class="text-rose-500" id="max-players">&nbsp;</span>
-</h1>
+<h3 class="block text-md font-small text-gray-500 italic">
+  <div id="duplicate-notice" class="text-rose-500">&nbsp;</div>
+</h3>
 
 <%= form_with(model: tournament, class: "contents") do |form| %>
   <% if tournament.errors.any? %>
@@ -15,45 +15,23 @@
   <% end %>
 
   <div class="space-y-6">
-    <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
+    <div data-controller="adhoc" class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
       <div class="md:grid md:grid-cols-3 md:gap-6">
-        <div class="md:col-span-1 max-h-96 overflow-y-auto border-[1px] p-2">
-          <label for="courts" id="players-label" class="block text-md font-medium text-gray-700">Players <span id="players-text" class="text-gray-400"></span>&nbsp;</label>
-
-          <% @tournament_configured ? player_list = tournament.users : player_list = @available_players %>
-          <%= form.collection_check_boxes(:players, player_list, :id, :full_name, disabled: @tournament_configured) do |player| %>
-            <%= player.label class:"text-sm font-medium text-gray-70 py-1" do %>
-              <% if @tournament_configured %>
-                <%= player.check_box(class: "w-4 h-4 rounded mx-0 ml-1 mr-1", disabled: true) %>
-                <%= hidden_field_tag "tournament[players][]", player.object.id, value: player.object.id  %>
-                <%=%>
-              <% else %>
-                <%= player.check_box(class: "w-4 h-4 rounded mx-0 ml-1 mr-1") %>
-              <% end %>
-              <%= player.text %>
-              <br />
-            <%end %>
-          <% end %>
-          <div class="py-2">
-            <% if !@tournament_configured %>
-              <button id="select-all" onclick="selectAllPlayers()" class="btn btn-outline btn-primary btn-xs">Select All</button>
-              <button id="select-none" onclick="selectNonePlayers()" class="btn btn-outline btn-primary btn-xs">Select None</button>
-            <% end %>
+        <% if action_name == "new" %>
+          <%= render "form_adhoc_players", form: form %>
+        <% else %>
+          <div class="mt-5 md:mt-0 md:col-span-2">
+            <h3 class="block text-md font-medium text-gray-900">
+              Tournament Players: <%= @player_names.join(", ") %> 
+            </h3>
           </div>
-
-        </div>
-
+        <% end %>
         <div class="mt-5 md:mt-0 md:col-span-2">
           <form action="#" method="POST">
-            <div class="grid grid-cols-6 gap-6">
+            <div class="grid grid-cols-6 gap-6 border-[1px] p-2">
               <div class="col-span-6 sm:col-span-6">
                 <label for="name" class="block text-sm font-medium text-gray-700">Tournament Name</label>
                 <%= form.text_field :name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-              </div>
-
-              <div class="col-span-6">
-                <label for="street-address" class="block text-sm font-medium text-gray-700">Street Address</label>
-                <%= form.text_field :address1, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
               </div>
 
               <div class="col-span-6 sm:col-span-6 lg:col-span-2">
@@ -79,8 +57,7 @@
                 <label for="break-time" class="block text-sm font-medium text-gray-700">Tournament Break Time (minutes)<span class="text-gray-400"></span></label>
                 <%= form.select :break_time, @break_times, { :placeholder => "Please Select" }, id: "break-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
               </div>
-            </div>
-            <div class="grid grid-cols-6 gap-6 mt-6"> 
+
               <div id="court-side-a" class="col-span-6 sm:col-span-6 lg:col-span-2">
                 <label for="courts" class="block text-sm font-medium text-gray-700">Court Side A Name</label>
                 <%= form.text_field :court_side_a_name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
@@ -88,10 +65,38 @@
               <div id="court-side-b" class="col-span-6 sm:col-span-6 lg:col-span-2">
                 <label for="courts" class="block text-sm font-medium text-gray-700">Court Side B Name</label>
                 <%= form.text_field :court_side_b_name, id: "court-2-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-              </div>           
-            </div>            
-            <%= render "form_courts", form: form %>
-            <%= form.hidden_field :adhoc, value: false %>
+              </div>                                   
+            </div>
+
+            <div class="grid grid-cols-6 gap-6 mt-6 gap-6 border-[1px] p-2"> 
+
+              <div data-adhoc-target="court-1" id="court-1-container" class="col-span-6 sm:col-span-6 lg:col-span-2">
+                <label for="courts" class="block text-sm font-medium text-gray-700">Court 1 Name</label>
+                <%= form.text_field :court_1_name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>
+              <div data-adhoc-target="court-2" id="court-2-container" class="col-span-6 sm:col-span-6 lg:col-span-2">
+                <label for="courts" class="block text-sm font-medium text-gray-700">Court 2 Name</label>
+                <%= form.text_field :court_2_name, id: "court-2-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>
+              <div data-adhoc-target="court-3" id="court-3-container" class="col-span-6 sm:col-span-6 lg:col-span-2">
+                <label for="courts" class="block text-sm font-medium text-gray-700">Court 3 Name</label>
+                <%= form.text_field :court_3_name, id: "court-3-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>            
+              <div data-adhoc-target="court-4" id="court-4-container" class="col-span-6 sm:col-span-6 lg:col-span-2">
+                <label for="courts" class="block text-sm font-medium text-gray-700">Court 4 Name</label>
+                <%= form.text_field :court_4_name, id: "court-4-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>
+              <div data-adhoc-target="court-5" id="court-5-container" class="col-span-6 sm:col-span-6 lg:col-span-2">
+                <label for="courts" class="block text-sm font-medium text-gray-700">Court 5 Name</label>
+                <%= form.text_field :court_5_name, id: "court-5-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>
+              <div data-adhoc-target="court-6" id="court-6-container" class="col-span-6 sm:col-span-6 lg:col-span-2">
+                <label for="courts" class="block text-sm font-medium text-gray-700">Court 6 Name</label>
+                <%= form.text_field :court_6_name, id: "court-6-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>            
+            </div>
+
+            <%= form.hidden_field :adhoc, value: true %>
           </form>
         </div>
       </div>
@@ -109,4 +114,4 @@
   </div>
 <% end %>
 
-<%= render "js_form", tournament: @tournament %>
+<%# render "js_form", tournament: @tournament %>

@@ -7,6 +7,7 @@
 #  id                   :bigint           not null, primary key
 #  address1             :string
 #  address2             :string
+#  adhoc                :boolean          default(FALSE)
 #  break_time           :decimal(5, 1)
 #  city                 :string
 #  configuration        :string
