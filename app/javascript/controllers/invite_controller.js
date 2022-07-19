@@ -7,6 +7,10 @@ export default class extends Controller {
     if (this.hasJoinTeamButtonTarget) {
       this.joinTeamButtonTarget.disabled = true;
     }
+
+    if (this.inviteCodeTarget.value) {
+      this.lookupInviteCode();
+    }
   }
 
   joinTeam() {
