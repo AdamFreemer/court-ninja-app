@@ -10,6 +10,7 @@ class DashboardController < ApplicationController
           Tournament.where(created_by_id: current_user.id).today.order(created_at: :desc)
         end
     else
+      @teams = current_user.teams
       @tournaments =
         case params[:filter]
         when 'before-today'
