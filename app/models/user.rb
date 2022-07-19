@@ -64,6 +64,8 @@ class User < ApplicationRecord
 
   has_many :tournaments_run, foreign_key: :created_by_id, dependent: :nullify, class_name: 'Tournament'
 
+  validate :unique_nick_name
+
   attr_accessor :role, :invite_code
 
   def full_name
@@ -77,10 +79,17 @@ class User < ApplicationRecord
   def name_abbreviated
     if is_ghost_player
       '--'
-    elsif adhoc
+    elsif nick_name
       nick_name.capitalize
     else
       "#{first_name&.capitalize} #{last_name[0]&.capitalize}"
     end
+  end
+
+  # private
+
+  def unique_nick_name
+    team_nick_names = teams.first.players.collect(&:nick_name)
+    errors.add(:nick_name, 'is not unique to your team.') if team_nick_names.include?(nick_name)
   end
 end

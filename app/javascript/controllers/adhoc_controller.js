@@ -1,11 +1,23 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
+  static values = { 
+    sets: Number,
+    rounds: Number,
+    courts: Number,
+    tournamentTime: { type: Number, default: 1 },
+    breakTime: { type: Number, default: 0.1 },
+  }
+
   connect() {
     this.setDefaultCourtCount(0);
   }
+
+  submit() {
+    document.getElementById('adhoc-form').submit();
+  }
   
-  playerInput() {
+  formInput() {
     const playerFields = document.getElementsByClassName("player-field");
     const players = []
     for (let i = 0; i < playerFields.length; i++) {
@@ -17,7 +29,24 @@ export default class extends Controller {
     const findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index)
     this.duplicateNamesNotice(findDuplicates(players).length)
     this.processPlayersSelected(players.length)
+    this.updateTournyTimeOnPage();
   }
+
+  timeSelects() {
+    this.tournamentTimeValue = document.getElementById("tournament-time").value
+    this.breakTimeValue = document.getElementById("break-time").value
+
+    this.updateTournyTimeOnPage();
+  }
+
+  updateTournyTimeOnPage() {
+    const totalTourneyTime = ((this.tournamentTimeValue * this.setsValue) + ((this.setsValue - 1) * this.breakTimeValue)) * this.roundsValue
+    if (this.setsValue == 0) {
+      $('#tourny-time').text("--")
+    } else {
+      $('#tourny-time').text(totalTourneyTime + " minutes")
+    }
+  }   
 
   setDefaultCourtCount(courtsCount) {
     if (courtsCount == "1") {
@@ -33,84 +62,89 @@ export default class extends Controller {
 
   duplicateNamesNotice(duplicateCount) {
     if (duplicateCount > 0) {
+      document.getElementById("save-button").disabled = true;
+      document.getElementById("save-button").classList.add("text-white")
+      document.getElementById("save-button").classList.add("bg-slate-100")
       document.getElementById('duplicate-notice').innerHTML = "Warning: one or more of your player names are duplicates"
     } else {
+      document.getElementById("save-button").classList.remove("text-white")
+      document.getElementById("save-button").classList.remove("bg-slate-100")
+      document.getElementById("save-button").disabled = false;
       document.getElementById('duplicate-notice').innerHTML = "&nbsp;"
     }
   }
 
   processPlayersSelected(pSelected) {
     // Limits saving and adds warning when user role is coach (needs expansion for future roles)
-    const userIsCoach = "<%= current_user.has_role?(:coach) %>"
     // Shows courts dependent on player count selected
     switch (pSelected) {
     case 0:
-      localStorage['tournamentSets'] = 0
-      localStorage['tournamentRounds'] = 1
+      this.setsValue = 0
+      this.roundsValue = 1
       this.courtsCountOne();
       break;
     case 6:
-      localStorage['tournamentSets'] = 10
-      localStorage['tournamentRounds'] = 1
+      this.setsValue = 10
+      this.roundsValue = 1
       this.courtsCountOne();
       break;
     case 7:
-      localStorage['tournamentSets'] = 7
-      localStorage['tournamentRounds'] = 1
+      this.setsValue = 7
+      this.roundsValue = 1
       this.courtsCountOne();
       break;
     case 8:
     case 9:
-      localStorage['tournamentSets'] = 12
-      localStorage['tournamentRounds'] = 1
+      this.setsValue = 12
+      this.roundsValue = 1
       this.courtsCountOne();
       break;
     case 10:
-      localStorage['tournamentSets'] = 5
-      localStorage['tournamentRounds'] = 2
+      this.setsValue = 5
+      this.roundsValue = 2
       this.courtsCountTwo();
       break;
     case 11:
-      localStorage['tournamentSets'] = 10
-      localStorage['tournamentRounds'] = 2
+      this.setsValue = 10
+      this.roundsValue = 2
       this.courtsCountTwo();
       break;
     case 12:
     case 13:
     case 14:
-      localStorage['tournamentSets'] = 7
-      localStorage['tournamentRounds'] = 2
+      this.setsValue = 7
+      this.roundsValue = 2
       this.courtsCountTwo();
       break;      
     case 15:
-      localStorage['tournamentSets'] = 5
-      localStorage['tournamentRounds'] = 3
+      this.setsValue = 5
+      this.roundsValue = 3
       this.courtsCountThree();
       break;
     case 16:
     case 17:
-      localStorage['tournamentSets'] = 7
-      localStorage['tournamentRounds'] = 2
+      this.setsValue = 7
+      this.roundsValue = 2
       this.courtsCountTwo();
       break;    
     case 18:
     case 19:
     case 20:
     case 21:
-      localStorage['tournamentSets'] = 7
-      localStorage['tournamentRounds'] = 3
+      this.setsValue = 7
+      this.roundsValue = 3
       this.courtsCountThree();
       break;      
     case 22:
     case 23:
     case 24:
-      localStorage['tournamentSets'] = 10
-      localStorage['tournamentRounds'] = 3
+      this.setsValue = 10
+      this.roundsValue = 3
       this.courtsCountFour();
       break;      
     case 25:
-      localStorage['tournamentSets'] = 12
-      localStorage['tournamentRounds'] = 2
+      this.setsValue = 12
+      this.roundsValue = 2
       this.courtsCountThree();
       break;
     case 26:
