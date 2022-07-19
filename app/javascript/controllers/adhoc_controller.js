@@ -63,12 +63,16 @@ export default class extends Controller {
   duplicateNamesNotice(duplicateCount) {
     if (duplicateCount > 0) {
       document.getElementById("save-button").disabled = true;
+      document.getElementById("save-button").classList.remove("text-indigo-700")
+      document.getElementById("save-button").classList.remove("bg-indigo-100")
       document.getElementById("save-button").classList.add("text-white")
       document.getElementById("save-button").classList.add("bg-slate-100")
       document.getElementById('duplicate-notice').innerHTML = "Warning: one or more of your player names are duplicates"
     } else {
       document.getElementById("save-button").classList.remove("text-white")
       document.getElementById("save-button").classList.remove("bg-slate-100")
+      document.getElementById("save-button").classList.add("text-indigo-700")
+      document.getElementById("save-button").classList.add("bg-indigo-100")
       document.getElementById("save-button").disabled = false;
       document.getElementById('duplicate-notice').innerHTML = "&nbsp;"
     }
