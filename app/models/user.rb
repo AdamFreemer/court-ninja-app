@@ -89,7 +89,7 @@ class User < ApplicationRecord
   # private
 
   def unique_nick_name
-    return true if adhoc == true
+    return true if adhoc == true || teams.blank? || nick_name.blank?
 
     team_nick_names = teams.first.players.collect(&:nick_name)
     errors.add(:nick_name, 'is not unique to your team.') if team_nick_names.include?(nick_name)

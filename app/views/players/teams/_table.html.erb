@@ -9,7 +9,11 @@
   <tbody>
     <% current_user.teams.each do |t| %>
     <tr class="hover:bg-gray-100 <%= t.active? ? 'bg-white text-gray-900' : 'bg-gray-200 text-gray-400' %>">
-      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium hover:underline"><%= link_to t.name, edit_team_path(t.id) %></td>
+      <% if current_user.has_role? :player %>
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium hover:underline"><%= t.name %></td>
+      <% else %>
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium hover:underline"><%= link_to t.name, edit_team_path(t.id) %></td>
+      <% end %>
       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium"><%= t.description %></td>
       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium"><%= t.coach.full_name %></td>
     </tr>
