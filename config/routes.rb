@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     collection do
       get 'verify'
       post 'join'
+      delete 'remove_player'
     end
   end
 
