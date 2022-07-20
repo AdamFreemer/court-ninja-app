@@ -38,7 +38,7 @@ class TournamentsController < ApplicationController
       end
     @tournament = Tournament.new
     @tournament_times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    @break_times = [0.1, 0.5, 1, 1.5]
+    @break_times = [1, 1.5, 2.0]
     @tournament_configured = !@tournament.rounds_configured.empty?
   end
 
@@ -198,7 +198,7 @@ class TournamentsController < ApplicationController
   def set_tournament
     @tournament = Tournament.find(params[:id])
     @tournament_times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    @break_times = [0.1, 0.5, 1, 1.5]
+    @break_times = [1, 1.5, 2.0]
   end
 
   def set_display
