@@ -41,6 +41,9 @@ class UsersController < ApplicationController
       if @user.update(user_params)
         format.html { redirect_to root_path, notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
+      elsif @user.errors
+        @teams = @user.teams
+        format.html { redirect_to root_path, alert: @user.errors.full_messages[0] }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -68,6 +71,7 @@ class UsersController < ApplicationController
       :email,
       :first_name,
       :last_name,
+      :nick_name,
       :address,
       :city,
       :state,

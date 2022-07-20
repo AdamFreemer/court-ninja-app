@@ -1,8 +1,9 @@
-<h3 class="block text-md font-small text-gray-500 italic">
-  <div id="duplicate-notice" class="text-rose-500">&nbsp;</div>
-</h3>
+<div class="text-md font-medium text-gray-800">
+  Tournament time: <span id="tourny-time">--</span><br>
+    <div id="duplicate-notice" class="text-rose-500">&nbsp;</div>
+</div>
 
-<%= form_with(model: tournament, class: "contents") do |form| %>
+<%= form_with(model: tournament, class: "contents", id: "adhoc-form") do |form| %>
   <% if tournament.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
       <h2><%= pluralize(tournament.errors.count, "error") %> prohibited this tournament from being saved:</h2>
@@ -14,8 +15,8 @@
     </div>
   <% end %>
 
-  <div class="space-y-6">
-    <div data-controller="adhoc" class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
+  <div data-controller="adhoc" class="space-y-6">
+    <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
       <div class="md:grid md:grid-cols-3 md:gap-6">
         <% if action_name == "new" %>
           <%= render "form_adhoc_players", form: form %>
@@ -28,7 +29,7 @@
         <% end %>
         <div class="mt-5 md:mt-0 md:col-span-2">
           <form action="#" method="POST">
-            <div class="grid grid-cols-6 gap-6 border-[1px] p-2">
+            <div class="grid grid-cols-6 gap-3 p-2">
               <div class="col-span-6 sm:col-span-6">
                 <label for="name" class="block text-sm font-medium text-gray-700">Tournament Name</label>
                 <%= form.text_field :name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
@@ -51,30 +52,26 @@
 
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                 <label for="tournament-time" class="block text-sm font-medium text-gray-700">Tournament Time (minutes)<span class="text-gray-400"></span></label>
-                <%= form.select :tournament_time, @tournament_times, { :placeholder => "Please Select" }, id: "tournament-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+                <%= form.select :tournament_time, @tournament_times, { :placeholder => "Please Select" }, 
+                  data: { action: "change->adhoc#timeSelects" }, 
+                  id: "tournament-time", 
+                  class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md"
+                %>
               </div>
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                 <label for="break-time" class="block text-sm font-medium text-gray-700">Tournament Break Time (minutes)<span class="text-gray-400"></span></label>
-                <%= form.select :break_time, @break_times, { :placeholder => "Please Select" }, id: "break-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+                <%= form.select :break_time, @break_times, { :placeholder => "Please Select" }, 
+                  data: { action: "change->adhoc#timeSelects" }, 
+                  id: "break-time", 
+                  class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md"
+                %>
               </div>
 
-              <div id="court-side-a" class="col-span-6 sm:col-span-6 lg:col-span-2">
-                <label for="courts" class="block text-sm font-medium text-gray-700">Court Side A Name</label>
-                <%= form.text_field :court_side_a_name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-              </div>
-              <div id="court-side-b" class="col-span-6 sm:col-span-6 lg:col-span-2">
-                <label for="courts" class="block text-sm font-medium text-gray-700">Court Side B Name</label>
-                <%= form.text_field :court_side_b_name, id: "court-2-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-              </div>                                   
-            </div>
-
-            <div class="grid grid-cols-6 gap-6 mt-6 gap-6 border-[1px] p-2"> 
-
-              <div data-adhoc-target="court-1" id="court-1-container" class="col-span-6 sm:col-span-6 lg:col-span-2">
+              <div data-adhoc-target="court-1" id="court-1-container" class="col-span-6 sm:col-span-6 lg:col-span-3">
                 <label for="courts" class="block text-sm font-medium text-gray-700">Court 1 Name</label>
-                <%= form.text_field :court_1_name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                <%= form.text_field :court_1_name, id: "court-1-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
               </div>
-              <div data-adhoc-target="court-2" id="court-2-container" class="col-span-6 sm:col-span-6 lg:col-span-2">
+              <div data-adhoc-target="court-2" id="court-2-container" class="col-span-6 sm:col-span-6 lg:col-span-3">
                 <label for="courts" class="block text-sm font-medium text-gray-700">Court 2 Name</label>
                 <%= form.text_field :court_2_name, id: "court-2-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
               </div>
@@ -95,6 +92,17 @@
                 <%= form.text_field :court_6_name, id: "court-6-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
               </div>            
             </div>
+              
+            <div class="grid grid-cols-6 gap-3 p-2">
+              <div id="court-side-a" class="col-span-6 sm:col-span-6 lg:col-span-3">
+                <label for="courts" class="block text-sm font-medium text-gray-700">Court Side A Name</label>
+                <%= form.text_field :court_side_a_name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>
+              <div id="court-side-b" class="col-span-6 sm:col-span-6 lg:col-span-3">
+                <label for="courts" class="block text-sm font-medium text-gray-700">Court Side B Name</label>
+                <%= form.text_field :court_side_b_name, id: "court-2-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>                                   
+            </div>
 
             <%= form.hidden_field :adhoc, value: true %>
           </form>
@@ -106,12 +114,11 @@
       <%= link_to "Back to Tournaments", tournaments_path, class: "inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
       <button 
         id="save-button"
-        type="submit" 
+        data-action="click->adhoc#submit"
+        type="button" 
         class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
         Save
       </button>
     </div>
   </div>
 <% end %>
-
-<%# render "js_form", tournament: @tournament %>
