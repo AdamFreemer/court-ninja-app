@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.4'
-gem 'rails', '~> 7.0.1'
+gem 'rails', '~> 7.0.3.1'
 
 gem 'cocoon', '~> 1.1'
 gem 'devise', '~> 4.8'
