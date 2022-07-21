@@ -86,12 +86,13 @@ class User < ApplicationRecord
     end
   end
 
-  # private
 
   def unique_nick_name
-    return true if adhoc == true || teams.blank? || nick_name.blank?
+    saved_user = User.find(self.id)
+    # Checking saved user nickname vs current pre-save for changes as it will cause dup in team_nick_names array below
+    return true if adhoc == true || teams.blank? || nick_name.blank? || saved_user.nick_name.downcase == nick_name.downcase
 
-    team_nick_names = teams.first.players.collect(&:nick_name)
+    team_nick_names = (teams.first.players.collect(&:nick_name) - [nil]).map(&:downcase)
     errors.add(:nick_name, 'is not unique to your team.') if team_nick_names.include?(nick_name)
   end
 end
