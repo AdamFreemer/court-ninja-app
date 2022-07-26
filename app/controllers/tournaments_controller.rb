@@ -5,6 +5,7 @@ class TournamentsController < ApplicationController
   ]
   before_action :set_display, only: %i[display_single display_multiple]
   before_action :round_two_generated, only: %i[administration]
+  before_action :current_set_players, only: %i[display_single display_multiple status]
 
   def index
     if params[:filter] == "before-today"
@@ -38,7 +39,7 @@ class TournamentsController < ApplicationController
       end
     @tournament = Tournament.new
     @tournament_times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    @break_times = [1, 1.5, 2.0]
+    @break_times = [0.5, 1, 1.5, 2.0]
     @tournament_configured = !@tournament.rounds_configured.empty?
   end
 
@@ -70,6 +71,9 @@ class TournamentsController < ApplicationController
 
   def display_single
     # display any court based on court param passed along
+    @team_size = @tournament.tournament_sets.first.tournament_teams.first.users.count
+    @work_size = @tournament.tournament_sets.first.tournament_teams.third.users.count
+    @row_columns = (@team_size * 2) +1
     @court = params[:court].to_i
     @court_sets = @tournament.tournament_sets.where(court: @court, round: params[:round])
   end
@@ -92,6 +96,7 @@ class TournamentsController < ApplicationController
     render json: {
       scores: scores,
       current_set: @tournament.current_set,
+      current_set_players: @current_set_players,
       current_round: @tournament.current_round,
       timer_state: @tournament.timer_state,
       timer_mode: @tournament.timer_mode,
@@ -101,8 +106,6 @@ class TournamentsController < ApplicationController
   end
 
   def timer_operation
-    puts "== Timer Updated"
-    puts "== Timer Time: #{params[:time]}"
     @tournament.update!(timer_state: params[:state], timer_mode: params[:mode], timer_time: params[:time])
 
     render json: {
@@ -152,7 +155,7 @@ class TournamentsController < ApplicationController
         @tournament.update(current_round: 1)
         redirect_to administration_tournament_url(@tournament, 1), notice: "Tournament was successfully created."
       else
-        redirect_to tournaments_path
+        redirect_to administration_tournament_url(@tournament, 1)
       end
     else
       render :new, status: :unprocessable_entity
@@ -160,17 +163,19 @@ class TournamentsController < ApplicationController
   end
 
   def update
-    if @tournament.update(tournament_params)
-      set_create_update(params)
+    cleaned_up_params = tournament_params
+    cleaned_up_params[:players] = cleaned_up_params[:players].compact_blank.map { |i| Integer(i, 10) }
+
+    if @tournament.update(cleaned_up_params)
       @tournament.save
       if @tournament.rounds_configured.empty?
         if @tournament.generate
-          redirect_to tournaments_path, notice: "Tournament updated and round one successfully created."
+          redirect_to administration_tournament_url(@tournament, 1), notice: "Tournament updated and round one successfully created."
         else
           redirect_to tournaments_path, notice: "Tournament was successfully updated (no rounds created)."
         end
       else
-        redirect_to tournaments_path, notice: "Tournament information updated."
+        redirect_to administration_tournament_url(@tournament, 1), notice: "Tournament information updated."
       end
     else
       render :edit, status: :unprocessable_entity
@@ -198,12 +203,21 @@ class TournamentsController < ApplicationController
   def set_tournament
     @tournament = Tournament.find(params[:id])
     @tournament_times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    @break_times = [1, 1.5, 2.0]
+    @break_times = [0.5, 1, 1.5, 2.0]
   end
 
   def set_display
     @current_set = @tournament.current_set
     @round = params[:round]
+  end
+
+  def current_set_players
+    # This returns the teams with player names for populating on display pages
+    teams = @tournament.tournament_sets[@tournament.current_set - 1].tournament_teams.order(:number)
+    names_abbreviated = teams.map { |team| team.users.map(&:name_abbreviated) }
+    names_initials = teams.map { |team| team.users.map(&:initials) }
+    current_set_players = names_abbreviated.zip(names_initials)
+    @current_set_players = current_set_players.map { |team| [team.collect(&:first).compact, team.collect(&:second).compact, team.collect(&:third).compact] }
   end
 
   def set_create_update(params)
