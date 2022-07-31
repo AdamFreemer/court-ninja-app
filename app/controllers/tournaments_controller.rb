@@ -73,7 +73,7 @@ class TournamentsController < ApplicationController
     # display any court based on court param passed along
     @team_size = @tournament.tournament_sets.first.tournament_teams.first.users.count
     @work_size = @tournament.tournament_sets.first.tournament_teams.third.users.count
-    @row_columns = (@team_size * 2) +1
+    @row_columns = (@team_size * 2) + 1
     @court = params[:court].to_i
     @court_sets = @tournament.tournament_sets.where(court: @court, round: params[:round])
   end

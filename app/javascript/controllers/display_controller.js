@@ -94,7 +94,6 @@ export default class extends Controller {
     this.secondTarget.innerHTML = second
     // On initial load if connection is slow syncing... will be displayed until removed below
     document.getElementById("syncing").style.display = 'none';
-
     document.getElementById("current-round").innerHTML = this.tournamentCurrentRoundServerValue
     document.getElementById("current-set").innerHTML = this.tournamentCurrentSetValue
 
@@ -131,8 +130,6 @@ export default class extends Controller {
       team2Data = this?.tournamentCurrentSetPlayersCourt2Value[1]
       workData = this?.tournamentCurrentSetPlayersCourt2Value[2]
     }
-    console.log('== team1 data: ', team1Data)
-    console.log('== team2 data: ', team2Data)
 
     if (team1Data[2][0] != '-') { // this prevents initial loading of null data
       document.getElementById('team-1-player-0-initials').innerHTML = team1Data[0][2] || "--"
