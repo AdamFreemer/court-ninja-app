@@ -73,12 +73,18 @@ class User < ApplicationRecord
   end
 
   def initials
-    "#{first_name[0]}#{last_name[0]}"
+    if is_ghost_player
+      ''
+    elsif adhoc
+      "#{nick_name[0]}"
+    else
+      "#{first_name[0]}#{last_name[0]}"
+    end
   end
 
   def name_abbreviated
     if is_ghost_player
-      '--'
+      'Ghost Player'
     elsif nick_name
       nick_name.capitalize
     else
