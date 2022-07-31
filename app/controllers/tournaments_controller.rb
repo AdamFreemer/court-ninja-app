@@ -92,11 +92,12 @@ class TournamentsController < ApplicationController
   end
 
   def status
-    scores = @tournament.tournament_teams.collect { |t| [t.id, t.score] }
+    scores = @tournament.tournament_teams.map { |t| [t.id, t.score] }
     render json: {
       scores: scores,
       current_set: @tournament.current_set,
-      current_set_players: @current_set_players,
+      current_set_players_court1: @current_set_players[0],
+      current_set_players_court2: @current_set_players[1],
       current_round: @tournament.current_round,
       timer_state: @tournament.timer_state,
       timer_mode: @tournament.timer_mode,
@@ -212,12 +213,22 @@ class TournamentsController < ApplicationController
   end
 
   def current_set_players
+    @current_set_players = []
     # This returns the teams with player names for populating on display pages
-    teams = @tournament.tournament_sets[@tournament.current_set - 1].tournament_teams.order(:number)
+    teams = @tournament.tournament_sets.find_by(number: @tournament.current_set, court: 1).tournament_teams.order(:number)
+    user_ids = teams.map { |team| team.users.map(&:id) }
     names_abbreviated = teams.map { |team| team.users.map(&:name_abbreviated) }
     names_initials = teams.map { |team| team.users.map(&:initials) }
-    current_set_players = names_abbreviated.zip(names_initials)
-    @current_set_players = current_set_players.map { |team| [team.collect(&:first).compact, team.collect(&:second).compact, team.collect(&:third).compact] }
+    current_set_players = user_ids.zip(names_abbreviated, names_initials)
+    @current_set_players[0] = current_set_players.map { |team| [team.map(&:first).compact, team.map(&:second).compact, team.map(&:third).compact] }
+    return unless @tournament.courts > 1
+
+    teams = @tournament.tournament_sets.find_by(number: @tournament.current_set, court: 2).tournament_teams.order(:number)
+    user_ids = teams.map { |team| team.users.map(&:id) }
+    names_abbreviated = teams.map { |team| team.users.map(&:name_abbreviated) }
+    names_initials = teams.map { |team| team.users.map(&:initials) }
+    current_set_players = user_ids.zip(names_abbreviated, names_initials)
+    @current_set_players[1] = current_set_players.map { |team| [team.map(&:first).compact, team.map(&:second).compact, team.map(&:third).compact] }
   end
 
   def set_create_update(params)

@@ -8,7 +8,8 @@ export default class extends Controller {
     tournamentCurrentRoundServer: Number,
     tournamentCurrentRoundLocal: Number,
     tournamentCurrentSet: Number,
-    tournamentCurrentSetPlayers: Array,
+    tournamentCurrentSetPlayersCourt1: { type: Array, default: [[['-'], ['-'],['-']], [['-'], ['-'],['-']],[['-'], ['-'],['-']]] },
+    tournamentCurrentSetPlayersCourt2: { type: Array, default: [[['-'], ['-'],['-']], [['-'], ['-'],['-']],[['-'], ['-'],['-']]] },
     tournamentCurrentCourt: Number,
     breakTime: Number, 
     tournamentTime: Number, // static value for Tournament Time
@@ -41,7 +42,9 @@ export default class extends Controller {
         this.tournamentTimerModeValue = response.timer_mode;
         this.tournamentTimerStateValue = response.timer_state;
         this.tournamentCurrentSetValue = response.current_set;
-        this.tournamentCurrentSetPlayersValue = response.current_set_players;
+        this.tournamentCurrentSetPlayersCourt1Value = response.current_set_players_court1;
+        this.tournamentCurrentSetPlayersCourt2Value = response.current_set_players_court2;
+        this.tournamentCurrentSetPlayersLivePollValue = response.current_set_players_live_poll;
         this.tournamentCurrentRoundServerValue = response.current_round;
       }
     })
@@ -115,19 +118,49 @@ export default class extends Controller {
     });
 
     // Update Player cards
-    const team1 = this.tournamentCurrentSetPlayersValue[0];
-    console.log(team1)
-    // team1.forEach((element) => {
-    //   console.log("-- player values -- 0 " + element)
+    let team1Data = []; 
+    let team2Data = []; 
+    let workData= [];
+    // load correct payload depending on whether displaying court 1 or 2
+    if (this.tournamentCurrentCourtValue == 1) {
+      team1Data = this?.tournamentCurrentSetPlayersCourt1Value[0]
+      team2Data = this?.tournamentCurrentSetPlayersCourt1Value[1]
+      workData = this?.tournamentCurrentSetPlayersCourt1Value[2]
+    } else if (this.tournamentCurrentCourtValue == 2) {
+      team1Data = this?.tournamentCurrentSetPlayersCourt2Value[0]
+      team2Data = this?.tournamentCurrentSetPlayersCourt2Value[1]
+      workData = this?.tournamentCurrentSetPlayersCourt2Value[2]
+    }
+    console.log('== team1 data: ', team1Data)
+    console.log('== team2 data: ', team2Data)
 
-    // }
-    // const team2 = this.tournamentCurrentSetPlayersValue[1]
-    // this.tournamentCurrentSetPlayersValue.forEach((element, index) => {
-      // console.log("-- player values -- 0")
-      // console.log(this.tournamentCurrentSetPlayersValue[0])
-      // console.log("-- player values -- 1")
-      // console.log(this.tournamentCurrentSetPlayersValue[1])
-    // }
+    if (team1Data[2][0] != '-') { // this prevents initial loading of null data
+      document.getElementById('team-1-player-0-initials').innerHTML = team1Data[0][2] || "--"
+      document.getElementById('team-1-player-0-name').innerHTML = team1Data[0][1] || "loading..."
+      document.getElementById('team-1-player-1-initials').innerHTML = team1Data[1][2] || "--"
+      document.getElementById('team-1-player-1-name').innerHTML = team1Data[1][1] || "loading..."
+      if (team1Data[2][0] != '-' && team1Data[2].length != 0) {
+        document.getElementById('team-1-player-2-initials').innerHTML = team1Data[2][2] || "--"
+        document.getElementById('team-1-player-2-name').innerHTML = team1Data[2][1] || "loading..."
+
+      }
+    }
+    if (team2Data[2][0] != '-') { // this prevents initial loading of null data
+      document.getElementById('team-2-player-0-initials').innerHTML = team2Data[0][2] || "--"
+      document.getElementById('team-2-player-0-name').innerHTML = team2Data[0][1] || "loading..."
+      document.getElementById('team-2-player-1-initials').innerHTML = team2Data[1][2] || "--"
+      document.getElementById('team-2-player-1-name').innerHTML = team2Data[1][1] || "loading..."
+      if (team2Data[2][0] != '-' && team2Data[2].length != 0) {
+        document.getElementById('team-2-player-2-initials').innerHTML = team2Data[2][2] || "--"
+        document.getElementById('team-2-player-2-name').innerHTML = team2Data[2][1] || "loading..."
+      }
+    }
+    if (workData[2][0] != '-') { // this prevents initial loading of null data
+      document.getElementById('work-player-0').innerHTML = workData[0][1] || ""
+      document.getElementById('work-player-1').innerHTML = workData[1][1] || ""
+      document.getElementById('work-player-2').innerHTML = workData[2][1] || ""
+
+    }
 
     // Update scores
     this.teamTargets.forEach((element, index) => {
