@@ -29,10 +29,8 @@
         </div>
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-            <% if current_user&.has_role?(:admin) %>
             <a href='mailto:luckymakro+gzrxpydftpm3ahxiqvgi@boards.trello.com?subject=TourneyChamp feedback from <%= "#{current_user.first_name} #{current_user.last_name}" %>' 
-               class="border-indigo-200 border-2 text-indigo-400 mt-1 inline-flex items-center px-1 rounded-lg text-sm font-medium">Submit Feedback</a>
-            <% end %>          
+               class="border-indigo-200 border-2 text-indigo-400 mt-1 inline-flex items-center px-1 rounded-lg text-sm font-medium">Submit Feedback</a>        
           </div>
 
           <!-- Profile dropdown -->

@@ -78,8 +78,8 @@
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
-                  <label for="position" class="block text-sm font-medium text-gray-700">Position</label>
-                  <%= form.text_field :position, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                  <label for="position" class="block text-sm font-medium text-gray-700">Position<span class="text-gray-400"></span></label>
+                  <%= form.select :position, @positions, { :include_blank => "--" }, id: "position", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">

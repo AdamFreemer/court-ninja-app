@@ -73,12 +73,18 @@ class User < ApplicationRecord
   end
 
   def initials
-    "#{first_name[0]}#{last_name[0]}"
+    if is_ghost_player
+      ''
+    elsif adhoc
+      "#{nick_name[0]}"
+    else
+      "#{first_name[0]}#{last_name[0]}"
+    end
   end
 
   def name_abbreviated
     if is_ghost_player
-      '--'
+      'Ghost Player'
     elsif nick_name
       nick_name.capitalize
     else
@@ -86,12 +92,13 @@ class User < ApplicationRecord
     end
   end
 
-  # private
-
   def unique_nick_name
-    return true if adhoc == true || teams.blank? || nick_name.blank?
+    return true if adhoc || teams.blank? || nick_name.blank?
 
-    team_nick_names = teams.first.players.collect(&:nick_name)
+    saved_user = User.find(id)
+    return true if saved_user&.nick_name&.downcase == nick_name&.downcase
+
+    team_nick_names = (teams.first.players.collect(&:nick_name) - [nil]).map(&:downcase)
     errors.add(:nick_name, 'is not unique to your team.') if team_nick_names.include?(nick_name)
   end
 end

@@ -8,6 +8,8 @@ export default class extends Controller {
     tournamentCurrentRoundServer: Number,
     tournamentCurrentRoundLocal: Number,
     tournamentCurrentSet: Number,
+    tournamentCurrentSetPlayersCourt1: { type: Array, default: [[['-'], ['-'],['-']], [['-'], ['-'],['-']],[['-'], ['-'],['-']]] },
+    tournamentCurrentSetPlayersCourt2: { type: Array, default: [[['-'], ['-'],['-']], [['-'], ['-'],['-']],[['-'], ['-'],['-']]] },
     tournamentCurrentCourt: Number,
     breakTime: Number, 
     tournamentTime: Number, // static value for Tournament Time
@@ -18,9 +20,9 @@ export default class extends Controller {
   static targets = [ "minute", "second", "progress", "syncing", "set", "status", "team" ]
 
   connect() {
-    this.connectStatus();
     this.updatePage();
     this.autoStart();
+    this.connectStatus();
   }
 
   autoStart() {
@@ -40,28 +42,14 @@ export default class extends Controller {
         this.tournamentTimerModeValue = response.timer_mode;
         this.tournamentTimerStateValue = response.timer_state;
         this.tournamentCurrentSetValue = response.current_set;
+        this.tournamentCurrentSetPlayersCourt1Value = response.current_set_players_court1;
+        this.tournamentCurrentSetPlayersCourt2Value = response.current_set_players_court2;
+        this.tournamentCurrentSetPlayersLivePollValue = response.current_set_players_live_poll;
         this.tournamentCurrentRoundServerValue = response.current_round;
       }
     })
     this.updatePage();
-    // highlight current set row, unhighlight others
-    this.setTargets.forEach((element, index) => {
-      if ((element.id) == (this.tournamentCurrentSetValue)) {
-        element.classList.add('font-extrabold');
-        element.classList.add('shadow-md');
-      } else {
-        element.classList.remove('font-extrabold');
-        element.classList.remove('shadow-md');
-      }    
-    });
 
-    this.teamTargets.forEach((element, index) => {
-      this.tournamentScoresValue.forEach((score, index) => {
-        if (element.id == score[0]) {
-          element.innerHTML = score[1];
-        }
-      });  
-    });
 
     this.connectStatus();
     // redirect to next round or results page
@@ -85,7 +73,8 @@ export default class extends Controller {
       let progress = Math.abs(Math.round((this.tournamentTimerValue / this.breakTimeValue) * 100))
       this.progressTarget.style.setProperty('--value', progress)
       this.statusTarget.innerHTML = "GET READY"
-    }    
+    }  
+
     // circular progress -- update color and state
     if (this.tournamentTimerValue == 0 || this.tournamentTimerStateValue == "stop") {
       this.progressTarget.style.setProperty('--value', 100)
@@ -95,6 +84,7 @@ export default class extends Controller {
       this.progressTarget.classList.remove('text-error');
       this.progressTarget.classList.add('text-accent-focus');
     }
+
     // timer update
     let second = this.tournamentTimerValue % 60;
     let minute = Math.floor(this.tournamentTimerValue / 60) % 60;
@@ -104,10 +94,83 @@ export default class extends Controller {
     this.secondTarget.innerHTML = second
     // On initial load if connection is slow syncing... will be displayed until removed below
     document.getElementById("syncing").style.display = 'none';
+    document.getElementById("current-round").innerHTML = this.tournamentCurrentRoundServerValue
+    document.getElementById("current-set").innerHTML = this.tournamentCurrentSetValue
+
+    // highlight current set row, show before and after, hide all others
+    this.setTargets.forEach((element, index) => {
+      if ((element.id) == (this.tournamentCurrentSetValue)) {
+        element.classList.add('font-extrabold');
+        element.classList.add('shadow-md');
+        element.classList.remove('hidden');
+      } else if (element.id == this.tournamentCurrentSetValue + 1) {
+        element.classList.remove('font-extrabold');
+        element.classList.remove('shadow-md');
+        element.classList.remove('hidden');
+      } else if (element.id == this.tournamentCurrentSetValue - 1) {
+        element.classList.remove('font-extrabold');
+        element.classList.remove('shadow-md');
+        element.classList.remove('hidden');      
+      } else {
+        element.classList.add('hidden');
+      }
+    });
+
+    // Update Player cards
+    let team1Data = []; 
+    let team2Data = []; 
+    let workData= [];
+    // load correct payload depending on whether displaying court 1 or 2
+    if (this.tournamentCurrentCourtValue == 1) {
+      team1Data = this?.tournamentCurrentSetPlayersCourt1Value[0]
+      team2Data = this?.tournamentCurrentSetPlayersCourt1Value[1]
+      workData = this?.tournamentCurrentSetPlayersCourt1Value[2]
+    } else if (this.tournamentCurrentCourtValue == 2) {
+      team1Data = this?.tournamentCurrentSetPlayersCourt2Value[0]
+      team2Data = this?.tournamentCurrentSetPlayersCourt2Value[1]
+      workData = this?.tournamentCurrentSetPlayersCourt2Value[2]
+    }
+
+    if (team1Data[2][0] != '-') { // this prevents initial loading of null data
+      document.getElementById('team-1-player-0-initials').innerHTML = team1Data[0][2] || "--"
+      document.getElementById('team-1-player-0-name').innerHTML = team1Data[0][1] || "loading..."
+      document.getElementById('team-1-player-1-initials').innerHTML = team1Data[1][2] || "--"
+      document.getElementById('team-1-player-1-name').innerHTML = team1Data[1][1] || "loading..."
+      if (team1Data[2][0] != '-' && team1Data[2].length != 0) {
+        document.getElementById('team-1-player-2-initials').innerHTML = team1Data[2][2] || "--"
+        document.getElementById('team-1-player-2-name').innerHTML = team1Data[2][1] || "loading..."
+
+      }
+    }
+    if (team2Data[2][0] != '-') { // this prevents initial loading of null data
+      document.getElementById('team-2-player-0-initials').innerHTML = team2Data[0][2] || "--"
+      document.getElementById('team-2-player-0-name').innerHTML = team2Data[0][1] || "loading..."
+      document.getElementById('team-2-player-1-initials').innerHTML = team2Data[1][2] || "--"
+      document.getElementById('team-2-player-1-name').innerHTML = team2Data[1][1] || "loading..."
+      if (team2Data[2][0] != '-' && team2Data[2].length != 0) {
+        document.getElementById('team-2-player-2-initials').innerHTML = team2Data[2][2] || "--"
+        document.getElementById('team-2-player-2-name').innerHTML = team2Data[2][1] || "loading..."
+      }
+    }
+    if (workData[2][0] != '-') { // this prevents initial loading of null data
+      document.getElementById('work-player-0').innerHTML = workData[0][1] || ""
+      document.getElementById('work-player-1').innerHTML = workData[1][1] || ""
+      document.getElementById('work-player-2').innerHTML = workData[2][1] || ""
+
+    }
+
+    // Update scores
+    this.teamTargets.forEach((element, index) => {
+      this.tournamentScoresValue.forEach((score, index) => {
+        if (element.id == score[0]) {
+          element.innerHTML = score[1];
+        }
+      });  
+    });    
   }
 
   connectStatus() {
-    // console.log("Scores: ", this.tournamentScoresValue);
+    // console.log("Current Players: ", this.tournamentCurrentSetPlayersValue);
     // console.log("Id: ", this.tournamentIdValue)
     // console.log("breakTime: ", this.breakTimeValue)
     // console.log("tournamentTime: ", this.tournamentTimeValue)
