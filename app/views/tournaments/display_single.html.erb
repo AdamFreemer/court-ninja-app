@@ -7,32 +7,33 @@
 
       <%= render "display_timer" %>
 
-      <div class="overflow-auto mt-12 border border-gray-500 rounded-lg shadow-sm divide-y divide-gray-200">
-        <ul role="list" class="min-w-full px-2 py-2 items-center grid grid-cols-<%= @row_columns %> gap-2 sm:grid-cols-<%= @row_columns %> md:grid-cols-<%= @row_columns %> lg:grid-cols-<%= @row_columns %>">
-          <% @court == 1 ? current_set_players = @current_set_players[0] : current_set_players = @current_set_players[1] %>
-          <% current_set_players[0].reject { |c| c.empty? }.each_with_index do |player, index| %>
-            <%= render "card", player: player, index: index, team: 1 %>
-          <% end %>
+      <%# commented out new UI display issue %>
+      <% if false %>
+        <div class="overflow-auto mt-12 border border-gray-500 rounded-lg shadow-sm divide-y divide-gray-200">
+          <ul role="list" class="min-w-full px-2 py-2 items-center grid grid-cols-<%= @row_columns %> gap-2 sm:grid-cols-<%= @row_columns %> md:grid-cols-<%= @row_columns %> lg:grid-cols-<%= @row_columns %>">
+            <% @court == 1 ? current_set_players = @current_set_players[0] : current_set_players = @current_set_players[1] %>
+            <% current_set_players[0].reject { |c| c.empty? }.each_with_index do |player, index| %>
+              <%= render "card", player: player, index: index, team: 1 %>
+            <% end %>
 
-          
-          <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">
-            <div class="flex-1 flex flex-col p-8">
-              <%= image_tag('vs.png') %>
-              <% if @tournament.work_group > 0 %>
-                <h3 class="mt-6 text-gray-900 text-sm font-medium underline">Work</h3>
-              <% end %>
-              <% current_set_players[2]&.each_with_index do |player, index| %>
-                <h3 id="work-player-<%= index %>" class="text-gray-900 text-sm font-medium"><%= player[1] %></h3>
-              <% end %>              
-            </div>
-          </li>      
+            <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">
+              <div class="flex-1 flex flex-col p-8">
+                <%= image_tag('vs.png') %>
+                <% if @tournament.work_group > 0 %>
+                  <h3 class="mt-6 text-gray-900 text-sm font-medium underline">Work</h3>
+                <% end %>
+                <% current_set_players[2]&.each_with_index do |player, index| %>
+                  <h3 id="work-player-<%= index %>" class="text-gray-900 text-sm font-medium"><%= player[1] %></h3>
+                <% end %>              
+              </div>
+            </li>      
 
-
-          <% current_set_players[1].reject { |c| c.empty? }.each_with_index do |player, index| %>
-            <%= render "card", player: player, index: index, team: 2 %>
-          <% end %>
-        </ul>
-      </div>
+            <% current_set_players[1].reject { |c| c.empty? }.each_with_index do |player, index| %>
+              <%= render "card", player: player, index: index, team: 2 %>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
       <div class="pt-8 text-2xl text-center font-medium text-gray-900">
          Set <span id="current-set"></span> of <%= @tournament.tournament_sets.count %>
