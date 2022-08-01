@@ -8,9 +8,9 @@
       <%= render "display_timer" %>
 
       <%# commented out new UI display issue %>
-      <% if false %>
+      <% if true %>
         <div class="overflow-auto mt-12 border border-gray-500 rounded-lg shadow-sm divide-y divide-gray-200">
-          <ul role="list" class="min-w-full px-2 py-2 items-center grid grid-cols-<%= @row_columns %> gap-2 sm:grid-cols-<%= @row_columns %> md:grid-cols-<%= @row_columns %> lg:grid-cols-<%= @row_columns %>">
+          <ul role="list" class="min-w-full px-2 py-2 items-center grid grid-cols-5 gap-2">
             <% @court == 1 ? current_set_players = @current_set_players[0] : current_set_players = @current_set_players[1] %>
             <% current_set_players[0].reject { |c| c.empty? }.each_with_index do |player, index| %>
               <%= render "card", player: player, index: index, team: 1 %>
