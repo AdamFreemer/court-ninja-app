@@ -4,14 +4,18 @@
   <div class="py-10">
       <%= render "display_timer" %>
 
-      <div class="overflow-auto mt-12 border border-gray-500 rounded-lg shadow-sm divide-y divide-gray-200">
-        <ul role="list" class="min-w-full px-2 py-2 items-center <%= "grid grid-cols-#{@row_columns}" %> gap-2">
+      <div class="overflow-auto mt-12 rounded-lg shadow-lg divide-y divide-gray-200">
+        <ul role="list" class="min-w-full px-2 py-2 items-center grid grid-cols-7 gap-2">
           <% @court == 1 ? current_set_players = @current_set_players[0] : current_set_players = @current_set_players[1] %>
-          <%# Team 1 %>
+          <%# Filler card %>
+          <% if @row_columns == 5 %>
+            <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>                  
+          <% end %>
+          
           <% current_set_players[0].reject { |c| c.empty? }.each_with_index do |player, index| %>
             <%= render "card", player: player, index: index, team: 1 %>
           <% end %>
-          <%# Vs + Work Team %>
+
           <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">
             <div class="flex-1 flex flex-col p-8">
               <%= image_tag('vs.png') %>
@@ -23,10 +27,14 @@
               <% end %>              
             </div>
           </li>      
-          <%# Team 2 %>
+
           <% current_set_players[1].reject { |c| c.empty? }.each_with_index do |player, index| %>
             <%= render "card", player: player, index: index, team: 2 %>
           <% end %>
+          <%# Filler card %>
+          <% if @row_columns == 5 %>
+            <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>                  
+          <% end %>            
         </ul>
       </div>
 
@@ -37,7 +45,7 @@
          (Round <span id="current-round"></span> of <%= @tournament.rounds %>)
       </div>      
 
-      <div class="overflow-auto mt-6 border border-gray-500 rounded-lg shadow-sm divide-y divide-gray-200">
+      <div class="overflow-auto mt-6 rounded-lg shadow-lg divide-y divide-gray-200">
         <div class="p-6">
           <% if @court == 1 %>
             <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_1_name %> Court</h2>
@@ -45,7 +53,7 @@
           <% if @court == 2 %>
             <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_2_name %> Court</h2>
           <% end %>
-          <table class="min-w-full divide-y divide-gray-300 border-2 border-b-green-500">
+          <table class="min-w-full divide-y divide-gray-300 border-2">
             <thead class="bg-gray-50">
             <% team_count = [*1..@tournament.tournament_sets.where(court: @court).first.tournament_teams.first.users.count - 1] %>
               <tr class="divide-x divide-gray-300">
