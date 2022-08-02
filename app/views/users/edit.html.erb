@@ -1,12 +1,12 @@
 <div class="mx-auto md:w-5/6 w-full mb-24">
   <div class="mb-6">
-    <h1 class="font-bold text-4xl">My Profile</h1>
+    <h1 class="font-semibold text-4xl">My Profile</h1>
   </div>
 
   <%= render "form", user: @user %>
   <div class="flex-1">
     <div class="flex justify-between items-center border-b-2 pb-2">
-      <h2 class="font-bold text-3xl">My Teams</h2>
+      <h2 class="font-semibold text-3xl">My Teams</h2>
     </div>
     <% if @teams.count == 0 %>
       <div class="shadow overflow-hidden bg-gray-50 py-10 text-center rounded-sm">
