@@ -3,17 +3,17 @@ class UsersController < ApplicationController
 
   def index
     @users =
-      if params[:sort]
-        User.where(is_ghost_player: false).order(params[:sort])
-      else
-        User.where(is_ghost_player: false)
-      end
+    if params[:sort]
+      User.where(is_ghost_player: false).order(params[:sort])
+    else
+      User.where(is_ghost_player: false)
+    end
   end
 
   def show
     @teams = @user.teams
   end
-
+\
   def new
     @user = User.new
   end
@@ -85,7 +85,8 @@ class UsersController < ApplicationController
       :contact_1_address,
       :contact_2_name,
       :contact_2_phone,
-      :contact_2_address
+      :contact_2_address,
+      :profile_picture
     )
   end
 end
