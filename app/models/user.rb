@@ -64,6 +64,8 @@ class User < ApplicationRecord
 
   has_many :tournaments_run, foreign_key: :created_by_id, dependent: :nullify, class_name: 'Tournament'
 
+  has_one_attached :profile_picture
+
   validate :unique_nick_name
 
   attr_accessor :role, :invite_code
