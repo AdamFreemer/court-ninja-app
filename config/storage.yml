@@ -1,10 +1,20 @@
-test:
-  service: Disk
-  root: <%= Rails.root.join("tmp/storage") %>
+google:
+  service: GCS
+  project: tourneychamp
+  credentials: <%= ENV['GOOGLE_APPLICATION_CREDENTIALS'].as_json %>
+  bucket: tourneychamp-images
 
-local:
-  service: Disk
-  root: <%= Rails.root.join("storage") %>
+google_dev:
+  service: GCS
+  project: tourneychamp
+  credentials: <%= Rails.root.join("config/secrets/tourneychamp-357017-e5ee919c9310.json") %>
+  bucket: tourneychamp-images-dev
+
+google_staging:
+  service: GCS
+  project: tourneychamp
+  credentials: <%= ENV['GOOGLE_APPLICATION_CREDENTIALS'].as_json %>
+  bucket: tourneychamp-images-staging
 
 # Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:

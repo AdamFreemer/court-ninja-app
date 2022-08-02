@@ -4,28 +4,36 @@
   <div class="py-10">
       <%= render "display_timer" %>
 
-      <div class="overflow-auto mt-12 border border-gray-500 rounded-lg shadow-sm divide-y divide-gray-200">
-        <ul role="list" class="min-w-full px-2 py-2 items-center <%= "grid grid-cols-#{@row_columns}" %> gap-2">
+      <div class="overflow-auto mt-12 rounded-lg shadow-lg divide-y divide-gray-200">
+        <ul role="list" class="min-w-full px-2 py-2 items-center grid grid-cols-7 gap-2">
           <% @court == 1 ? current_set_players = @current_set_players[0] : current_set_players = @current_set_players[1] %>
-          <%# Team 1 %>
+          <%# Filler card %>
+          <% if @row_columns == 5 %>
+            <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>
+          <% end %>
+
           <% current_set_players[0].reject { |c| c.empty? }.each_with_index do |player, index| %>
             <%= render "card", player: player, index: index, team: 1 %>
           <% end %>
-          <%# Vs + Work Team %>
+
           <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">
-            <div class="flex-1 flex flex-col p-8">
-              <%= image_tag('vs.png') %>
+            <div class="flex-1 flex flex-col p-2">
+              <%= image_tag('vs.png', class: 'mt-10') %>
               <% if @tournament.work_group > 0 %>
                 <h3 class="mt-6 text-gray-900 text-sm font-medium underline">Work</h3>
               <% end %>
               <% current_set_players[2]&.each_with_index do |player, index| %>
                 <h3 id="work-player-<%= index %>" class="text-gray-900 text-sm font-medium"><%= player[1] %></h3>
-              <% end %>              
+              <% end %>
             </div>
-          </li>      
-          <%# Team 2 %>
+          </li>
+
           <% current_set_players[1].reject { |c| c.empty? }.each_with_index do |player, index| %>
             <%= render "card", player: player, index: index, team: 2 %>
+          <% end %>
+          <%# Filler card %>
+          <% if @row_columns == 5 %>
+            <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>
           <% end %>
         </ul>
       </div>
@@ -35,9 +43,9 @@
       </div>
       <div class="text-base text-center font-medium text-gray-900">
          (Round <span id="current-round"></span> of <%= @tournament.rounds %>)
-      </div>      
+      </div>
 
-      <div class="overflow-auto mt-6 border border-gray-500 rounded-lg shadow-sm divide-y divide-gray-200">
+      <div class="overflow-auto mt-6 rounded-lg shadow-lg divide-y divide-gray-200">
         <div class="p-6">
           <% if @court == 1 %>
             <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_1_name %> Court</h2>
@@ -45,7 +53,7 @@
           <% if @court == 2 %>
             <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_2_name %> Court</h2>
           <% end %>
-          <table class="min-w-full divide-y divide-gray-300 border-2 border-b-green-500">
+          <table class="min-w-full divide-y divide-gray-300 border-2">
             <thead class="bg-gray-50">
             <% team_count = [*1..@tournament.tournament_sets.where(court: @court).first.tournament_teams.first.users.count - 1] %>
               <tr class="divide-x divide-gray-300">
@@ -59,12 +67,12 @@
                 <% team_count.each do |team_2| %>
                   <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
                 <% end %>
-                <th scope="col" class="px-2 py-3.5 text-center text-md font-semibold text-gray-600">Score</th>  
+                <th scope="col" class="px-2 py-3.5 text-center text-md font-semibold text-gray-600">Score</th>
                 <% if @tournament.work_group > 0 %>
                   <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600">Working</th>
                   <% (1..(@tournament.work_group - 1)).each do |blank| %>
                     <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-600">&nbsp;</th>
-                  <% end %>              
+                  <% end %>
                 <% end %>
               </tr>
             </thead>
@@ -86,7 +94,7 @@
                     <% if @tournament.work_group > 0 %>
                       <% work_team.each do |player| %>
                         <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
-                      <% end %>                     
+                      <% end %>
                     <% end %>
                   </tr>
               <% end %>
@@ -94,7 +102,7 @@
           </table>
         </div>
       </div>
-  
+
     </div>
 
   </div>
