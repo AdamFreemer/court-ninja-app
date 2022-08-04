@@ -8,22 +8,9 @@ class TournamentsController < ApplicationController
   before_action :current_set_players, only: %i[display_single display_multiple status]
 
   def index
-    if params[:filter] == "before-today"
-      @tournaments = Tournament.before_today.order(created_at: :desc)
-    elsif params[:filter] == "today"
-      @tournaments = Tournament.today.order(created_at: :desc)
-    elsif params[:filter] == "all"
-      @tournaments = Tournament.all.order(created_at: :desc)
-    else
-      @tournaments = Tournament.today.order(created_at: :desc)
-    end
-
+    @tournaments = Tournament.all.order(created_at: :desc)
     @tournaments = @tournaments.where(created_by_id: current_user.id) if current_user.is_coach?
 
-    respond_to do |format|
-      format.js { render layout: false }
-      format.html { render 'index' }
-    end
   end
 
   def new
@@ -73,7 +60,7 @@ class TournamentsController < ApplicationController
     # display any court based on court param passed along
     @team_size = @tournament.tournament_sets.first.tournament_teams.first.users.count
     @work_size = @tournament.tournament_sets.first.tournament_teams.third.users.count
-    @row_columns = (@team_size * 2) + 1
+    @row_columns = (@team_size * 2) +   1
     @court = params[:court].to_i
     @court_sets = @tournament.tournament_sets.where(court: @court, round: params[:round])
   end
@@ -102,12 +89,26 @@ class TournamentsController < ApplicationController
       timer_state: @tournament.timer_state,
       timer_mode: @tournament.timer_mode,
       timer_time: @tournament.timer_time,
+      break_time: @tournament.break_time,
       tournament_completed: @tournament.tournament_completed
     }
   end
 
   def timer_operation
-    @tournament.update!(timer_state: params[:state], timer_mode: params[:mode], timer_time: params[:time])
+    # If timer is pausing / stopping, set time to current time on admin page
+    # If timer is resetting, set time to stored break time on server
+    # TODO: refactor number types
+    if params[:state] == "stop"
+      timer_state = 'stop'
+      timer_time = params[:time]
+    elsif params[:state] == "reset"
+      timer_state = 'stop'
+      timer_time = (@tournament.break_time * 60).to_i
+    else
+      timer_time = params[:time]
+      timer_state = params[:state]
+    end
+    @tournament.update!(timer_state: timer_state, timer_mode: params[:mode], timer_time: timer_time)
 
     render json: {
       timer_state: @tournament.timer_state,
@@ -215,7 +216,7 @@ class TournamentsController < ApplicationController
   def current_set_players
     @current_set_players = []
     # This returns the teams with player names for populating on display pages
-    teams = @tournament.tournament_sets.find_by(number: @tournament.current_set, court: 1).tournament_teams.order(:number)
+    teams = @tournament.tournament_sets.find_by(number: @tournament.current_set, court: 1, round: @tournament.current_round).tournament_teams.order(:number)
     user_ids = teams.map { |team| team.users.map(&:id) }
     names_abbreviated = teams.map { |team| team.users.map(&:name_abbreviated) }
     names_initials = teams.map { |team| team.users.map(&:initials) }
@@ -223,7 +224,7 @@ class TournamentsController < ApplicationController
     @current_set_players[0] = current_set_players.map { |team| [team.map(&:first).compact, team.map(&:second).compact, team.map(&:third).compact] }
     return unless @tournament.courts > 1
 
-    teams = @tournament.tournament_sets.find_by(number: @tournament.current_set, court: 2).tournament_teams.order(:number)
+    teams = @tournament.tournament_sets.find_by(number: @tournament.current_set, court: 2, round: @tournament.current_round).tournament_teams.order(:number)
     user_ids = teams.map { |team| team.users.map(&:id) }
     names_abbreviated = teams.map { |team| team.users.map(&:name_abbreviated) }
     names_initials = teams.map { |team| team.users.map(&:initials) }
