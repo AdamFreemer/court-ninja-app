@@ -1,19 +1,29 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[show edit update destroy]
+  before_action :set_user, only: %i[edit update destroy]
 
   def index
     @users =
-    if params[:sort]
-      User.where(is_ghost_player: false).order(params[:sort])
-    else
-      User.where(is_ghost_player: false)
-    end
+      if params[:sort]
+        User.where(is_ghost_player: false).order(params[:sort])
+      else
+        User.where(is_ghost_player: false)
+      end
   end
 
   def show
+    @user = User.find(current_user.id)
+    @positions =
+      [
+        ['Setter (S)', 1],
+        ['Outside Hitter (OH)', 2],
+        ['Opposite/Right Side Hitter (OPPO/RS)', 3],
+        ['Middle (M)', 3],
+        ['Libero (LIB)', 4],
+        ['Defensive Specialist (DS)', 5]
+      ]
     @teams = @user.teams
   end
-\
+
   def new
     @user = User.new
   end
