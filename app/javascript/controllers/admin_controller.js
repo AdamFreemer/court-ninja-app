@@ -27,6 +27,8 @@ export default class extends Controller {
     console.log("== start mode " + this.timer)
     let mode;
     this.tournamentTimerStateValue == "initial" ? mode = "break" : mode = this.tournamentTimerModeValue;
+    // get status first before starting new timer
+
     this.timerOperation("run", mode, this.tournamentTimerValue);
     this.timer = setInterval(() => {
       this.update();
@@ -44,7 +46,7 @@ export default class extends Controller {
   reset() {
     console.log("== reset" + "mode: " + this.tournamentTimerModeValue)
     clearInterval(this.timer);
-    this.timerOperation("stop", "break", this.breakTimeValue);
+    this.timerOperation("reset", "break", this.breakTimeValue);
     this.updatePage();
   }
 
@@ -88,7 +90,7 @@ export default class extends Controller {
   }
 
   timerOperation(state, mode, time) {
-    console.log('== timerOperation: ' + state + '/' + mode)
+    console.log('== timerOperation: ' + state + ' / (break/tournament): ' + mode + ' / ' + time)
     this.tournamentTimerStateValue = state;
     this.tournamentTimerModeValue = mode;
     this.tournamentTimerValue = time;

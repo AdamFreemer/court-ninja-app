@@ -36,6 +36,7 @@ export default class extends Controller {
       type: "GET",
       url: "/tournaments/" + this.tournamentIdValue + "/status",
       success: (response) => {
+        this.breakTimeValue = response.break_time;
         this.tournamentScoresValue = response.scores;
         this.tournamentCompletedValue = response.tournament_completed;
         this.tournamentTimerValue = response.timer_time;
@@ -94,7 +95,10 @@ export default class extends Controller {
     this.secondTarget.innerHTML = second
     // On initial load if connection is slow syncing... will be displayed until removed below
     document.getElementById("syncing").style.display = 'none';
-    document.getElementById("current-round").innerHTML = this.tournamentCurrentRoundServerValue
+    // document.getElementById("current-round").innerHTML = this.tournamentCurrentRoundServerValue
+    if (document.getElementById("current-round")) {
+      document.getElementById("current-round").innerHTML = this.tournamentCurrentRoundServerValue
+    }    
     document.getElementById("current-set").innerHTML = this.tournamentCurrentSetValue
 
     // highlight current set row, show before and after, hide all others

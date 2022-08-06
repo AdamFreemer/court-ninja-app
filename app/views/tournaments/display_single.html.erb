@@ -39,11 +39,13 @@
       </div>
 
       <div class="pt-8 text-2xl text-center font-medium text-gray-900">
-         Set <span id="current-set"></span> of <%= @tournament.tournament_sets.count %>
+         Set <span id="current-set"></span> of <%= @tournament.tournament_sets.where(round: 1, court: 1).count %>
       </div>
-      <div class="text-base text-center font-medium text-gray-900">
-         (Round <span id="current-round"></span> of <%= @tournament.rounds %>)
-      </div>
+      <% if @tournament.rounds > 1 %>
+        <div class="text-base text-center font-medium text-gray-900">
+          (Round <span id="current-round"></span> of <%= @tournament.rounds %>)
+        </div>
+        <% end %>
 
       <div class="overflow-auto mt-6 rounded-lg shadow-lg divide-y divide-gray-200">
         <div class="p-6">

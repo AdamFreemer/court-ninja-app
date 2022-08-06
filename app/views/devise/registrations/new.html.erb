@@ -33,7 +33,7 @@
               <div class="pb-4">
                 <%= f.label :invite_code, "Invite Code?", class: "block text-sm" %>
                 <% if @invite_code %>
-                  <%= f.text_field :invite_code, value: @invite_code, readonly: true, class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500", data: {'invite-target': 'inviteCode', action: 'input->invite#lookupInviteCode' } %>
+                  <%= f.text_field :invite_code, value: @invite_code, disabled: true, readonly: true, class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500", data: {'invite-target': 'inviteCode', action: 'input->invite#lookupInviteCode' } %>
                 <% else %>
                   <%= f.text_field :invite_code, class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500", data: {'invite-target': 'inviteCode', action: 'input->invite#lookupInviteCode' } %>
                 <% end %>
@@ -44,10 +44,14 @@
               <div class="pb-4 text-center text-sm text-red-500 hidden" data-invite-target="error">
                 Invite code invalid.
               </div>
-              <div>
-                <%= f.label :role, "Select Your Role", class: "block text-sm" %>
-                <%= f.select :role, Role.where(show_on_signup_form: true).order(name: :desc).pluck(:name).map(&:capitalize), {}, { class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500" } %>
-              </div>
+              <% if @invite_code %>
+                <%= f.hidden_field :role, value: 'Player' %>
+              <% else %>
+                <div>
+                  <%= f.label :role, "Select Your Role", class: "block text-sm" %>
+                  <%= f.select :role, Role.where(show_on_signup_form: true).order(name: :desc).pluck(:name).map(&:capitalize), {}, { class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500" } %>
+                </div>
+              <% end %>
               <%= f.submit "Sign Up", class: "block w-full px-2 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-500 border border-transparent rounded-lg active:bg-blue-500 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue" %>
             <% end %>
             <hr class="my-8" />
