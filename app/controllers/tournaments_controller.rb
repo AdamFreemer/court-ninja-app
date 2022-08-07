@@ -213,11 +213,7 @@ class TournamentsController < ApplicationController
   end
 
   def current_set_players
-    # return if @tournament.current_set = 0
     @current_set_players = []
-    # This returns the teams with player names for populating on display pages
-    # binding.pry
-    # teams = @tournament.tournament_sets.find_by(number: @tournament.current_set, court: 1).tournament_teams.order(:number)
     teams = @tournament.tournament_sets.find_by(number: @tournament.current_set, court: 1, round: @tournament.current_round).tournament_teams.order(:number)
     user_ids = teams.map { |team| team.users.map(&:id) }
     names_abbreviated = teams.map { |team| team.users.map(&:name_abbreviated) }
