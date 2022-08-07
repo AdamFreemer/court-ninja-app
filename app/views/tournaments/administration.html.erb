@@ -11,13 +11,27 @@
       data-admin-tournament-timer-state-value="<%= @tournament.timer_state %>" 
       data-admin-tournament-timer-value="<%= @tournament.break_time * 60 %>" 
       data-admin-tournament-time-value="<%= @tournament.tournament_time * 60 %>"  
-      class="pb-6 pt-3 text-2xl text-left font-medium text-gray-700">
-      <div class="timer">
+      class="pb-6 pt-3 text-2xl text-left font-medium text-gray-700"
+    >
+      <%# timer section %>
+      <div class="timer text-xl font-extrabold text-gray-600 sm:text-2xl md:text-2xl">
         Timer: <span data-admin-target="minute"></span>:<span data-admin-target="second"></span>
       </div>
-      <button data-action="admin#start" class="inline-flex items-center btn btn-success btn-xs hover:text-rose-50">Timer Start</button>
-      <button data-action="admin#pause" class="inline-flex items-center btn btn-warning btn-xs hover:text-rose-50">Timer Pause</button>
-      <button data-action="admin#reset" class="inline-flex items-center btn btn-alert btn-xs hover:text-rose-50">Timer Reset</button>
+      <button 
+        data-action="admin#start" 
+        class="px-3 py-1.5 inline-flex items-center border border-transparent text-sm font-medium rounded text-indigo-700 bg-green-200 hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >Timer Start</button>
+      <button 
+        data-action="admin#pause" 
+        class="px-3 py-1.5 inline-flex items-center border border-transparent text-sm font-medium rounded text-indigo-700 bg-yellow-200 hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >Timer Pause</button>
+      <button 
+        data-action="admin#reset" 
+        class="px-3 py-1.5 inline-flex items-center border border-transparent text-sm font-medium rounded text-indigo-700 bg-red-200 hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >Timer Reset</button>            
+      <span class="mt-2 block text-sm font-medium text-gray-700">Tournament Time: <%= @tournament.tournament_time%> minutes<br>Break Time: <%= @tournament.break_time %> minutes</span> 
+      <%# end timer section %>
+      
     </div>
   </div>
   <div class="w-1/3">
@@ -100,7 +114,8 @@
         <button onclick="display('3')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 3</button>
         <button onclick="display('4')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 4</button>
       <% end %>
-      <% if @tournament.courts > 1 %>
+      <%# <% if @tournament.courts > 1 %>
+      <% if false %>
         <button onclick="display('all')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display All Courts</button>
       <% end %>
     </div>
