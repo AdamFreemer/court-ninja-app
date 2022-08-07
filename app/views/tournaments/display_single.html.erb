@@ -2,9 +2,32 @@
 <audio id="audio" src="http://www.ufoseries.com/soundEffects/hqAlarmBell.mp3"></audio>
 <div id="courts" data-courts="single"></div>
   <div class="py-10">
-      <%= render "display_timer" %>
+    <div data-controller="display"
+      data-display-tournament-id-value="<%= @tournament.id %>"
+      data-display-tournament-current-round-local-value="<%= @round %>"
+      data-display-tournament-current-round-server-value="<%= @round %>"
+      data-display-tournament-current-set-value="<%= @tournament.current_set %>"
+      data-display-tournament-current-court-value="<%= @court %>" 
+      data-display-tournament-timer-state-value="<%= @tournament.timer_state %>" 
+      data-display-tournament-timer-value="0" 
+      data-display-tournament-time-value="<%= @tournament.tournament_time * 60 %>"   
+      > 
 
-      <div class="overflow-auto mt-12 rounded-lg shadow-lg divide-y divide-gray-200">
+      <%# timer section %>
+      <div class="pt-3 text-6xl text-center font-medium text-gray-900">
+        <div data-display-target="status" id="status" class="pt-3 py-3.5 text-6xl text-center font-medium text-gray-900"></div>
+        <div data-display-target="progress" class="radial-progress text-accent-focus" style="--size:12rem; --value:100;">
+          <div class="timer">
+            <span data-display-target="minute" class="text-6xl"></span>:<span data-display-target="second" class="text-6xl"></span>
+          </div>
+        </div>
+      </div>    
+      <div class="text-center space-y-2">
+        <span data-display-target="syncing" id="syncing" class="pt-3 text-2xl text-center font-medium text-gray-900">Syncing...</span>
+      </div>
+      <%# end timer section %>
+      <%# player card section %>
+      <div class="overflow-auto mt-12 rounded-lg shadow-lg divide-gray-200">
         <ul role="list" class="min-w-full px-2 py-2 items-center grid grid-cols-7 gap-2">
           <% @court == 1 ? current_set_players = @current_set_players[0] : current_set_players = @current_set_players[1] %>
           <%# Filler card %>
@@ -36,8 +59,23 @@
             <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>                  
           <% end %>            
         </ul>
+        <ul role="list" class="min-w-full items-center grid grid-cols-7">
+          <li>&nbsp;</li><li>&nbsp;</li>
+          <li class="col-span-1 text-center bg-white divide-y divide-gray-200">
+            <div class="flex-auto p-2 text-2xl"><%= @tournament.court_side_a_name %> Side</div>
+          </li>   
+          <li>&nbsp;</li>     
+          <li class="col-span-1 text-center bg-white divide-y divide-gray-200">
+            <div class="flex-auto p-2 text-2xl"><%= @tournament.court_side_b_name %> Side</div>
+          </li>   
+          <li>&nbsp;</li><li>&nbsp;</li> 
+        </ul>
       </div>
 
+
+      <%# end player card section %>
+
+      <%# tournament status section %>
       <div class="pt-8 text-2xl text-center font-medium text-gray-900">
          Set <span id="current-set"></span> of <%= @tournament.tournament_sets.where(round: 1, court: 1).count %>
       </div>
@@ -45,8 +83,10 @@
         <div class="text-base text-center font-medium text-gray-900">
           (Round <span id="current-round"></span> of <%= @tournament.rounds %>)
         </div>
-        <% end %>
+      <% end %>
+      <%# end tournament status section %>
 
+      <%# tournament table section %>
       <div class="overflow-auto mt-6 rounded-lg shadow-lg divide-y divide-gray-200">
         <div class="p-6">
           <% if @court == 1 %>

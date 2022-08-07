@@ -51,7 +51,6 @@ export default class extends Controller {
     })
     this.updatePage();
 
-
     this.connectStatus();
     // redirect to next round or results page
     const whichCourt = document.getElementById('courts').dataset.courts
@@ -101,25 +100,6 @@ export default class extends Controller {
     }    
     document.getElementById("current-set").innerHTML = this.tournamentCurrentSetValue
 
-    // highlight current set row, show before and after, hide all others
-    this.setTargets.forEach((element, index) => {
-      if ((element.id) == (this.tournamentCurrentSetValue)) {
-        element.classList.add('font-extrabold');
-        element.classList.add('shadow-md');
-        element.classList.remove('hidden');
-      } else if (element.id == this.tournamentCurrentSetValue + 1) {
-        element.classList.remove('font-extrabold');
-        element.classList.remove('shadow-md');
-        element.classList.remove('hidden');
-      } else if (element.id == this.tournamentCurrentSetValue - 1) {
-        element.classList.remove('font-extrabold');
-        element.classList.remove('shadow-md');
-        element.classList.remove('hidden');      
-      } else {
-        element.classList.add('hidden');
-      }
-    });
-
     // Update Player cards
     let team1Data = []; 
     let team2Data = []; 
@@ -164,8 +144,8 @@ export default class extends Controller {
     }
 
     // Update scores
-    this.teamTargets.forEach((element, index) => {
-      this.tournamentScoresValue.forEach((score, index) => {
+    this.teamTargets.forEach((element) => {
+      this.tournamentScoresValue.forEach((score) => {
         if (element.id == score[0]) {
           element.innerHTML = score[1];
         }
@@ -182,7 +162,8 @@ export default class extends Controller {
     // console.log("tournamentTimerState: ", this.tournamentTimerStateValue)
     // console.log("tournamentTimerMode: ", this.tournamentTimerModeValue)
     // console.log("tournamentRoundServer: ", this.tournamentCurrentRoundServerValue)
-    // console.log("tournamentRoundLocalValue: ", this.tournamentCurrentRoundLocalValue)
+    // console.log("tournamentCurrentSet: ", this.tournamentCurrentSetValue)
     // console.log("tournamentCurrentCourtValue: ", this.tournamentCurrentCourtValue)
+    // console.log("tournamentScoresValue: ", this.tournamentScoresValue)
   }
 }
