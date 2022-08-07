@@ -25,7 +25,7 @@ class TournamentsController < ApplicationController
         User.where(is_ghost_player: false).order(:last_name)
       end
     @tournament = Tournament.new
-    @tournament_times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    @tournament_times = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
     @break_times = [0.5, 1, 1.5, 2.0]
     @tournament_configured = !@tournament.rounds_configured.empty?
   end
@@ -41,7 +41,7 @@ class TournamentsController < ApplicationController
         User.where(is_ghost_player: false).order(:last_name)
       end
     @tournament_configured = !@tournament.rounds_configured.empty?
-    @player_names = @tournament.users.collect { |player| player.name_abbreviated }
+    @player_names = @tournament.users.map(&:name_abbreviated)
   end
 
   def administration; end
@@ -79,7 +79,7 @@ class TournamentsController < ApplicationController
   end
 
   def status
-    scores = @tournament.tournament_teams.map { |t| [t.id, t.score] }
+    scores = @tournament.tournament_teams.collect { |t| [t.id, t.score] }
     render json: {
       scores: scores,
       current_set: @tournament.current_set,
@@ -166,10 +166,9 @@ class TournamentsController < ApplicationController
 
   def update
     cleaned_up_params = tournament_params
-    cleaned_up_params[:players] = cleaned_up_params[:players].compact_blank.map { |i| Integer(i, 10) }
+    cleaned_up_params[:players] = cleaned_up_params[:players].compact_blank.map { |i| Integer(i, 10) } if @tournament.adhoc == false
 
     if @tournament.update(cleaned_up_params)
-      @tournament.save
       if @tournament.rounds_configured.empty?
         if @tournament.generate
           redirect_to administration_tournament_url(@tournament, 1), notice: "Tournament updated and round one successfully created."
@@ -204,7 +203,7 @@ class TournamentsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_tournament
     @tournament = Tournament.find(params[:id])
-    @tournament_times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    @tournament_times = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
     @break_times = [0.5, 1, 1.5, 2.0]
   end
 
@@ -215,7 +214,6 @@ class TournamentsController < ApplicationController
 
   def current_set_players
     @current_set_players = []
-    # This returns the teams with player names for populating on display pages
     teams = @tournament.tournament_sets.find_by(number: @tournament.current_set, court: 1, round: @tournament.current_round).tournament_teams.order(:number)
     user_ids = teams.map { |team| team.users.map(&:id) }
     names_abbreviated = teams.map { |team| team.users.map(&:name_abbreviated) }

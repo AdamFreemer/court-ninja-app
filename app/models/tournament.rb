@@ -198,8 +198,6 @@ class Tournament < ApplicationRecord
         found_current = true
       end
     end
-    # if we find no empty scores, set current_set so no rows are highlighted
-    update(current_set: 0) if found_current == false
   end
 
   def self.sanitized_of_ghosts_players(player_ids)
