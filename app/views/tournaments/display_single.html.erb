@@ -7,11 +7,11 @@
       data-display-tournament-current-round-local-value="<%= @round %>"
       data-display-tournament-current-round-server-value="<%= @round %>"
       data-display-tournament-current-set-value="<%= @tournament.current_set %>"
-      data-display-tournament-current-court-value="<%= @court %>" 
-      data-display-tournament-timer-state-value="<%= @tournament.timer_state %>" 
-      data-display-tournament-timer-value="0" 
-      data-display-tournament-time-value="<%= @tournament.tournament_time * 60 %>"   
-      > 
+      data-display-tournament-current-court-value="<%= @court %>"
+      data-display-tournament-timer-state-value="<%= @tournament.timer_state %>"
+      data-display-tournament-timer-value="0"
+      data-display-tournament-time-value="<%= @tournament.tournament_time * 60 %>"
+      >
 
       <%# timer section %>
       <div class="pt-3 text-6xl text-center font-medium text-gray-900">
@@ -21,7 +21,7 @@
             <span data-display-target="minute" class="text-6xl"></span>:<span data-display-target="second" class="text-6xl"></span>
           </div>
         </div>
-      </div>    
+      </div>
       <div class="text-center space-y-2">
         <span data-display-target="syncing" id="syncing" class="pt-3 text-2xl text-center font-medium text-gray-900">Syncing...</span>
       </div>
@@ -32,9 +32,9 @@
           <% @court == 1 ? current_set_players = @current_set_players[0] : current_set_players = @current_set_players[1] %>
           <%# Filler card %>
           <% if @row_columns == 5 %>
-            <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>                  
+            <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>
           <% end %>
-          
+
           <% current_set_players[0].reject { |c| c.empty? }.each_with_index do |player, index| %>
             <%= render "card", player: player, index: index, team: 1 %>
           <% end %>
@@ -47,28 +47,28 @@
               <% end %>
               <% current_set_players[2]&.each_with_index do |player, index| %>
                 <h3 id="work-player-<%= index %>" class="text-gray-900 text-sm font-medium"><%= player[1] %></h3>
-              <% end %>                
+              <% end %>
             </div>
-          </li>      
+          </li>
 
           <% current_set_players[1].reject { |c| c.empty? }.each_with_index do |player, index| %>
             <%= render "card", player: player, index: index, team: 2 %>
           <% end %>
           <%# Filler card %>
           <% if @row_columns == 5 %>
-            <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>                  
-          <% end %>            
+            <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>
+          <% end %>
         </ul>
         <ul role="list" class="min-w-full items-center grid grid-cols-7">
           <li>&nbsp;</li><li>&nbsp;</li>
           <li class="col-span-1 text-center bg-white divide-y divide-gray-200">
             <div class="flex-auto p-2 text-2xl"><%= @tournament.court_side_a_name %> Side</div>
-          </li>   
-          <li>&nbsp;</li>     
+          </li>
+          <li>&nbsp;</li>
           <li class="col-span-1 text-center bg-white divide-y divide-gray-200">
             <div class="flex-auto p-2 text-2xl"><%= @tournament.court_side_b_name %> Side</div>
-          </li>   
-          <li>&nbsp;</li><li>&nbsp;</li> 
+          </li>
+          <li>&nbsp;</li><li>&nbsp;</li>
         </ul>
       </div>
 
@@ -77,7 +77,7 @@
 
       <%# tournament status section %>
       <div class="pt-8 text-2xl text-center font-medium text-gray-900">
-         Set <span id="current-set"></span> of <%= @tournament.tournament_sets.where(round: 1, court: 1).count %>
+         Match <span id="current-set"></span> of <%= @tournament.tournament_sets.where(round: 1, court: 1).count %>
       </div>
       <% if @tournament.rounds > 1 %>
         <div class="text-base text-center font-medium text-gray-900">
@@ -99,7 +99,7 @@
             <thead class="bg-gray-50">
             <% team_count = [*1..@tournament.tournament_sets.where(court: @court).first.tournament_teams.first.users.count - 1] %>
               <tr class="divide-x divide-gray-300">
-                <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600">Set</th>
+                <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600">Match</th>
                 <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600"><%= @tournament.court_side_a_name %> Side</th>
                 <% team_count.each do |team_1| %>
                   <th scope="col" class="px-1 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
@@ -109,12 +109,12 @@
                 <% team_count.each do |team_2| %>
                   <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600">&nbsp;</th>
                 <% end %>
-                <th scope="col" class="px-2 py-3.5 text-center text-md font-semibold text-gray-600">Score</th>  
+                <th scope="col" class="px-2 py-3.5 text-center text-md font-semibold text-gray-600">Score</th>
                 <% if @tournament.work_group > 0 %>
                   <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600">Working</th>
                   <% (1..(@tournament.work_group - 1)).each do |blank| %>
                     <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-600">&nbsp;</th>
-                  <% end %>              
+                  <% end %>
                 <% end %>
               </tr>
             </thead>
@@ -136,7 +136,7 @@
                     <% if @tournament.work_group > 0 %>
                       <% work_team.each do |player| %>
                         <td class="px-2 py-3.5 text-left text-md text-gray-600"><%= player.name_abbreviated %></td>
-                      <% end %>                     
+                      <% end %>
                     <% end %>
                   </tr>
               <% end %>
@@ -144,7 +144,7 @@
           </table>
         </div>
       </div>
-  
+
     </div>
 
   </div>
