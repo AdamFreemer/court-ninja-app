@@ -6,7 +6,7 @@
     <% elsif round == 1 && court == 3 %>
       <span class=" "><%= tournament.court_3_name %> Court (3)</span>
     <% elsif round == 1 && court == 4 %>
-      <span class=" "><%= tournament.court_3_name %> Court (4)</span>    
+      <span class=" "><%= tournament.court_3_name %> Court (4)</span>
     <% end %>
 
     <% if round == 2 && court == 1 %>
@@ -24,7 +24,7 @@
     <thead class="bg-gray-50 pl-4">
     <% team_count = [*1..tournament.tournament_sets.where(court: 1).first.tournament_teams.first.users.count - 1] %>
       <tr>
-        <th scope="col" class="border-2 pl-2 px-2 py-3.5 text-left text-sm font-semibold text-gray-600">Set</th>
+        <th scope="col" class="border-2 pl-2 px-2 py-3.5 text-left text-sm font-semibold text-gray-600">Match</th>
         <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-600"><%= @tournament.court_side_a_name %> Side</th>
         <% team_count.each do |team_1| %>
           <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-600">&nbsp;</th>
@@ -99,4 +99,3 @@
       <% end %>
     </tbody>
   </table>
-  

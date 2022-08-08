@@ -17,11 +17,11 @@
           <tr class="hover:bg-gray-100 <%= c.active? ? 'bg-white text-gray-900' : 'bg-gray-200 text-gray-400' %>">
             <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-left">
               <% if p.profile_picture.attached? %>
-                <div class="w-[30px] aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-xs border-2 border-gray-600 text-gray-600">
+                <div class="w-[30px] h-[30px] aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-xs border-2 border-gray-600 text-gray-600">
                   <%= image_tag(p.profile_picture, class: 'rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center') %>
                 </div>
               <% else %>
-                <div class="w-[30px] aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-xs border-2 border-gray-600 text-gray-600"><%= p.initials %></div>
+                <div class="w-[30px] h-[30px] aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-xs border-2 border-gray-600 text-gray-600"><%= p.initials %></div>
               <% end %>
             </td>
             <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-left"><%= p.full_name %></td>
