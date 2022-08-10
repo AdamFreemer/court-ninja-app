@@ -115,32 +115,73 @@ export default class extends Controller {
       workData = this?.tournamentCurrentSetPlayersCourt2Value[2]
     }
 
+    let update;
     if (team1Data[2][0] != '-') { // this prevents initial loading of null data
-      document.getElementById('team-1-player-0-initials').innerHTML = team1Data[0][2] || "--"
+      // Team 2 Card 1
       document.getElementById('team-1-player-0-name').innerHTML = team1Data[0][1] || "loading..."
-      document.getElementById('team-1-player-1-initials').innerHTML = team1Data[1][2] || "--"
-      document.getElementById('team-1-player-1-name').innerHTML = team1Data[1][1] || "loading..."
-      if (team1Data[2][0] != '-' && team1Data[2].length != 0) {
-        document.getElementById('team-1-player-2-initials').innerHTML = team1Data[2][2] || "--"
-        document.getElementById('team-1-player-2-name').innerHTML = team1Data[2][1] || "loading..."
+      if (team1Data[0][3] == '') {
+        update = `<div id='team-1-player-0-picture' class='player-initials team-1 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team1Data[0][2] || "--"}</div>`
+      } else {
+        update = `<img src=${team1Data[0][3]} id='team-1-player-0-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
+      }
+      document.getElementById('team-1-player-0-picture').outerHTML = update
 
+      // Team 2 Card 2
+      document.getElementById('team-1-player-1-name').innerHTML = team1Data[1][1] || "loading..."
+      if (team1Data[1][3] == '') {
+        update = `<div id='team-1-player-1-picture' class='player-initials team-1 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team1Data[1][2] || "--"}</div>`
+      } else {
+        update = `<img src=${team1Data[1][3]} id='team-1-player-1-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
+      }
+      document.getElementById('team-1-player-1-picture').outerHTML = update
+
+      // Team 2 Card 3
+      if (team1Data[2][0] != '-' && team1Data[2].length != 0) {
+        if (team1Data[2][3] == '') {
+          update = `<div id='team-1-player-2-picture' class='player-initials team-1 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team1Data[2][2] || "--"}</div>`
+        } else {
+          update = `<img src=${team1Data[2][3]} id='team-1-player-2-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
+        }
+        document.getElementById('team-1-player-2-picture').outerHTML = update
+        document.getElementById('team-1-player-2-name').innerHTML = team1Data[2][1] || "loading..."
       }
     }
+
     if (team2Data[2][0] != '-') { // this prevents initial loading of null data
-      document.getElementById('team-2-player-0-initials').innerHTML = team2Data[0][2] || "--"
+      // Team 2 Card 1
       document.getElementById('team-2-player-0-name').innerHTML = team2Data[0][1] || "loading..."
-      document.getElementById('team-2-player-1-initials').innerHTML = team2Data[1][2] || "--"
+      if (team2Data[0][3] == '') {
+        update = `<div id='team-2-player-0-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team2Data[0][2] || "--"}</div>`
+      } else {
+        update = `<img src=${team2Data[0][3]} id='team-2-player-0-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
+      }
+      document.getElementById('team-2-player-0-picture').outerHTML = update
+
+      // Team 2 Card 2
       document.getElementById('team-2-player-1-name').innerHTML = team2Data[1][1] || "loading..."
+      if (team2Data[1][3] == '') {
+        update = `<div id='team-2-player-1-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team2Data[1][2] || "--"}</div>`
+      } else {
+        update = `<img src=${team2Data[1][3]} id='team-2-player-1-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
+      }
+      document.getElementById('team-2-player-1-picture').outerHTML = update
+      
+      // Team 2 Card 3
       if (team2Data[2][0] != '-' && team2Data[2].length != 0) {
-        document.getElementById('team-2-player-2-initials').innerHTML = team2Data[2][2] || "--"
+        if (team2Data[2][3] == '') {
+          update = `<div id='team-2-player-2-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team2Data[2][2] || "--"}</div>`
+        } else {
+          update = `<img src=${team2Data[2][3]} id='team-2-player-2-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
+        }
+        document.getElementById('team-2-player-2-picture').outerHTML = update
         document.getElementById('team-2-player-2-name').innerHTML = team2Data[2][1] || "loading..."
       }
     }
+
     if (workData[2][0] != '-') { // this prevents initial loading of null data
       document.getElementById('work-player-0').innerHTML = workData[0][1] || ""
       document.getElementById('work-player-1').innerHTML = workData[1][1] || ""
       document.getElementById('work-player-2').innerHTML = workData[2][1] || ""
-
     }
 
     // Update scores
