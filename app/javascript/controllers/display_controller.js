@@ -116,6 +116,10 @@ export default class extends Controller {
     }
 
     let update;
+    // Data Array Guide //////
+    // teamXData[0][1] - element 0, player id: 0, 1 or 2 (2 is optional depending on 2 or 3 person per side config)
+    // teamXData[0][1] - element 1, data: 0 - player id, 1 - player name, 2 - player initials, 3 - photo / picture url
+
     if (team1Data[2][0] != '-') { // this prevents initial loading of null data
       // Team 2 Card 1
       document.getElementById('team-1-player-0-name').innerHTML = team1Data[0][1] || "loading..."
