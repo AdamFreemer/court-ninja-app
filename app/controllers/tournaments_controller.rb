@@ -132,7 +132,7 @@ class TournamentsController < ApplicationController
       tournament_completed: tournament_status,
       rounds_finalized: rounds_finalized,
       current_set: 1,
-      current_round: rounds_finalized == @tournament.rounds ? round : round + 1
+      current_round: current_round_calc(round, @tournament.rounds)
     )
 
     # This logic determines when final round is completed and go to results page
@@ -144,6 +144,14 @@ class TournamentsController < ApplicationController
       redirect_to results_tournament_url(@tournament), notice: 'Tournament results processed.'
     else
       redirect_to tournaments_path
+    end
+  end
+
+  def current_round_calc(current_round, total_rounds)
+    if current_round == total_rounds
+      current_round
+    elsif total_rounds > current_round
+      current_round + 1
     end
   end
 
@@ -214,11 +222,15 @@ class TournamentsController < ApplicationController
 
   def current_set_players
     @current_set_players = []
+    # binding.pry
     teams = @tournament.tournament_sets.find_by(number: @tournament.current_set, court: 1, round: @tournament.current_round).tournament_teams.order(:number)
     user_ids = teams.map { |team| team.users.map(&:id) }
     names_abbreviated = teams.map { |team| team.users.map(&:name_abbreviated) }
     names_initials = teams.map { |team| team.users.map(&:initials) }
-    current_set_players = user_ids.zip(names_abbreviated, names_initials)
+    picture = teams.map { |team| team.users.map { |user| user.profile_picture.attached? ? url_for(user.profile_picture) : '' } }
+    current_set_players = user_ids.zip(names_abbreviated, names_initials, picture)
+    # binding.pry
+
     @current_set_players[0] = current_set_players.map { |team| [team.map(&:first).compact, team.map(&:second).compact, team.map(&:third).compact] }
     return unless @tournament.courts > 1
 
