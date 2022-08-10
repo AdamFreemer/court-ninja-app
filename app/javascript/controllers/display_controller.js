@@ -119,7 +119,7 @@ export default class extends Controller {
     // Data Array Guide //////
     // teamXData[0][1] - element 0, player id: 0, 1 or 2 (2 is optional depending on 2 or 3 person per side config)
     // teamXData[0][1] - element 1, data: 0 - player id, 1 - player name, 2 - player initials, 3 - photo / picture url
-
+    // data:
     console.log("===== team1Data: " + team1Data)
     console.log("===== team2Data: " + team2Data)
     
