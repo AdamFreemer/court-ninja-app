@@ -26,7 +26,7 @@ class TournamentsController < ApplicationController
       end
     @tournament = Tournament.new
     @tournament_times = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
-    @break_times = [0.5, 1, 1.5, 2.0]
+    @break_times = [0.12, 0.5, 1, 1.5, 2.0]
     @tournament_configured = !@tournament.rounds_configured.empty?
   end
 
@@ -57,12 +57,14 @@ class TournamentsController < ApplicationController
   end
 
   def display_single
+    # binding.pry
     # display any court based on court param passed along
     @team_size = @tournament.tournament_sets.first.tournament_teams.first.users.count
     @work_size = @tournament.tournament_sets.first.tournament_teams.third.users.count
-    @row_columns = (@team_size * 2) +   1
+    @row_columns = (@team_size * 2) + 1
     @court = params[:court].to_i
     @court_sets = @tournament.tournament_sets.where(court: @court, round: params[:round])
+    # binding.pry
   end
 
   def display_multiple
@@ -79,6 +81,7 @@ class TournamentsController < ApplicationController
   end
 
   def status
+    # binding.pry
     scores = @tournament.tournament_teams.collect { |t| [t.id, t.score] }
     render json: {
       scores: scores,
@@ -212,7 +215,7 @@ class TournamentsController < ApplicationController
   def set_tournament
     @tournament = Tournament.find(params[:id])
     @tournament_times = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
-    @break_times = [0.5, 1, 1.5, 2.0]
+    @break_times = [0.12, 0.5, 1, 1.5, 2.0]
   end
 
   def set_display
@@ -222,7 +225,7 @@ class TournamentsController < ApplicationController
 
   def current_set_players
     @current_set_players = []
-    # binding.pry
+
     teams = @tournament.tournament_sets.find_by(number: @tournament.current_set, court: 1, round: @tournament.current_round).tournament_teams.order(:number)
     user_ids = teams.map { |team| team.users.map(&:id) }
     names_abbreviated = teams.map { |team| team.users.map(&:name_abbreviated) }
@@ -238,7 +241,8 @@ class TournamentsController < ApplicationController
     user_ids = teams.map { |team| team.users.map(&:id) }
     names_abbreviated = teams.map { |team| team.users.map(&:name_abbreviated) }
     names_initials = teams.map { |team| team.users.map(&:initials) }
-    current_set_players = user_ids.zip(names_abbreviated, names_initials)
+    picture = teams.map { |team| team.users.map { |user| user.profile_picture.attached? ? url_for(user.profile_picture) : '' } }
+    current_set_players = user_ids.zip(names_abbreviated, names_initials, picture)
     @current_set_players[1] = current_set_players.map { |team| [team.map(&:first).compact, team.map(&:second).compact, team.map(&:third).compact] }
   end
 

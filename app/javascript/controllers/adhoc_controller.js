@@ -10,7 +10,7 @@ export default class extends Controller {
   }
 
   connect() {
-    this.setDefaultCourtCount(0);
+    this.setDefaultCourtCount(this.courtsValue);
   }
 
   submit() {

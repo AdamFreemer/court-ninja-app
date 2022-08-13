@@ -34,23 +34,23 @@ module PlayerConfigs
   def self.p6 # 10 rounds
     [
       [[1, 2, 3], [4, 5, 6], []],
-      [[1, 2, 4], [3, 5, 6], []],
+      [[3, 5, 6], [1, 2, 4], []],
       [[1, 2, 5], [3, 4, 6], []],
       [[1, 2, 6], [3, 4, 5], []],
-      [[1, 3, 4], [2, 5, 6], []],
+      [[2, 5, 6], [1, 3, 4], []],
       [[1, 3, 5], [2, 4, 6], []],
-      [[1, 3, 6], [2, 4, 5], []],
+      [[2, 4, 5], [1, 3, 6], []],
       [[1, 4, 5], [2, 3, 6], []],
       [[1, 4, 6], [2, 3, 5], []],
-      [[1, 5, 6], [2, 3, 4], []]
+      [[2, 3, 4], [1, 5, 6], []]
     ]
   end
 
   def self.p5
     [
       [[1, 2], [3, 4], [5]],
-      [[1, 3], [2, 5], [4]],
-      [[1, 4], [3, 5], [2]],
+      [[2, 5], [1, 3], [4]],
+      [[3, 5], [1, 4], [2]],
       [[1, 5], [2, 4], [3]],
       [[2, 3], [4, 5], [1]]
     ]
@@ -206,9 +206,9 @@ module PlayerConfigs
   def self.new_round(players)
     case players[:ids].count
     when 6 # players_count_6
-      { court1: players[:ids], court2: [] }
+      { court1: players[:ids].shuffle, court2: [] }
     when 7 # players_count_7
-      { court1: players[:ids], court2: [] }
+      { court1: players[:ids].shuffle, court2: [] }
     when 8 # players_count_8_9
       { court1: players[:ids].first(8) + [players[:ghosts].first], court2: [] }
     when 9
