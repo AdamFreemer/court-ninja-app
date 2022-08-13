@@ -50,7 +50,6 @@ export default class extends Controller {
       }
     })
     this.updatePage();
-
     this.connectStatus();
     // redirect to next round or results page
     const whichCourt = document.getElementById('courts').dataset.courts
@@ -103,7 +102,7 @@ export default class extends Controller {
     // Update Player cards
     let team1Data = []; 
     let team2Data = []; 
-    let workData= [];
+    let workData = [];
     // load correct payload depending on whether displaying court 1 or 2
     if (this.tournamentCurrentCourtValue == 1) {
       team1Data = this?.tournamentCurrentSetPlayersCourt1Value[0]
@@ -119,35 +118,31 @@ export default class extends Controller {
     // Data Array Guide //////
     // teamXData[0][1] - element 0, player id: 0, 1 or 2 (2 is optional depending on 2 or 3 person per side config)
     // teamXData[0][1] - element 1, data: 0 - player id, 1 - player name, 2 - player initials, 3 - photo / picture url
-    // data:
-    console.log("===== team1Data: " + team1Data)
-    console.log("===== team2Data: " + team2Data)
-    
     if (team1Data[2][0] != '-') { // this prevents initial loading of null data
       // Team 2 Card 1
       document.getElementById('team-1-player-0-name').innerHTML = team1Data[0][1] || "loading..."
-      if (team1Data[0][3] == '') {
-        update = `<div id='team-1-player-0-picture' class='player-initials team-1 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team1Data[0][2] || "--"}</div>`
+      if (team1Data[0][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
+        update = this.initialsDiv(1, 0, team1Data[0][2])
       } else {
-        update = `<img src=${team1Data[0][3]} id='team-1-player-0-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
+        update = this.photoDiv(1, 0, team1Data[0][3])
       }
       document.getElementById('team-1-player-0-picture').outerHTML = update
 
       // Team 2 Card 2
       document.getElementById('team-1-player-1-name').innerHTML = team1Data[1][1] || "loading..."
-      if (team1Data[1][3] == '') {
-        update = `<div id='team-1-player-1-picture' class='player-initials team-1 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team1Data[1][2] || "--"}</div>`
+      if (team1Data[1][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
+        update = this.initialsDiv(1, 1, team1Data[1][2])
       } else {
-        update = `<img src=${team1Data[1][3]} id='team-1-player-1-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
-      }
+        update = this.photoDiv(1, 1, team1Data[1][3])
+      }      
       document.getElementById('team-1-player-1-picture').outerHTML = update
-
+      
       // Team 2 Card 3
       if (team1Data[2][0] != '-' && team1Data[2].length != 0) {
-        if (team1Data[2][3] == '') {
-          update = `<div id='team-1-player-2-picture' class='player-initials team-1 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team1Data[2][2] || "--"}</div>`
+        if (team1Data[2][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
+          update = this.initialsDiv(1, 2, team1Data[2][2])
         } else {
-          update = `<img src=${team1Data[2][3]} id='team-1-player-2-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
+          update = this.photoDiv(1, 2, team1Data[2][3])
         }
         document.getElementById('team-1-player-2-picture').outerHTML = update
         document.getElementById('team-1-player-2-name').innerHTML = team1Data[2][1] || "loading..."
@@ -157,28 +152,28 @@ export default class extends Controller {
     if (team2Data[2][0] != '-') { // this prevents initial loading of null data
       // Team 2 Card 1
       document.getElementById('team-2-player-0-name').innerHTML = team2Data[0][1] || "loading..."
-      if (team2Data[0][3] == '') {
-        update = `<div id='team-2-player-0-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team2Data[0][2] || "--"}</div>`
+      if (team2Data[0][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
+        update = this.initialsDiv(2, 0, team2Data[0][2])
       } else {
-        update = `<img src=${team2Data[0][3]} id='team-2-player-0-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
+        update = this.photoDiv(2, 0, team2Data[0][3])
       }
       document.getElementById('team-2-player-0-picture').outerHTML = update
 
       // Team 2 Card 2
       document.getElementById('team-2-player-1-name').innerHTML = team2Data[1][1] || "loading..."
-      if (team2Data[1][3] == '') {
-        update = `<div id='team-2-player-1-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team2Data[1][2] || "--"}</div>`
+      if (team2Data[1][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
+        update = this.initialsDiv(2, 1, team2Data[1][2])
       } else {
-        update = `<img src=${team2Data[1][3]} id='team-2-player-1-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
+        update = this.photoDiv(2, 1, team2Data[1][3])
       }
       document.getElementById('team-2-player-1-picture').outerHTML = update
       
       // Team 2 Card 3
       if (team2Data[2][0] != '-' && team2Data[2].length != 0) {
-        if (team2Data[2][3] == '') {
-          update = `<div id='team-2-player-2-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team2Data[2][2] || "--"}</div>`
+        if (team2Data[2][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
+          update = this.initialsDiv(2, 2, team2Data[2][2])
         } else {
-          update = `<img src=${team2Data[2][3]} id='team-2-player-2-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
+          update = this.photoDiv(2, 2, team2Data[2][3])
         }
         document.getElementById('team-2-player-2-picture').outerHTML = update
         document.getElementById('team-2-player-2-name').innerHTML = team2Data[2][1] || "loading..."
@@ -199,6 +194,17 @@ export default class extends Controller {
         }
       });  
     });    
+  }
+
+
+  initialsDiv(team, player, data) {
+    // HTML to render initials card
+    return `<div id='team-${team}-player-${player}-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${data || "--"}</div>`
+  }
+
+  photoDiv(team, player, data) {
+        // HTML to render photo on card
+    return `<img src=${data} id='team-${team}-player-${player}-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
   }
 
   connectStatus() {

@@ -118,7 +118,7 @@ class Tournament < ApplicationRecord
       next if player.is_ghost_player == true
 
       score = player.user_scores.where(tournament_id: id, round: round).sum(:score)
-      wins = player.user_scores.where(tournament_id: id, round: round).sum(:win)   
+      wins = player.user_scores.where(tournament_id: id, round: round).sum(:win)
 
       if player.user_scores.where(tournament_id: id, round: round, court: 1).count.positive?
         court_1_scores << [player.id, player.name_abbreviated, score, wins]
@@ -160,8 +160,6 @@ class Tournament < ApplicationRecord
       player[2] = player[2] + lowest_score&.abs + 1
     end
   end
-
-
 
   def scoring(tournament_set)
     # TODO: handle nil scores
