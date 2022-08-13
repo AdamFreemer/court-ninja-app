@@ -88,7 +88,7 @@ class TournamentGenerator
     currently_configured = tournament.rounds_configured
     currently_configured << round.to_i
     tournament.update!(rounds_configured: currently_configured) if tournament.tournament_sets.count.positive?
-  end   
+  end
 
   def player_order(tournament, players) # shuffle if first round, otherwise no
     tournament.rounds_configured == [] ? players.shuffle : players
