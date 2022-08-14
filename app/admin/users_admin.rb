@@ -11,7 +11,7 @@ Trestle.resource(:users) do
   end
 
   collection do
-    model.where(is_ghost_player: false)
+    model.where(is_ghost_player: false, adhoc: false)
   end
 
   scope :all, -> { User.all }, default: true
