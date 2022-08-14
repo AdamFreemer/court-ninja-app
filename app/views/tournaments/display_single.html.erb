@@ -1,6 +1,6 @@
 <%# This is the audio for the bell ringer that executes from the js_display file %>
 <audio id="audio" src="http://www.ufoseries.com/soundEffects/hqAlarmBell.mp3"></audio>
-<div id="courts" data-courts="single" data-current-court="<%= @court %>"></div>
+<div id="courts" data-courts="single"></div>
   <div class="py-10">
     <div data-controller="display"
       data-display-tournament-id-value="<%= @tournament.id %>"
@@ -13,14 +13,24 @@
       data-display-tournament-time-value="<%= @tournament.tournament_time * 60 %>"
       >
 
+
+
       <%# timer section %>
-      <div class="pt-3 text-6xl text-center font-medium text-gray-900">
+      <div class="pt-2 text-6xl text-center font-medium text-gray-900">
         <div data-display-target="status" id="status" class="pt-3 py-3.5 text-6xl text-center font-medium text-gray-900"></div>
-        <div data-display-target="progress" class="radial-progress text-accent-focus" style="--size:12rem; --value:100;">
+
+
+        <div class="overflow-hidden h-14 m-4 text-xs flex rounded bg-green-200">
+          <div id="progress" style="width:29%" data-display-target="progress" class="shadow-lg flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"></div>
+        </div>
+
+        <div class="text-accent-focus" style="--size:12rem; --value:100;">
           <div class="timer">
-            <span data-display-target="minute" class="text-6xl"></span>:<span data-display-target="second" class="text-6xl"></span>
+            <span data-display-target="minute" class="text-6xl"></span>m<span data-display-target="second" class="text-6xl"></span>s
           </div>
         </div>
+
+
       </div>
       <div class="text-center space-y-2">
         <span data-display-target="syncing" id="syncing" class="pt-3 text-2xl text-center font-medium text-gray-900">Syncing...</span>
@@ -74,9 +84,15 @@
       <%# end player card section %>
 
       <%# tournament status section %>
-      <div class="pt-8 text-2xl text-center font-medium text-gray-900">
-         Match <span id="current-set"></span> of <%= @tournament.tournament_sets.where(round: 1, court: 1).count %>
+      <div class="pt-12 text-xl text-center font-large text-gray-900">
+        <ul class="steps lg:steps-horizontal">
+          <% (1..@tournament.tournament_sets.count).each do |set| %>
+            <li data-display-target="step" data-content="<%= set %>" class="<%= set <= @tournament.current_set ? "step-primary" : "" %> step"></li>   
+          <% end %>       
+        </ul>
+        <div class="pt-4">Tournament Progress</div>
       </div>
+
       <% if @tournament.rounds > 1 %>
         <div class="text-base text-center font-medium text-gray-900">
           (Round <span id="current-round"></span> of <%= @tournament.rounds %>)
@@ -85,7 +101,7 @@
       <%# end tournament status section %>
 
       <%# tournament table section %>
-      <div class="overflow-auto mt-6 rounded-lg shadow-lg divide-y divide-gray-200">
+      <div class="overflow-auto mt-6 rounded-lg shadow-xl divide-y divide-gray-500">
         <div class="p-6">
           <% if @court == 1 %>
             <h2 class="text-xl text-center font-medium text-gray-900"><%= @tournament&.court_1_name %> Court</h2>
@@ -95,8 +111,6 @@
           <% end %>
           <table class="min-w-full divide-y divide-gray-300 border-2">
             <thead class="bg-gray-50">
-            <%# binding.pry %>
-            <%= puts "================ @court: #{@court}"%>
             <% team_count = [*1..@tournament.tournament_sets.where(court: @court).first.tournament_teams.first.users.count - 1] %>
               <tr class="divide-x divide-gray-300">
                 <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600">Match</th>

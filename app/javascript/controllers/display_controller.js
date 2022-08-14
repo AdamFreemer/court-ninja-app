@@ -17,7 +17,7 @@ export default class extends Controller {
     tournamentTimerState: String, // "run", "stop", "initial"
     tournamentTimerMode: String, // "break" or "run"
   }
-  static targets = [ "minute", "second", "progress", "syncing", "set", "status", "team" ]
+  static targets = [ "minute", "second", "progress", "syncing", "set", "status", "team", "step" ]
 
   connect() {
     this.updatePage();
@@ -50,6 +50,7 @@ export default class extends Controller {
       }
     })
     this.updatePage();
+
     this.connectStatus();
     // redirect to next round or results page
     const whichCourt = document.getElementById('courts').dataset.courts
@@ -63,26 +64,26 @@ export default class extends Controller {
   }
 
   updatePage() {  
-    // circular progress -- update progress
+    // progress bar -- update progress
     if (this.tournamentTimerModeValue == "tournament") {
       let progress = Math.abs(Math.round((this.tournamentTimerValue / this.tournamentTimeValue) * 100))
-      this.progressTarget.style.setProperty('--value', progress)
+      this.progressTarget.style.setProperty('width', `${progress}%`)
       this.statusTarget.innerHTML = "PLAY"
     } else {
       let progress = Math.abs(Math.round((this.tournamentTimerValue / this.breakTimeValue) * 100))
-      this.progressTarget.style.setProperty('--value', progress)
+      this.progressTarget.style.setProperty('width', "100%")
       this.statusTarget.innerHTML = "GET READY"
     }  
 
     // circular progress -- update color and state
-    if (this.tournamentTimerValue == 0 || this.tournamentTimerStateValue == "stop") {
-      this.progressTarget.style.setProperty('--value', 100)
-      this.progressTarget.classList.remove('text-accent-focus');
-      this.progressTarget.classList.add('text-error');
-    } else {
-      this.progressTarget.classList.remove('text-error');
-      this.progressTarget.classList.add('text-accent-focus');
-    }
+    // if (this.tournamentTimerValue == 0 || this.tournamentTimerStateValue == "stop") {
+    //   // this.progressTarget.style.setProperty('--value', 100)
+    //   this.progressTarget.classList.remove('text-accent-focus');
+    //   this.progressTarget.classList.add('text-error');
+    // } else {
+    //   this.progressTarget.classList.remove('text-error');
+    //   this.progressTarget.classList.add('text-accent-focus');
+    // }
 
     // timer update
     let second = this.tournamentTimerValue % 60;
@@ -97,7 +98,15 @@ export default class extends Controller {
     if (document.getElementById("current-round")) {
       document.getElementById("current-round").innerHTML = this.tournamentCurrentRoundServerValue
     }    
-    document.getElementById("current-set").innerHTML = this.tournamentCurrentSetValue
+
+    // Update tournament steps color for current set
+    this.stepTargets.forEach((element) => {
+      if (element.dataset.content <= this.tournamentCurrentSetValue) {
+        element.classList.add('step-primary');
+      } else {
+        element.classList.remove('step-primary');
+      }
+    });
 
     // Update Player cards
     let team1Data = []; 
@@ -118,31 +127,32 @@ export default class extends Controller {
     // Data Array Guide //////
     // teamXData[0][1] - element 0, player id: 0, 1 or 2 (2 is optional depending on 2 or 3 person per side config)
     // teamXData[0][1] - element 1, data: 0 - player id, 1 - player name, 2 - player initials, 3 - photo / picture url
+    
     if (team1Data[2][0] != '-') { // this prevents initial loading of null data
       // Team 2 Card 1
       document.getElementById('team-1-player-0-name').innerHTML = team1Data[0][1] || "loading..."
-      if (team1Data[0][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
-        update = this.initialsDiv(1, 0, team1Data[0][2])
+      if (team1Data[0][3] == '') {
+        update = `<div id='team-1-player-0-picture' class='player-initials team-1 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team1Data[0][2] || "--"}</div>`
       } else {
-        update = this.photoDiv(1, 0, team1Data[0][3])
+        update = `<img src=${team1Data[0][3]} id='team-1-player-0-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
       }
       document.getElementById('team-1-player-0-picture').outerHTML = update
 
       // Team 2 Card 2
       document.getElementById('team-1-player-1-name').innerHTML = team1Data[1][1] || "loading..."
-      if (team1Data[1][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
-        update = this.initialsDiv(1, 1, team1Data[1][2])
+      if (team1Data[1][3] == '') {
+        update = `<div id='team-1-player-1-picture' class='player-initials team-1 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team1Data[1][2] || "--"}</div>`
       } else {
-        update = this.photoDiv(1, 1, team1Data[1][3])
-      }      
+        update = `<img src=${team1Data[1][3]} id='team-1-player-1-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
+      }
       document.getElementById('team-1-player-1-picture').outerHTML = update
-      
+
       // Team 2 Card 3
       if (team1Data[2][0] != '-' && team1Data[2].length != 0) {
-        if (team1Data[2][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
-          update = this.initialsDiv(1, 2, team1Data[2][2])
+        if (team1Data[2][3] == '') {
+          update = `<div id='team-1-player-2-picture' class='player-initials team-1 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team1Data[2][2] || "--"}</div>`
         } else {
-          update = this.photoDiv(1, 2, team1Data[2][3])
+          update = `<img src=${team1Data[2][3]} id='team-1-player-2-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
         }
         document.getElementById('team-1-player-2-picture').outerHTML = update
         document.getElementById('team-1-player-2-name').innerHTML = team1Data[2][1] || "loading..."
@@ -152,28 +162,28 @@ export default class extends Controller {
     if (team2Data[2][0] != '-') { // this prevents initial loading of null data
       // Team 2 Card 1
       document.getElementById('team-2-player-0-name').innerHTML = team2Data[0][1] || "loading..."
-      if (team2Data[0][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
-        update = this.initialsDiv(2, 0, team2Data[0][2])
+      if (team2Data[0][3] == '') {
+        update = `<div id='team-2-player-0-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team2Data[0][2] || "--"}</div>`
       } else {
-        update = this.photoDiv(2, 0, team2Data[0][3])
+        update = `<img src=${team2Data[0][3]} id='team-2-player-0-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
       }
       document.getElementById('team-2-player-0-picture').outerHTML = update
 
       // Team 2 Card 2
       document.getElementById('team-2-player-1-name').innerHTML = team2Data[1][1] || "loading..."
-      if (team2Data[1][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
-        update = this.initialsDiv(2, 1, team2Data[1][2])
+      if (team2Data[1][3] == '') {
+        update = `<div id='team-2-player-1-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team2Data[1][2] || "--"}</div>`
       } else {
-        update = this.photoDiv(2, 1, team2Data[1][3])
+        update = `<img src=${team2Data[1][3]} id='team-2-player-1-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
       }
       document.getElementById('team-2-player-1-picture').outerHTML = update
       
       // Team 2 Card 3
       if (team2Data[2][0] != '-' && team2Data[2].length != 0) {
-        if (team2Data[2][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
-          update = this.initialsDiv(2, 2, team2Data[2][2])
+        if (team2Data[2][3] == '') {
+          update = `<div id='team-2-player-2-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${team2Data[2][2] || "--"}</div>`
         } else {
-          update = this.photoDiv(2, 2, team2Data[2][3])
+          update = `<img src=${team2Data[2][3]} id='team-2-player-2-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
         }
         document.getElementById('team-2-player-2-picture').outerHTML = update
         document.getElementById('team-2-player-2-name').innerHTML = team2Data[2][1] || "loading..."
@@ -194,17 +204,6 @@ export default class extends Controller {
         }
       });  
     });    
-  }
-
-
-  initialsDiv(team, player, data) {
-    // HTML to render initials card
-    return `<div id='team-${team}-player-${player}-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${data || "--"}</div>`
-  }
-
-  photoDiv(team, player, data) {
-        // HTML to render photo on card
-    return `<img src=${data} id='team-${team}-player-${player}-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
   }
 
   connectStatus() {
