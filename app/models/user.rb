@@ -14,6 +14,7 @@
 #  contact_2_phone        :string
 #  current_sign_in_at     :datetime
 #  current_sign_in_ip     :string
+#  date_of_birth          :date
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  first_name             :string

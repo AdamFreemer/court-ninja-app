@@ -96,6 +96,7 @@ class UsersController < ApplicationController
       :contact_2_name,
       :contact_2_phone,
       :contact_2_address,
+      :date_of_birth,
       :profile_picture
     )
   end
