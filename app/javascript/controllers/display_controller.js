@@ -28,7 +28,7 @@ export default class extends Controller {
   autoStart() {
     this.timer = setInterval(() => {
       this.activePolling();
-    }, 1000);
+    }, 1500);
   }
 
   activePolling() {  
@@ -205,14 +205,13 @@ export default class extends Controller {
     });    
   }
 
-
   initialsDiv(team, player, data) {
     // HTML to render initials card
     return `<div id='team-${team}-player-${player}-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${data || "--"}</div>`
   }
 
   photoDiv(team, player, data) {
-        // HTML to render photo on card
+    // HTML to render photo on card
     return `<img src=${data} id='team-${team}-player-${player}-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
   }
 
