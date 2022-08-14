@@ -33,7 +33,7 @@
               <div class="pb-4">
                 <%= f.label :invite_code, "Invite Code?", class: "block text-sm" %>
                 <% if @invite_code %>
-                  <%= f.text_field :invite_code, value: @invite_code, readonly: true, class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500", data: {'invite-target': 'inviteCode', action: 'input->invite#lookupInviteCode' } %>
+                  <%= f.text_field :invite_code, value: @invite_code, disabled: true, readonly: true, class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500", data: {'invite-target': 'inviteCode', action: 'input->invite#lookupInviteCode' } %>
                 <% else %>
                   <%= f.text_field :invite_code, class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500", data: {'invite-target': 'inviteCode', action: 'input->invite#lookupInviteCode' } %>
                 <% end %>

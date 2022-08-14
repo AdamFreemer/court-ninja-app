@@ -1,6 +1,6 @@
 <%# This is the audio for the bell ringer that executes from the js_display file %>
 <audio id="audio" src="http://www.ufoseries.com/soundEffects/hqAlarmBell.mp3"></audio>
-<div id="courts" data-courts="single"></div>
+<div id="courts" data-courts="single" data-current-court="<%= @court %>"></div>
   <div class="py-10">
     <div data-controller="display"
       data-display-tournament-id-value="<%= @tournament.id %>"
@@ -111,6 +111,8 @@
           <% end %>
           <table class="min-w-full divide-y divide-gray-300 border-2">
             <thead class="bg-gray-50">
+            <%# binding.pry %>
+            <%= puts "================ @court: #{@court}"%>
             <% team_count = [*1..@tournament.tournament_sets.where(court: @court).first.tournament_teams.first.users.count - 1] %>
               <tr class="divide-x divide-gray-300">
                 <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600">Match</th>
