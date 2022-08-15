@@ -16,8 +16,9 @@ export default class extends Controller {
     tournamentTimer: Number, // Actual countdown timer value
     tournamentTimerState: String, // "run", "stop", "initial"
     tournamentTimerMode: String, // "break" or "run"
+    tournamentCourtSets: Number,
   }
-  static targets = [ "minute", "second", "progress", "syncing", "set", "status", "team" ]
+  static targets = [ "minute", "second", "progress", "progressbackground", "syncing", "set", "status", "team", "step" ]
 
   connect() {
     this.updatePage();
@@ -28,7 +29,7 @@ export default class extends Controller {
   autoStart() {
     this.timer = setInterval(() => {
       this.activePolling();
-    }, 1000);
+    }, 1500);
   }
 
   activePolling() {  
@@ -63,25 +64,29 @@ export default class extends Controller {
   }
 
   updatePage() {  
-    // circular progress -- update progress
+    // progress bar -- update progress
     if (this.tournamentTimerModeValue == "tournament") {
       let progress = Math.abs(Math.round((this.tournamentTimerValue / this.tournamentTimeValue) * 100))
-      this.progressTarget.style.setProperty('--value', progress)
+      this.progressTarget.style.setProperty('width', `${progress}%`)
       this.statusTarget.innerHTML = "PLAY"
     } else {
       let progress = Math.abs(Math.round((this.tournamentTimerValue / this.breakTimeValue) * 100))
-      this.progressTarget.style.setProperty('--value', progress)
+      this.progressTarget.style.setProperty('width', "100%")
       this.statusTarget.innerHTML = "GET READY"
     }  
 
-    // circular progress -- update color and state
-    if (this.tournamentTimerValue == 0 || this.tournamentTimerStateValue == "stop") {
-      this.progressTarget.style.setProperty('--value', 100)
-      this.progressTarget.classList.remove('text-accent-focus');
-      this.progressTarget.classList.add('text-error');
+    // progress bar -- update color and state
+    if (this.tournamentTimerValue == 0 || this.tournamentTimerModeValue == "break") {
+      // this.progressTarget.style.setProperty('--value', 100)
+      this.progressTarget.classList.remove('bg-green-500');
+      this.progressTarget.classList.add('bg-yellow-500');
+      this.progressbackgroundTarget.classList.remove('bg-green-200');
+      this.progressbackgroundTarget.classList.add('bg-yellow-200');
     } else {
-      this.progressTarget.classList.remove('text-error');
-      this.progressTarget.classList.add('text-accent-focus');
+      this.progressTarget.classList.remove('bg-yellow-500');
+      this.progressTarget.classList.add('bg-green-500');
+      this.progressbackgroundTarget.classList.remove('bg-yellow-200');
+      this.progressbackgroundTarget.classList.add('bg-green-200');
     }
 
     // timer update
@@ -97,7 +102,17 @@ export default class extends Controller {
     if (document.getElementById("current-round")) {
       document.getElementById("current-round").innerHTML = this.tournamentCurrentRoundServerValue
     }    
-    document.getElementById("current-set").innerHTML = this.tournamentCurrentSetValue
+
+    // step bar -- update for current set
+    this.stepTargets.forEach((element) => {
+      if (element.dataset.content <= this.tournamentCurrentSetValue && this.tournamentCurrentRoundServerValue == 1) {
+        element.classList.add('step-primary')
+      } else if (element.dataset.content <= (this.tournamentCurrentSetValue + this.tournamentCourtSetsValue) && this.tournamentCurrentRoundServerValue == 2) {
+        element.classList.add('step-primary');
+      } else {
+        element.classList.remove('step-primary');
+      }
+    });
 
     // Update Player cards
     let team1Data = []; 
@@ -118,6 +133,7 @@ export default class extends Controller {
     // Data Array Guide //////
     // teamXData[0][1] - element 0, player id: 0, 1 or 2 (2 is optional depending on 2 or 3 person per side config)
     // teamXData[0][1] - element 1, data: 0 - player id, 1 - player name, 2 - player initials, 3 - photo / picture url
+
     if (team1Data[2][0] != '-') { // this prevents initial loading of null data
       // Team 2 Card 1
       document.getElementById('team-1-player-0-name').innerHTML = team1Data[0][1] || "loading..."
@@ -196,14 +212,13 @@ export default class extends Controller {
     });    
   }
 
-
   initialsDiv(team, player, data) {
     // HTML to render initials card
     return `<div id='team-${team}-player-${player}-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${data || "--"}</div>`
   }
 
   photoDiv(team, player, data) {
-        // HTML to render photo on card
+    // HTML to render photo on card
     return `<img src=${data} id='team-${team}-player-${player}-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
   }
 
@@ -219,5 +234,6 @@ export default class extends Controller {
     // console.log("tournamentCurrentSet: ", this.tournamentCurrentSetValue)
     // console.log("tournamentCurrentCourtValue: ", this.tournamentCurrentCourtValue)
     // console.log("tournamentScoresValue: ", this.tournamentScoresValue)
+    console.log("this.tournamentCourtSetsValue: ", this.tournamentCourtSetsValue)
   }
 }
