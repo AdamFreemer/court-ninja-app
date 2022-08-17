@@ -37,6 +37,7 @@ export default class extends Controller {
       type: "GET",
       url: "/tournaments/" + this.tournamentIdValue + "/status",
       success: (response) => {
+        console.log('==== timer: ' + new Date(response.timer * 1000))
         this.breakTimeValue = response.break_time;
         this.tournamentScoresValue = response.scores;
         this.tournamentCompletedValue = response.tournament_completed;

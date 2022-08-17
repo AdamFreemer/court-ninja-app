@@ -93,7 +93,8 @@ class TournamentsController < ApplicationController
       timer_mode: @tournament.timer_mode,
       timer_time: @tournament.timer_time,
       break_time: @tournament.break_time,
-      tournament_completed: @tournament.tournament_completed
+      tournament_completed: @tournament.tournament_completed,
+      timer: @tournament.created_at.to_i
     }
   end
 

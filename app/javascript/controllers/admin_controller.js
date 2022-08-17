@@ -13,16 +13,6 @@ export default class extends Controller {
   }
   static targets = [ "minute", "second" ]
 
-  connect() {
-    console.log("breakTime: ", this.breakTimeValue)
-    console.log("tournamentTime: ", this.tournamentTimeValue)
-    console.log("tournamentTimer: ", this.tournamentTimerValue)
-    console.log("tournamentTimerState: ", this.tournamentTimerStateValue)
-    console.log("tournamentTimerMode: ", this.tournamentTimerModeValue)
-    this.updatePage();
-    this.autoStart();
-  }
-
   start() {
     console.log("== start mode " + this.timer)
     let mode;
@@ -76,7 +66,7 @@ export default class extends Controller {
     } else {
       this.timerOperation(this.tournamentTimerStateValue, this.tournamentTimerModeValue, this.tournamentTimerValue);
     }
-  }
+  };
 
   updatePage() {  
     let time;
@@ -87,9 +77,11 @@ export default class extends Controller {
     minute = (minute < 10) ? + minute : minute;
     this.minuteTarget.innerHTML = minute
     this.secondTarget.innerHTML = second
-  }
+  };
 
   timerOperation(state, mode, time) {
+    // TimerState: "run", "stop", "initial"
+    // TimerMode: "break" or "run"
     console.log('== timerOperation: ' + state + ' / (break/tournament): ' + mode + ' / ' + time)
     this.tournamentTimerStateValue = state;
     this.tournamentTimerModeValue = mode;
@@ -112,4 +104,15 @@ export default class extends Controller {
       }
     })
   };
+
+  connect() {
+    console.log("breakTime: ", this.breakTimeValue)
+    console.log("tournamentTime: ", this.tournamentTimeValue)
+    console.log("tournamentTimer: ", this.tournamentTimerValue)
+    console.log("tournamentTimerState: ", this.tournamentTimerStateValue)
+    console.log("tournamentTimerMode: ", this.tournamentTimerModeValue)
+    this.updatePage();
+    this.autoStart();
+  };
+
 }
