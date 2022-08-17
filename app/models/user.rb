@@ -87,7 +87,7 @@ class User < ApplicationRecord
   def name_abbreviated
     if is_ghost_player
       'Ghost Player'
-    elsif nick_name
+    elsif nick_name.present?
       nick_name.capitalize
     else
       "#{first_name&.capitalize} #{last_name[0]&.capitalize}"
