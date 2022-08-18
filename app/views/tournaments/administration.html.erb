@@ -4,34 +4,34 @@
 <div class="mx-auto mb-32">
   <div class="flex">
   <div class="w-1/3">
-    <div data-controller="admin" 
+    <div data-controller="admin"
       data-admin-tournament-id-value="<%= @tournament.id %>"
-      data-admin-tournament-round-value="<%= round %>" 
-      data-admin-break-time-value="<%= @tournament.break_time * 60 %>" 
-      data-admin-tournament-timer-state-value="<%= @tournament.timer_state %>" 
-      data-admin-tournament-timer-value="<%= @tournament.break_time * 60 %>" 
-      data-admin-tournament-time-value="<%= @tournament.tournament_time * 60 %>"  
+      data-admin-tournament-round-value="<%= round %>"
+      data-admin-break-time-value="<%= @tournament.break_time * 60 %>"
+      data-admin-tournament-timer-state-value="<%= @tournament.timer_state %>"
+      data-admin-tournament-timer-value="<%= @tournament.break_time * 60 %>"
+      data-admin-tournament-time-value="<%= @tournament.tournament_time * 60 %>"
       class="pb-6 pt-3 text-2xl text-left font-medium text-gray-700"
     >
       <%# timer section %>
       <div class="timer text-xl font-extrabold text-gray-600 sm:text-2xl md:text-2xl">
         Timer: <span data-admin-target="minute"></span>:<span data-admin-target="second"></span>
       </div>
-      <button 
-        data-action="admin#start" 
+      <button
+        data-action="admin#start"
         class="px-3 py-1.5 inline-flex items-center border border-transparent text-sm font-medium rounded text-indigo-700 bg-green-200 hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >Timer Start</button>
-      <button 
-        data-action="admin#pause" 
+      <button
+        data-action="admin#pause"
         class="px-3 py-1.5 inline-flex items-center border border-transparent text-sm font-medium rounded text-indigo-700 bg-yellow-200 hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >Timer Pause</button>
-      <button 
-        data-action="admin#reset" 
+      <button
+        data-action="admin#reset"
         class="px-3 py-1.5 inline-flex items-center border border-transparent text-sm font-medium rounded text-indigo-700 bg-red-200 hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >Timer Reset</button>            
-      <span class="mt-2 block text-sm font-medium text-gray-700">Tournament Time: <%= @tournament.tournament_time%> minutes<br>Break Time: <%= @tournament.break_time %> minutes</span> 
+      >Timer Reset</button>
+      <span class="mt-2 block text-sm font-medium text-gray-700">Tournament Time: <%= @tournament.tournament_time%> minutes<br>Break Time: <%= @tournament.break_time %> minutes</span>
       <%# end timer section %>
-      
+
     </div>
   </div>
   <div class="w-1/3">
@@ -73,11 +73,11 @@
     </div>
     <br>
     <div class="flex">
-      <div class="w-1/4"></div>     
+      <div class="w-1/4"></div>
       <div class="w-1/2">
         <%= render "table", tournament: @tournament, court: 3, round: round, tournament_sets: @tournament.tournament_sets.where(court: 3, round: round) %>
-      </div>      
-      <div class="w-1/4"></div> 
+      </div>
+      <div class="w-1/4"></div>
     </div>
   <% elsif @tournament.courts == 4 %>
     <div class="flex space-x-5">
@@ -103,36 +103,36 @@
   <br>
   <div class="flow-root">
     <div class="float-left space-x-4">
-      <button onclick="display('1')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court <%= @tournament.courts > 1 ? 1 : "" %></button>
+      <button onclick="display('1')" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-slate-700 bg-slate-200 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">Display Court <%= @tournament.courts > 1 ? 1 : "" %></button>
       <% if @tournament.courts == 2 %>
-        <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 2</button>
+        <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-slate-700 bg-slate-200 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">Display Court 2</button>
       <% elsif @tournament.courts == 3 %>
-        <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 2</button>
-        <button onclick="display('3')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 3</button>
+        <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-slate-700 bg-slate-200 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">Display Court 2</button>
+        <button onclick="display('3')" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-slate-700 bg-slate-200 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">Display Court 3</button>
       <% elsif @tournament.courts == 4 %>
-        <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 2</button>
-        <button onclick="display('3')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 3</button>
-        <button onclick="display('4')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display Court 4</button>
+        <button onclick="display('2')" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-slate-700 bg-slate-200 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">Display Court 2</button>
+        <button onclick="display('3')" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-slate-700 bg-slate-200 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">Display Court 3</button>
+        <button onclick="display('4')" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-slate-700 bg-slate-200 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">Display Court 4</button>
       <% end %>
       <%# <% if @tournament.courts > 1 %>
       <% if false %>
-        <button onclick="display('all')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm">Display All Courts</button>
+        <button onclick="display('all')" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-slate-700 bg-slate-200 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">Display All Courts</button>
       <% end %>
     </div>
     <div class="float-right space-x-4">
-      <%= link_to 'Back to Tournaments', tournaments_path, class: "inline-flex items-center px-2.5 py-1.5 btn btn-primary btn-sm" %>
-      <%= link_to "Edit Tournament Info", edit_tournament_path(@tournament), class: "inline-flex items-center px-2.5 py-1.5 btn btn-primary btn-sm" %>
+      <%= link_to 'Back to Tournaments', tournaments_path, class: "inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+      <%= link_to "Edit Tournament Info", edit_tournament_path(@tournament), class: "inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
       <% if round != 1 %>
-        <%= link_to "Round One", administration_tournament_path(@tournament, 1), class: "inline-flex items-center px-2.5 py-1.5 btn btn-primary btn-sm" %>
+        <%= link_to "Round One", administration_tournament_path(@tournament, 1), class: "inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
       <% end %>
       <% if round != 2 && @tournament.rounds_configured.include?(2) %>
-        <%= link_to "Round Two", administration_tournament_path(@tournament, 2), class: "inline-flex items-center px-2.5 py-1.5 btn btn-primary btn-sm" %>
+        <%= link_to "Round Two", administration_tournament_path(@tournament, 2), class: "inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
       <% end %>
       <% if (round == 1 && !@tournament.rounds_finalized.include?(1)) || (round == 2 && !@tournament.rounds_finalized.include?(2)) %>
-        <button id="update-scores" onclick="updateScores('update')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">Update Scores</button>
+        <button id="update-scores" onclick="updateScores('update')" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-rose-700 bg-rose-100 hover:bg-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500">Update Scores</button>
       <% end %>
       <% if (@tournament.rounds_finalized.count < @tournament.rounds) %>
-        <button id="finalize-round" onclick="updateScores('finalize')" class="inline-flex items-center px-2.5 py-1.5 btn btn-sm btn-error hover:text-rose-50">
+        <button id="finalize-round" onclick="updateScores('finalize')" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm font-medium rounded text-rose-700 bg-rose-100 hover:bg-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500">
           Finalize Round <%= @tournament.rounds > 1 ? round : "" %>
         </button>
       <% end %>
