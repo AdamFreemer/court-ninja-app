@@ -24,8 +24,10 @@
 #  current_round        :integer          default(0)
 #  current_set          :integer          default(1)
 #  date                 :datetime
+#  match_time           :integer
 #  name                 :string
 #  players              :integer          default([]), is an Array
+#  pre_match_time       :integer
 #  rounds               :integer
 #  rounds_configured    :integer          default([]), is an Array
 #  rounds_finalized     :integer          default([]), is an Array

@@ -80,7 +80,7 @@ export default class extends Controller {
   };
 
   timerOperation(state, mode, time) {
-    // TimerState: "run", "stop", "initial"
+    // TimerState: "run", "stop", "initial" (default "initial")
     // TimerMode: "break" or "run"
     console.log('== timerOperation: ' + state + ' / (break/tournament): ' + mode + ' / ' + time)
     this.tournamentTimerStateValue = state;
