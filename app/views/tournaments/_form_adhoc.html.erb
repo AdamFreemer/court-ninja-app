@@ -1,5 +1,5 @@
 <div class="text-md font-medium text-gray-800">
-  Tournament time: <span id="tourny-time">--</span><br>
+  Total Tournament Time: <span id="tourny-time">--</span><br>
     <div id="duplicate-notice" class="text-rose-500">&nbsp;</div>
 </div>
 
@@ -51,7 +51,7 @@
               </div>
 
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
-                <label for="tournament-time" class="block text-sm font-medium text-gray-700">Tournament Time (minutes)<span class="text-gray-400"></span></label>
+                <label for="tournament-time" class="block text-sm font-medium text-gray-700">Match Time Length (minutes)<span class="text-gray-400"></span></label>
                 <%= form.select :tournament_time, @tournament_times, { :placeholder => "Please Select" }, 
                   data: { action: "change->adhoc#timeSelects" }, 
                   id: "tournament-time", 
@@ -59,7 +59,7 @@
                 %>
               </div>
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
-                <label for="break-time" class="block text-sm font-medium text-gray-700">Tournament Break Time (minutes)<span class="text-gray-400"></span></label>
+                <label for="break-time" class="block text-sm font-medium text-gray-700">Break Time Length (minutes)<span class="text-gray-400"></span></label>
                 <%= form.select :break_time, @break_times, { :placeholder => "Please Select" }, 
                   data: { action: "change->adhoc#timeSelects" }, 
                   id: "break-time", 
