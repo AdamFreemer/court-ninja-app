@@ -2,7 +2,7 @@
   <% @tournaments.where(adhoc: true).each do |tournament| %>
     <tr class="bg-grey">
       <% if current_user.has_role? "admin" %>
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.created_by.full_name %></td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament&.created_by&.full_name if tournament&.created_by %></td>
       <% end %>
       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.name %></td>
       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.created_at.strftime("%b %e, %Y | %l:%M %p") %></td>
