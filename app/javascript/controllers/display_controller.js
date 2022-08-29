@@ -18,7 +18,7 @@ export default class extends Controller {
     tournamentTimerMode: String, // "break" or "run"
     tournamentCourtSets: Number,
   }
-  static targets = [ "minute", "second", "progress", "progressbackground", "syncing", "set", "status", "team", "step" ]
+  static targets = [ "minute", "second", "progress", "progressbackground", "syncing", "set", "status", "team", "step", "spinner" ]
 
   connect() {
     this.updatePage();
@@ -70,10 +70,14 @@ export default class extends Controller {
       let progress = Math.abs(Math.round((this.tournamentTimerValue / this.tournamentTimeValue) * 100))
       this.progressTarget.style.setProperty('width', `${progress}%`)
       this.statusTarget.innerHTML = "PLAY"
+      this.spinnerTarget.classList.remove('timer-loader-static');
+      this.spinnerTarget.classList.add('timer-loader');
     } else {
       let progress = Math.abs(Math.round((this.tournamentTimerValue / this.breakTimeValue) * 100))
       this.progressTarget.style.setProperty('width', "100%")
       this.statusTarget.innerHTML = "GET READY"
+      this.spinnerTarget.classList.add('timer-loader-static');
+      this.spinnerTarget.classList.remove('timer-loader');
     }  
 
     // progress bar -- update color and state

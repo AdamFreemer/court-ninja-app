@@ -27,6 +27,10 @@ class TournamentsController < ApplicationController
     @tournament = Tournament.new
     @tournament_times = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
     @break_times = [0.12, 0.5, 1, 1.5, 2.0]
+
+    @match_times = [["1 minute", 60], ["2 minutes", 120], ["3 minutes", 180], ["4 minutes", 240], ["5 minutes", 300], 
+                    ["6 minutes", 360], ["7 minutes", 420], ["8 minutes", 480], ["9 minutes", 540], ["10 minutes", 600]]
+    @pre_match_times = [["5 seconds", 5], ["30 seconds", 30], ["1.0 minute", 60], ["1.5 minutes", 90], ["2.0 minutes", 120]]
     @tournament_configured = !@tournament.rounds_configured.empty?
   end
 
@@ -160,6 +164,7 @@ class TournamentsController < ApplicationController
   end
 
   def create
+    binding.pry 
     @tournament = Tournament.new(tournament_params)
     @tournament.created_by = current_user
 
@@ -217,6 +222,9 @@ class TournamentsController < ApplicationController
     @tournament = Tournament.find(params[:id])
     @tournament_times = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
     @break_times = [0.12, 0.5, 1, 1.5, 2.0]
+    @match_times = [["1 minute", 60], ["2 minutes", 120], ["3 minutes", 180], ["4 minutes", 240], ["5 minutes", 300], 
+    ["6 minutes", 360], ["7 minutes", 420], ["8 minutes", 480], ["9 minutes", 540], ["10 minutes", 600]]
+    @pre_match_times = [["5 seconds", 5], ["30 seconds", 30], ["1.0 minute", 60], ["1.5 minutes", 90], ["2.0 minutes", 120]]
   end
 
   def set_display
