@@ -7,7 +7,7 @@
     }
   };
 
-  function updateScores(finalize) {
+  function updateScores(finalize) { 
     var score_data = $('input[name^=team-]').map(function(idx, elem) {
       return { team_id: $(elem).attr('id'), score: $(elem).val() }
     }).get();
@@ -25,9 +25,12 @@
           if (finalize == 'update') {
             $('#update-scores').addClass("loading")
             location.reload();
-          } else {
-            $('#finalize-round').addClass("loading")
-            window.location.href = "/tournament/process_round/<%= @tournament.id %>/<%= round %>";
+          } else if (finalize == 'finalize') {
+            if (confirm('Are you sure you want to finalize round?')) {
+              window.location.href = "/tournament/process_round/<%= @tournament.id %>/<%= round %>";
+            } else {
+              return false;
+            }
           }
         }
     })
