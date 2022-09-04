@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="flex gap-6">
-                <% if current_user.is_player? %>
+                <% if current_user.is_athlete? %>
                   <div class="flex-1">
                     <label for="date_of_birth" class="block text-sm font-medium text-gray-700">Date of Birth</label>
                     <%= form.date_field :date_of_birth, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
@@ -83,7 +83,7 @@
 
 
                 <div class="flex gap-6">
-                <% if current_user.is_player? %>
+                <% if current_user.is_athlete? %>
                   <div class="flex-1">
                     <label for="jersey_number" class="block text-sm font-medium text-gray-700">Jersey Number</label>
                     <%= form.text_field :jersey_number, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
@@ -95,7 +95,7 @@
                 <% end %>
                 </div>
 
-                <% if current_user.is_player? %>
+                <% if current_user.is_athlete? %>
                   <h2 class="text-lg leading-6 font-medium text-gray-900">Contact 1</h2>
                   <div>
                     <label for="contact_1_name" class="block text-sm font-medium text-gray-700">Name</label>

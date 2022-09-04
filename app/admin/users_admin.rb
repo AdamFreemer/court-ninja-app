@@ -37,7 +37,10 @@ Trestle.resource(:users) do
       col(sm: 6) { text_field :last_name, label: 'Last Name' }
     end
 
-    text_field :phone_number, label: 'Phone Number'
+    row do
+      col(sm: 6) { text_field :phone_number, label: 'Phone Number' }
+      col(sm: 6) { select :role_ids, Role.all.map { |r| [r.name.humanize.titleize, r.id] }, { label: 'Roles' }, multiple: true }
+    end
 
     text_field :address
     row do

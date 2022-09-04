@@ -16,7 +16,7 @@ class CreateUserRoleRequests < ActiveRecord::Migration[7.0]
 
     add_index(:user_role_requests_roles, [ :user_role_request_id, :role_id ], name: 'index_user_role_requests_roles_on_user_role_request_and_role')
 
-    ['coach', 'player', 'organization'].each do |role_name|
+    ['coach', 'athlete', 'organization'].each do |role_name|
       role = Role.find_or_create_by(name: role_name)
       role.show_on_signup_form = true
       role.save!

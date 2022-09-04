@@ -45,7 +45,7 @@
                 Invite code invalid.
               </div>
               <% if @invite_code %>
-                <%= f.hidden_field :role, value: 'Player' %>
+                <%= f.hidden_field :role, value: 'athlete' %>
               <% else %>
                 <div>
                   <%= f.label :role, "Select Your Role", class: "block text-sm" %>
