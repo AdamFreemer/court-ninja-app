@@ -1,7 +1,7 @@
 <div class="md:grid md:grid-cols-4 md:gap-6 max-w-7xl mx-auto">
   <div class="mt-5 md:mt-0 md:col-span-1">
     <%= render partial: "users/profile_picture", locals: { user: current_user } %>
-    <% if current_user.is_player? %>
+    <% if current_user.is_athlete? %>
       <div class="w-full flex justify-center">
         <a data-modal-toggle="enterInviteCode" class="inline-flex items-center px-2.5 py-1.5 mt-4 border border-transparent text-lg font-medium rounded text-indigo-500 hover:text-indigo-700 cursor-pointer text-center">Enter Invite Code</a>
       </div>
@@ -12,7 +12,7 @@
     <div class="mt-4">
       <ul id="tabs" class="inline-flex w-full px-1 pt-2 ">
         <li class="px-4 py-2 -mb-px font-semibold text-gray-900 border-b-2 border-blue-400"><a id="profile-tab" href="#profile">Profile</a></li>
-        <% if current_user.is_player? %>
+        <% if current_user.is_athlete? %>
           <li class="px-4 py-2 font-semibold text-gray-900"><a href="#teams">My Teams</a></li>
         <% end %>
       </ul>
@@ -20,7 +20,7 @@
         <div id="profile" class="p-4">
           <%= render partial: "users/form", locals: { user: current_user } %>
         </div>
-        <% if current_user.is_player? %>
+        <% if current_user.is_athlete? %>
           <div id="teams" class="hidden p-4">
             <%= render "users/teams/index" %>
           </div>
