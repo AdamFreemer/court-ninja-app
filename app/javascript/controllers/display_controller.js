@@ -15,7 +15,6 @@ export default class extends Controller {
     tournamentTime: Number, // static value for Tournament Time
     tournamentTimer: Number, // Actual countdown timer value
     tournamentTimerState: String, // "run", "stop", "initial"
-    tournamentTimerMode: String, // "break" or "run"
     tournamentCourtSets: Number,
   }
   static targets = [ "minute", "second", "progress", "progressbackground", "syncing", "set", "status", "team", "step", "spinner" ]
@@ -37,12 +36,10 @@ export default class extends Controller {
       type: "GET",
       url: "/tournaments/" + this.tournamentIdValue + "/status",
       success: (response) => {
-        console.log('==== timer: ' + new Date(response.timer * 1000))
         this.breakTimeValue = response.break_time;
         this.tournamentScoresValue = response.scores;
         this.tournamentCompletedValue = response.tournament_completed;
         this.tournamentTimerValue = response.timer_time;
-        this.tournamentTimerModeValue = response.timer_mode;
         this.tournamentTimerStateValue = response.timer_state;
         this.tournamentCurrentSetValue = response.current_set;
         this.tournamentCurrentSetPlayersCourt1Value = response.current_set_players_court1;
@@ -66,32 +63,33 @@ export default class extends Controller {
 
   updatePage() {  
     // progress bar -- update progress
-    if (this.tournamentTimerModeValue == "tournament") {
-      let progress = Math.abs(Math.round((this.tournamentTimerValue / this.tournamentTimeValue) * 100))
-      this.progressTarget.style.setProperty('width', `${progress}%`)
+    const totalMatchTime = this.breakTimeValue + this.tournamentTimeValue
+    let progress = Math.abs(Math.round((this.tournamentTimerValue / totalMatchTime) * 100))
+    this.progressTarget.style.setProperty('width', `${progress}%`)
+    console.log(`== this.tournamentTimerValue: ${this.tournamentTimerValue} | this.tournamentTimeValue: ${this.tournamentTimeValue} | ${this.tournamentTimerValue <= this.tournamentTimeValue}`)
+    if (this.tournamentTimerValue <= this.tournamentTimeValue) { // break time
+
       this.statusTarget.innerHTML = "PLAY"
       this.spinnerTarget.classList.remove('timer-loader-static');
       this.spinnerTarget.classList.add('timer-loader');
     } else {
-      let progress = Math.abs(Math.round((this.tournamentTimerValue / this.breakTimeValue) * 100))
-      this.progressTarget.style.setProperty('width', "100%")
+      // this.progressTarget.style.setProperty('width', "100%")
       this.statusTarget.innerHTML = "GET READY"
       this.spinnerTarget.classList.add('timer-loader-static');
       this.spinnerTarget.classList.remove('timer-loader');
     }  
 
     // progress bar -- update color and state
-    if (this.tournamentTimerValue == 0 || this.tournamentTimerModeValue == "break") {
-      // this.progressTarget.style.setProperty('--value', 100)
-      this.progressTarget.classList.remove('bg-green-500');
-      this.progressTarget.classList.add('bg-yellow-500');
-      this.progressbackgroundTarget.classList.remove('bg-green-200');
-      this.progressbackgroundTarget.classList.add('bg-yellow-200');
-    } else {
+    if (this.tournamentTimerValue <= this.tournamentTimeValue) {
       this.progressTarget.classList.remove('bg-yellow-500');
       this.progressTarget.classList.add('bg-green-500');
       this.progressbackgroundTarget.classList.remove('bg-yellow-200');
       this.progressbackgroundTarget.classList.add('bg-green-200');
+    } else {
+      this.progressTarget.classList.remove('bg-green-500');
+      this.progressTarget.classList.add('bg-yellow-500');
+      this.progressbackgroundTarget.classList.remove('bg-green-200');
+      this.progressbackgroundTarget.classList.add('bg-yellow-200');
     }
 
     // timer update
@@ -234,7 +232,6 @@ export default class extends Controller {
     // console.log("tournamentTime: ", this.tournamentTimeValue)
     // console.log("tournamentTimer: ", this.tournamentTimerValue)
     // console.log("tournamentTimerState: ", this.tournamentTimerStateValue)
-    // console.log("tournamentTimerMode: ", this.tournamentTimerModeValue)
     // console.log("tournamentRoundServer: ", this.tournamentCurrentRoundServerValue)
     // console.log("tournamentCurrentSet: ", this.tournamentCurrentSetValue)
     // console.log("tournamentCurrentCourtValue: ", this.tournamentCurrentCourtValue)

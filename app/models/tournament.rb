@@ -8,6 +8,8 @@
 #  address1             :string
 #  address2             :string
 #  adhoc                :boolean          default(FALSE)
+#  admin_view_current   :integer
+#  admin_views          :json
 #  break_time           :decimal(5, 1)
 #  city                 :string
 #  configuration        :string
@@ -64,7 +66,8 @@ class Tournament < ApplicationRecord
   scope :before_today, -> { where("created_at < ?", 1.days.ago) }
   scope :today, -> { where("created_at > ?", DateTime.now.beginning_of_day) }
 
-  after_save :associate_players
+  after_save :associate_players  #TODO: refactor to not hit db when not needed
+
 
   def generate
     return false unless players.count.between?(6, 27)
@@ -130,16 +133,16 @@ class Tournament < ApplicationRecord
       end
       if player.user_scores.where(tournament_id: id, round: round, court: 3).count.positive?
         court_3_scores << [player.id, player.name_abbreviated, score, wins]
-      end     
+      end
       if player.user_scores.where(tournament_id: id, round: round, court: 4).count.positive?
         court_4_scores << [player.id, player.name_abbreviated, score, wins]
-      end   
+      end
       if player.user_scores.where(tournament_id: id, round: round, court: 5).count.positive?
         court_5_scores << [player.id, player.name_abbreviated, score, wins]
-      end 
+      end
       if player.user_scores.where(tournament_id: id, round: round, court: 6).count.positive?
         court_6_scores << [player.id, player.name_abbreviated, score, wins]
-      end 
+      end
     end
 
     court_1_sorted = normalized_score(court_1_scores.sort_by { |a| [-a[3], -a[2]] }) 
@@ -205,6 +208,49 @@ class Tournament < ApplicationRecord
     player_ids.map(&:to_i) - ghost_users_ids
   end
 
+  def process_admin_view(view)
+    skip_some_callbacks = true
+    # rubocop:disable Lint/NumberConversion
+    # view = current admin page being examined
+    # admin_view_current = current admin view id stored on tournament
+    # admin_views = existing admin views (with timestamps) stored as hashes on tournament
+    ## arguments: view[:id] view[:timestamp]
+    #############################################################################################################################################################
+    # - Delete view if older than x seconds, a refresh cause view to go stale and be deleted, pushing new admin_view_current
+    # - Closing a browser would force new view id, causing old to go stale and be removed
+    ### Scenarios for view to be admin_view_current:
+    # - On new tournament creation, admin_view_current is blank, first view created wins
+    # - f existing admin_current_view window closes, it would then become stale and transfer admin_current_view status to other open view
+
+    # Remove stale views
+    admin_views.each do |id, timestamp| # remove stale views
+      admin_views.delete(id) if timestamp.to_i < (view[:timestamp].to_i - 4)
+    end
+
+    # Scan all views and clear admin_view_current if admin_view_current not in view set
+    if !admin_views.keys.include?(admin_view_current.to_s)
+      self.admin_view_current = nil
+    end
+
+    # If no current views, by default current view becomes master
+    self.admin_view_current = view[:id] if self.admin_view_current.blank?
+
+    # Confirm set current view to master if no other views
+    self.admin_view_current = view[:id] if admin_views.count == 1
+
+    # Update timestamp of existing view and save record
+    admin_views[view[:id].to_s] = view[:timestamp].to_s
+    save
+    # rubocop:enable Lint/NumberConversion
+  end
+
+  def pre_match_time_formatted
+    if pre_match_time >= 60
+      "#{pre_match_time / 60} minutes"
+    else
+      "#{pre_match_time} seconds"
+    end
+  end
   private
 
   def associate_players
@@ -213,4 +259,5 @@ class Tournament < ApplicationRecord
       self.users << User.find(player)
     end
   end
+
 end

@@ -161,6 +161,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_21_001320) do
     t.boolean "adhoc", default: false
     t.integer "match_time"
     t.integer "pre_match_time"
+    t.json "admin_views", default: {}
+    t.integer "admin_view_current"
     t.index ["created_by_id"], name: "index_tournaments_on_created_by_id"
   end
 

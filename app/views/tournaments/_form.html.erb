@@ -73,11 +73,11 @@ Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose
 
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                 <label for="tournament-time" class="block text-sm font-medium text-gray-700">Match Time Length<span class="text-gray-400"></span></label>
-                <%= form.select :tournament_time, @match_times, { :placeholder => "Please Select" }, id: "tournament-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+                <%= form.select :match_time, @match_times, { :placeholder => "Please Select" }, id: "tournament-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
               </div>
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                 <label for="break-time" class="block text-sm font-medium text-gray-700">Break Time Length<span class="text-gray-400"></span></label>
-                <%= form.select :break_time, @pre_match_times, { :placeholder => "Please Select" }, id: "break-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+                <%= form.select :pre_match_time, @pre_match_times, { :placeholder => "Please Select" }, id: "break-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
               </div>              
             </div>
 

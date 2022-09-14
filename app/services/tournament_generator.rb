@@ -70,7 +70,7 @@ class TournamentGenerator
       tournament.update(work_group: 1, courts: 3, rounds: 3, configuration: "p7")
     end
 
-    if @player_ids.count.between?(22, 24) # 4 courts of 6 | pair down courts 
+    if @player_ids.count.between?(22, 24) # 4 courts of 6 | pair down courts
       create_court(tournament, round, 1, PlayerConfigs.p6, PlayerConfigs.new_round(@pids_hash))
       create_court(tournament, round, 2, PlayerConfigs.p6, PlayerConfigs.new_round(@pids_hash))
       create_court(tournament, round, 3, PlayerConfigs.p6, PlayerConfigs.new_round(@pids_hash))
