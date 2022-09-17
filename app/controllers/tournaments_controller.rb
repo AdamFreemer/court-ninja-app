@@ -46,6 +46,7 @@ class TournamentsController < ApplicationController
       end
     @tournament_configured = !@tournament.rounds_configured.empty?
     @player_names = @tournament.users.map(&:name_abbreviated)
+    # @tournament.associate_players
   end
 
   def administration; end
@@ -61,14 +62,12 @@ class TournamentsController < ApplicationController
   end
 
   def display_single
-    # binding.pry
     # display any court based on court param passed along
     @team_size = @tournament.tournament_sets.first.tournament_teams.first.users.count
     @work_size = @tournament.tournament_sets.first.tournament_teams.third.users.count
     @row_columns = (@team_size * 2) + 1
     @court = params[:court].to_i
     @court_sets = @tournament.tournament_sets.where(court: @court, round: params[:round])
-    # binding.pry
   end
 
   def display_multiple
@@ -80,12 +79,13 @@ class TournamentsController < ApplicationController
     score_date = request.params['score_data']
     TournamentTeam.score_update(score_date)
     @tournament.update_current_set(score_date)
-    # @tournament.update!(timer_state: "reset")
+    @tournament.update!(timer_state: "run")
     render json: {}
   end
 
   def status
-    # binding.pry
+    # checking for no admin views, this check will be unnecessary after convergence
+    @tournament.status_process_admin_views(params[:timestamp])
     scores = @tournament.tournament_teams.collect { |t| [t.id, t.score] }
     render json: {
       scores: scores,
@@ -98,7 +98,8 @@ class TournamentsController < ApplicationController
       timer_time: @tournament.timer_time,
       break_time: @tournament.pre_match_time,
       tournament_completed: @tournament.tournament_completed,
-      timer: @tournament.created_at.to_i
+      timer: @tournament.created_at.to_i,
+      admin_views_count: @tournament.admin_views.count
     }
   end
 
@@ -137,6 +138,7 @@ class TournamentsController < ApplicationController
     # Grab current rounds finalized, push in current round just finalized (if first round, rounds_finalized will be empty to start)
     rounds_finalized = @tournament.rounds_finalized
     rounds_finalized << round
+    @tournament.associate_players
     @tournament.generate unless @tournament.rounds_finalized.count >= @tournament.rounds
     @tournament.update(
       tournament_completed: tournament_status,
@@ -168,6 +170,7 @@ class TournamentsController < ApplicationController
   def create
     @tournament = Tournament.new(tournament_params)
     @tournament.created_by = current_user
+    @tournament.timer_time = @tournament.pre_match_time + @tournament.match_time # set default time to be display
 
     set_create_update(params)
     if @tournament.save
@@ -175,7 +178,7 @@ class TournamentsController < ApplicationController
         @tournament.update(current_round: 1)
         redirect_to administration_tournament_url(@tournament, 1), notice: "Tournament was successfully created."
       else
-        redirect_to administration_tournament_url(@tournament, 1)
+        redirect_to tournaments_url
       end
     else
       render :new, status: :unprocessable_entity

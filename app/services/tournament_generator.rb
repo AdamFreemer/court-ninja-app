@@ -14,7 +14,6 @@ class TournamentGenerator
     # player_ids from initialize do not have ghost_ids included yet
     # create_court(tournament, round, court, # players on court, player config, court config)
     # 1 create court for each court per round (15 player has 3 courts of 5 i.e. 3 create_court's)
-
     if @player_ids.count == 6
       create_court(tournament, round, 1, PlayerConfigs.p6, PlayerConfigs.new_round(@pids_hash))
       tournament.update(work_group: 0, courts: 1, rounds: 1, configuration: "p6")

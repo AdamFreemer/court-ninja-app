@@ -2,7 +2,6 @@ Rails.application.routes.draw do
   resources :tournaments, except: :show do
     member do
       get 'results'
-      get 'status'
       post 'team_scores_update'
     end
   end
@@ -18,6 +17,7 @@ Rails.application.routes.draw do
 
   get '/tournament/process_round/:id/:round', to: 'tournaments#process_round'
   post '/tournaments/admin_connection', to: 'tournaments#admin_connection'
+  get '/tournaments/:id/status/:timestamp', to: 'tournaments#status'
 
   devise_for :users, controllers: { registrations: 'registrations' }
 

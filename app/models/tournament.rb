@@ -66,8 +66,7 @@ class Tournament < ApplicationRecord
   scope :before_today, -> { where("created_at < ?", 1.days.ago) }
   scope :today, -> { where("created_at > ?", DateTime.now.beginning_of_day) }
 
-  after_save :associate_players  #TODO: refactor to not hit db when not needed
-
+  # after_save :associate_players  #TODO: refactor to not hit db when not needed
 
   def generate
     return false unless players.count.between?(6, 27)
@@ -208,6 +207,15 @@ class Tournament < ApplicationRecord
     player_ids.map(&:to_i) - ghost_users_ids
   end
 
+  def status_process_admin_views(currrent_timestamp)
+    # remove stale views during display view fetch (this method should go away on convergence)
+    # this covers when there's no admin view at all (all admin tabs / windows close)
+    admin_views.each do |id, timestamp|
+      admin_views.delete(id) if (currrent_timestamp.to_i - timestamp.to_i) >= 8 # going generous on 8 seconds
+      save
+    end
+  end
+
   def process_admin_view(view)
     skip_some_callbacks = true
     # rubocop:disable Lint/NumberConversion
@@ -221,7 +229,7 @@ class Tournament < ApplicationRecord
     ### Scenarios for view to be admin_view_current:
     # - On new tournament creation, admin_view_current is blank, first view created wins
     # - f existing admin_current_view window closes, it would then become stale and transfer admin_current_view status to other open view
-
+  
     # Remove stale views
     admin_views.each do |id, timestamp| # remove stale views
       admin_views.delete(id) if timestamp.to_i < (view[:timestamp].to_i - 4)
@@ -251,13 +259,12 @@ class Tournament < ApplicationRecord
       "#{pre_match_time} seconds"
     end
   end
-  private
 
   def associate_players
     self.users = []
     players.each do |player|
       self.users << User.find(player)
     end
+    save
   end
-
 end

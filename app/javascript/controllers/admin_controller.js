@@ -53,7 +53,6 @@ export default class extends Controller {
       }
     })
     this.realTimeLogic();
-    console.log(`== activeConnection | state: ${this.tournamentTimerStateValue} | tournamentTimer: ${this.tournamentTimerValue}`)
   };
 
   realTimeLogic() {
@@ -61,6 +60,7 @@ export default class extends Controller {
     this.timerOfflineWarning();
     this.timerControlsEnablement();
     this.updateTimerOnPage();
+    this.updateTimerSpinner();
     if (!this.timer && this.tournamentTimerStateValue == "run") {
       this.timerRun();
     }
@@ -151,10 +151,18 @@ export default class extends Controller {
     }
   };
 
-  updateTimerOnPage() {  
+  updateTimerSpinner() {
+    if (this.tournamentTimerStateValue == "run") {
+      this.spinnerTarget.style.display = 'inline-block';
+    } else {
+      this.spinnerTarget.style.display = 'none';
+    }    
+  }
+  
+  updateTimerOnPage() {
     const totalMatchTime = this.breakTimeValue + this.tournamentTimeValue
     let time;
-    this.tournamentTimerState == "initial" ? time = totalMatchTime : time = this.tournamentTimerValue;
+    this.tournamentTimerState == "initial" ? time = totalMatchTimeValue : time = this.tournamentTimerValue;
     let second = time % 60;
     let minute = Math.floor(time / 60) % 60;
     second = (second < 10) ? '0'+ second : second;
