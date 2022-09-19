@@ -13,7 +13,6 @@ Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose
       </ul>
     </div>
   <% end %>
-
   <div class="space-y-6">
     <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
       <div class="md:grid md:grid-cols-3 md:gap-6">
@@ -71,14 +70,15 @@ Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose
                 <%= form.text_field :zip, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
               </div>
 
+
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
-                <label for="tournament-time" class="block text-sm font-medium text-gray-700">Match Time Length (minutes)<span class="text-gray-400"></span></label>
-                <%= form.select :tournament_time, @tournament_times, { :placeholder => "Please Select" }, id: "tournament-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+                <label for="tournament-time" class="block text-sm font-medium text-gray-700">Match Time Length<span class="text-gray-400"></span></label>
+                <%= form.select :match_time, @match_times, { :placeholder => "Please Select" }, id: "tournament-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
               </div>
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
-                <label for="break-time" class="block text-sm font-medium text-gray-700">Break Time Length (minutes)<span class="text-gray-400"></span></label>
-                <%= form.select :break_time, @break_times, { :placeholder => "Please Select" }, id: "break-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
-              </div>
+                <label for="break-time" class="block text-sm font-medium text-gray-700">Break Time Length<span class="text-gray-400"></span></label>
+                <%= form.select :pre_match_time, @pre_match_times, { :placeholder => "Please Select" }, id: "break-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+              </div>              
             </div>
 
             <%= render "form_courts", form: form %>

@@ -1,7 +1,7 @@
 class TournamentsController < ApplicationController
   before_action :set_tournament, only: %i[status tournament_status
     administration display_single display_multiple results
-    team_scores_update process_round edit update destroy timer_operation
+    team_scores_update process_round edit update destroy admin_connection
   ]
   before_action :set_display, only: %i[display_single display_multiple]
   before_action :round_two_generated, only: %i[administration]
@@ -27,6 +27,10 @@ class TournamentsController < ApplicationController
     @tournament = Tournament.new
     @tournament_times = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
     @break_times = [0.12, 0.5, 1, 1.5, 2.0]
+
+    @match_times = [["1 minute", 60], ["2 minutes", 120], ["3 minutes", 180], ["4 minutes", 240], ["5 minutes", 300], 
+                    ["6 minutes", 360], ["7 minutes", 420], ["8 minutes", 480], ["9 minutes", 540], ["10 minutes", 600]]
+    @pre_match_times = [["5 seconds", 5], ["30 seconds", 30], ["1.0 minute", 60], ["1.5 minutes", 90], ["2.0 minutes", 120]]
     @tournament_configured = !@tournament.rounds_configured.empty?
   end
 
@@ -42,6 +46,7 @@ class TournamentsController < ApplicationController
       end
     @tournament_configured = !@tournament.rounds_configured.empty?
     @player_names = @tournament.users.map(&:name_abbreviated)
+    # @tournament.associate_players
   end
 
   def administration; end
@@ -57,14 +62,12 @@ class TournamentsController < ApplicationController
   end
 
   def display_single
-    # binding.pry
     # display any court based on court param passed along
     @team_size = @tournament.tournament_sets.first.tournament_teams.first.users.count
     @work_size = @tournament.tournament_sets.first.tournament_teams.third.users.count
     @row_columns = (@team_size * 2) + 1
     @court = params[:court].to_i
     @court_sets = @tournament.tournament_sets.where(court: @court, round: params[:round])
-    # binding.pry
   end
 
   def display_multiple
@@ -76,12 +79,13 @@ class TournamentsController < ApplicationController
     score_date = request.params['score_data']
     TournamentTeam.score_update(score_date)
     @tournament.update_current_set(score_date)
-    # @tournament.update!(timer_state: "reset")
+    @tournament.update!(timer_state: "run")
     render json: {}
   end
 
   def status
-    # binding.pry
+    # checking for no admin views, this check will be unnecessary after convergence
+    @tournament.status_process_admin_views(params[:timestamp])
     scores = @tournament.tournament_teams.collect { |t| [t.id, t.score] }
     render json: {
       scores: scores,
@@ -92,31 +96,35 @@ class TournamentsController < ApplicationController
       timer_state: @tournament.timer_state,
       timer_mode: @tournament.timer_mode,
       timer_time: @tournament.timer_time,
-      break_time: @tournament.break_time,
-      tournament_completed: @tournament.tournament_completed
+      break_time: @tournament.pre_match_time,
+      tournament_completed: @tournament.tournament_completed,
+      timer: @tournament.created_at.to_i,
+      admin_views_count: @tournament.admin_views.count
     }
   end
 
-  def timer_operation
+  def admin_connection
     # If timer is pausing / stopping, set time to current time on admin page
     # If timer is resetting, set time to stored break time on server
     # TODO: refactor number types
-    if params[:state] == "stop"
+    if params[:state] == 'sync'
+      @tournament.process_admin_view(params[:view])
+    elsif params[:state] == "stop"
       timer_state = 'stop'
       timer_time = params[:time]
     elsif params[:state] == "reset"
       timer_state = 'stop'
-      timer_time = (@tournament.break_time * 60).to_i
+      timer_time = (@tournament.pre_match_time + @tournament.match_time).to_i
     else
       timer_time = params[:time]
       timer_state = params[:state]
     end
-    @tournament.update!(timer_state: timer_state, timer_mode: params[:mode], timer_time: timer_time)
+    @tournament.update!(timer_state: timer_state, timer_time: timer_time) unless params[:state] == 'sync'
 
     render json: {
       timer_state: @tournament.timer_state,
-      timer_mode: @tournament.timer_mode,
-      timer_time: @tournament.timer_time
+      timer_time: @tournament.timer_time,
+      current_view: @tournament.admin_view_current
     }
   end
 
@@ -130,6 +138,7 @@ class TournamentsController < ApplicationController
     # Grab current rounds finalized, push in current round just finalized (if first round, rounds_finalized will be empty to start)
     rounds_finalized = @tournament.rounds_finalized
     rounds_finalized << round
+    @tournament.associate_players
     @tournament.generate unless @tournament.rounds_finalized.count >= @tournament.rounds
     @tournament.update(
       tournament_completed: tournament_status,
@@ -161,6 +170,7 @@ class TournamentsController < ApplicationController
   def create
     @tournament = Tournament.new(tournament_params)
     @tournament.created_by = current_user
+    @tournament.timer_time = @tournament.pre_match_time + @tournament.match_time # set default time to be display
 
     set_create_update(params)
     if @tournament.save
@@ -168,7 +178,7 @@ class TournamentsController < ApplicationController
         @tournament.update(current_round: 1)
         redirect_to administration_tournament_url(@tournament, 1), notice: "Tournament was successfully created."
       else
-        redirect_to administration_tournament_url(@tournament, 1)
+        redirect_to tournaments_url
       end
     else
       render :new, status: :unprocessable_entity
@@ -214,8 +224,9 @@ class TournamentsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_tournament
     @tournament = Tournament.find(params[:id])
-    @tournament_times = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
-    @break_times = [0.12, 0.5, 1, 1.5, 2.0]
+    @match_times = [["1 minute", 60], ["2 minutes", 120], ["3 minutes", 180], ["4 minutes", 240], ["5 minutes", 300], 
+    ["6 minutes", 360], ["7 minutes", 420], ["8 minutes", 480], ["9 minutes", 540], ["10 minutes", 600]]
+    @pre_match_times = [["5 seconds", 5], ["30 seconds", 30], ["1.0 minute", 60], ["1.5 minutes", 90], ["2.0 minutes", 120]]
   end
 
   def set_display
@@ -286,7 +297,7 @@ class TournamentsController < ApplicationController
   def tournament_params
     params.fetch(:tournament).permit(
       :name, :address1, :address2, :city, :state, :zip, :date, :rounds, :team_size, :court_side_a_name, :court_side_b_name,
-      :rounds_configured, :rounds_finalized, :court_names, :tournament_time, :break_time, :current_set,
+      :rounds_configured, :rounds_finalized, :court_names, :tournament_time, :break_time, :current_set, :match_time, :pre_match_time,
       :court_1_name, :court_2_name, :court_3_name, :court_4_name, :court_5_name, :court_6_name, players: []
     )
   end

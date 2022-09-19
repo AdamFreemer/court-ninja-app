@@ -15,12 +15,13 @@ export default class extends Controller {
     tournamentTime: Number, // static value for Tournament Time
     tournamentTimer: Number, // Actual countdown timer value
     tournamentTimerState: String, // "run", "stop", "initial"
-    tournamentTimerMode: String, // "break" or "run"
     tournamentCourtSets: Number,
+    tournamentAdminViewsCount: Number,
   }
-  static targets = [ "minute", "second", "progress", "progressbackground", "syncing", "set", "status", "team", "step" ]
+  static targets = [ "minute", "second", "progress", "progressbackground", "syncing", "set", "status", "team", "step", "spinner" ]
 
   connect() {
+    // this.spinnerTarget.classList.add('animate-reverse-spin');
     this.updatePage();
     this.autoStart();
     this.connectStatus();
@@ -33,21 +34,22 @@ export default class extends Controller {
   }
 
   activePolling() {  
+    const current_time = Math.floor(Date.now() / 1000) // last_update on server
     $.ajax({
       type: "GET",
-      url: "/tournaments/" + this.tournamentIdValue + "/status",
+      url: "/tournaments/" + this.tournamentIdValue + "/status/" + current_time,
       success: (response) => {
         this.breakTimeValue = response.break_time;
         this.tournamentScoresValue = response.scores;
         this.tournamentCompletedValue = response.tournament_completed;
         this.tournamentTimerValue = response.timer_time;
-        this.tournamentTimerModeValue = response.timer_mode;
         this.tournamentTimerStateValue = response.timer_state;
         this.tournamentCurrentSetValue = response.current_set;
         this.tournamentCurrentSetPlayersCourt1Value = response.current_set_players_court1;
         this.tournamentCurrentSetPlayersCourt2Value = response.current_set_players_court2;
         this.tournamentCurrentSetPlayersLivePollValue = response.current_set_players_live_poll;
         this.tournamentCurrentRoundServerValue = response.current_round;
+        this.tournamentAdminViewsValue = response.admin_views_count;
       }
     })
     this.updatePage();
@@ -65,30 +67,44 @@ export default class extends Controller {
 
   updatePage() {  
     // progress bar -- update progress
-    if (this.tournamentTimerModeValue == "tournament") {
-      let progress = Math.abs(Math.round((this.tournamentTimerValue / this.tournamentTimeValue) * 100))
-      this.progressTarget.style.setProperty('width', `${progress}%`)
+    const totalMatchTime = this.breakTimeValue + this.tournamentTimeValue
+    let progress = Math.abs(Math.round((this.tournamentTimerValue / totalMatchTime) * 100))
+    this.progressTarget.style.setProperty('width', `${progress}%`)
+    if (this.tournamentAdminViewsValue == 0) { // when all admin windows closed
+      this.progressTarget.style.setProperty('width', "100%")
+      this.statusTarget.innerHTML = "GET READY"
+    } else if (this.tournamentTimerValue <= this.tournamentTimeValue && this.tournamentTimerStateValue == "run") { // break time
       this.statusTarget.innerHTML = "PLAY"
     } else {
-      let progress = Math.abs(Math.round((this.tournamentTimerValue / this.breakTimeValue) * 100))
-      this.progressTarget.style.setProperty('width', "100%")
+      // this.progressTarget.style.setProperty('width', "100%")
       this.statusTarget.innerHTML = "GET READY"
     }  
 
     // progress bar -- update color and state
-    if (this.tournamentTimerValue == 0 || this.tournamentTimerModeValue == "break") {
-      // this.progressTarget.style.setProperty('--value', 100)
+    if (this.tournamentAdminViewsValue == 0) { // when all admin windows closed
       this.progressTarget.classList.remove('bg-green-500');
       this.progressTarget.classList.add('bg-yellow-500');
       this.progressbackgroundTarget.classList.remove('bg-green-200');
       this.progressbackgroundTarget.classList.add('bg-yellow-200');
-    } else {
+    } else if (this.tournamentTimerValue <= this.tournamentTimeValue && this.tournamentTimerStateValue == "run") {
       this.progressTarget.classList.remove('bg-yellow-500');
       this.progressTarget.classList.add('bg-green-500');
       this.progressbackgroundTarget.classList.remove('bg-yellow-200');
       this.progressbackgroundTarget.classList.add('bg-green-200');
+    } else {
+      this.progressTarget.classList.remove('bg-green-500');
+      this.progressTarget.classList.add('bg-yellow-500');
+      this.progressbackgroundTarget.classList.remove('bg-green-200');
+      this.progressbackgroundTarget.classList.add('bg-yellow-200');
     }
-
+    // time spinner
+    if (this.tournamentAdminViewsValue == 0) { // when all admin windows closed
+      this.spinnerTarget.style.display = 'none';
+    } else if (this.tournamentTimerStateValue == "run") {
+      this.spinnerTarget.style.display = 'inline-block';
+    } else {
+      this.spinnerTarget.style.display = 'none';
+    }
     // timer update
     let second = this.tournamentTimerValue % 60;
     let minute = Math.floor(this.tournamentTimerValue / 60) % 60;
@@ -229,7 +245,6 @@ export default class extends Controller {
     // console.log("tournamentTime: ", this.tournamentTimeValue)
     // console.log("tournamentTimer: ", this.tournamentTimerValue)
     // console.log("tournamentTimerState: ", this.tournamentTimerStateValue)
-    // console.log("tournamentTimerMode: ", this.tournamentTimerModeValue)
     // console.log("tournamentRoundServer: ", this.tournamentCurrentRoundServerValue)
     // console.log("tournamentCurrentSet: ", this.tournamentCurrentSetValue)
     // console.log("tournamentCurrentCourtValue: ", this.tournamentCurrentCourtValue)
