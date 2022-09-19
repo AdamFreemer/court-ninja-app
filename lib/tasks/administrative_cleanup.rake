@@ -6,15 +6,15 @@ namespace :db do
     Tournament.all.each do |tournament|
       puts "== Executing on Tournament ID: #{tournament.id}"
       if tournament.match_time.blank?
-        tournament.match_time = 60
+        tournament.update!(match_time: 60)
         puts "== Updated match_time on Tournament ID: #{tournament.id}"
       end
 
       if tournament.pre_match_time.blank?
-        tournament.pre_match_time = 60
+        tournament.update!(pre_match_time: 60)
         puts "== Updated pre_match_time on Tournament ID: #{tournament.id}"
       end
-      tournament.save
+      puts tournament
     end
   end
 end
