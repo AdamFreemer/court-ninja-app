@@ -46,7 +46,6 @@ class TournamentsController < ApplicationController
       end
     @tournament_configured = !@tournament.rounds_configured.empty?
     @player_names = @tournament.users.map(&:name_abbreviated)
-    # @tournament.associate_players
   end
 
   def administration; end
@@ -119,7 +118,7 @@ class TournamentsController < ApplicationController
       timer_time = params[:time]
       timer_state = params[:state]
     end
-    @tournament.update!(timer_state: timer_state, timer_time: timer_time) unless params[:state] == 'sync'
+    @tournament.update(timer_state: timer_state, timer_time: timer_time) unless params[:state] == 'sync'
 
     render json: {
       timer_state: @tournament.timer_state,
@@ -174,6 +173,7 @@ class TournamentsController < ApplicationController
 
     set_create_update(params)
     if @tournament.save
+      @tournament.associate_players
       if @tournament.generate
         @tournament.update(current_round: 1)
         redirect_to administration_tournament_url(@tournament, 1), notice: "Tournament was successfully created."
@@ -190,6 +190,7 @@ class TournamentsController < ApplicationController
     cleaned_up_params[:players] = cleaned_up_params[:players].compact_blank.map { |i| Integer(i, 10) } if @tournament.adhoc == false
 
     if @tournament.update(cleaned_up_params)
+      @tournament.associate_players
       if @tournament.rounds_configured.empty?
         if @tournament.generate
           redirect_to administration_tournament_url(@tournament, 1), notice: "Tournament updated and round one successfully created."

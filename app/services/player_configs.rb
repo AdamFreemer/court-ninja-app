@@ -2,7 +2,8 @@ module PlayerConfigs
   # tournament configurations
   # These arrays are based off the bjerring tables: https://vbc.cyburi.com/resource/LinearRankingTournament.pdf
   # For each row, 1st array is Team 1, 2nd array is Team 2. If there's a work (non-playing) Team, that is the 3rd array.
-  def self.p9 # 12 rounds
+  def self.p9
+    # 12 rounds
     [
       [[1, 4, 7], [2, 5, 9], [3, 6, 8]],
       [[1, 5, 8], [2, 6, 7], [3, 4, 9]],
@@ -19,7 +20,8 @@ module PlayerConfigs
     ]
   end
 
-  def self.p7 # 7 rounds
+  def self.p7
+    # 7 matches
     [
       [[1, 2, 3], [4, 5, 6], [7]],
       [[1, 4, 7], [2, 3, 5], [6]],
@@ -31,7 +33,8 @@ module PlayerConfigs
     ]
   end
 
-  def self.p6 # 10 rounds
+  def self.p6
+    # 10 matches
     [
       [[1, 2, 3], [4, 5, 6], []],
       [[3, 5, 6], [1, 2, 4], []],
@@ -47,6 +50,7 @@ module PlayerConfigs
   end
 
   def self.p5
+    # 5 matches
     [
       [[1, 2], [3, 4], [5]],
       [[2, 5], [1, 3], [4]],

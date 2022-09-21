@@ -4,47 +4,49 @@
 #
 # Table name: tournaments
 #
-#  id                   :bigint           not null, primary key
-#  address1             :string
-#  address2             :string
-#  adhoc                :boolean          default(FALSE)
-#  admin_view_current   :integer
-#  admin_views          :json
-#  break_time           :decimal(5, 1)
-#  city                 :string
-#  configuration        :string
-#  court_1_name         :string
-#  court_2_name         :string
-#  court_3_name         :string
-#  court_4_name         :string
-#  court_5_name         :string
-#  court_6_name         :string
-#  court_names          :string           default([]), is an Array
-#  court_side_a_name    :string
-#  court_side_b_name    :string
-#  courts               :integer
-#  current_round        :integer          default(0)
-#  current_set          :integer          default(1)
-#  date                 :datetime
-#  match_time           :integer
-#  name                 :string
-#  players              :integer          default([]), is an Array
-#  pre_match_time       :integer
-#  rounds               :integer
-#  rounds_configured    :integer          default([]), is an Array
-#  rounds_finalized     :integer          default([]), is an Array
-#  state                :string
-#  team_size            :integer
-#  timer_mode           :string           default("break")
-#  timer_state          :string           default("initial")
-#  timer_time           :integer          default(0)
-#  tournament_completed :boolean          default(FALSE)
-#  tournament_time      :decimal(5, 1)
-#  work_group           :integer
-#  zip                  :string
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  created_by_id        :bigint
+#  id                    :bigint           not null, primary key
+#  address1              :string
+#  address2              :string
+#  adhoc                 :boolean          default(FALSE)
+#  admin_view_current    :integer
+#  admin_views           :json
+#  break_time            :decimal(5, 1)
+#  city                  :string
+#  configuration         :string
+#  court_1_name          :string
+#  court_2_name          :string
+#  court_3_name          :string
+#  court_4_name          :string
+#  court_5_name          :string
+#  court_6_name          :string
+#  court_names           :string           default([]), is an Array
+#  court_side_a_name     :string
+#  court_side_b_name     :string
+#  courts                :integer
+#  current_round         :integer          default(0)
+#  current_set           :integer          default(1)
+#  date                  :datetime
+#  match_time            :integer
+#  matches_per_round     :integer
+#  name                  :string
+#  players               :integer          default([]), is an Array
+#  pre_match_time        :integer
+#  rounds                :integer
+#  rounds_configured     :integer          default([]), is an Array
+#  rounds_finalized      :integer          default([]), is an Array
+#  state                 :string
+#  team_size             :integer
+#  timer_mode            :string           default("break")
+#  timer_state           :string           default("initial")
+#  timer_time            :integer          default(0)
+#  total_tournament_time :float
+#  tournament_completed  :boolean          default(FALSE)
+#  tournament_time       :decimal(5, 1)
+#  work_group            :integer
+#  zip                   :string
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  created_by_id         :bigint
 #
 # Indexes
 #
@@ -67,6 +69,7 @@ class Tournament < ApplicationRecord
   scope :today, -> { where("created_at > ?", DateTime.now.beginning_of_day) }
 
   # after_save :associate_players  #TODO: refactor to not hit db when not needed
+  before_save :calculate_total_tournament_time
 
   def generate
     return false unless players.count.between?(6, 27)
@@ -265,6 +268,12 @@ class Tournament < ApplicationRecord
     players.each do |player|
       self.users << User.find(player)
     end
-    save
+  end
+
+  def calculate_total_tournament_time
+    return unless tournament_sets.count.positive?
+    return if match_time.blank? || matches_per_round.blank? || pre_match_time.blank? || rounds.blank?
+
+    self.total_tournament_time = ((((match_time * matches_per_round) + ((matches_per_round - 1) * pre_match_time)) * rounds) / 60.0).round
   end
 end
