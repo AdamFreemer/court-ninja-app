@@ -272,6 +272,7 @@ class Tournament < ApplicationRecord
 
   def calculate_total_tournament_time
     return unless tournament_sets.count.positive?
+    return if match_time.blank? || matches_per_round.blank? || pre_match_time.blank? || rounds.blank?
 
     self.total_tournament_time = ((((match_time * matches_per_round) + ((matches_per_round - 1) * pre_match_time)) * rounds) / 60.0).round
   end
