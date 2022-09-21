@@ -20,10 +20,14 @@ Trestle.resource(:users) do
     scope role.name.downcase.to_sym, -> { User.with_role(role.name) }
   end
 
+  scope :signed_in, -> { User.where.not(last_sign_in_at: nil) }
+  scope :never_signed_in, -> { User.where(last_sign_in_at: nil) }
+
   table do
     column :first_name
     column :last_name
     column :email
+    column :last_sign_in_at
     column :admin do |u|
       u.has_role?(:admin)
     end
