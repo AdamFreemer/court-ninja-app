@@ -21,4 +21,6 @@
 class PlayerTeam < ApplicationRecord
   belongs_to :player, class_name: 'User'
   belongs_to :team
+
+  validates :team_id, uniqueness: { scope: :player_id }
 end
