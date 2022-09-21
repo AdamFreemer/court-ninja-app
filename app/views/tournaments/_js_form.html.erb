@@ -11,6 +11,11 @@
     tournyBreakTimeChangeListener();
     // Update page with current total tournament time
     updateTournyTimeOnPageListener();
+
+    // On initial load (edit view) display estimated tourney time
+    const initPlayerCount = "<%= tournament.players.count %>"
+    processPlayersSelected(Number(initPlayerCount))
+    updateTournyTimeOnPage();
   });
 
   function setDefaultSessionData() {
@@ -56,6 +61,31 @@
       localStorage['tournamentRounds'] = 1
       courtsCountOne();
       break;
+    case 1:
+      localStorage['tournamentSets'] = 0
+      localStorage['tournamentRounds'] = 1
+      courtsCountOne();
+      break;
+    case 2:
+      localStorage['tournamentSets'] = 0
+      localStorage['tournamentRounds'] = 1
+      courtsCountOne();
+      break;
+    case 3:
+      localStorage['tournamentSets'] = 0
+      localStorage['tournamentRounds'] = 1
+      courtsCountOne();
+      break;
+    case 4:
+      localStorage['tournamentSets'] = 0
+      localStorage['tournamentRounds'] = 1
+      courtsCountOne();
+      break;
+    case 5:
+      localStorage['tournamentSets'] = 0
+      localStorage['tournamentRounds'] = 1
+      courtsCountOne();
+      break;                      
     case 6:
       localStorage['tournamentSets'] = 10
       localStorage['tournamentRounds'] = 1
@@ -127,6 +157,7 @@
 
   function updateTournyTimeOnPageListener() {
     $('#tournament-time, #break-time, input:checkbox').change(function () {
+      console.log("updateTournyTimeOnPageListener")
       updateTournyTimeOnPage();
     });      
   }
@@ -137,9 +168,9 @@
     var tournamentSets = parseFloat(localStorage['tournamentSets']).toFixed(1);
     var tournamentRounds = parseFloat(localStorage['tournamentRounds']).toFixed(1);
 
-    totalTourneyTime = ((tournyTime * tournamentSets) + ((tournamentSets - 1) * tournyBreakTime)) * tournamentRounds
+    totalTourneyTime = Math.round(10 * (((tournyTime / 60) * tournamentSets) + ((tournamentSets - 1) * (tournyBreakTime / 60))) * tournamentRounds ) / 10
     if (localStorage['tournamentSets'] == 0) {
-      $('#tourny-time').text("--")
+      $('#tourny-time').text("Add more athletes!")
     } else {
       $('#tourny-time').text(totalTourneyTime + " minutes")
     }

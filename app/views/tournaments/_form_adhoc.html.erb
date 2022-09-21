@@ -15,7 +15,13 @@
     </div>
   <% end %>
 
-  <div data-controller="adhoc" class="space-y-6" data-adhoc-courts-value="<%= @tournament.courts %>">
+  <div 
+    class="space-y-6"
+    data-controller="adhoc" 
+    data-adhoc-courts-value="<%= @tournament.courts %>"
+    data-adhoc-controller-action-value="<%= action_name %>"
+    data-adhoc-player-count-value="<%= @tournament.users.count %>"
+  >
     <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
       <div class="md:grid md:grid-cols-3 md:gap-6">
         <% if action_name == "new" %>
@@ -52,11 +58,11 @@
 
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                 <label for="tournament-time" class="block text-sm font-medium text-gray-700">Match Time Length<span class="text-gray-400"></span></label>
-                <%= form.select :match_time, @match_times, { :placeholder => "Please Select" }, id: "tournament-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+                <%= form.select :match_time, @match_times, { :placeholder => "Please Select" }, id: "tournament-time", data: { action: 'change->adhoc#timeSelects', turbo: false }, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
               </div>
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                 <label for="break-time" class="block text-sm font-medium text-gray-700">Break Time Length<span class="text-gray-400"></span></label>
-                <%= form.select :pre_match_time, @pre_match_times, { :placeholder => "Please Select" }, id: "break-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+                <%= form.select :pre_match_time, @pre_match_times, { :placeholder => "Please Select" }, id: "break-time", data: { action: 'change->adhoc#timeSelects', turbo: false }, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
               </div>   
 
               <div data-adhoc-target="court-1" id="court-1-container" class="col-span-6 sm:col-span-6 lg:col-span-3">

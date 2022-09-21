@@ -7,10 +7,18 @@ export default class extends Controller {
     courts: Number,
     tournamentTime: { type: Number, default: 1 },
     breakTime: { type: Number, default: 0.1 },
+    controllerAction: String,
+    playerCount: Number,
   }
 
   connect() {
     this.setDefaultCourtCount(this.courtsValue);
+    if (this.controllerActionValue == 'edit') {
+      this.processPlayersSelected(this.playerCountValue);
+      this.timeSelects();
+      this.updateTournyTimeOnPage();
+    }
+
   }
 
   submit() {
@@ -20,29 +28,32 @@ export default class extends Controller {
   formInput() {
     const playerFields = document.getElementsByClassName("player-field");
     const players = []
-    for (let i = 0; i < playerFields.length; i++) {
-      if (playerFields[i].value.length > 0) {
-        players.push(playerFields[i].value.toLowerCase())
-      } 
+    if (this.controllerActionValue == 'edit') {
+      this.processPlayersSelected(this.playerCountValue)
+    } else {
+      for (let i = 0; i < playerFields.length; i++) {
+        if (playerFields[i].value.length > 0) {
+          players.push(playerFields[i].value.toLowerCase())
+        } 
+      }
+      const findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index)
+      this.duplicateNamesNotice(findDuplicates(players).length)
+      this.processPlayersSelected(players.length)
     }
-
-    const findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index)
-    this.duplicateNamesNotice(findDuplicates(players).length)
-    this.processPlayersSelected(players.length)
+    this.timeSelects();
     this.updateTournyTimeOnPage();
   }
 
   timeSelects() {
     this.tournamentTimeValue = document.getElementById("tournament-time").value
     this.breakTimeValue = document.getElementById("break-time").value
-
     this.updateTournyTimeOnPage();
   }
 
   updateTournyTimeOnPage() {
-    const totalTourneyTime = ((this.tournamentTimeValue * this.setsValue) + ((this.setsValue - 1) * this.breakTimeValue)) * this.roundsValue
+    const totalTourneyTime = Math.round(10 * (((this.tournamentTimeValue * this.setsValue) + ((this.setsValue - 1) * this.breakTimeValue)) * this.roundsValue) / 60) / 10
     if (this.setsValue == 0) {
-      $('#tourny-time').text("--")
+      $('#tourny-time').text("Add more athletes!")
     } else {
       $('#tourny-time').text(totalTourneyTime + " minutes")
     }

@@ -44,7 +44,10 @@
 
       <span data-admin-target="timerWarning" style="display:none" class="mt-3 block text-sm font-medium text-gray-700"><i>Timer synchronizing with server...</i></span>
       <span data-admin-target="timerOffline" style="display:none" class="mt-3 block text-sm font-medium text-gray-700"><i>Timer is active on another tab or browser window.</i></span>
-      <span class="mt-3 block text-sm font-medium text-gray-700"><b>Match Time:</b> <%= @tournament&.match_time ? @tournament.match_time / 60 : 0 %> minutes<br><b>Break Time:</b> <%= @tournament.pre_match_time_formatted %> 
+      <span class="mt-3 block text-sm font-medium text-gray-700">
+        <b>Match Time:</b> <%= @tournament&.match_time ? @tournament.match_time / 60 : 0 %> minutes<br>
+        <b>Break Time:</b> <%= @tournament.pre_match_time_formatted %><br> 
+        <b>Tournament Time:</b> ~<%= @tournament.total_tournament_time.round %> minutes
       </span>
       <%# end timer section %>
     </div>
