@@ -67,6 +67,7 @@ class TournamentsController < ApplicationController
     @row_columns = (@team_size * 2) + 1
     @court = params[:court].to_i
     @court_sets = @tournament.tournament_sets.where(court: @court, round: params[:round])
+    @scores = Array(1..30)
   end
 
   def display_multiple
