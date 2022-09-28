@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   get '/user_role_request/:id/approve', to: 'user_role_requests#approve', as: 'approve_user_role_request'
   get '/user_role_request/:id/deny', to: 'user_role_requests#deny', as: 'deny_user_role_request'
 
+  get '/approve_team/:uuid', to: 'teams#existing_athlete_join_team_approval', as: 'existing_athlete_join_team_approval'
+
   get '/tournaments/administration/:id/:round', to: 'tournaments#administration', as: 'administration_tournament'
   get '/tournaments/display_single/:id/:round/:court', to: 'tournaments#display_single'
   get '/tournaments/display_multiple/:id/:round', to: 'tournaments#display_multiple'
@@ -27,6 +29,10 @@ Rails.application.routes.draw do
       get 'verify'
       post 'join'
       delete 'remove_player'
+    end
+
+    member do
+      post 'add_player_to_team'
     end
   end
 

@@ -4,8 +4,8 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!, unless: :devise_controller?
   before_action :configure_permitted_parameters, if: :devise_controller?
 
-  def after_sign_in_path_for(_resource)
-    root_path
+  def after_sign_in_path_for(resource_or_scope)
+    stored_location_for(resource_or_scope) || super
   end
 
   protected
@@ -13,5 +13,15 @@ class ApplicationController < ActionController::Base
   def configure_permitted_parameters
     attributes = %i[first_name last_name]
     devise_parameter_sanitizer.permit(:sign_up, keys: attributes)
+  end
+
+  private
+
+  def storable_location?
+    request.get? && is_navigational_format? && !devise_controller? && !request.xhr?
+  end
+
+  def store_user_location!
+    store_location_for(:user, request.fullpath)
   end
 end

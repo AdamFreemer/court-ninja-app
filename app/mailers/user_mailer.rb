@@ -13,4 +13,9 @@ class UserMailer < ApplicationMailer
     @user = user_role_request.user
     mail(to: @user.email, subject: "Role Request #{user_role_request.status&.capitalize}")
   end
+
+  def existing_athlete_join_team_approval_email(id)
+    @pt = PlayerTeam.find(id)
+    mail(to: @pt.player.email, subject: "TourneyChamp: You've been added to #{@pt.team.name}")
+  end
 end

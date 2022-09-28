@@ -1,0 +1,12 @@
+<table id="layout" border="0" cellspacing="0" cellpadding="0" width="600" style="margin: 10px auto;text-align: left;">
+  <tr>
+    <td id="content" style="background: #ffffff;line-height: 1.25em;padding: 10px 20px 30px 40px;vertical-align: top;">
+      <p>You have been added to <%= @pt.team.name %>. To accept, click below. If you do not wish to join this team, simply do nothing.</p>
+    </td>
+  </tr>
+  <tr>
+    <td id="content" style="background: #ffffff;line-height: 1.25em;padding: 10px 20px 30px 40px;vertical-align: top">
+      <%= link_to "Join Team", existing_athlete_join_team_approval_url(uuid: @pt.uuid) %>
+    </td>
+  </tr>
+</table>
