@@ -1,0 +1,22 @@
+<table id="layout" border="0" cellspacing="0" cellpadding="0" width="600" style="margin: 10px auto;text-align: left;">
+  <tr>
+    <td id="content" style="background: #ffffff;line-height: 1.25em;padding: 10px 20px 30px 40px;vertical-align: top;">
+      <p>An athlete account has been created for you and you have been added to <%= @pt.team.name %>. To accept, first click below to claim your account and set a password. If you do not wish to join this team, simply do nothing.</p>
+    </td>
+  </tr>
+  <tr style="display:flex;justify-content:center;">
+    <td id="content" style="background: #ffffff;line-height: 1.25em;padding: 10px 20px 30px 40px;vertical-align: top">
+      <%= link_to "Claim Your Account", new_password_url(@pt.player, claim: true) %>
+    </td>
+  </tr>
+  <tr>
+    <td id="content" style="background: #ffffff;line-height: 1.25em;padding: 10px 20px 30px 40px;vertical-align: top;">
+      <p>Then click below to join the team. If you do not wish to join this team, simply do nothing.</p>
+    </td>
+  </tr>
+  <tr style="display:flex;justify-content:center;">
+    <td id="content" style="background: #ffffff;line-height: 1.25em;padding: 10px 20px 30px 40px;vertical-align: top">
+      <%= link_to "Join Team", existing_athlete_join_team_approval_url(uuid: @pt.uuid) %>
+    </td>
+  </tr>
+</table>
