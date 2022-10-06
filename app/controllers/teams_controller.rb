@@ -63,8 +63,14 @@ class TeamsController < ApplicationController
     user = User.find_by(email: athlete_params[:email])
 
     if user
-      pt = PlayerTeam.create!(team: team, player: user, pending: true)
-      UserMailer.existing_athlete_join_team_approval_email(pt.id).deliver_now
+      player_team = PlayerTeam.find_by(team: team, player: user)
+
+      unless player_team
+        pt = PlayerTeam.create!(team: team, player: user, pending: true)
+        UserMailer.existing_athlete_join_team_approval_email(pt.id).deliver_now
+      else
+        flash[:notice] = 'Athlete is already on this team'
+      end
     else
       pw = SecureRandom.uuid
       user = User.create!(email: athlete_params[:email], first_name: athlete_params[:first_name], last_name: athlete_params[:last_name], password: pw, password_confirmation: pw)
