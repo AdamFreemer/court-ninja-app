@@ -1,0 +1,117 @@
+<!----------- tournament controls drawer ---------->
+<div id="tournament-controls" class="fixed z-40 h-screen p-4 overflow-y-auto bg-white w-2/5 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-label">
+  <h5 id="drawer-label" class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400"><svg class="w-5 h-5 mr-2" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>Tournament Controls</h5>
+  <button type="button" data-drawer-dismiss="tournament-controls" aria-controls="tournament-controls" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
+      <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+      <span class="sr-only">Close menu</span>
+  </button>
+
+  <span data-admin-target="timerWarning" style="display:none" class="mt-3 block text-sm font-medium text-gray-700 bg-gray-200"><i>Timer synchronizing with server...</i></span>
+  <span data-admin-target="timerOffline" style="display:none" class="mt-3 block text-sm font-medium text-gray-700"><i>Timer is active on another tab or browser window.</i></span>
+  <span class="mt-3 mb-3 block text-sm font-medium text-gray-700">
+    <b>Match Time:</b> <%= @tournament&.match_time ? @tournament.match_time / 60 : 0 %> minutes<br>
+    <b>Break Time:</b> <%= @tournament&.pre_match_time_formatted %><br> 
+    <b>Tournament Time:</b> ~<%= @tournament&.total_tournament_time&.round %> minutes
+  </span>
+
+  <div class="grid grid-cols-3 gap-3">
+    <button type="button" class="rounded-lg px-5 py-2.5 mr-2 mb-2 border border-transparent text-sm font-medium rounded text-black bg-green-200 hover:bg-green-300">Timer Start</button>
+    <button type="button" class="rounded-lg px-5 py-2.5 mr-2 mb-2 border border-transparent text-sm font-medium rounded text-black bg-yellow-200 hover:bg-yellow-300">Timer Pause</button>
+    <button type="button" class="rounded-lg px-5 py-2.5 mr-2 mb-2 border border-transparent text-sm font-medium rounded text-black bg-red-200 hover:bg-red-300">Timer Reset</button>
+  </div>
+
+  <h5 id="drawer-label" class="inline-flex items-center mt-6 text-base font-semibold text-gray-500 dark:text-gray-400"><svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>&nbsp;Court Selection</h5>        
+  <div class="mt-2">
+    <div class="grid grid-cols-3 gap-3">
+      <button type="button" class="rounded-lg px-5 py-2.5 mr-2 mb-2 border text-sm font-medium rounded text-black bg-gray-200 hover:bg-gray-300">Court 1</button>
+      <button type="button" class="rounded-lg px-5 py-2.5 mr-2 mb-2 border text-sm font-medium rounded text-black bg-gray-200 hover:bg-gray-300">Court 2</button>
+      <button type="button" class="rounded-lg px-5 py-2.5 mr-2 mb-2 border text-sm font-medium rounded text-black bg-gray-200 hover:bg-gray-300">Court 3</button>
+    </div>
+    <div class="grid grid-cols-3 gap-3">
+      <button type="button" class="rounded-lg px-5 py-2.5 mr-2 mb-2 border text-sm font-medium rounded text-black bg-gray-200 hover:bg-gray-300">Court 4</button>
+      <button type="button" class="rounded-lg px-5 py-2.5 mr-2 mb-2 border text-sm font-medium rounded text-black bg-gray-200 hover:bg-gray-300">Court 5</button>
+      <button type="button" class="rounded-lg px-5 py-2.5 mr-2 mb-2 border text-sm font-medium rounded text-black bg-gray-200 hover:bg-gray-300">Court 6</button>
+    </div>           
+  </div>
+  
+  
+  <!-- Scoring -->
+  <h5 id="drawer-label" class="inline-flex items-center mt-6 text-base font-semibold text-gray-500 dark:text-gray-400"><svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>&nbsp;Scoring</h5>     
+  <div class="mt-2">
+    <div class="grid grid-cols-1">
+      <!-- Scoring match selection dropdown -->
+      <button id="dropdownRadioBgHoverButton" data-dropdown-toggle="dropdownRadioBgHover" class="bg-blue-200 hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:hover:bg-blue-400 dark:focus:ring-blue-800" type="button">
+        <div>1) Olivia L | Maddy H &nbsp;&nbsp;   VS &nbsp;&nbsp;   Kaylani K | Sofia P</div>
+        <svg class="ml-2 w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+
+      <div id="dropdownRadioBgHover" class="border-8 hidden z-10 w-screen bg-white rounded divide-y shadow-lg divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
+          <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioBgHoverButton">
+            <li>
+              <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+
+                  <input id="default-radio-4" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                  <label for="default-radio-4" class="ml-2 w-full text-xs font-medium text-gray-900 rounded dark:text-gray-300">1) Olivia L | Maddy H &nbsp;&nbsp;   VS &nbsp;&nbsp;   Kaylani K | Sofia P</label>
+
+              </div>
+            </li>
+            <li>
+              <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                  <input id="default-radio-4" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                  <label for="default-radio-4" class="ml-2 w-full text-xs font-medium text-gray-900 rounded dark:text-gray-300">1) Olivia L | Maddy H &nbsp;&nbsp;   VS &nbsp;&nbsp;   Kaylani K | Sofia P</label>
+              </div>
+            </li>
+            <li>
+              <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                  <input id="default-radio-4" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                  <label for="default-radio-4" class="ml-2 w-full text-xs font-medium text-gray-900 rounded dark:text-gray-300">1) Olivia L | Maddy H &nbsp;&nbsp;   VS &nbsp;&nbsp;   Kaylani K | Sofia P</label>
+              </div>
+            </li>
+          </ul>
+      </div>   
+    </div>
+  </div>
+
+  <!-- scoring section -->
+  <div class="mt-3">       
+    <div class="grid grid-cols-3 gap-3">
+      <input type="text" id="title" class="text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Score" required>
+
+      <div class="mt-2 text-center text-sm font-medium text-black">VS.</div>
+
+      <input type="text" id="title" class="text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Score" required>
+    </div>
+    <div class="grid grid-cols-3 gap-3">
+      <div class="mt-2 text-center text-sm font-medium text-black">Olivia L + Maddy H</div>
+
+      <div class="mt-2 text-center text-sm font-medium text-black">&nbsp;</div>
+
+      <div class="mt-2 text-center text-sm font-medium text-black">Kaylani K + Sofia P</div>
+    </div>           
+  </div>
+  <!-- scoring submit -->
+  <div class="mt-2">
+    <div class="grid grid-cols-1">
+      <button type="submit" class="mt-4 text-white justify-center flex text-center bg-blue-700 hover:bg-blue-800 w-full focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"> Submit Scores</button>
+    </div>
+  </div>        
+  
+  
+  
+  <!-- Match / Round Operations -->
+  <h5 id="drawer-label" class="inline-flex items-center mt-6 text-base font-semibold text-gray-500 dark:text-gray-400"><svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>&nbsp;Match / Round Operations</h5>        
+  <div class="mt-2">
+    <div class="grid grid-cols-2 gap-3">
+      <button type="button" class="rounded-lg px-5 py-2.5 mr-2 mb-2 border text-sm font-medium rounded text-black bg-gray-200 hover:bg-gray-300">Update Scores</button>
+      <button type="button" class="rounded-lg px-5 py-2.5 mr-2 mb-2 border text-sm font-medium rounded text-black bg-gray-200 hover:bg-gray-300">Finalize Round 1</button>
+    </div>         
+  </div>
+  <div class="mt-4">
+    <div class="grid grid-cols-2 gap-3">
+      <button type="button" class="rounded-lg px-5 py-2.5 mr-2 mb-2 border text-sm font-medium rounded text-black bg-gray-200 hover:bg-gray-300">Edit Tournament</button>
+      <button type="button" class="rounded-lg px-5 py-2.5 mr-2 mb-2 border text-sm font-medium rounded text-black bg-gray-200 hover:bg-gray-300">Back To Tournaments</button>
+    </div>           
+  </div>     
+</div>

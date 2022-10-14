@@ -20,8 +20,8 @@ export default class extends Controller {
     this.updateTimerOnPage();
     // generate new unique admin view id on initial load / refresh
     this.localViewIdValue = Math.floor(Math.random() * 1000000)
-    this.activeConnection("sync", null) // initial sync / load
-    this.activeConnectionStart(); // start active monitoring of admin views
+    // this.activeConnection("sync", null) // initial sync / load
+    // this.activeConnectionStart(); // start active monitoring of admin views
   };
 
   // this is the "always running while page is loaded" server status fetch timer

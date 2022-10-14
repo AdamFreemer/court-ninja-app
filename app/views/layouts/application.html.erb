@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>TourneyChamp</title>
+    <% if action_name == "display" && @tournament.courts > 1 %>
+      <title>TC | Court #<%= params[:court] %></title>
+    <% else %>
+      <title>TourneyChamp</title>
+    <% end %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -18,7 +22,7 @@
 
   <body>
     <% if current_user %>
-      <% if action_name == "display_multiple" || action_name == "display_single" || action_name == "results" %>
+      <% if action_name == "display" || action_name == "results" %>
         <%= render 'layouts/headerless' %>
       <% else %>
         <%= render 'layouts/header' %>
