@@ -1,5 +1,5 @@
 class TeamsController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:verify]
+  skip_before_action :authenticate_user!
 
   def show; end
 
@@ -65,11 +65,11 @@ class TeamsController < ApplicationController
     if user
       player_team = PlayerTeam.find_by(team: team, player: user)
 
-      unless player_team
+      if player_team
+        flash[:notice] = 'Athlete is already on this team'
+      else
         pt = PlayerTeam.create!(team: team, player: user, pending: true)
         UserMailer.existing_athlete_join_team_approval_email(pt.id).deliver_now
-      else
-        flash[:notice] = 'Athlete is already on this team'
       end
     else
       pw = SecureRandom.uuid
