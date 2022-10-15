@@ -1,5 +1,5 @@
 class TeamsController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:verify]
+  skip_before_action :authenticate_user!, only: [:verify, :add_player_to_team]
 
   def show; end
 
