@@ -30,7 +30,7 @@
       <div class="p-6">
 
         <h2 class="font-bold">Add Athlete</h2>
-        <%= form_for athlete, url: { action: 'add_player_to_team', remote: true } do |f| %>
+        <%= form_for athlete, url: { action: 'add_player_to_team', remote: true, turbo: false } do |f| %>
           <div class="py-4">
             <%= f.label :first_name, "First Name", class: "block text-sm" %>
             <%= f.text_field :first_name, autofocus: true, class: "w-full px-2 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500" %>
