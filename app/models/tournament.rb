@@ -87,22 +87,26 @@ class Tournament < ApplicationRecord
     round.generate_round(current_round + 1)
   end
 
-  def update_scores(tournament_set)
+  def update_scores(tournament_set, set_current_match)
     current_set = tournament_sets.find_by(round: tournament_set[:round], court: tournament_set[:court], number: tournament_set[:current_court_match])
     team1 = current_set.tournament_teams.find_by(number: 1)
     team2 = current_set.tournament_teams.find_by(number: 2)
     team1.update!(score: tournament_set[:scores][:team1].to_i)
     team2.update!(score: tournament_set[:scores][:team2].to_i)
-    # This is to keep track of individual current_sets on each court.
-    # Each court is stored as a k/v pair in a hash of all courts.
-    # i.e. current_matches: {"1"=>3, "2"=>2}, key = court, value = match
-    set_current_set =
-      if matches_per_round == tournament_set[:current_court_match].to_i
-        tournament_set[:current_court_match].to_i
-      else
-        tournament_set[:current_court_match].to_i + 1
-      end
-    current_matches[tournament_set[:court]] = set_current_set
+
+    # we don't set current match if we're doing a utility drawer scores update
+    if set_current_match
+      # This is to keep track of individual current_sets on each court.
+      # Each court is stored as a k/v pair in a hash of all courts.
+      # i.e. current_matches: {"1"=>3, "2"=>2}, key = court, value = match
+      set_current_set =
+        if matches_per_round == tournament_set[:current_court_match].to_i
+          tournament_set[:current_court_match].to_i
+        else
+          tournament_set[:current_court_match].to_i + 1
+        end
+      current_matches[tournament_set[:court]] = set_current_set
+    end
     save!
   end
 
@@ -281,7 +285,7 @@ class Tournament < ApplicationRecord
     ### Scenarios for view to be admin_view_current:
     # - On new tournament creation, admin_view_current is blank, first view created wins
     # - f existing admin_current_view window closes, it would then become stale and transfer admin_current_view status to other open view
-  
+
     # Remove stale views
     admin_views.each do |id, timestamp| # remove stale views
       admin_views.delete(id) if timestamp.to_i < (view[:timestamp].to_i - 4)
@@ -331,6 +335,10 @@ class Tournament < ApplicationRecord
     elsif total_rounds.to_i > current_round.to_i
       current_round.to_i + 1
     end
+  end
+
+  def total_match_time
+    match_time + pre_match_time
   end
   # rubocop:enable Lint/NumberConversion
 end

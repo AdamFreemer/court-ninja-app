@@ -1,7 +1,7 @@
 class TournamentsController < ApplicationController
   before_action :set_tournament, only: %i[status tournament_status
     administration display results submit_scores team_scores_update 
-    process_round edit update destroy admin_connection]
+    process_round edit update destroy admin_connection update_scores]
   before_action :set_display, only: %i[display]
   before_action :round_two_generated, only: %i[administration]
   before_action :current_set_players, only: %i[display status]
@@ -26,7 +26,7 @@ class TournamentsController < ApplicationController
     @tournament_times = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
     @break_times = [0.12, 0.5, 1, 1.5, 2.0]
 
-    @match_times = [["1 minute", 60], ["2 minutes", 120], ["3 minutes", 180], ["4 minutes", 240], ["5 minutes", 300], 
+    @match_times = [["30 seconds", 30], ["1 minute", 60], ["2 minutes", 120], ["3 minutes", 180], ["4 minutes", 240], ["5 minutes", 300], 
                     ["6 minutes", 360], ["7 minutes", 420], ["8 minutes", 480], ["9 minutes", 540], ["10 minutes", 600]]
     @pre_match_times = [["5 seconds", 5], ["30 seconds", 30], ["1.0 minute", 60], ["1.5 minutes", 90], ["2.0 minutes", 120]]
     @tournament_configured = !@tournament.rounds_configured.empty?
@@ -88,22 +88,22 @@ class TournamentsController < ApplicationController
     tournament_set = { round: @tournament.current_round, court: params[:court], current_court_match: params[:current_court_match], scores: params[:scores] }
     if params[:round].to_i != @tournament.current_round
       # when the round was updated on one court but the other (one submitted) hasn't refreshed yet
-      message = "Alert: other Court submitted round. Page updated to round ##{@tournament.current_round}."
+      message = "<p>Alert!</p> Other Court submitted round. Page updated to round ##{@tournament.current_round}."
       status = 'new-round'
     elsif params[:function] == 'round'
       if @tournament.all_scores_entered_all_courts_round(@tournament.current_round.to_i) # check all courts for completed scoring
         @tournament.process_round(@tournament.current_round.to_i)
-        message = 'Alert: round processed.'
+        message = '<p>Alert!</p> Round processed.'
         status = 'new-round'
       else
-        message = 'Alert: Not all courts in this tournament have completed scoring.'
+        message = '<p>Alert!</p> Not all courts in this tournament have completed scoring for this round.'
       end
     elsif params[:function] == 'scores'
       if @tournament.all_scores_entered_court_round(params[:court].to_i, @tournament.current_round.to_i) # check current court for completed scoring
-        message = 'Alert: All scores for this court have been entered.'
+        message = '<p>Alert!</p> All scores for this court have been entered.'
       else
-        @tournament.update_scores(tournament_set)
-        message = "Alert: scores processed. Match ##{@tournament.current_matches[params[:court]]} starting."
+        @tournament.update_scores(tournament_set, true)
+        message = "<p>Alert!</p> Scores processed. Match ##{@tournament.current_matches[params[:court]]} starting."
       end
     end
 
@@ -123,6 +123,18 @@ class TournamentsController < ApplicationController
       admin_views_count: @tournament.admin_views.count,
       current_court_match: @tournament.current_matches[params[:court]],
       all_scores_entered: @tournament.all_scores_entered_court_round(params[:court], @tournament.current_round),
+      message: message,
+      status: status
+    }
+  end
+
+  def update_scores
+    message = "Alert: Scores updated."
+    status = ''
+    tournament_set = { round: params[:round], court: params[:court], current_court_match: params[:current_court_match], scores: params[:scores] }
+    @tournament.update_scores(tournament_set, false)
+
+    render json: {
       message: message,
       status: status
     }
@@ -212,8 +224,6 @@ class TournamentsController < ApplicationController
     }
   end
 
-
-
   def current_round_calc(current_round, total_rounds)
     if current_round == total_rounds
       current_round
@@ -232,7 +242,7 @@ class TournamentsController < ApplicationController
       @tournament.associate_players
       if @tournament.generate
         @tournament.update(current_round: 1)
-        redirect_to administration_tournament_url(@tournament, 1), notice: "Tournament was successfully created."
+        redirect_to display_url(@tournament, 1), notice: "Tournament was successfully created."
       else
         redirect_to tournaments_url
       end
@@ -281,7 +291,7 @@ class TournamentsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_tournament
     @tournament = Tournament.find(params[:id])
-    @match_times = [["1 minute", 60], ["2 minutes", 120], ["3 minutes", 180], ["4 minutes", 240], ["5 minutes", 300], 
+    @match_times = [["30 seconds", 30], ["1 minute", 60], ["2 minutes", 120], ["3 minutes", 180], ["4 minutes", 240], ["5 minutes", 300], 
     ["6 minutes", 360], ["7 minutes", 420], ["8 minutes", 480], ["9 minutes", 540], ["10 minutes", 600]]
     @pre_match_times = [["5 seconds", 5], ["30 seconds", 30], ["1.0 minute", 60], ["1.5 minutes", 90], ["2.0 minutes", 120]]
   end
