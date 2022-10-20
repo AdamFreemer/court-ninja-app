@@ -16,7 +16,6 @@ Rails.application.routes.draw do
   get '/tournaments/administration/:id/:round', to: 'tournaments#administration', as: 'administration_tournament'
   get '/tournaments/display/:id/:court', to: 'tournaments#display', as: 'display'
 
-  get '/tournament/process_round/:id/:round', to: 'tournaments#process_round'
   post '/tournaments/submit_scores', to: 'tournaments#submit_scores'
   post '/tournaments/update_scores', to: 'tournaments#update_scores'
   post '/tournaments/admin_connection', to: 'tournaments#admin_connection'

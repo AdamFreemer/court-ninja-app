@@ -90,6 +90,15 @@ class TournamentsController < ApplicationController
       # when the round was updated on one court but the other (one submitted) hasn't refreshed yet
       message = "<p>Alert!</p> Other Court submitted round. Page updated to round ##{@tournament.current_round}."
       status = 'new-round'
+    elsif params[:function] == 'round' && @tournament.rounds_finalized.include?(@tournament.current_round)
+      if @tournament.current_round == @tournament.rounds_finalized.last # tournament is over, shouldn't be getting here
+        @tournament.update!(tournament_completed: true)
+        message = "<p>Alert!</p> Tournament complete."
+        status = 'new-round'
+      else 
+        message = "<p>Alert!</p> This round has already been processed."
+        status = 'new-round'
+      end
     elsif params[:function] == 'round'
       if @tournament.all_scores_entered_all_courts_round(@tournament.current_round.to_i) # check all courts for completed scoring
         @tournament.process_round(@tournament.current_round.to_i)
@@ -140,7 +149,7 @@ class TournamentsController < ApplicationController
     }
   end
 
-  def process_round
+  # def process_round
     # round = params[:round] # params: :id / :round
     # # check if all tournament_teams for all courts in current round have scores. If true, create_user_scores and proceed.
     # if @tournament.all_scores_entered_court_round(params[:court], params[:round])
@@ -169,7 +178,7 @@ class TournamentsController < ApplicationController
     # else
     #   redirect_to administration_tournament_url(@tournament, round), notice: 'Scores for all matches not entered.'
     # end
-  end
+  # end
 
   def team_scores_update
     score_date = request.params['score_data']

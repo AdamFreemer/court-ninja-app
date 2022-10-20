@@ -49,11 +49,19 @@
             <% team1.each do |player| %>
               <td class="px-1"><%= player.name_abbreviated %></td>
             <% end %>
-            <td class="px-6"><%= tournament_set.tournament_teams.first.score %></td>
+            <td 
+              id="<%= tournament_set.tournament_teams.first.id %>" 
+              data-display-target="team"
+              class="px-6"><%= tournament_set.tournament_teams.first.score %>
+            </td>
             <% team2.each do |player| %>
               <td class="px-1"><%= player.name_abbreviated %></td>
             <% end %>
-            <td class="px-6"><%= tournament_set.tournament_teams.second.score %></td>
+            <td 
+              id="<%= tournament_set.tournament_teams.second.id %>" 
+              data-display-target="team"
+              class="px-6"><%= tournament_set.tournament_teams.second.score %>
+            </td>
           </tr>
         <% end %>
 

@@ -111,18 +111,20 @@ class Tournament < ApplicationRecord
   end
 
   def process_round(round)
-    create_user_scores(round)
+    return false if rounds_finalized.include?(round)
 
+    create_user_scores(round)
     rounds_finalized = self.rounds_finalized # Grab current rounds finalized, push in current round just finalized (if first round, rounds_finalized will be empty to start)
     rounds_finalized << round
     associate_players
     generate unless rounds_finalized.count >= rounds
     update!(
-      tournament_completed: rounds_finalized.count == rounds ? true : false,
+      tournament_completed: rounds_finalized.last == rounds ? true : false,
       rounds_finalized: rounds_finalized,
       current_set: 1,
       current_round: current_round_calc(round, rounds)
     )
+    true
   end
 
   def create_user_scores(round)
