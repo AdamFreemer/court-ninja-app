@@ -26,13 +26,13 @@
   <div class="overflow-x-auto relative">
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-      <% team_count = [*1..@tournament.tournament_sets.where(court: @court_number).first.tournament_teams.first.users.count - 1] %>
+      <% team_count = @tournament.tournament_sets.first.tournament_teams.first.users.count %>
         <tr>
           <th scope="col" class="py-3">&nbsp;</th>  
           <th scope="col" class="py-3">Match</th>
-          <th colspan="3" scope="<%= team_count.count %>" class="py-3 px-6"><%= tournament.court_side_a_name %> Side</th>
+          <th colspan="<%= team_count %>" scope="<%= team_count %>" class="py-3"><%= tournament.court_side_a_name %> Side</th>
           <th scope="col" class="py-3">Score</th>
-          <th colspan="3" scope="<%= team_count.count %>" class="py-3 px-6"><%= tournament.court_side_b_name %> Side</th>
+          <th colspan="<%= team_count %>" scope="<%= team_count %>" class="py-3"><%= tournament.court_side_b_name %> Side</th>
           <th scope="col" class="py-3">Score</th>
         </tr>
       </thead>

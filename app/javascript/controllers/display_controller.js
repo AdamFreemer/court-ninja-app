@@ -116,15 +116,18 @@ export default class extends Controller {
       if (element.id == inputSelected.id) {
         element.parentElement.parentElement.children[0].children[0].checked = true
 
-        element.parentElement.parentElement.classList.add('border-4');
-        element.parentElement.parentElement.classList.add('border-indigo-500');
-        element.parentElement.parentElement.classList.add('rounded-full') 
+        element.parentElement.parentElement.classList.add('font-extrabold');
+        // element.parentElement.parentElement.classList.add('shadow-lg');
+        // element.parentElement.parentElement.classList.add('shadow-cyan-500/50');
+        // bg-cyan-500 shadow-lg shadow-cyan-500/50
+        // element.parentElement.parentElement.classList.add('border-indigo-500');
+        // element.parentElement.parentElement.classList.add('rounded-full') 
 
       } else {
         element.parentElement.parentElement.children[0].children[0].checked = false
-        element.parentElement.parentElement.classList.add('rounded') 
-        element.parentElement.parentElement.classList.remove('border-4');
-        element.parentElement.parentElement.classList.remove('border-indigo-500');
+        // element.parentElement.parentElement.classList.add('rounded') 
+        element.parentElement.parentElement.classList.remove('font-extrabold');
+
       }
     });
   }
