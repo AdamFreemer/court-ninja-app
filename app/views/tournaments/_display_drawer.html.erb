@@ -36,7 +36,7 @@
           <th scope="col" class="py-3">Score</th>
         </tr>
       </thead>
-      <tbody class="">
+      <tbody>
         <% @tournament.current_round == 1 ? court_sets = @court_sets_round1 : court_sets = @court_sets_round2 %>
         <% court_sets.each do |tournament_set, i| %>
           <% team1 = tournament_set.tournament_teams.first.users %>
