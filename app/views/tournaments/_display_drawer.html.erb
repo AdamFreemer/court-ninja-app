@@ -41,9 +41,14 @@
         <% court_sets.each do |tournament_set, i| %>
           <% team1 = tournament_set.tournament_teams.first.users %>
           <% team2 = tournament_set.tournament_teams.second.users %>
-          <tr id="<%= tournament_set.number %>" data-display-target="matchRowSelected" class="bg-white dark:bg-gray-800">
+          <tr 
+            id="<%= tournament_set.number %>" 
+            data-display-target="matchRowSelected" 
+            data-action="click->display#matchSelectClick"
+            class="bg-white dark:bg-gray-800"
+          >
             <td class="px-2 py-3">
-             <input id="<%= tournament_set.number %>"type="radio" data-display-target="matchSelected" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500">
+             <input id="<%= tournament_set.number %>" type="radio" data-display-target="matchSelected" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500">
             </td>
             <td class="px-6"><%= tournament_set.number %></td>
             <% team1.each do |player| %>

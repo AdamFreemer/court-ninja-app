@@ -29,14 +29,6 @@ export default class extends Controller {
   connect() {
     this.updatePage();
     this.spinnerTarget.style.display = 'none';
-
-    // event listener for drawer match selection
-    document.addEventListener("click", event => {
-      if (event.target.type === "radio") {
-        this.matchRowSelectedValue = event.target.id
-        this.matchSelectClick();
-      }
-    })     
     
     console.log("---> this.modalPurposeValue: ", this.modalPurposeValue)
     console.log("---> this.allScoresEnteredValue: ", this.allScoresEnteredValue)
@@ -82,7 +74,7 @@ export default class extends Controller {
     } else if (this.modalPurposeValue == "message") {
         this.modalButtonsTarget.style.display = 'none';
         this.confirmationMessageValue = 'Message'
-    } else if (this.modalPurposeValue == "confirm") {
+    } else if (this.modalPurposeValue == "update-scores") {
         this.modalButtonsTarget.style.display = 'flex';
         this.confirmationMessageValue = 'Message'
     }
@@ -117,22 +109,22 @@ export default class extends Controller {
 
   // drawer service methods  /////////////////////////////////////////////////////////////////
 
-  matchSelectClick() {
+  matchSelectClick(event) {
+    const inputSelected = event.target.parentElement.children[0].children[0]
     this.matchSelectedTargets.forEach((element) => {
-      if (element.id == this.matchRowSelectedValue) {
-        element.checked = true
-      } else {
-        element.checked = false
-      }
-    });
+      this.matchRowSelectedValue = inputSelected.id
+      if (element.id == inputSelected.id) {
+        element.parentElement.parentElement.children[0].children[0].checked = true
 
-    this.matchRowSelectedTargets.forEach((element) => {
-      if (element.id == this.matchRowSelectedValue) {
-        element.classList.add('border-2');
-        element.classList.add('border-indigo-500');
+        element.parentElement.parentElement.classList.add('border-4');
+        element.parentElement.parentElement.classList.add('border-indigo-500');
+        element.parentElement.parentElement.classList.add('rounded-full') 
+
       } else {
-        element.classList.remove('border-2');
-        element.classList.remove('border-indigo-500');
+        element.parentElement.parentElement.children[0].children[0].checked = false
+        element.parentElement.parentElement.classList.add('rounded') 
+        element.parentElement.parentElement.classList.remove('border-4');
+        element.parentElement.parentElement.classList.remove('border-indigo-500');
       }
     });
   }
@@ -189,6 +181,7 @@ export default class extends Controller {
     if (this.matchTimerValue <= 0) {
       clearInterval(this.timer);
       this.spinnerTarget.style.display = 'none';
+      this.matchTimerValue = this.matchTimeValue
     } else {
 
     }
@@ -236,7 +229,9 @@ export default class extends Controller {
           this.modalPurposeValue = "message"
           this.modalMessageTarget.innerHTML = response.message
           this.openModal();
-          this.start();
+          if (!this.timer) {
+            this.start();
+          };
         }       
       }
     })
@@ -296,7 +291,7 @@ export default class extends Controller {
 
     this.team1ScoreTarget.value = 1
     this.team2ScoreTarget.value = 1
-
+    this.matchRowSelectedValue = null // drawer match selection
     console.log("---> this.modalPurposeValue: ", this.modalPurposeValue)
     console.log("---> this.allScoresEnteredValue: ", this.allScoresEnteredValue)
   }
