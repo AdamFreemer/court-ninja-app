@@ -23,9 +23,11 @@
 #  court_side_a_name     :string
 #  court_side_b_name     :string
 #  courts                :integer
+#  current_matches       :json
 #  current_round         :integer          default(0)
 #  current_set           :integer          default(1)
 #  date                  :datetime
+#  is_new                :boolean          default(TRUE)
 #  match_time            :integer
 #  matches_per_round     :integer
 #  name                  :string
@@ -57,6 +59,7 @@
 #  fk_rails_...  (created_by_id => users.id)
 #
 class Tournament < ApplicationRecord
+  # rubocop:disable Lint/NumberConversion
   belongs_to :created_by, class_name: 'User', inverse_of: :tournaments_run
 
   has_many :tournament_teams
@@ -75,17 +78,59 @@ class Tournament < ApplicationRecord
     return false unless players.count.between?(6, 27)
     return false if current_round == 1 && players.count.between?(6, 9)
 
-    ordered_player_ids = if self.current_round == 0 # new tournament, just use newly created self.players
-                           players
-                         else                       # self.player_ranking returns ranked court array
-                          PlayerConfigs.player_court_distributor(player_ranking(self.current_round), players)
-                         end
+    ordered_player_ids =
+      if self.current_round.zero? # new tournament, just use newly created self.players
+        players
+      else # self.player_ranking returns ranked court array
+        PlayerConfigs.player_court_distributor(player_ranking(self.current_round), players)
+      end
     round = TournamentGenerator.new(self, ordered_player_ids)
     round.generate_round(current_round + 1)
   end
 
+  def update_scores(tournament_set, set_current_match)
+    current_set = tournament_sets.find_by(round: tournament_set[:round], court: tournament_set[:court], number: tournament_set[:current_court_match])
+    team1 = current_set.tournament_teams.find_by(number: 1)
+    team2 = current_set.tournament_teams.find_by(number: 2)
+    team1.update!(score: tournament_set[:scores][:team1].to_i)
+    team2.update!(score: tournament_set[:scores][:team2].to_i)
+
+    # we don't set current match if we're doing a utility drawer scores update
+    if set_current_match
+      # This is to keep track of individual current_sets on each court.
+      # Each court is stored as a k/v pair in a hash of all courts.
+      # i.e. current_matches: {"1"=>3, "2"=>2}, key = court, value = match
+      set_current_set =
+        if matches_per_round == tournament_set[:current_court_match].to_i
+          tournament_set[:current_court_match].to_i
+        else
+          tournament_set[:current_court_match].to_i + 1
+        end
+      current_matches[tournament_set[:court]] = set_current_set
+    end
+    save!
+  end
+
+  def process_round(round)
+    return false if rounds_finalized.include?(round)
+
+    create_user_scores(round)
+    rounds_finalized = self.rounds_finalized # Grab current rounds finalized, push in current round just finalized (if first round, rounds_finalized will be empty to start)
+    rounds_finalized << round
+    associate_players
+    generate unless rounds_finalized.count >= rounds
+    update!(
+      tournament_completed: rounds_finalized.last == rounds ? true : false,
+      rounds_finalized: rounds_finalized,
+      current_set: 1,
+      current_round: current_round_calc(round, rounds)
+    )
+    true
+  end
+
   def create_user_scores(round)
-    # this method is non-idempotent
+    # This is for round finalization. tournament_team scores are set during scoring update, not team_user scores.
+    # this method commits to the database
     tournament_sets.where(round: round).each do |tournament_set|
       score = scoring(tournament_set)
       tournament_set.tournament_teams.each do |team|
@@ -102,6 +147,36 @@ class Tournament < ApplicationRecord
           )
         end
       end
+    end
+  end
+
+  def all_scores_entered_court_round(court, round)
+    return true if tournament_teams.where(court: court, round: round).where(score: nil).count.zero?
+
+    false
+  end
+
+  def all_scores_entered_all_courts_round(round)
+    return true if tournament_teams.where(round: round).where(score: nil).count.zero?
+
+    false
+  end
+
+  def scoring(tournament_set)
+    team_1_score = tournament_set.tournament_teams.find_by(number: 1).score ||= 0
+    team_2_score = tournament_set.tournament_teams.find_by(number: 2).score ||= 0
+    score_delta = (team_1_score - team_2_score).abs
+
+    if team_1_score > team_2_score
+      {
+        team1: { win: 1, loss: 0, score: score_delta },
+        team2: { win: 0, loss: 1, score: -score_delta }
+      }
+    else
+      {
+        team1: { win: 0, loss: 1, score: -score_delta },
+        team2: { win: 1, loss: 0, score: score_delta }
+      }
     end
   end
 
@@ -168,25 +243,7 @@ class Tournament < ApplicationRecord
     end
   end
 
-  def scoring(tournament_set)
-    # TODO: handle nil scores
-    team_1_score = tournament_set.tournament_teams.find_by(number: 1).score ||= 0
-    team_2_score = tournament_set.tournament_teams.find_by(number: 2).score ||= 0
-    score_delta = (team_1_score - team_2_score).abs
-
-    if team_1_score > team_2_score
-      {
-        team1: { win: 1, loss: 0, score: score_delta },
-        team2: { win: 0, loss: 1, score: -score_delta }
-      }
-    else
-      {
-        team1: { win: 0, loss: 1, score: -score_delta },
-        team2: { win: 1, loss: 0, score: score_delta }
-      }
-    end
-  end
-
+  # deprecated (for mass update)
   def update_current_set(score_data)
     teams_count = score_data.length
     teams_count_array = [*0..teams_count - 1].map(&:to_s)
@@ -221,7 +278,6 @@ class Tournament < ApplicationRecord
 
   def process_admin_view(view)
     skip_some_callbacks = true
-    # rubocop:disable Lint/NumberConversion
     # view = current admin page being examined
     # admin_view_current = current admin view id stored on tournament
     # admin_views = existing admin views (with timestamps) stored as hashes on tournament
@@ -232,7 +288,7 @@ class Tournament < ApplicationRecord
     ### Scenarios for view to be admin_view_current:
     # - On new tournament creation, admin_view_current is blank, first view created wins
     # - f existing admin_current_view window closes, it would then become stale and transfer admin_current_view status to other open view
-  
+
     # Remove stale views
     admin_views.each do |id, timestamp| # remove stale views
       admin_views.delete(id) if timestamp.to_i < (view[:timestamp].to_i - 4)
@@ -252,7 +308,6 @@ class Tournament < ApplicationRecord
     # Update timestamp of existing view and save record
     admin_views[view[:id].to_s] = view[:timestamp].to_s
     save
-    # rubocop:enable Lint/NumberConversion
   end
 
   def pre_match_time_formatted
@@ -276,4 +331,17 @@ class Tournament < ApplicationRecord
 
     self.total_tournament_time = ((((match_time * matches_per_round) + ((matches_per_round - 1) * pre_match_time)) * rounds) / 60.0).round
   end
+
+  def current_round_calc(current_round, total_rounds)
+    if current_round.to_i == total_rounds.to_i
+      current_round.to_i
+    elsif total_rounds.to_i > current_round.to_i
+      current_round.to_i + 1
+    end
+  end
+
+  def total_match_time
+    match_time + pre_match_time
+  end
+  # rubocop:enable Lint/NumberConversion
 end

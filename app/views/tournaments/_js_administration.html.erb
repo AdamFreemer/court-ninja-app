@@ -1,10 +1,6 @@
 <script>
   function display(court) {
-    if (court == 'all') {
-      window.open("/tournaments/display_multiple/<%= @tournament.id %>/<%= round %>")
-    } else {
-      window.open("/tournaments/display_single/<%= @tournament.id %>/<%= round %>/" + court)
-    }
+    window.open("/tournaments/display/<%= @tournament.id %>/" + court)
   };
 
   function updateScores(finalize) { 

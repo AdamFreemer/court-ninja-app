@@ -17,35 +17,35 @@ class TournamentGenerator
     # 1 create court for each court per round (15 player has 3 courts of 5 i.e. 3 create_court's)
     if @player_ids.count == 6
       create_court(tournament, round, 1, PlayerConfigs.p6, PlayerConfigs.new_round(@pids_hash))
-      tournament.update(work_group: 0, courts: 1, matches_per_round: 10, rounds: 1, configuration: 'p6')
+      tournament.update(work_group: 0, courts: 1, matches_per_round: 10, rounds: 1, configuration: 'p6', current_matches: { '1' => 1 })
     end
 
     if @player_ids.count == 7
       create_court(tournament, round, 1, PlayerConfigs.p7, PlayerConfigs.new_round(@pids_hash))
-      tournament.update(work_group: 1, courts: 1, matches_per_round: 7, rounds: 1, configuration: 'p7')
+      tournament.update(work_group: 1, courts: 1, matches_per_round: 7, rounds: 1, configuration: 'p7', current_matches: { '1' => 1 })
     end
 
     if @player_ids.count.between?(8, 9)
       create_court(tournament, round, 1, PlayerConfigs.p9, PlayerConfigs.new_round(@pids_hash))
-      tournament.update(work_group: 3, courts: 1, matches_per_round: 12, rounds: 1, configuration: 'p9')
+      tournament.update(work_group: 3, courts: 1, matches_per_round: 12, rounds: 1, configuration: 'p9', current_matches: { '1' => 1 })
     end
 
     if @player_ids.count == 10
       create_court(tournament, round, 1, PlayerConfigs.p5, PlayerConfigs.new_round(@pids_hash))
       create_court(tournament, round, 2, PlayerConfigs.p5, PlayerConfigs.new_round(@pids_hash))
-      tournament.update(work_group: 1, courts: 2, matches_per_round: 5, rounds: 2, configuration: 'p5')
+      tournament.update(work_group: 1, courts: 2, matches_per_round: 5, rounds: 2, configuration: 'p5', current_matches: { '1' => 1, '2' => 1 })
     end
 
     if @player_ids.count.between?(11, 12) # 2 courts of 6 | top 3 each court for gold round 2
       create_court(tournament, round, 1, PlayerConfigs.p6, PlayerConfigs.new_round(@pids_hash))
       create_court(tournament, round, 2, PlayerConfigs.p6, PlayerConfigs.new_round(@pids_hash))
-      tournament.update(work_group: 0, courts: 2, matches_per_round: 10, rounds: 2, configuration: 'p6')
+      tournament.update(work_group: 0, courts: 2, matches_per_round: 10, rounds: 2, configuration: 'p6', current_matches: { '1' => 1, '2' => 1 })
     end
 
     if @player_ids.count.between?(13, 14) # 2 courts of 7 | Review
       create_court(tournament, round, 1, PlayerConfigs.p7, PlayerConfigs.new_round(@pids_hash))
       create_court(tournament, round, 2, PlayerConfigs.p7, PlayerConfigs.new_round(@pids_hash))
-      tournament.update(work_group: 1, courts: 2, matches_per_round: 7, rounds: 2, configuration: 'p7')
+      tournament.update(work_group: 1, courts: 2, matches_per_round: 7, rounds: 2, configuration: 'p7', current_matches: { '1' => 1, '2' => 1 })
     end
 
     ## Below 14 is coach / team level role / package
@@ -54,20 +54,20 @@ class TournamentGenerator
       create_court(tournament, round, 1, PlayerConfigs.p5, PlayerConfigs.new_round(@pids_hash))
       create_court(tournament, round, 2, PlayerConfigs.p5, PlayerConfigs.new_round(@pids_hash))
       create_court(tournament, round, 3, PlayerConfigs.p5, PlayerConfigs.new_round(@pids_hash))
-      tournament.update(work_group: 1, courts: 3, matches_per_round: 5, rounds: 3, configuration: 'p5')
+      tournament.update(work_group: 1, courts: 3, matches_per_round: 5, rounds: 3, configuration: 'p5', current_matches: { '1' => 1, '2' => 1, '3' => 1 })
     end
 
     if @player_ids.count.between?(16, 17) # 2 courts of 9
       create_court(tournament, round, 1, PlayerConfigs.p9, PlayerConfigs.new_round(@pids_hash))
       create_court(tournament, round, 2, PlayerConfigs.p9, PlayerConfigs.new_round(@pids_hash))
-      tournament.update(work_group: 3, courts: 2, matches_per_round: 12, rounds: 2, configuration: 'p9')
+      tournament.update(work_group: 3, courts: 2, matches_per_round: 12, rounds: 2, configuration: 'p9', current_matches: { '1' => 1, '2' => 1 })
     end
 
     if @player_ids.count.between?(18, 21) # 3 courts of 7 | Top 1 pick from each, then smush the rest
       create_court(tournament, round, 1, PlayerConfigs.p7, PlayerConfigs.new_round(@pids_hash))
       create_court(tournament, round, 2, PlayerConfigs.p7, PlayerConfigs.new_round(@pids_hash))
       create_court(tournament, round, 3, PlayerConfigs.p7, PlayerConfigs.new_round(@pids_hash))
-      tournament.update(work_group: 1, courts: 3, matches_per_round: 7, rounds: 3, configuration: 'p7')
+      tournament.update(work_group: 1, courts: 3, matches_per_round: 7, rounds: 3, configuration: 'p7', current_matches: { '1' => 1, '2' => 1, '3' => 1 })
     end
 
     if @player_ids.count.between?(22, 24) # 4 courts of 6 | pair down courts
@@ -75,19 +75,26 @@ class TournamentGenerator
       create_court(tournament, round, 2, PlayerConfigs.p6, PlayerConfigs.new_round(@pids_hash))
       create_court(tournament, round, 3, PlayerConfigs.p6, PlayerConfigs.new_round(@pids_hash))
       create_court(tournament, round, 4, PlayerConfigs.p6, PlayerConfigs.new_round(@pids_hash))
-      tournament.update(work_group: 0, courts: 4, matches_per_round: 10, rounds: 3, configuration: 'p6')
+      tournament.update(work_group: 0, courts: 4, matches_per_round: 10, rounds: 3, configuration: 'p6', current_matches: { '1' => 1, '2' => 1, '3' => 1, '4' => 1 })
     end
 
     if @player_ids.count.between?(25, 27) # 3 courts of 9 | top 3 each court for gold
       create_court(tournament, round, 1, PlayerConfigs.p9, PlayerConfigs.new_round(@pids_hash))
       create_court(tournament, round, 2, PlayerConfigs.p9, PlayerConfigs.new_round(@pids_hash))
       create_court(tournament, round, 3, PlayerConfigs.p9, PlayerConfigs.new_round(@pids_hash))
-      tournament.update(work_group: 3, courts: 3, matches_per_round: 12, rounds: 2, configuration: 'p9')
+      tournament.update(work_group: 3, courts: 3, matches_per_round: 12, rounds: 2, configuration: 'p9', current_matches: { '1' => 1, '2' => 1, '3' => 1 })
     end
 
     currently_configured = tournament.rounds_configured
     currently_configured << round.to_i
     tournament.update!(rounds_configured: currently_configured, total_tournament_time: calculate_total_tournament_time) if tournament.tournament_sets.count.positive?
+  end
+
+  def set_default_courts(courts_count)
+    if courts_count == 1
+      
+    elsif courts_count == 2
+    end
   end
 
   def calculate_total_tournament_time
@@ -146,8 +153,8 @@ class TournamentGenerator
       court: court,
       round: round
     )
-    team1 = TournamentTeam.create(number: 1, tournament_id: tournament.id)
-    team2 = TournamentTeam.create(number: 2, tournament_id: tournament.id)
+    team1 = TournamentTeam.create!(number: 1, tournament_id: tournament.id, court: court, round: round)
+    team2 = TournamentTeam.create!(number: 2, tournament_id: tournament.id, court: court, round: round)
 
     config[0].each do |config_player_number|
       team1.users << User.find(player_ids[config_player_number - 1])

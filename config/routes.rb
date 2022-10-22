@@ -14,12 +14,14 @@ Rails.application.routes.draw do
   get '/approve_team/:uuid', to: 'teams#existing_athlete_join_team_approval', as: 'existing_athlete_join_team_approval'
 
   get '/tournaments/administration/:id/:round', to: 'tournaments#administration', as: 'administration_tournament'
-  get '/tournaments/display_single/:id/:round/:court', to: 'tournaments#display_single'
-  get '/tournaments/display_multiple/:id/:round', to: 'tournaments#display_multiple'
+  get '/tournaments/display/:id/:court', to: 'tournaments#display', as: 'display'
 
-  get '/tournament/process_round/:id/:round', to: 'tournaments#process_round'
+  post '/tournaments/submit_scores', to: 'tournaments#submit_scores'
+  post '/tournaments/update_scores', to: 'tournaments#update_scores'
+  post '/tournaments/set_stale', to: 'tournaments#set_stale'
+
   post '/tournaments/admin_connection', to: 'tournaments#admin_connection'
-  get '/tournaments/:id/status/:timestamp', to: 'tournaments#status'
+  get '/tournaments/status/:id/:court_number/:timestamp', to: 'tournaments#status'
 
   devise_for :users, controllers: { registrations: 'registrations' }
 

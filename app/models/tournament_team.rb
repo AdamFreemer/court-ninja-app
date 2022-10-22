@@ -5,7 +5,9 @@
 # Table name: tournament_teams
 #
 #  id            :bigint           not null, primary key
+#  court         :integer
 #  number        :integer
+#  round         :integer
 #  score         :integer
 #  work_team     :boolean
 #  created_at    :datetime         not null
