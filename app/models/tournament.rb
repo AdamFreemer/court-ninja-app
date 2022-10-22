@@ -27,6 +27,7 @@
 #  current_round         :integer          default(0)
 #  current_set           :integer          default(1)
 #  date                  :datetime
+#  is_new                :boolean          default(TRUE)
 #  match_time            :integer
 #  matches_per_round     :integer
 #  name                  :string

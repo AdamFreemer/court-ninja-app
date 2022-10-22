@@ -2,19 +2,20 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { 
+    isNew: Boolean, 
     submitButtonText: String,
     allScoresEntered: { type: Boolean, default: false },
     tournamentScores: Array, // team_id, score
     tournamentId: Number,
-    tournamentCompleted: Boolean,
+    isCompleted: Boolean,
     tournamentCurrentSetPlayersCourt1: { type: Array, default: [[['-'], ['-'],['-']], [['-'], ['-'],['-']],[['-'], ['-'],['-']]] },
     tournamentCurrentSetPlayersCourt2: { type: Array, default: [[['-'], ['-'],['-']], [['-'], ['-'],['-']],[['-'], ['-'],['-']]] },
     tournamentCurrentRound: Number,
     tournamentCurrentCourt: Number,
-    tournamentCourts: Number,
     tournamentMatchesPerRound: Number,
     tournamentCurrentCourtMatch: Number,
     tournamentTotalRounds: Number,
+    courts: Number,
     matchTime: Number, // static value for Tournament Time
     matchPreTime: Number, // static value for Tournament Pre Time
     matchTimer: Number, // Actual countdown timer value
@@ -29,16 +30,11 @@ export default class extends Controller {
   connect() {
     this.updatePage();
     this.spinnerTarget.style.display = 'none';
-    
-    console.log("---> this.modalPurposeValue: ", this.modalPurposeValue)
-    console.log("---> this.allScoresEnteredValue: ", this.allScoresEnteredValue)
   }
 
   // modal related methods ////////////////////////////////////////////////////////////////
 
   mainPageSubmitClick() {
-    console.log("---> this.modalPurposeValue: ", this.modalPurposeValue)
-    console.log("---> this.allScoresEnteredValue: ", this.allScoresEnteredValue)
     if (this.allScoresEnteredValue != true) {
       this.modalPurposeValue = "submit-scores"
       this.openModal();
@@ -49,8 +45,6 @@ export default class extends Controller {
   }
 
   drawerSubmitScoresClick() {
-    console.log("---> this.modalPurposeValue: ", this.modalPurposeValue)
-    console.log("---> this.allScoresEnteredValue: ", this.allScoresEnteredValue)
     if (this.matchRowSelectedValue && this.team1ScoreUpdateTarget.value.length != 0 && this.team2ScoreUpdateTarget.value.length != 0) {
       this.modalPurposeValue = "update-scores"
       this.modalMessageTarget.innerHTML = `<p>Are you sure you want to update scores for </p> Match #${this.matchRowSelectedValue}?`
@@ -63,11 +57,11 @@ export default class extends Controller {
   }
 
   openModal() {
-    console.log("---> this.modalPurposeValue: ", this.modalPurposeValue)
-    console.log("---> this.allScoresEnteredValue: ", this.allScoresEnteredValue)
+    this.reset();
     if (this.modalPurposeValue == "submit-scores") {
+        const currentCourtMatch = this.tournamentCurrentCourtMatchValue + (this.tournamentMatchesPerRoundValue * (this.tournamentCurrentRoundValue - 1))
         this.modalButtonsTarget.style.display = 'flex';
-        this.modalMessageTarget.innerHTML = `Submit scores for Match #${this.tournamentCurrentCourtMatchValue}?`
+        this.modalMessageTarget.innerHTML = `Submit scores for Match #${currentCourtMatch}?`
     } else if (this.modalPurposeValue == "submit-round") {
         this.modalButtonsTarget.style.display = 'flex';
         this.modalMessageTarget.innerHTML = 'Submit Round? (Warning: this can NOT be undone)'
@@ -77,6 +71,9 @@ export default class extends Controller {
     } else if (this.modalPurposeValue == "update-scores") {
         this.modalButtonsTarget.style.display = 'flex';
         this.confirmationMessageValue = 'Message'
+    } else if (this.modalPurposeValue == "is-new") {
+      this.modalButtonsTarget.style.display = 'flex';
+      this.modalMessageTarget.innerHTML = '<p>New Tournament created, yay!</p>Click Confirm to start.'
     }
     this.modalTarget.classList.add('modal-open');
   }
@@ -86,17 +83,27 @@ export default class extends Controller {
   }
 
   modalConfirmClick() {
-    console.log('modalConfirmClick()')
-    console.log("---> this.modalPurposeValue: ", this.modalPurposeValue)
-    console.log("---> this.allScoresEnteredValue: ", this.allScoresEnteredValue)
     this.modalTarget.classList.remove('modal-open');
+    
+    // new tournament
+    if (this.modalPurposeValue == "is-new") {
+      this.reset();
+      this.start();
+    }    
     // submit (update) scores from drawer
     if (this.modalPurposeValue == "update-scores") {
       this.updateScores();
+      this.reset();
+      this.start();
     } 
     // submit (scores / round) from main page
     if (this.modalPurposeValue == "submit-scores" || this.modalPurposeValue == "submit-round") {
       this.submitScores();
+      this.reset();
+      // start timer if NOT the last match in the round
+      if (this.tournamentCurrentCourtMatchValue != this.tournamentMatchesPerRoundValue) {
+        this.start();
+      }
     }
 
     setTimeout(() => {
@@ -115,19 +122,10 @@ export default class extends Controller {
       this.matchRowSelectedValue = inputSelected.id
       if (element.id == inputSelected.id) {
         element.parentElement.parentElement.children[0].children[0].checked = true
-
         element.parentElement.parentElement.classList.add('font-extrabold');
-        // element.parentElement.parentElement.classList.add('shadow-lg');
-        // element.parentElement.parentElement.classList.add('shadow-cyan-500/50');
-        // bg-cyan-500 shadow-lg shadow-cyan-500/50
-        // element.parentElement.parentElement.classList.add('border-indigo-500');
-        // element.parentElement.parentElement.classList.add('rounded-full') 
-
       } else {
         element.parentElement.parentElement.children[0].children[0].checked = false
-        // element.parentElement.parentElement.classList.add('rounded') 
         element.parentElement.parentElement.classList.remove('font-extrabold');
-
       }
     });
   }
@@ -213,9 +211,9 @@ export default class extends Controller {
         scores: { team1: this.team1ScoreTarget.value, team2: this.team2ScoreTarget.value }
       },
       success: (response) => {
+        this.isCompletedValue = response.is_completed;
         this.allScoresEnteredValue = response.all_scores_entered;
         this.tournamentScoresValue = response.scores;
-        this.tournamentCompletedValue = response.tournament_completed;
         this.tournamentCurrentSetPlayersCourt1Value = response.current_set_players_court1;
         this.tournamentCurrentSetPlayersCourt2Value = response.current_set_players_court2;
         this.tournamentCurrentSetPlayersLivePollValue = response.current_set_players_live_poll;
@@ -232,9 +230,6 @@ export default class extends Controller {
           this.modalPurposeValue = "message"
           this.modalMessageTarget.innerHTML = response.message
           this.openModal();
-          if (!this.timer) {
-            this.start();
-          };
         }       
       }
     })
@@ -270,14 +265,43 @@ export default class extends Controller {
       type: "GET",
       url: `/tournaments/status/${this.tournamentIdValue}/${this.tournamentCurrentCourtValue}/${current_time}`,
       success: (response) => {
+        this.isNewValue = response.is_new;
+        this.courtsValue = response.courts;
         this.tournamentScoresValue = response.scores;
-        this.tournamentCompletedValue = response.tournament_completed;
+        this.isCompletedValue = response.is_completed;
         this.tournamentCurrentSetPlayersCourt1Value = response.current_set_players_court1;
         this.tournamentCurrentSetPlayersCourt2Value = response.current_set_players_court2;
         this.tournamentCurrentRoundValue = response.current_round;
         this.tournamentCurrentCourtMatchValue = response.current_court_match;
 
         this.updateMatchLabel();
+        this.isNew();
+      }
+    })
+  }
+
+  isNew() {
+    if (this.isNewValue == true) {
+      this.modalPurposeValue = "is-new"      
+      this.openModal();
+      this.setStale();
+    }
+  };
+
+  setStale() {
+    $.ajax({
+      type: "POST",
+      url: "/tournaments/set_stale",
+      beforeSend: function(jqXHR, settings) {
+        jqXHR.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+      },
+      data: {
+        id: this.tournamentIdValue,
+      },
+      success: (response) => {
+        if (this.courtsValue > 1) {
+          window.open(`/tournaments/display/${this.tournamentIdValue}/2`, '_blank');
+        }
       }
     })
   }
@@ -295,10 +319,7 @@ export default class extends Controller {
     this.team1ScoreTarget.value = 1
     this.team2ScoreTarget.value = 1
     this.matchRowSelectedValue = null // drawer match selection
-    console.log("---> this.modalPurposeValue: ", this.modalPurposeValue)
-    console.log("---> this.allScoresEnteredValue: ", this.allScoresEnteredValue)
   }
-
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////-----------------------------/ update page methods /--------------------------------------------------------------------//////////
@@ -321,10 +342,10 @@ export default class extends Controller {
   }
 
   updateProgressBar() {
-
+    // progress bar -- update color and state -- update state message
     let progress = Math.abs(Math.round((this.matchTimerValue / this.matchTimeValue) * 100))
     this.progressTarget.style.setProperty('width', `${progress}%`)
-    // progress bar -- update color and state -- update state message
+
     if (this.matchTimerValue < (this.matchTimeValue - this.matchPreTimeValue)) {
       this.statusTarget.innerHTML = "PLAY"
       this.progressTarget.classList.remove('bg-yellow-500');
@@ -470,7 +491,8 @@ export default class extends Controller {
   }
 
   updateMatchLabel() {
-    this.matchTarget.innerHTML = `Match #${this.tournamentCurrentCourtMatchValue}`
+    const currentCourtMatch = this.tournamentCurrentCourtMatchValue + (this.tournamentMatchesPerRoundValue * (this.tournamentCurrentRoundValue - 1))
+    this.matchTarget.innerHTML = `Match #${currentCourtMatch}`
   }
 
   initialsDiv(team, player, data) {

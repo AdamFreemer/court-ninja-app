@@ -18,6 +18,8 @@ Rails.application.routes.draw do
 
   post '/tournaments/submit_scores', to: 'tournaments#submit_scores'
   post '/tournaments/update_scores', to: 'tournaments#update_scores'
+  post '/tournaments/set_stale', to: 'tournaments#set_stale'
+
   post '/tournaments/admin_connection', to: 'tournaments#admin_connection'
   get '/tournaments/status/:id/:court_number/:timestamp', to: 'tournaments#status'
 
