@@ -43,7 +43,16 @@
       <% end %>
 
       <h2 class="text-center mb-4 text-7xl font-extrabold tracking-tight leading-none text-gray-900 md:text-7xl lg:text-7xl dark:text-white">
-        <%= !@court_name.blank? ? "#{@court_name} Court (##{@court_number})" : "Court ##{@court_number}" %> 
+      
+      <%# Only show Court Labeling if more than 1 court, and show Gold / Silver designation on Round 2+ %>
+      <% if @tournament.current_round == 2 && @court_number == 1 && @tournament.courts > 1 %>
+        <%= !@court_name.blank? ? "#{@court_name} Court (Gold)" : "Court ##{@court_number} (Gold)" %>
+      <% elsif @tournament.current_round == 2 && @court_number == 2 && @tournament.courts > 1 %>
+        <%= !@court_name.blank? ? "#{@court_name} Court (Silver)" : "Court ##{@court_number} (Silver)" %>
+      <% elsif @tournament.current_round == 1 && @tournament.courts > 1 %>
+        <%= !@court_name.blank? ? "#{@court_name} Court (##{@court_number})" : "Court ##{@court_number}" %>
+      <% end %>
+
       </h2>
 
       <% if @tournament.tournament_completed %>
