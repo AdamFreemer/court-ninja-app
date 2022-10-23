@@ -30,6 +30,7 @@ export default class extends Controller {
   connect() {
     this.updatePage();
     this.spinnerTarget.style.display = 'none';
+    this.isNew();
   }
 
   // modal related methods ////////////////////////////////////////////////////////////////
@@ -73,7 +74,7 @@ export default class extends Controller {
         this.confirmationMessageValue = 'Message'
     } else if (this.modalPurposeValue == "is-new") {
       this.modalButtonsTarget.style.display = 'flex';
-      this.modalMessageTarget.innerHTML = '<p>New Tournament created, yay!</p>Click Confirm to start.'
+      this.modalMessageTarget.innerHTML = 'Click Confirm to start the first match!'
     }
     this.modalTarget.classList.add('modal-open');
   }
@@ -84,7 +85,7 @@ export default class extends Controller {
 
   modalConfirmClick() {
     this.modalTarget.classList.remove('modal-open');
-    
+
     // new tournament
     if (this.modalPurposeValue == "is-new") {
       this.reset();
@@ -281,10 +282,14 @@ export default class extends Controller {
   }
 
   isNew() {
-    if (this.isNewValue == true) {
+    
+    if (this.tournamentCurrentCourtMatchValue == 1) {
       this.modalPurposeValue = "is-new"      
       this.openModal();
-      this.setStale();
+      if (this.courtsValue == 2 && this.isNewValue == true) {
+        window.open(`/tournaments/display/${this.tournamentIdValue}/1`, '_blank');
+        this.setStale();
+      }
     }
   };
 
@@ -299,9 +304,7 @@ export default class extends Controller {
         id: this.tournamentIdValue,
       },
       success: (response) => {
-        if (this.courtsValue > 1) {
-          window.open(`/tournaments/display/${this.tournamentIdValue}/2`, '_blank');
-        }
+
       }
     })
   }
