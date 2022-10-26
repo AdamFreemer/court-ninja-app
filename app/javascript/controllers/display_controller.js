@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { 
+    publicMode: Boolean,
     isNew: Boolean, 
     submitButtonText: String,
     allScoresEntered: { type: Boolean, default: false },
@@ -11,6 +12,7 @@ export default class extends Controller {
     tournamentCurrentSetPlayersCourt1: { type: Array, default: [[['-'], ['-'],['-']], [['-'], ['-'],['-']],[['-'], ['-'],['-']]] },
     tournamentCurrentSetPlayersCourt2: { type: Array, default: [[['-'], ['-'],['-']], [['-'], ['-'],['-']],[['-'], ['-'],['-']]] },
     tournamentCurrentRound: Number,
+    tournamentCurrentRoundLocal: Number,
     tournamentCurrentCourt: Number,
     tournamentMatchesPerRound: Number,
     tournamentCurrentCourtMatch: Number,
@@ -23,7 +25,7 @@ export default class extends Controller {
     modalMessageText: { type: String, default: 'Smurf' },
     matchRowSelected: Number,
   }
-  static targets = [ "minute", "second", "progress", "progressbackground", "modal", "modalMessage", "modalButtons", "flash", "flashMessage",
+  static targets = [ "minute", "second", "progress", "progressbackground", "modal", "timerSection", "modalMessage", "modalButtons", "flash", "flashMessage","publicMode", "publicModeIcon",
     "set", "status", "team", "step", "spinner", "team1Score", "team2Score", "team1ScoreUpdate", "team2ScoreUpdate", "mainPageSubmitText", "match", "matchSelected", "matchRowSelected"
   ]
 
@@ -31,6 +33,7 @@ export default class extends Controller {
     this.updatePage();
     this.spinnerTarget.style.display = 'none';
     this.isNew();
+    this.publicModeOffClick();
   }
 
   // modal related methods ////////////////////////////////////////////////////////////////
@@ -59,6 +62,8 @@ export default class extends Controller {
 
   openModal() {
     this.reset();
+    if (this.publicModeValue) return false 
+
     if (this.modalPurposeValue == "submit-scores") {
         const currentCourtMatch = this.tournamentCurrentCourtMatchValue + (this.tournamentMatchesPerRoundValue * (this.tournamentCurrentRoundValue - 1))
         this.modalButtonsTarget.style.display = 'flex';
@@ -145,6 +150,54 @@ export default class extends Controller {
 
   openCourtTwoClick() {
     window.open(`/tournaments/display/${this.tournamentIdValue}/2`, '_blank');
+  }
+
+  // public mode /////////////////////////////////////////////////////////////////
+
+  publicModeOnClick() {
+    // Update drawer public mode
+    this.publicModeValue = true;
+    this.publicModeIconTarget.style.display = 'inline-block';
+    this.publicModeTarget.classList.add('text-green-600');
+    this.publicModeTarget.classList.remove('text-remove-500');
+    // Hide sections of page for public mode
+    this.timerSectionTarget.style.display = 'none';
+    this.mainPageSubmitTextTarget.style.display = 'none';
+    this.team1ScoreTarget.style.display = 'none';
+    this.team2ScoreTarget.style.display = 'none';
+    // Start auto refresh
+    this.publicModeAutoRefresh();
+  }
+
+  publicModeOffClick() {
+    // Update drawer public mode
+    this.publicModeValue = false;
+    this.publicModeIconTarget.style.display = 'none';
+    this.publicModeTarget.classList.remove('text-green-600');
+    this.publicModeTarget.classList.add('text-remove-500');
+    // Show sections of page for public mode
+    this.timerSectionTarget.style.display = 'block';
+    this.mainPageSubmitTextTarget.style.display = 'inline-block';
+    this.team1ScoreTarget.style.display = 'inline-block';
+    this.team2ScoreTarget.style.display = 'inline-block';
+    // Stop auto refresh
+    clearInterval(this.publicTimer);
+  }
+
+  publicModeAutoRefresh() {
+    this.publicTimer = setInterval(() => {
+      console.log('** publicMode timer running **')
+      this.fetchNewData();
+      if (this.tournamentCurrentRoundValue != this.tournamentCurrentRoundLocalValue) {
+        location.reload();
+      }
+      // update page elements
+      this.updateStepBar();
+      this.updateMatchLabel();
+      this.updatePlayerCards();
+      this.updateMatchScoringTable();
+      this.updateMatchLabel();
+    }, 2000);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
@@ -489,8 +542,8 @@ export default class extends Controller {
         if (element.id == score[0]) {
           element.innerHTML = score[1];
         }
-      });  
-    });       
+      });
+    });
   }
 
   updateMatchLabel() {

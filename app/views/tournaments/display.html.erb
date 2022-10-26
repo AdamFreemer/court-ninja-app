@@ -3,6 +3,7 @@
     <div data-controller="display"
       data-display-tournament-id-value="<%= @tournament.id %>"
       data-display-tournament-current-round-value="<%= @tournament.current_round %>"
+      data-display-tournament-current-round-local-value="<%= @tournament.current_round %>"
       data-display-tournament-current-court-value="<%= @court_number %>"
       data-display-tournament-timer-state-value="<%= @tournament.timer_state %>"
       data-display-match-timer-value="<%= @tournament.total_match_time %>"
@@ -72,7 +73,7 @@
         </div>
       <% else %>
         <!-- timer section -->
-        <div class="pt-2 text-6xl text-center font-medium text-gray-900">
+        <div data-display-target="timerSection" class="pt-2 text-6xl text-center font-medium text-gray-900">
           <div data-display-target="status" id="status" class="mb-4 text-6xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white"></div>
 
           <div data-display-target="progressbackground"class="overflow-hidden h-14 m-4 text-xs flex rounded bg-yellow-200">
