@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { 
+    displayMode: Boolean,
     isNew: Boolean, 
     submitButtonText: String,
     allScoresEntered: { type: Boolean, default: false },
@@ -11,6 +12,7 @@ export default class extends Controller {
     tournamentCurrentSetPlayersCourt1: { type: Array, default: [[['-'], ['-'],['-']], [['-'], ['-'],['-']],[['-'], ['-'],['-']]] },
     tournamentCurrentSetPlayersCourt2: { type: Array, default: [[['-'], ['-'],['-']], [['-'], ['-'],['-']],[['-'], ['-'],['-']]] },
     tournamentCurrentRound: Number,
+    tournamentCurrentRoundLocal: Number,
     tournamentCurrentCourt: Number,
     tournamentMatchesPerRound: Number,
     tournamentCurrentCourtMatch: Number,
@@ -23,14 +25,14 @@ export default class extends Controller {
     modalMessageText: { type: String, default: 'Smurf' },
     matchRowSelected: Number,
   }
-  static targets = [ "minute", "second", "progress", "progressbackground", "modal", "modalMessage", "modalButtons", "flash", "flashMessage",
-    "set", "status", "team", "step", "spinner", "team1Score", "team2Score", "team1ScoreUpdate", "team2ScoreUpdate", "mainPageSubmitText", "match", "matchSelected", "matchRowSelected"
+  static targets = [ "displayMode", "displayModeIcon", "displayModeToggle", "displayCards", "displayCardsDisplayMode", "minute", "second", "progress", "progressbackground", "modal", "timerSection", "modalMessage", "modalButtons", "flash", "flashMessage", "primaryCourtLabel", "set", "status", "team", "step", "spinner", "team1Score", "team2Score", "team1ScoreUpdate", "team2ScoreUpdate", "mainPageSubmitText", "match", "matchSelected", "matchRowSelected", "resultsTables"
   ]
 
   connect() {
     this.updatePage();
     this.spinnerTarget.style.display = 'none';
     this.isNew();
+    this.displayCardsDisplayModeTarget.style.display = "none"
   }
 
   // modal related methods ////////////////////////////////////////////////////////////////
@@ -59,6 +61,8 @@ export default class extends Controller {
 
   openModal() {
     this.reset();
+    if (this.displayModeValue) return false 
+
     if (this.modalPurposeValue == "submit-scores") {
         const currentCourtMatch = this.tournamentCurrentCourtMatchValue + (this.tournamentMatchesPerRoundValue * (this.tournamentCurrentRoundValue - 1))
         this.modalButtonsTarget.style.display = 'flex';
@@ -145,6 +149,62 @@ export default class extends Controller {
 
   openCourtTwoClick() {
     window.open(`/tournaments/display/${this.tournamentIdValue}/2`, '_blank');
+  }
+
+  // display mode /////////////////////////////////////////////////////////////////
+
+  displayModeToggleClick() {
+    if (this.displayModeToggleTarget.checked) { // display mode on
+      // Update drawer display mode
+      this.displayModeValue = true;
+      this.displayModeIconTarget.style.display = 'inline-block';
+      this.displayModeTarget.classList.add('text-green-600');
+      this.displayModeTarget.classList.remove('text-remove-500');
+      // Hide / show correct player cards sections
+      this.displayCardsTarget.style.display = "none"
+      this.displayCardsDisplayModeTarget.style.display = "block"
+      // Hide sections of page for display mode
+      this.primaryCourtLabelTarget.style.display = 'none';
+      this.timerSectionTarget.style.display = 'none';
+      this.mainPageSubmitTextTarget.style.display = 'none';
+      this.team1ScoreTarget.style.display = 'none';
+      this.team2ScoreTarget.style.display = 'none';
+      this.resultsTablesTarget.style.display = "none"
+      // Start auto refresh
+      this.displayModeAutoRefresh();
+    } else { // display mode off
+      // Update drawer display mode
+      this.displayModeValue = false;
+      this.displayModeIconTarget.style.display = 'none';
+      this.displayModeTarget.classList.remove('text-green-600');
+      this.displayModeTarget.classList.add('text-remove-500');
+      // Hide / show correct player cards sections
+      this.displayCardsTarget.style.display = "block"
+      this.displayCardsDisplayModeTarget.style.display = "none"
+      // Show sections of page for display mode
+      this.primaryCourtLabelTarget.style.display = 'block';
+      this.timerSectionTarget.style.display = 'block';
+      this.mainPageSubmitTextTarget.style.display = 'inline-block';
+      this.team1ScoreTarget.style.display = 'inline-block';
+      this.team2ScoreTarget.style.display = 'inline-block';
+      this.resultsTablesTarget.style.display = "block"
+      // Stop auto refresh
+      clearInterval(this.displayTimer);
+    }
+  }
+
+  displayModeAutoRefresh() {
+    this.displayTimer = setInterval(() => {
+      console.log('** displayMode timer running **')
+      this.fetchNewData();
+      if (this.tournamentCurrentRoundValue != this.tournamentCurrentRoundLocalValue) {
+        location.reload();
+      }
+      // update page elements
+      this.updateStepBar();
+      this.updateMatchLabel();
+      this.updatePlayerCards();
+    }, 2000);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
@@ -489,8 +549,8 @@ export default class extends Controller {
         if (element.id == score[0]) {
           element.innerHTML = score[1];
         }
-      });  
-    });       
+      });
+    });
   }
 
   updateMatchLabel() {
