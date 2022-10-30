@@ -1,0 +1,134 @@
+<% if tournament.courts == 1 %>
+  <ul role="list" class="min-w-full px-2 py-0 items-center grid grid-cols-7 gap-2">
+    <% current_set_players = current_set_players_all[0] %>
+    <!-- Filler cards (depending on 2 or 3 athlete per side) -->
+    <% if row_columns == 5 %>
+      <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>
+    <% end %>
+
+    <!-- Team 1 (left side) -->
+    <% current_set_players[0].reject { |c| c.empty? }.each_with_index do |player, index| %>
+      <%= render "card", player: player, index: index, team: 1 %>
+    <% end %>
+
+    <!-- Team 1 (work group middle) -->
+    <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">
+      <div class="flex-1 flex flex-col p-2">
+        <%= image_tag('vs.png', class: 'mt-10') %>
+        <% if tournament.work_group > 0 %>
+          <h3 class="mt-6 text-gray-900 text-sm font-medium underline">Work</h3>
+        <% end %>
+        <% current_set_players[2]&.each_with_index do |player, index| %>
+          <h3 id="work-player-<%= index %>" class="text-gray-900 text-sm font-medium"><%= player[1] %></h3>
+        <% end %>
+      </div>
+    </li>
+
+    <!-- Team 2 (right side) -->
+    <% current_set_players[1].reject { |c| c.empty? }.each_with_index do |player, index| %>
+      <%= render "card", player: player, index: index, team: 2 %>
+    <% end %>
+
+    <!-- Filler cards (depending on 2 or 3 athlete per side) -->
+    <% if row_columns == 5 %>
+      <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>
+    <% end %>
+  </ul> 
+
+<% else %>
+
+  <h2 class="mt-10 text-center text-5xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-5xl dark:text-white">
+    <% if tournament.current_round == 2 %>
+      <%= !tournament.court_2_name.blank? ? "#{tournament.court_1_name} Court (Gold)" : "Court #1 (Gold)" %>
+    <% elsif tournament.current_round == 1 %>
+      <%= !tournament.court_2_name.blank? ? "#{tournament.court_1_name} Court (#1)" : "Court #1" %>
+    <% end %>
+  </h2>
+
+  <!-- Court 1 -->
+  <div class="mb-4">
+    <ul role="list" class="min-w-full px-2 py-0 items-center grid grid-cols-7 gap-2">
+      <% current_set_players = current_set_players_all[0] %>
+      <!-- Filler cards (depending on 2 or 3 athlete per side) -->
+      <% if row_columns == 5 %>
+        <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>
+      <% end %>
+
+      <!-- Team 1 (left side) -->
+      <% current_set_players[0].reject { |c| c.empty? }.each_with_index do |player, index| %>
+        <%= render "card", player: player, index: index, team: 1 %>
+      <% end %>
+
+      <!-- Team 1 (work group middle) -->
+      <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">
+        <div class="flex-1 flex flex-col p-2">
+        <%= image_tag('vs.png', class: 'mt-10') %>
+        <% if tournament.work_group > 0 %>
+          <h3 class="mt-6 text-gray-900 text-sm font-medium underline">Work</h3>
+        <% end %>
+        <% current_set_players[2]&.each_with_index do |player, index| %>
+          <h3 id="work-player-<%= index %>" class="text-gray-900 text-sm font-medium"><%= player[1] %></h3>
+        <% end %>
+        </div>
+      </li>
+
+      <!-- Team 2 (right side) -->
+      <% current_set_players[1].reject { |c| c.empty? }.each_with_index do |player, index| %>
+        <%= render "card", player: player, index: index, team: 2 %>
+      <% end %>
+
+      <!-- Filler cards (depending on 2 or 3 athlete per side) -->
+      <% if row_columns == 5 %>
+        <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>
+      <% end %>
+    </ul>   
+  </div>
+
+
+  <%# Only show Court Labeling if more than 1 court, and show Gold / Silver designation on Round 2+ %>
+  <h2 class="mt-10 text-center text-5xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-5xl dark:text-white">
+    <% if tournament.current_round == 2 %>
+      <%= !tournament.court_2_name.blank? ? "#{tournament.court_2_name} Court (Silver)" : "Court #2 (Silver)" %>
+    <% elsif tournament.current_round == 1 %>
+      <%= !tournament.court_2_name.blank? ? "#{tournament.court_2_name} Court (#2)" : "Court #2" %>
+    <% end %>
+  </h2>
+
+
+  <!-- Court 2 -->
+  <ul role="list" class="min-w-full px-2 py-0 items-center grid grid-cols-7 gap-2">
+    <% current_set_players = current_set_players_all[1] %>
+    <!-- Filler cards (depending on 2 or 3 athlete per side) -->
+    <% if row_columns == 5 %>
+      <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>
+    <% end %>
+
+    <!-- Team 1 (left side) -->
+    <% current_set_players[0].reject { |c| c.empty? }.each_with_index do |player, index| %>
+      <%= render "card", player: player, index: index, team: 1 %>
+    <% end %>
+
+    <!-- Team 1 (work group middle) -->
+    <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">
+      <div class="flex-1 flex flex-col p-2">
+      <%= image_tag('vs.png', class: 'mt-10') %>
+      <% if tournament.work_group > 0 %>
+        <h3 class="mt-6 text-gray-900 text-sm font-medium underline">Work</h3>
+      <% end %>
+      <% current_set_players[2]&.each_with_index do |player, index| %>
+        <h3 id="work-player-<%= index %>" class="text-gray-900 text-sm font-medium"><%= player[1] %></h3>
+      <% end %>
+      </div>
+    </li>
+
+    <!-- Team 2 (right side) -->
+    <% current_set_players[1].reject { |c| c.empty? }.each_with_index do |player, index| %>
+      <%= render "card", player: player, index: index, team: 2 %>
+    <% end %>
+
+    <!-- Filler cards (depending on 2 or 3 athlete per side) -->
+    <% if row_columns == 5 %>
+      <li class="col-span-1 flex flex-col text-center bg-white divide-y divide-gray-200">&nbsp;</li>
+    <% end %>
+  </ul>   
+<% end %>

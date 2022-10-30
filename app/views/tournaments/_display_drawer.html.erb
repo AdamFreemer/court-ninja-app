@@ -138,34 +138,29 @@
     </div>           
   </div>
 
-  <!-- Public Mode -->
-  <div data-display-target="publicMode" class="mt-6 text-gray-500">
-    <h5 id="drawer-label" class="inline-flex items-center text-base font-semibold"><svg aria-hidden="true" class="flex-shrink-0 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>&nbsp;Public Mode</h5>   
-    <span data-display-target="publicModeIcon" class="inline-flex text-green-300">
+  <!-- Display Mode -->
+  <div data-display-target="displayMode" class="mt-6 text-gray-500">
+    <h5 id="drawer-label" class="inline-flex items-center text-base font-semibold"><svg aria-hidden="true" class="flex-shrink-0 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>&nbsp;Display Mode</h5>   
+    <span data-display-target="displayModeIcon" class="inline-flex text-green-300">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z" />
       </svg>
     </span>    
   </div>
 
-  <div class="mt-2">
-    <div class="grid grid-cols-2 gap-3">
-      <button 
-        type="button" 
-        data-action="display#publicModeOnClick"
-        class="rounded-lg px-5 py-2.5 mr-2 mb-2 border text-sm font-medium rounded text-black bg-green-300 hover:bg-green-200">
-        Public Mode On
-      </button>
-      <button 
-        type="button"
-        data-action="display#publicModeOffClick"
-        class="rounded-lg px-5 py-2.5 mr-2 mb-2 border text-sm font-medium rounded text-black bg-red-300 hover:bg-red-200">
-        Public Mode Off
-      </button>
-    </div>          
+  <div class="mt-4">
+    <label for="checked-toggle" class="inline-flex relative items-center cursor-pointer">
+      <input 
+        data-action="display#displayModeToggleClick"
+        data-display-target="displayModeToggle"
+        type="checkbox" 
+        value="" 
+        id="checked-toggle" 
+        class="sr-only peer"
+      >
+      <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+      </div>
+      <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Engage display mode to monitor all court scores in real time.</span>
+    </label>        
   </div>
- 
-   
-
-
 </div>
