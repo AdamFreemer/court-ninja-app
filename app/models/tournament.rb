@@ -49,6 +49,7 @@
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  created_by_id         :bigint
+#  winner_id             :integer          default(0)
 #
 # Indexes
 #
@@ -119,11 +120,22 @@ class Tournament < ApplicationRecord
     rounds_finalized << round
     associate_players
     generate unless rounds_finalized.count >= rounds
+
+    completed = rounds_finalized.last == rounds ? true : false
+    winner_id =
+      if completed
+        winner = self.player_ranking(self.rounds)[0].first
+        winner[0]
+      else
+        0
+      end
+
     update!(
-      tournament_completed: rounds_finalized.last == rounds ? true : false,
+      tournament_completed: completed,
       rounds_finalized: rounds_finalized,
       current_set: 1,
-      current_round: current_round_calc(round, rounds)
+      current_round: current_round_calc(round, rounds),
+      winner_id: winner_id
     )
     true
   end
