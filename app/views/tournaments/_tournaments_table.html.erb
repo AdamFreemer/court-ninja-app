@@ -1,0 +1,33 @@
+<% if @tournaments %>
+  <table class="min-w-full divide-y divide-gray-300">
+    <thead class="bg-gray-50">
+      <tr>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+        <% if current_user.has_role? "admin" %>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created By</th>
+        <% end %>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Completed?</th>
+        <th colspan="2" scope="col" class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tournament Court(s)</th>
+        <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Results</th>
+        <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Edit</th>
+      </tr>
+    </thead>
+    <tbody id="tournaments-container" class="divide-y divide-gray-200">
+      <% @tournaments.each do |tournament| %>
+        <tr class="bg-grey">
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.created_at.strftime("%b %e, %Y | %l:%M %p") %></td>
+          <% if current_user.has_role? "admin" %>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament&.created_by&.full_name if tournament&.created_by %></td>
+          <% end %>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.adhoc ? 'Adhoc' : 'Authenticated' %></td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.name %></td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.tournament_completed ? "Yes" : "No" %></td>
+          <%= render "tournaments/tournaments_row_buttons", tournament: tournament %> 
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+ 
