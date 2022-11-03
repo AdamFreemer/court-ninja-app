@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_22_013701) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_03_204732) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -172,6 +172,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_22_013701) do
     t.integer "matches_per_round"
     t.json "current_matches", default: {}
     t.boolean "is_new", default: true
+    t.integer "winner_id", default: 0
     t.index ["created_by_id"], name: "index_tournaments_on_created_by_id"
   end
 
