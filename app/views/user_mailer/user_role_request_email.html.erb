@@ -1,7 +1,7 @@
 <table id="layout" border="0" cellspacing="0" cellpadding="0" width="600" style="margin: 10px auto;text-align: left;">
   <tr>
     <td id="content" style="background: #ffffff;line-height: 1.25em;padding: 10px 20px 30px 40px;vertical-align: top;">
-      <p><%= "#{@user.first_name} #{@user.last_name}" %> has requested to be a <%=@user_role_request.roles.map(&:name).join(', ') %>.</p>
+      <p><%= "#{@user.first_name} #{@user.last_name} <#{@user.email}>" %> has requested to be a <%=@user_role_request.roles.map(&:name).join(', ') %>.</p>
     </td>
   </tr>
   <tr>
