@@ -7,8 +7,8 @@ class TournamentsController < ApplicationController
   before_action :current_set_players, only: %i[display status]
 
   def index
-    @tournaments = Tournament.all.order(created_at: :desc)
-    @tournaments = @tournaments.where(created_by_id: current_user.id) if current_user.is_coach?
+    # dashboards/index
+    redirect_to root_path
   end
 
   def new
