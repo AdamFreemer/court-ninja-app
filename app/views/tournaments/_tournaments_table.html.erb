@@ -8,7 +8,6 @@
         <% end %>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Completed?</th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Winner</th>
         <th colspan="2" scope="col" class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tournament Court(s)</th>
         <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Results</th>
@@ -24,7 +23,6 @@
           <% end %>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.adhoc ? 'Adhoc' : 'Registered Athlete' %></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.name %></td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.tournament_completed ? "Yes" : "No" %></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.winner_id == 0 ? '' : User.find(tournament.winner_id).name_abbreviated %></td>
           <%= render "tournaments/tournaments_row_buttons", tournament: tournament %> 
         </tr>
