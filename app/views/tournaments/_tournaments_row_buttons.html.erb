@@ -3,7 +3,13 @@
     <a href="<%= display_path(tournament.id, 1) %>" target="_blank">
       <button 
         class="text-md py-0.5 px-5 text-md font-medium text-black focus:outline-none bg-white rounded-lg border-2 border-black hover:bg-gray-100 hover:text-black focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-blue-700 dark:border-gray-600 dark:hover:text-black dark:hover:bg-gray-200">
-        Court <%= tournament.courts > 1 ? 1 : "1" %>
+        <% if tournament.court_1_name.present? %>
+          <%= tournament.court_1_name %>
+        <% elsif tournament.courts > 1 %>
+          Court 1
+        <% else %>
+          Court
+        <% end %>
       </button>
     </a>
   <% end %>
@@ -13,7 +19,7 @@
     <a href="<%= display_path(tournament.id, 2) %>" target="_blank">
       <button 
         class="text-md py-0.5 px-5 text-md font-medium text-black focus:outline-none bg-white rounded-lg border-2 border-black hover:bg-gray-100 hover:text-black focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-blue-700 dark:border-gray-600 dark:hover:text-black dark:hover:bg-gray-200">
-        Court 2
+        <%= tournament.court_2_name.present? ?  tournament.court_2_name : "Court 2" %>
       </button>
     </a>
   <% end %>

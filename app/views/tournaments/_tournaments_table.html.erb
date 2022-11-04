@@ -22,7 +22,7 @@
           <% if current_user.has_role? "admin" %>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament&.created_by&.full_name if tournament&.created_by %></td>
           <% end %>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.adhoc ? 'Adhoc' : 'Registered' %></td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.adhoc ? 'Adhoc' : 'Registered Athlete' %></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.name %></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.tournament_completed ? "Yes" : "No" %></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.winner_id == 0 ? '' : User.find(tournament.winner_id).name_abbreviated %></td>
