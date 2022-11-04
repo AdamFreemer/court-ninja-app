@@ -118,7 +118,7 @@ class TournamentsController < ApplicationController
     @court_number = params[:court].to_i
     @court_sets_round1 = @tournament.tournament_sets.where(court: @court_number, round: 1)
     @court_sets_round2 = @tournament.tournament_sets.where(court: @court_number, round: 2)
-    @scores = Array(1..30)
+    @scores = Array(0..30)
     @current_court_match = @tournament.current_matches[@court_number.to_s]
     @court_name =
       if @court_number == 1
