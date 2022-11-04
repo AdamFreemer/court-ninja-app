@@ -210,7 +210,16 @@ export default class extends Controller {
   ///////////////////////////////////////////////////////////////////////////////////
 
   // timer controls /////////////////////////////////////////////////////////////////
-  
+
+  progressPauseClick() {
+    // this covers tapping on progress bar
+    if (this.spinnerTarget.style.display == 'inline-block') {
+      this.pause();
+    } else {
+      this.start();
+    }
+  }
+
   start() {
     if (this.matchTimerValue > 0) {
       this.timerRun();
@@ -379,8 +388,8 @@ export default class extends Controller {
     this.updateMatchLabel();
     this.updateSubmitButton('update'); // default 'update' page argument
 
-    this.team1ScoreTarget.value = 1
-    this.team2ScoreTarget.value = 1
+    this.team1ScoreTarget.value = 0
+    this.team2ScoreTarget.value = 0
     this.matchRowSelectedValue = null // drawer match selection
   }
 
@@ -394,6 +403,8 @@ export default class extends Controller {
       this.mainPageSubmitTextTarget.innerHTML = submitLoadingText
     } else if (this.allScoresEnteredValue == true) {
       this.mainPageSubmitTextTarget.innerHTML = 'Submit Round';
+      this.mainPageSubmitTextTarget.classList.add('bg-green-500');
+      this.mainPageSubmitTextTarget.classList.remove('bg-blue-700');
       this.team1ScoreTarget.disabled = true;
       this.team2ScoreTarget.disabled = true;
     } else if (this.allScoresEnteredValue == false) {
