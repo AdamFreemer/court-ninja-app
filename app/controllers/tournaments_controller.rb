@@ -75,6 +75,7 @@ class TournamentsController < ApplicationController
       @tournament.associate_players
       if @tournament.rounds_configured.empty?
         if @tournament.generate
+          @tournament.update(current_round: 1)
           redirect_to display_url(@tournament, 1), notice: 'Tournament updated and round one successfully created.'
         else
           redirect_to tournaments_path, notice: 'Tournament was successfully updated (no rounds created).'
