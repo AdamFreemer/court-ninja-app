@@ -289,7 +289,6 @@ class TournamentsController < ApplicationController
 
   def current_set_players
     @current_set_players = []
-    # binding.pry
 
     teams = @tournament.tournament_sets.find_by(number: @tournament.current_matches['1'], court: 1, round: @tournament.current_round).tournament_teams.order(:number)
     user_ids = teams.map { |team| team.users.map(&:id) }
