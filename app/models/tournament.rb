@@ -76,8 +76,8 @@ class Tournament < ApplicationRecord
   before_save :calculate_total_tournament_time
 
   def generate
-    return false unless players.count.between?(6, 27)
-    return false if current_round == 1 && players.count.between?(6, 9)
+    return false unless players.count.between?(5, 27)
+    return false if current_round == 1 && players.count.between?(5, 9)
 
     ordered_player_ids =
       if self.current_round.zero? # new tournament, just use newly created self.players

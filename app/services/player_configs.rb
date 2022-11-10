@@ -206,9 +206,10 @@ module PlayerConfigs
     end
   end
 
-  ## After 
   def self.new_round(players)
     case players[:ids].count
+    when 5 # players_count_5
+      { court1: players[:ids].shuffle, court2: [] }
     when 6 # players_count_6
       { court1: players[:ids].shuffle, court2: [] }
     when 7 # players_count_7

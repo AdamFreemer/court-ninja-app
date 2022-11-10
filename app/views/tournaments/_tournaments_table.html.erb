@@ -6,8 +6,9 @@
         <% if current_user.has_role? "admin" %>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created By</th>
         <% end %>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Matches Total</th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Winner</th>
         <th colspan="2" scope="col" class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tournament Court(s)</th>
         <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Results</th>
@@ -21,8 +22,9 @@
           <% if current_user.has_role? "admin" %>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament&.created_by&.full_name if tournament&.created_by %></td>
           <% end %>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.adhoc ? 'Adhoc' : 'Registered Athlete' %></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.name %></td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.adhoc ? 'Adhoc' : 'Authenticated' %></td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.rounds.to_i * tournament.matches_per_round.to_i %></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.winner_id == 0 ? '' : User.find(tournament.winner_id).name_abbreviated %></td>
           <%= render "tournaments/tournaments_row_buttons", tournament: tournament %> 
         </tr>

@@ -75,6 +75,7 @@ class TournamentsController < ApplicationController
       @tournament.associate_players
       if @tournament.rounds_configured.empty?
         if @tournament.generate
+          @tournament.update(current_round: 1)
           redirect_to display_url(@tournament, 1), notice: 'Tournament updated and round one successfully created.'
         else
           redirect_to tournaments_path, notice: 'Tournament was successfully updated (no rounds created).'
@@ -288,6 +289,7 @@ class TournamentsController < ApplicationController
 
   def current_set_players
     @current_set_players = []
+    # binding.pry
 
     teams = @tournament.tournament_sets.find_by(number: @tournament.current_matches['1'], court: 1, round: @tournament.current_round).tournament_teams.order(:number)
     user_ids = teams.map { |team| team.users.map(&:id) }
