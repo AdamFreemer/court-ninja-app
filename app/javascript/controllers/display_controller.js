@@ -30,8 +30,8 @@ export default class extends Controller {
 
   connect() {
     this.updatePage();
-    this.pauseButtonTarget.style.display = 'inline-block'
-    this.playButtonTarget.style.display = 'none'
+    this.pauseButtonTarget.style.display = 'none'
+    this.playButtonTarget.style.display = 'inline-block'
     this.spinnerTarget.style.display = 'none'
 
     this.isNew();
@@ -216,17 +216,18 @@ export default class extends Controller {
 
   playPauseClick() {
     if (this.pauseButtonTarget.style.display == 'none') {
-      this.pause();
-    } else {
       this.start();
+
+    } else {
+      this.pause();
     }
   }
 
   start() {
     if (this.matchTimerValue > 0) {
       this.timerRun();
-      this.pauseButtonTarget.style.display = 'none'
-      this.playButtonTarget.style.display = 'inline-block'
+      this.pauseButtonTarget.style.display = 'inline-block'
+      this.playButtonTarget.style.display = 'none'
       this.spinnerTarget.style.display = 'inline-block'
     }
   }
@@ -234,15 +235,15 @@ export default class extends Controller {
     if (this.timer) {
       clearInterval(this.timer);
     }
-    this.pauseButtonTarget.style.display = 'inline-block'
-    this.playButtonTarget.style.display = 'none'
+    this.pauseButtonTarget.style.display = 'none'
+    this.playButtonTarget.style.display = 'inline-block'
     this.spinnerTarget.style.display = 'none'
   }
   reset() {
     clearInterval(this.timer);
     this.matchTimerValue = this.matchTimeValue
-    this.pauseButtonTarget.style.display = 'inline-block'
-    this.playButtonTarget.style.display = 'none'
+    this.pauseButtonTarget.style.display = 'none'
+    this.playButtonTarget.style.display = 'inline-block'
     this.updateProgressBar();
     this.updateTimerDigits();
   }
@@ -258,8 +259,8 @@ export default class extends Controller {
 
     if (this.matchTimerValue <= 0) {
       clearInterval(this.timer);
-      this.pauseButtonTarget.style.display = 'inline-block'
-      this.playButtonTarget.style.display = 'none'
+      this.pauseButtonTarget.style.display = 'none'
+      this.playButtonTarget.style.display = 'inline-block'
       this.matchTimerValue = this.matchTimeValue
     } else {
 
@@ -430,16 +431,16 @@ export default class extends Controller {
 
     if (this.matchTimerValue < (this.matchTimeValue - this.matchPreTimeValue)) {
       this.statusTarget.innerHTML = "PLAY"
-      this.progressTarget.classList.remove('bg-yellow-500');
+      this.progressTarget.classList.remove('bg-red-400');
       this.progressTarget.classList.add('bg-green-500');
-      this.progressbackgroundTarget.classList.remove('bg-yellow-200');
+      this.progressbackgroundTarget.classList.remove('bg-red-200');
       this.progressbackgroundTarget.classList.add('bg-green-200');
     } else {
       this.statusTarget.innerHTML = "GET READY"
       this.progressTarget.classList.remove('bg-green-500');
-      this.progressTarget.classList.add('bg-yellow-500');
+      this.progressTarget.classList.add('bg-red-400');
       this.progressbackgroundTarget.classList.remove('bg-green-200');
-      this.progressbackgroundTarget.classList.add('bg-yellow-200');
+      this.progressbackgroundTarget.classList.add('bg-red-200');
     }   
   }
 
