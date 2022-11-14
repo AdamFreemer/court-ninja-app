@@ -25,12 +25,15 @@ export default class extends Controller {
     modalMessageText: { type: String, default: 'Smurf' },
     matchRowSelected: Number,
   }
-  static targets = [ "displayMode", "displayModeIcon", "displayModeToggle", "displayCards", "displayCardsDisplayMode", "minute", "second", "progress", "progressbackground", "modal", "timerSection", "modalMessage", "modalButtons", "flash", "flashMessage", "primaryCourtLabel", "set", "status", "team", "step", "spinner", "team1Score", "team2Score", "team1ScoreUpdate", "team2ScoreUpdate", "mainPageSubmitText", "match", "matchSelected", "matchRowSelected", "resultsTables"
+  static targets = [ "displayMode", "displayModeIcon", "displayModeToggle", "displayCards", "displayCardsDisplayMode", "minute", "second", "progress", "progressbackground", "modal", "timerSection", "modalMessage", "modalButtons", "flash", "flashMessage", "playButton", "pauseButton", "primaryCourtLabel", "spinner", "set", "status", "team", "step", "team1Score", "team2Score", "team1ScoreUpdate", "team2ScoreUpdate", "mainPageSubmitText", "match", "matchSelected", "matchRowSelected", "resultsTables"
   ]
 
   connect() {
     this.updatePage();
-    this.spinnerTarget.style.display = 'none';
+    this.pauseButtonTarget.style.display = 'inline-block'
+    this.playButtonTarget.style.display = 'none'
+    this.spinnerTarget.style.display = 'none'
+
     this.isNew();
     this.displayCardsDisplayModeTarget.style.display = "none"
   }
@@ -211,9 +214,8 @@ export default class extends Controller {
 
   // timer controls /////////////////////////////////////////////////////////////////
 
-  progressPauseClick() {
-    // this covers tapping on progress bar
-    if (this.spinnerTarget.style.display == 'inline-block') {
+  playPauseClick() {
+    if (this.pauseButtonTarget.style.display == 'none') {
       this.pause();
     } else {
       this.start();
@@ -223,19 +225,24 @@ export default class extends Controller {
   start() {
     if (this.matchTimerValue > 0) {
       this.timerRun();
-      this.spinnerTarget.style.display = 'inline-block';
+      this.pauseButtonTarget.style.display = 'none'
+      this.playButtonTarget.style.display = 'inline-block'
+      this.spinnerTarget.style.display = 'inline-block'
     }
   }
   pause() {
     if (this.timer) {
       clearInterval(this.timer);
     }
-    this.spinnerTarget.style.display = 'none';
+    this.pauseButtonTarget.style.display = 'inline-block'
+    this.playButtonTarget.style.display = 'none'
+    this.spinnerTarget.style.display = 'none'
   }
   reset() {
     clearInterval(this.timer);
     this.matchTimerValue = this.matchTimeValue
-    this.spinnerTarget.style.display = 'none';
+    this.pauseButtonTarget.style.display = 'inline-block'
+    this.playButtonTarget.style.display = 'none'
     this.updateProgressBar();
     this.updateTimerDigits();
   }
@@ -251,7 +258,8 @@ export default class extends Controller {
 
     if (this.matchTimerValue <= 0) {
       clearInterval(this.timer);
-      this.spinnerTarget.style.display = 'none';
+      this.pauseButtonTarget.style.display = 'inline-block'
+      this.playButtonTarget.style.display = 'none'
       this.matchTimerValue = this.matchTimeValue
     } else {
 
