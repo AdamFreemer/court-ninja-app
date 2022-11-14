@@ -215,7 +215,6 @@ export default class extends Controller {
   // timer controls /////////////////////////////////////////////////////////////////
 
   playPauseClick() {
-    // this covers tapping on progress bar
     if (this.pauseButtonTarget.style.display == 'none') {
       this.pause();
     } else {
