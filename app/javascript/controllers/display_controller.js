@@ -217,7 +217,6 @@ export default class extends Controller {
   playPauseClick() {
     if (this.pauseButtonTarget.style.display == 'none') {
       this.start();
-
     } else {
       this.pause();
     }
@@ -231,6 +230,7 @@ export default class extends Controller {
       this.spinnerTarget.style.display = 'inline-block'
     }
   }
+
   pause() {
     if (this.timer) {
       clearInterval(this.timer);
@@ -239,11 +239,13 @@ export default class extends Controller {
     this.playButtonTarget.style.display = 'inline-block'
     this.spinnerTarget.style.display = 'none'
   }
+
   reset() {
     clearInterval(this.timer);
     this.matchTimerValue = this.matchTimeValue
     this.pauseButtonTarget.style.display = 'none'
     this.playButtonTarget.style.display = 'inline-block'
+    this.spinnerTarget.style.display = 'none'
     this.updateProgressBar();
     this.updateTimerDigits();
   }
@@ -261,6 +263,7 @@ export default class extends Controller {
       clearInterval(this.timer);
       this.pauseButtonTarget.style.display = 'none'
       this.playButtonTarget.style.display = 'inline-block'
+      this.spinnerTarget.style.display = 'none'
       this.matchTimerValue = this.matchTimeValue
     } else {
 
