@@ -98,6 +98,11 @@ export default class extends Controller {
       this.roundsValue = 1
       this.courtsCountOne();
       break;
+    case 5:
+      this.setsValue = 5
+      this.roundsValue = 1
+      this.courtsCountOne();
+      break;
     case 6:
       this.setsValue = 10
       this.roundsValue = 1
