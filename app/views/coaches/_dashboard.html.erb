@@ -4,7 +4,7 @@
 <div class="flex gap-2 items-center border-b-2 pb-1 justify-between">
   <h2 class="text-center text-4xl font-bold tracking-tight leading-none text-gray-900 md:text-4xl lg:text-4xl dark:text-white float-left">My Tournaments</h2>
   <div>
-    <% if current_user.teams_coached.count > 0 %>
+    <% if current_user.teams_coached.active.count > 0 %>
       <button
         type="button"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-md px-5 py-1 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
