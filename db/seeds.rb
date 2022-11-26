@@ -10,7 +10,9 @@ lucky = User.create(email: 'lucky@2629consulting.com', first_name: 'Lucky', last
 end
 
 coach_adam = User.create(email: 'coach@freemer.com', first_name: 'Coach Adam', last_name: 'Freemer', password: 'password', password_confirmation: 'password')
+coach_dan = User.create(email: 'coach@dan.com', first_name: 'Coach Dan', last_name: 'Brooking', password: 'password', password_confirmation: 'password')
 coach_adam.add_role :coach
+coach_dan.add_role :coach
 
 team = Team.create(name: "Primary", description: "Primary Team", coach_id: coach_adam.id)
 
@@ -78,17 +80,17 @@ User.create(email: '_ghost_player6@mail.com', first_name: 'ghost_player6', last_
 puts "== Created #{User.count} users. ===================="
 
 # Team 16 Walker
-# Ally G. 
-# Sam L. 
-# Maddie L. 
-# Sofia M. 
-# Kaila E. 
-# Sophia S. 
-# Madi H. 
-# Pailey D. 
-# Ady V. 
-# Sadie S. 
-# Tangi N. 
+# Ally G.
+# Sam L.
+# Maddie L.
+# Sofia M.
+# Kaila E.
+# Sophia S.
+# Madi H.
+# Pailey D.
+# Ady V.
+# Sadie S.
+# Tangi N.
 # Elizabeth C
 
 ### Add players to team
