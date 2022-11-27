@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "daisyui": "^2.14.2"
+    "daisyui": "^2.14.2",
+    "stimulus-dropdown": "^2.0.0"
   }
 }

@@ -15,6 +15,7 @@ coach_adam.add_role :coach
 coach_dan.add_role :coach
 
 team = Team.create(name: "Primary", description: "Primary Team", coach_id: coach_adam.id)
+second_team = Team.create(name: "Second Team", description: "Second Team", coach_id: coach_adam.id)
 
 # Lucky Team
 l1 = User.create(email: 'sfaisal2007@yahoo.com', first_name: 'Olivia', last_name: 'Luey', password: 'password', password_confirmation: 'password')
@@ -38,21 +39,25 @@ l15 = User.create(email: 'lucky@2629consulting.com', first_name: 'Lucky', last_n
   player.save
 end
 
-
 # 15 Jen Team
-User.create(email: 'gia.r@gmail.com', first_name: 'Gia', last_name: 'R', password: 'password', password_confirmation: 'password')
-User.create(email: 'cassidy.p@gmail.com', first_name: 'Cassidy', last_name: 'P', password: 'password', password_confirmation: 'password')
-User.create(email: 'adrianna.a@gmail.com', first_name: 'Adrianna', last_name: 'A', password: 'password', password_confirmation: 'password')
-User.create(email: 'sophie.p@gmail.com', first_name: 'Sophie', last_name: 'P', password: 'password', password_confirmation: 'password')
-User.create(email: 'sophie.m@gmail.com', first_name: 'Sophie', last_name: 'M', password: 'password', password_confirmation: 'password')
-User.create(email: 'rube.r@gmail.com', first_name: 'Rube', last_name: 'R', password: 'password', password_confirmation: 'password')
-User.create(email: 'claire.s@gmail.com', first_name: 'Claire', last_name: 'S', password: 'password', password_confirmation: 'password')
-User.create(email: 'alley.k@gmail.com', first_name: 'Alley', last_name: 'K', password: 'password', password_confirmation: 'password')
-User.create(email: 'lily.k@gmail.com', first_name: 'Lily', last_name: 'K', password: 'password', password_confirmation: 'password')
-User.create(email: 'poemma.u@gmail.com', first_name: 'Poemma', last_name: 'U', password: 'password', password_confirmation: 'password')
-User.create(email: 'abby.m@gmail.com', first_name: 'Abby', last_name: 'M', password: 'password', password_confirmation: 'password')
-User.create(email: 'bre.c@gmail.com', first_name: 'Bre', last_name: 'Coach', password: 'password', password_confirmation: 'password')
-User.create(email: 'mikey.c@gmail.com', first_name: 'Mikey', last_name: 'Coach', password: 'password', password_confirmation: 'password')
+p1 = User.create(email: 'gia.r@gmail.com', first_name: 'Gia', last_name: 'R', password: 'password', password_confirmation: 'password')
+p2 = User.create(email: 'cassidy.p@gmail.com', first_name: 'Cassidy', last_name: 'P', password: 'password', password_confirmation: 'password')
+p3 = User.create(email: 'adrianna.a@gmail.com', first_name: 'Adrianna', last_name: 'A', password: 'password', password_confirmation: 'password')
+p4 = User.create(email: 'sophie.p@gmail.com', first_name: 'Sophie', last_name: 'P', password: 'password', password_confirmation: 'password')
+p5 = User.create(email: 'sophie.m@gmail.com', first_name: 'Sophie', last_name: 'M', password: 'password', password_confirmation: 'password')
+p6 = User.create(email: 'rube.r@gmail.com', first_name: 'Rube', last_name: 'R', password: 'password', password_confirmation: 'password')
+p7 = User.create(email: 'claire.s@gmail.com', first_name: 'Claire', last_name: 'S', password: 'password', password_confirmation: 'password')
+p8 = User.create(email: 'alley.k@gmail.com', first_name: 'Alley', last_name: 'K', password: 'password', password_confirmation: 'password')
+p9 = User.create(email: 'lily.k@gmail.com', first_name: 'Lily', last_name: 'K', password: 'password', password_confirmation: 'password')
+p10 = User.create(email: 'poemma.u@gmail.com', first_name: 'Poemma', last_name: 'U', password: 'password', password_confirmation: 'password')
+p11 = User.create(email: 'abby.m@gmail.com', first_name: 'Abby', last_name: 'M', password: 'password', password_confirmation: 'password')
+p12 = User.create(email: 'bre.c@gmail.com', first_name: 'Bre', last_name: 'Coach', password: 'password', password_confirmation: 'password')
+p13 = User.create(email: 'mikey.c@gmail.com', first_name: 'Mikey', last_name: 'Coach', password: 'password', password_confirmation: 'password')
+
+[p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11].each do |player|
+  player.teams << second_team
+  player.save
+end
 
 # 16 Kimmy Guest Team
 User.create(email: 'coachgel@test.com', first_name: 'Gel', last_name: 'Leano', password: 'password', password_confirmation: 'password')

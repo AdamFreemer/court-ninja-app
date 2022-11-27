@@ -13,6 +13,7 @@ Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose
       </ul>
     </div>
   <% end %>
+  <%= form.hidden_field :base_team_id, value: @team_id || form.object.base_team_id  %>
   <div class="space-y-6">
     <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
       <div class="md:grid md:grid-cols-3 md:gap-6">
@@ -78,12 +79,12 @@ Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                 <label for="break-time" class="block text-sm font-medium text-gray-700">Break Time Length<span class="text-gray-400"></span></label>
                 <%= form.select :pre_match_time, @pre_match_times, { :placeholder => "Please Select" }, id: "break-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
-              </div>              
+              </div>
             </div>
 
             <%= render "form_courts", form: form %>
-            
-            <div class="grid grid-cols-6 gap-6 mt-6"> 
+
+            <div class="grid grid-cols-6 gap-6 mt-6">
               <div id="court-side-a" class="col-span-6 sm:col-span-6 lg:col-span-2">
                 <label for="courts" class="block text-sm font-medium text-gray-700">Court Side A Name</label>
                 <%= form.text_field :court_side_a_name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
@@ -91,8 +92,8 @@ Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose
               <div id="court-side-b" class="col-span-6 sm:col-span-6 lg:col-span-2">
                 <label for="courts" class="block text-sm font-medium text-gray-700">Court Side B Name</label>
                 <%= form.text_field :court_side_b_name, id: "court-2-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-              </div>           
-            </div>            
+              </div>
+            </div>
 
             <%= form.hidden_field :adhoc, value: false %>
           </form>
@@ -102,9 +103,9 @@ Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose
 
     <div class="flex justify-end space-x-3">
       <%= link_to "Back to Tournaments", root_path, class: "inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-      <button 
+      <button
         id="save-button"
-        type="submit" 
+        type="submit"
         class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
         Save
       </button>

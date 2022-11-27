@@ -48,26 +48,31 @@
 #  zip                   :string
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
+#  base_team_id          :bigint
 #  created_by_id         :bigint
 #  winner_id             :integer          default(0)
 #
 # Indexes
 #
+#  index_tournaments_on_base_team_id   (base_team_id)
 #  index_tournaments_on_created_by_id  (created_by_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (base_team_id => teams.id)
 #  fk_rails_...  (created_by_id => users.id)
 #
 class Tournament < ApplicationRecord
   # rubocop:disable Lint/NumberConversion
   belongs_to :created_by, class_name: 'User', inverse_of: :tournaments_run
+  belongs_to :base_team, class_name: 'Team'
 
-  has_many :tournament_teams
-  has_many :tournament_sets
-  has_many :tournament_users
-  has_many :users, through: :tournament_users
-  has_many :user_scores
+  has_many :tournament_teams, dependent: :destroy
+  has_many :tournament_sets, dependent: :destroy
+  has_many :tournament_users, dependent: :destroy
+  has_many :users, through: :tournament_users, dependent: :destroy
+  has_many :user_scores, dependent: :destroy
+
 
   scope :before_today, -> { where("created_at < ?", 1.days.ago) }
   scope :today, -> { where("created_at > ?", DateTime.now.beginning_of_day) }
@@ -234,7 +239,7 @@ class Tournament < ApplicationRecord
       end
     end
 
-    court_1_sorted = normalized_score(court_1_scores.sort_by { |a| [-a[3], -a[2]] }) 
+    court_1_sorted = normalized_score(court_1_scores.sort_by { |a| [-a[3], -a[2]] })
     court_2_sorted = normalized_score(court_2_scores.sort_by { |a| [-a[3], -a[2]] })
     courts >= 3 ? court_3_sorted = normalized_score(court_3_scores.sort_by { |a| [-a[3], -a[2]] }) : court_3_sorted = []
     courts >= 4 ? court_4_sorted = normalized_score(court_4_scores.sort_by { |a| [-a[3], -a[2]] }) : court_4_sorted = []

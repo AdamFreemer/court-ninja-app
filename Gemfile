@@ -10,6 +10,7 @@ gem 'google-cloud-storage', '~> 1.38', require: false
 gem 'importmap-rails', '~> 1.0'
 gem 'jbuilder', '~> 2.11'
 gem 'mailsafe', '~> 0.3'
+gem 'net-http', '~> 0.3'
 gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.6.4'
 gem 'redis', '~> 4.0'
@@ -39,10 +40,9 @@ gem 'bootsnap', require: false
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem 'awesome_print'
-  gem 'debug', platforms: %i[mri mingw x64_mingw]
-  gem 'pry-byebug'
-  gem 'pry-rails'
+  gem 'awesome_print', '~> 1.9'
+  gem 'pry-byebug', '~> 3.10'
+  gem 'pry-rails', '~> 0.3'
 end
 
 group :development do
@@ -58,7 +58,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara'
-  gem 'selenium-webdriver'
-  gem 'webdrivers'
+  gem 'capybara', '~> 3.38'
+  gem 'selenium-webdriver', '~> 4.6'
+  gem 'webdrivers', '~> 5.2'
 end
