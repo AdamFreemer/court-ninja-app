@@ -1,19 +1,37 @@
 <div class="flex gap-6 flex-col md:flex-row pb-6">
   <%= render "coaches/teams/index" %>
 </div>
-<div class="flex gap-2 items-center border-b-2 pb-1 justify-between">
+<div class="flex gap-2 items-center border-b-2 pb-2 justify-between">
   <h2 class="text-center text-4xl font-bold tracking-tight leading-none text-gray-900 md:text-4xl lg:text-4xl dark:text-white float-left">My Tournaments</h2>
-  <div>
-    <% if current_user.teams_coached.active.count > 0 %>
+  <div class="flex flex-row">
+    <% if current_user.teams_coached.active.count == 1 %>
       <button
         type="button"
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-md px-5 py-1 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-md px-5 py-2 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         data-action="portal#newTournamentClick">[+] Registered Athlete Tournament
       </button>
+    <% elsif current_user.teams_coached.active.count > 1 %>
+      <div data-controller="dropdown" class="relative">
+        <button type="button" data-action="dropdown#toggle click@window->dropdown#hide" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-md px-5 py-2 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          [+] Registered Athlete Tournament
+        </button>
+        <div
+          data-dropdown-target="menu"
+          class="flex transition transform origin-top-right absolute bg-white flex-col mr-2 shadow-2xl top-14 right-0 border-solid border-[1px] border-gray-200 rounded-lg"
+          data-transition-enter-from="opacity-0 scale-95"
+          data-transition-enter-to="opacity-100 scale-100"
+          data-transition-leave-from="opacity-100 scale-100"
+          data-transition-leave-to="opacity-0 scale-95"
+        >
+          <% current_user.teams_coached.active.each do |t| %>
+            <a href=<%= "/tournaments/new/?type=standard&team=#{t.id}" %> data-action="dropdown#toggle" class="py-3 px-6 hover:bg-blue-700 hover:text-white hover:font-bold first-of-type:rounded-t-lg  last-of-type:rounded-b-lg"><%= t.name %></a>
+          <% end %>
+        </div>
+      </div>
     <% end %>
     <button
       type="button"
-      class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-md px-5 py-1 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-md px-5 py-2 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       data-action="portal#newAdhocTournamentClick">[+] Adhoc Tournament
     </button>
   </div>

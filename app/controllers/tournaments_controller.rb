@@ -1,6 +1,6 @@
 class TournamentsController < ApplicationController
   before_action :set_tournament, only: %i[status tournament_status
-    administration display results submit_scores team_scores_update 
+    administration display results submit_scores team_scores_update
     process_round edit update destroy admin_connection update_scores set_stale]
   before_action :set_display, only: %i[display]
   before_action :round_two_generated, only: %i[administration]
@@ -17,8 +17,13 @@ class TournamentsController < ApplicationController
       if @type == 'adhoc'
         []
       elsif current_user&.is_coach?
-        players = current_user.teams_coached.map(&:players)
-        players.flatten!.sort_by(&:last_name)
+        @team_id = params[:team] || current_user.teams_coached.first.id
+        if @team_id
+          Team.find(@team_id).players.sort_by(&:last_name)
+        else
+          p = current_user.teams_coached.active.map(&:players)
+          p.flatten!.sort_by(&:last_name)
+        end
       else
         User.where(is_ghost_player: false).order(:last_name)
       end
@@ -26,7 +31,7 @@ class TournamentsController < ApplicationController
     @tournament_times = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
     @break_times = [0.12, 0.5, 1, 1.5, 2.0]
 
-    @match_times = [["30 seconds", 30], ["1 minute", 60], ["2 minutes", 120], ["3 minutes", 180], ["4 minutes", 240], ["5 minutes", 300], 
+    @match_times = [["30 seconds", 30], ["1 minute", 60], ["2 minutes", 120], ["3 minutes", 180], ["4 minutes", 240], ["5 minutes", 300],
                     ["6 minutes", 360], ["7 minutes", 420], ["8 minutes", 480], ["9 minutes", 540], ["10 minutes", 600]]
     @pre_match_times = [["5 seconds", 5], ["30 seconds", 30], ["1.0 minute", 60], ["1.5 minutes", 90], ["2.0 minutes", 120]]
     @tournament_configured = !@tournament.rounds_configured.empty?
@@ -37,8 +42,13 @@ class TournamentsController < ApplicationController
       if @tournament.adhoc
         []
       elsif current_user&.is_coach?
-        players = current_user.teams_coached.map(&:players)
-        players.flatten!.sort_by(&:last_name)
+        players =
+          if @tournament.base_team
+            @tournament.base_team.players.sort_by(&:last_name)
+          else
+            p = current_user.teams_coached.active.map(&:players)
+            p.flatten!.sort_by(&:last_name)
+          end
       else
         User.where(is_ghost_player: false).order(:last_name)
       end
@@ -150,7 +160,7 @@ class TournamentsController < ApplicationController
         @tournament.update!(tournament_completed: true)
         message = "<p>Alert!</p> Tournament complete."
         status = 'new-round'
-      else 
+      else
         message = "<p>Alert!</p> This round has already been processed."
         status = 'new-round'
       end
@@ -277,7 +287,7 @@ class TournamentsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_tournament
     @tournament = Tournament.find(params[:id])
-    @match_times = [["30 seconds", 30], ["1 minute", 60], ["2 minutes", 120], ["3 minutes", 180], ["4 minutes", 240], ["5 minutes", 300], 
+    @match_times = [["30 seconds", 30], ["1 minute", 60], ["2 minutes", 120], ["3 minutes", 180], ["4 minutes", 240], ["5 minutes", 300],
     ["6 minutes", 360], ["7 minutes", 420], ["8 minutes", 480], ["9 minutes", 540], ["10 minutes", 600]]
     @pre_match_times = [["5 seconds", 5], ["30 seconds", 30], ["1.0 minute", 60], ["1.5 minutes", 90], ["2.0 minutes", 120]]
   end
@@ -350,9 +360,33 @@ class TournamentsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def tournament_params
     params.fetch(:tournament).permit(
-      :name, :address1, :address2, :city, :state, :zip, :date, :rounds, :team_size, :court_side_a_name, :court_side_b_name,
-      :rounds_configured, :rounds_finalized, :court_names, :tournament_time, :break_time, :current_set, :match_time, :pre_match_time,
-      :court_1_name, :court_2_name, :court_3_name, :court_4_name, :court_5_name, :court_6_name, players: []
+      :name,
+      :address1,
+      :address2,
+      :city,
+      :state,
+      :zip,
+      :date,
+      :rounds,
+      :team_size,
+      :court_side_a_name,
+      :court_side_b_name,
+      :rounds_configured,
+      :rounds_finalized,
+      :court_names,
+      :tournament_time,
+      :break_time,
+      :current_set,
+      :match_time,
+      :pre_match_time,
+      :court_1_name,
+      :court_2_name,
+      :court_3_name,
+      :court_4_name,
+      :court_5_name,
+      :court_6_name,
+      :base_team_id,
+      players: []
     )
   end
 end

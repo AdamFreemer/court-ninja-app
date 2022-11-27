@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_03_204732) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_27_164009) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -173,6 +173,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_03_204732) do
     t.json "current_matches", default: {}
     t.boolean "is_new", default: true
     t.integer "winner_id", default: 0
+    t.bigint "base_team_id"
+    t.index ["base_team_id"], name: "index_tournaments_on_base_team_id"
     t.index ["created_by_id"], name: "index_tournaments_on_created_by_id"
   end
 
@@ -289,6 +291,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_03_204732) do
   add_foreign_key "tournament_teams", "tournaments"
   add_foreign_key "tournament_users", "tournaments"
   add_foreign_key "tournament_users", "users"
+  add_foreign_key "tournaments", "teams", column: "base_team_id"
   add_foreign_key "tournaments", "users", column: "created_by_id"
   add_foreign_key "user_role_requests", "users"
   add_foreign_key "user_role_requests", "users", column: "processed_by_id"
