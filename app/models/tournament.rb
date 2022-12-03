@@ -37,6 +37,7 @@
 #  rounds_configured     :integer          default([]), is an Array
 #  rounds_finalized      :integer          default([]), is an Array
 #  state                 :string
+#  structure             :string           default([]), is an Array
 #  team_size             :integer
 #  timer_mode            :string           default("break")
 #  timer_state           :string           default("initial")
@@ -65,7 +66,7 @@
 class Tournament < ApplicationRecord
   # rubocop:disable Lint/NumberConversion
   belongs_to :created_by, class_name: 'User', inverse_of: :tournaments_run
-  belongs_to :base_team, class_name: 'Team'
+  belongs_to :base_team, class_name: 'Team', optional: true
 
   has_many :tournament_teams, dependent: :destroy
   has_many :tournament_sets, dependent: :destroy

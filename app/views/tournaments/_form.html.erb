@@ -51,26 +51,27 @@ Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose
                 <%= form.text_field :name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
               </div>
 
-              <div class="col-span-6">
-                <label for="street-address" class="block text-sm font-medium text-gray-700">Street Address</label>
-                <%= form.text_field :address1, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-              </div>
+              <% if false # removed from use for now %>
+                <div class="col-span-6">
+                  <label for="street-address" class="block text-sm font-medium text-gray-700">Street Address</label>
+                  <%= form.text_field :address1, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                </div>
 
-              <div class="col-span-6 sm:col-span-6 lg:col-span-2">
-                <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-                <%= form.text_field :city, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-              </div>
+                <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                  <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                  <%= form.text_field :city, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                </div>
 
-              <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                <label for="region" class="block text-sm font-medium text-gray-700">State / Province</label>
-                <%= form.text_field :state, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-              </div>
+                <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                  <label for="region" class="block text-sm font-medium text-gray-700">State / Province</label>
+                  <%= form.text_field :state, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                </div>
 
-              <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                <label for="postal-code" class="block text-sm font-medium text-gray-700">Postal code</label>
-                <%= form.text_field :zip, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-              </div>
-
+                <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                  <label for="postal-code" class="block text-sm font-medium text-gray-700">Postal code</label>
+                  <%= form.text_field :zip, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                </div>
+              <% end %>
 
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                 <label for="tournament-time" class="block text-sm font-medium text-gray-700">Match Time Length<span class="text-gray-400"></span></label>
@@ -107,7 +108,7 @@ Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose
         id="save-button"
         type="submit"
         class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-        Save
+        Start Tournament
       </button>
     </div>
   </div>

@@ -12,7 +12,7 @@
       </button>
     <% elsif current_user.teams_coached.active.count > 1 %>
       <div data-controller="dropdown" class="relative">
-        <button type="button" data-action="dropdown#toggle click@window->dropdown#hide" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-md px-5 py-2 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        <button type="button" data-action="dropdown#toggle click@window->dropdown#hide" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-md px-5 py-1.5 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           [+] Registered Athlete Tournament
         </button>
         <div
@@ -31,7 +31,7 @@
     <% end %>
     <button
       type="button"
-      class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-md px-5 py-2 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-md px-5 py-1.5 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       data-action="portal#newAdhocTournamentClick">[+] Adhoc Tournament
     </button>
   </div>
