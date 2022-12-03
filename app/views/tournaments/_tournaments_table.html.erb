@@ -23,7 +23,7 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament&.created_by&.full_name if tournament&.created_by %></td>
           <% end %>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.name %></td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.adhoc ? 'Adhoc' : 'Authenticated' %></td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.adhoc ? 'Adhoc' : 'Registered' %></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.rounds.to_i * tournament.matches_per_round.to_i %></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.winner_id == 0 ? '' : User.find(tournament.winner_id).name_abbreviated %></td>
           <%= render "tournaments/tournaments_row_buttons", tournament: tournament %> 
