@@ -125,7 +125,12 @@ export default class extends Controller {
   // drawer service methods  /////////////////////////////////////////////////////////////////
 
   matchSelectClick(event) {
-    const inputSelected = event.target.parentElement.children[0].children[0]
+    let inputSelected;
+    if (event.target.type == "radio") { // this is when the actual radio button is clicked
+      inputSelected = event.target.parentElement.children[0]
+    } else { // this is when something on the row but not the radio button is clicked
+      inputSelected = event.target.parentElement.children[0].children[0]
+    }
     this.matchSelectedTargets.forEach((element) => {
       this.matchRowSelectedValue = inputSelected.id
       if (element.id == inputSelected.id) {
