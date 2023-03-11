@@ -11,6 +11,9 @@ class DashboardController < ApplicationController
     end
   end
 
+  def landing
+  end
+
   private
 
   def set_params
