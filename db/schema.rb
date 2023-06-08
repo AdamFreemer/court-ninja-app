@@ -173,7 +173,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_27_164009) do
     t.json "current_matches", default: {}
     t.boolean "is_new", default: true
     t.integer "winner_id", default: 0
-    t.string "structure", default: [], array: true
     t.bigint "base_team_id"
     t.index ["base_team_id"], name: "index_tournaments_on_base_team_id"
     t.index ["created_by_id"], name: "index_tournaments_on_created_by_id"

@@ -37,7 +37,6 @@
 #  rounds_configured     :integer          default([]), is an Array
 #  rounds_finalized      :integer          default([]), is an Array
 #  state                 :string
-#  structure             :string           default([]), is an Array
 #  team_size             :integer
 #  timer_mode            :string           default("break")
 #  timer_state           :string           default("initial")

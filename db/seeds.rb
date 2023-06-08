@@ -4,7 +4,7 @@ puts "== Creating Users..."
 dan = User.create(email: 'dmbrooking@gmail.com', first_name: 'Dan', last_name: 'Brooking', password: 'password', password_confirmation: 'password')
 adam = User.create(email: 'adam@freemer.com', first_name: 'Adam', last_name: 'Freemer', password: 'password', password_confirmation: 'password')
 
-[dan, adam, lucky].each do |user|
+[dan, adam].each do |user|
   user.add_role :admin
 end
 
