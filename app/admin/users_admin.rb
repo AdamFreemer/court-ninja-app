@@ -16,9 +16,9 @@ Trestle.resource(:users) do
 
   scope :all, -> { User.all }, default: true
   # Comment out 19-21 when rebuilding db
-  Role.all.each do |role|
-    scope role.name.downcase.to_sym, -> { User.with_role(role.name) }
-  end
+  # Role.all.each do |role|
+  #   scope role.name.downcase.to_sym, -> { User.with_role(role.name) }
+  # end
 
   scope :signed_in, -> { User.where.not(last_sign_in_at: nil) }
   scope :never_signed_in, -> { User.where(last_sign_in_at: nil) }
