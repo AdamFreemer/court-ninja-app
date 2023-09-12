@@ -1,20 +1,20 @@
 google:
   service: GCS
-  project: tourneychamp
+  project: courtninja
   credentials: <%= ENV['GOOGLE_APPLICATION_CREDENTIALS'].as_json %>
-  bucket: tourneychamp-images
+  bucket: courtninja-images
 
 google_dev:
   service: GCS
-  project: tourneychamp
-  credentials: <%= Rails.root.join("config/secrets/tourneychamp-357017-e5ee919c9310.json") %>
-  bucket: tourneychamp-images-dev
+  project: courtninja
+  credentials: <%= Rails.root.join("config/secrets/courtninja-357017-e5ee919c9310.json") %>
+  bucket: courtninja-images-dev
 
 google_staging:
   service: GCS
-  project: tourneychamp
+  project: courtninja
   credentials: <%= ENV['GOOGLE_APPLICATION_CREDENTIALS'].as_json %>
-  bucket: tourneychamp-images-staging
+  bucket: courtninja-images-staging
 
 # Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:

@@ -19,7 +19,7 @@
 
         <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
           <div class="flex-shrink-0 flex items-center">
-            <a href="/" class="text-gray-500 text-2xl tracking-tighter items-center px-1 pt-1 font-bold">TourneyChamp</a>
+            <a href="/" class="text-gray-500 text-2xl tracking-tighter items-center px-1 pt-1 font-bold">Court Ninja</a>
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
             <% if current_user&.has_role?(:admin) %>
@@ -29,7 +29,7 @@
         </div>
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-            <a href='mailto:luckymakro+gzrxpydftpm3ahxiqvgi@boards.trello.com?subject=TourneyChamp feedback from <%= "#{current_user.first_name} #{current_user.last_name}" %>'
+            <a href='mailto:luckymakro+gzrxpydftpm3ahxiqvgi@boards.trello.com?subject=Court Ninja feedback from <%= "#{current_user.first_name} #{current_user.last_name}" %>'
                class="border-indigo-200 border-2 text-indigo-400 mt-1 inline-flex items-center px-1 rounded-lg text-sm font-medium">Submit Feedback</a>
           </div>
 
@@ -67,7 +67,7 @@
         <% if current_user&.has_role?(:admin) %>
         <a href="/admin" class="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"> Admin</a>
         <% end %>
-        <a href='mailto:luckymakro+gzrxpydftpm3ahxiqvgi@boards.trello.com?subject=TourneyChamp feedback from <%= "#{current_user.first_name} #{current_user.last_name}" %>'
+        <a href='mailto:luckymakro+gzrxpydftpm3ahxiqvgi@boards.trello.com?subject=Court Ninja feedback from <%= "#{current_user.first_name} #{current_user.last_name}" %>'
            class="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Submit Feedback</a>
       </div>
     </div>

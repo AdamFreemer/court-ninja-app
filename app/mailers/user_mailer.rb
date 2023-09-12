@@ -16,11 +16,11 @@ class UserMailer < ApplicationMailer
 
   def existing_athlete_join_team_approval_email(id)
     @pt = PlayerTeam.find(id)
-    mail(to: @pt.player.email, subject: "TourneyChamp: You've been added to #{@pt.team.name}")
+    mail(to: @pt.player.email, subject: "Court Ninja: You've been added to #{@pt.team.name}")
   end
 
   def new_athlete_join_team_approval_email(id)
     @pt = PlayerTeam.find(id)
-    mail(to: @pt.player.email, subject: "TourneyChamp: You've been added to #{@pt.team.name}")
+    mail(to: @pt.player.email, subject: "Court Ninja: You've been added to #{@pt.team.name}")
   end
 end

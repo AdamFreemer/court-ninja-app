@@ -9,7 +9,7 @@
         <% if current_user&.has_role?(:admin) %>
         <a href="/admin" class="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"> Admin</a>
         <% end %>  
-        <a href='mailto:luckymakro+gzrxpydftpm3ahxiqvgi@boards.trello.com?subject=TourneyChamp feedback from <%= "#{current_user.first_name} #{current_user.last_name}" %>' 
+        <a href='' 
            class="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Submit Feedback</a>
       </div>
     </div>
