@@ -4,6 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.2.2'
 gem 'rails', '~> 7.0.5'
 
+gem 'authentication-zero'
 gem 'cocoon', '~> 1.1'
 gem 'devise', '~> 4.8'
 gem 'google-cloud-storage', '~> 1.38', require: false
