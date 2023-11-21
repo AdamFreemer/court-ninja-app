@@ -23,7 +23,7 @@ default: &default
 
 development:
   <<: *default
-  database: collegi8_app_development
+  database: courtninja_app_development
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -57,7 +57,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: collegi8_app_test
+  database: courtninja_app_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -81,6 +81,6 @@ test:
 #
 production:
   <<: *default
-  database: collegi8_app_production
-  username: collegi8_app
-  password: <%= ENV["COLLEGI8_APP_DATABASE_PASSWORD"] %>
+  database: courtninja_production
+  username: courtninja
+  password: <%= ENV["COURTNINJA_DATABASE_PASSWORD"] %>

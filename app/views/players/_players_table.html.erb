@@ -1,0 +1,75 @@
+<% if players.count > 0 %>
+  <div id="users" class="min-w-full">
+    <% if @players_one_off.count > 0 && @players_team.count > 0 && type == "one_off" %>
+      <span class="font-semibold">One Off Players</span><span class="font-light font-medium italic text-gray-500 float-right"> Note: One off players will be erased 24 hours after creation.</span> 
+    <% elsif @players_one_off.count > 0 && @players_team.count > 0 && type == "team" %>
+      <span class="font-semibold">Team Players</span>
+    <% else %>
+    <% end %>
+
+    <div class="flex flex-col">
+      <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+          <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+            <table id="userTable" class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "ID", sort: "id"%></th>
+                  <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Last Name", sort: "last_name"%></th>
+                  <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "First Name", sort: "first_name"%></th>
+                  <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Email", sort: "email"%></th>
+                  <% if type == "team" %>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jersey</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+                  <% end %>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">&nbsp;</th>
+                  <th scope="col" class="relative px-6 py-3">
+                    <span class="sr-only">&nbsp;</span>
+                  </th>
+                  <th scope="col" class="relative px-6 py-3">
+                    <span class="sr-only">&nbsp;</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <% players&.each do |user| %>
+                  <tr 
+                    class="bg-grey" 
+                    data-controller="user" 
+                    data-user-id-value="<%= user.id %>" 
+                    data-user-type-value="player"
+                  >
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.id %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.last_name %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.first_name %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.email if !user.is_one_off %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.phone_number %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.jersey_number %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.position %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <%= link_to "Edit", edit_user_path(user), class: "text-indigo-600 hover:text-indigo-900" %>
+                    </td>
+
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <button 
+                        id="delete-button"
+                        data-action="click->user#delete"
+                        type="button" 
+                        class="text-indigo-600 hover:text-indigo-900">
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% else %>
+
+<% end %>
+<br>

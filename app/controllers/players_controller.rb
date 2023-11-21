@@ -1,40 +1,41 @@
-class UsersController < ApplicationController
+class PlayersController < ApplicationController
+  protect_from_forgery with: :null_session
   before_action :set_user, only: %i[edit update destroy]
   before_action :set_positions
 
   def index
-    @title = 'All Users'
-    @users =
-      if params[:sort]
-        User.all.where(is_ghost_player: false).order(params[:sort])
-      else
-        User.all.where(is_ghost_player: false)
-      end
-  end
-
-  def show
-    @user = User.find(current_user.id)
-  end
-
-  def profile
-    @user = User.find(current_user.id)
+    @title = 'Player Management'
+    players =
+        if params[:sort]
+        current_user.players.where(is_ghost_player: false).order(params[:sort])
+        else
+        current_user.players.where(is_ghost_player: false)
+        end
+    @players_one_off = players&.all.where(is_one_off: true)
+    @players_team = players&.all.where(is_one_off: false)  
   end
 
   def new
-    @submit_button_text = 'Add User'
+    @type = if params[:type] == 'team'
+              'Team'
+            else
+              'One Off'
+            end
+    @submit_button_text = 'Add Player'
     @user = User.new
   end
 
   def edit
-    @submit_button_text = 'Edit User'
+    @submit_button_text = 'Edit Player'
   end
 
   def create
-    binding.pry
     @user = User.new(user_params)
+    @user.coach = current_user
+
     respond_to do |format|
       if @user.save(validate: false)
-        format.html { redirect_to user_url(@user), notice: 'User was successfully created.' }
+        format.html { redirect_to players_path, notice: 'Player was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -86,7 +87,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.fetch(:user, [{}]).permit(
+    params.permit(
       :email,
       :first_name,
       :last_name,

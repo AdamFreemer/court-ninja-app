@@ -19,7 +19,9 @@ Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose
       <div class="md:grid md:grid-cols-3 md:gap-6">
         <div class="md:col-span-1 max-h-96 overflow-y-auto border-[1px] p-2">
           <label for="courts" id="players-label" class="block text-md font-medium text-gray-700">Players <span id="players-text" class="text-gray-400"></span>&nbsp;</label>
-
+          <% if true %>
+            <label class="block text-sm font-medium text-gray-500">Tournament rounds generated, no editing of Players allowed.</span>&nbsp;</label>
+          <% end %>
           <% @tournament_configured ? player_list = tournament.users : player_list = @available_players %>
           <%= form.collection_check_boxes(:players, player_list, :id, :full_name, disabled: @tournament_configured) do |player| %>
             <%= player.label class:"text-sm font-medium text-gray-70 py-1" do %>

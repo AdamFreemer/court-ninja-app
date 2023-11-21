@@ -1,32 +1,26 @@
 <div data-controller="portal" class="mx-auto">
-  <% if current_user.is_coach? %>
-    <%= render "coaches/dashboard" %>
-  <% elsif current_user.is_organization? || current_user.is_admin? %>
-    <div class="flex gap-2 items-center border-b-2 pb-1 flow-root">
-      <h2 class="text-center text-4xl font-bold tracking-tight leading-none text-gray-900 md:text-4xl lg:text-4xl dark:text-white float-left">My Tournaments</h2>
-      <button 
-        type="button" 
-        class="float-right text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-md px-5 py-1 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        data-action="portal#newTournamentClick">[+] Tournament
-      </button>
-      <button 
-        type="button" 
-        class="float-right text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-md px-5 py-1 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        data-action="portal#newAdhocTournamentClick">[+] Adhoc Tournament
-      </button>
-    </div>
-    <div id="tournaments" class="min-w-full">
-      <div class="flex flex-col">
-        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-              <%= render "tournaments/tournaments_table" %>
-            </div>
+  <div class="flex gap-2 items-center border-b-2 pb-1 flow-root">
+    <h2 class="text-center text-4xl font-bold tracking-tight leading-none text-gray-900 md:text-4xl lg:text-4xl dark:text-white float-left">Tournaments</h2>
+    <button 
+      type="button" 
+      class="float-right text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-md px-5 py-1 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      data-action="portal#newAdhocTournamentClick">[+] Adhoc Tournament
+    </button>
+    <button 
+      type="button" 
+      class="float-right text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-md px-5 py-1 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      data-action="portal#newTournamentClick">[+] Registered Players Tournament
+    </button>
+  </div>
+  <div id="tournaments" class="min-w-full">
+    <div class="flex flex-col">
+      <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+          <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+            <%= render "tournaments/tournaments_table" %>
           </div>
         </div>
       </div>
     </div>
-  <% else %>
-    <%= render "users/profile" %>
-  <% end %>
+  </div>
 </div>
