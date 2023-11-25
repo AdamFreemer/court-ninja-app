@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :books
   resources :tournaments, except: :show do
     member do
       get 'results'
