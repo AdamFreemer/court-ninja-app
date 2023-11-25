@@ -7,26 +7,21 @@ class TournamentsController < ApplicationController
   before_action :current_set_players, only: %i[display status]
 
   def index
+    @tournaments = Tournament.all.order(created_at: :desc)
+    @tournaments = @tournaments.where(created_by_id: current_user.id) if current_user.is_coach?
+    if current_user.is_coach?
+      @teams = current_user.teams_coached if current_user.is_coach?
+    else
+      @teams = current_user.teams
+    end    
     # dashboards/index
-    redirect_to root_path
+    # redirect_to root_path
   end
 
   def new
     @type = params[:type]
-    @available_players =
-      if @type == 'adhoc'
-        []
-      elsif current_user&.is_coach?
-        @team_id = params[:team] || current_user.teams_coached.first.id
-        if @team_id
-          Team.find(@team_id).players.sort_by(&:last_name)
-        else
-          p = current_user.teams_coached.active.map(&:players)
-          p.flatten!.sort_by(&:last_name)
-        end
-      else
-        User.where(is_ghost_player: false).order(:last_name)
-      end
+    # binding.pry
+    @available_players = current_user.players.where.not(last_name: nil).sort_by(&:last_name)
     @tournament = Tournament.new
     @tournament_times = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
     @break_times = [0.12, 0.5, 1, 1.5, 2.0]
@@ -38,20 +33,10 @@ class TournamentsController < ApplicationController
   end
 
   def edit
-    @available_players =
-      if @tournament.adhoc
-        []
-      elsif current_user&.is_coach?
-        players =
-          if @tournament.base_team
-            @tournament.base_team.players.sort_by(&:last_name)
-          else
-            p = current_user.teams_coached.active.map(&:players)
-            p.flatten!.sort_by(&:last_name)
-          end
-      else
-        User.where(is_ghost_player: false).order(:last_name)
-      end
+    # binding.pry
+    @available_players = current_user.players
+
+
     @tournament_configured = !@tournament.rounds_configured.empty?
     @player_names = @tournament.users.map(&:name_abbreviated)
   end

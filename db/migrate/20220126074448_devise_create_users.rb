@@ -23,10 +23,11 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.0]
       t.string :contact_2_phone
       t.string :contact_2_address
 
-      t.boolean :is_admin, default: false
       t.boolean :is_player, default: false
       t.boolean :is_ghost_player, default: false
-
+      t.boolean :is_admin, default: false
+      t.boolean :is_coach, default: false
+      t.boolean :is_one_off, default: false
       ## Trackable
       # t.integer  :sign_in_count, default: 0, null: false
       # t.datetime :current_sign_in_at
@@ -35,6 +36,8 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.0]
       # t.string   :last_sign_in_ip
 
       t.timestamps null: false
+
+      t.references :coach, foreign_key: { to_table: :users }
     end
 
     # add_index :users, :email,                unique: true

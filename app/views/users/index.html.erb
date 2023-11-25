@@ -1,65 +1,14 @@
-
-
-<div class="mx-auto">
+<div class="mx-auto" data-controller="users">
   <div class="pb-6 flex justify-between items-center">
-    <h1 class="font-semibold text-3xl">Players</h1>
-    <%= link_to 'New Player', new_user_path, class: "inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+    <h1 class="font-semibold text-3xl"><%= @title %></h1>
+      <div class="flex gap-2 items-center pb-1 flow-root">
+        <button 
+          type="button" 
+          class="float-right text-white bg-red-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-md px-5 py-1 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          data-action="users#newUser">Add User
+        </button>       
+      </div>    
+    <%# link_to 'New Player', new_user_path, class: "inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
   </div>
-
-  <div id="users" class="min-w-full">
-    <!-- This example requires Tailwind CSS v2.0+ -->
-    <div class="flex flex-col">
-      <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table id="userTable" class="min-w-full divide-y divide-gray-300">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "ID", sort: "id"%></th>
-                  <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Last Name", sort: "last_name"%></th>
-                  <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "First Name", sort: "first_name"%></th>
-                  <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Email", sort: "email"%></th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jersey</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">&nbsp;</th>
-                  <th scope="col" class="relative px-6 py-3">
-                    <span class="sr-only">&nbsp;</span>
-                  </th>
-                  <th scope="col" class="relative px-6 py-3">
-                    <span class="sr-only">&nbsp;</span>
-                  </th>
-
-                  <%= link_to "Delete", :confirm => "Are you sure?", :method => :delete %>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-200 bg-white">
-                <% @users.each do |user| %>
-                  <tr class="bg-grey">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.id %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.last_name %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.first_name %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.email %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user&.created_at&.strftime("%B %d, %Y") %></td>
-
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.phone_number %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.jersey_number %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.position %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      <%= link_to "Edit", edit_user_path(user), class: "text-indigo-600 hover:text-indigo-900" %>
-                    </td>
-
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      <%= link_to "Delete", user_path(user), class: "text-indigo-600 hover:text-indigo-900", method: :delete %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <%= render "users_table", users: @users %>
 </div>

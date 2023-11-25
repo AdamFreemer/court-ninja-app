@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_27_164009) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_24_234458) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -41,6 +41,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_27_164009) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "books", force: :cascade do |t|
+    t.string "title"
+    t.string "quality"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "coach_players_relationships", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "player_teams", force: :cascade do |t|
@@ -252,12 +264,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_27_164009) do
     t.string "contact_2_name"
     t.string "contact_2_phone"
     t.string "contact_2_address"
+    t.boolean "is_player", default: false
     t.boolean "is_ghost_player", default: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
+    t.boolean "is_admin", default: false
+    t.boolean "is_coach", default: false
+    t.boolean "is_one_off", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "coach_id"
     t.boolean "adhoc", default: false
     t.string "nick_name"
     t.integer "sign_in_count", default: 0, null: false
@@ -266,8 +280,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_27_164009) do
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.date "date_of_birth"
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["coach_id"], name: "index_users_on_coach_id"
   end
 
   create_table "users_roles", id: false, force: :cascade do |t|
@@ -301,4 +314,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_27_164009) do
   add_foreign_key "user_scores", "users"
   add_foreign_key "user_traits", "traits"
   add_foreign_key "user_traits", "users"
+  add_foreign_key "users", "users", column: "coach_id"
 end

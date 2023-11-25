@@ -4,7 +4,7 @@ import Dropdown from "stimulus-dropdown";
 const application = Application.start();
 application.register('dropdown', Dropdown);
 
-console.log('123');
+console.log('-- application.js controller loaded');
 // Configure Stimulus development experience
 application.debug = false
 window.Stimulus = application

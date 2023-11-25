@@ -23,8 +23,6 @@ gem 'sentry-ruby', '~> 5.4'
 gem 'sprockets-rails', '~> 3.4'
 gem 'stimulus-rails', '~> 1.0'
 gem 'tailwindcss-rails', '~> 2.0'
-gem 'trestle', '~> 0.9'
-gem 'trestle-auth', '~> 0.4'
 gem 'turbo-rails', '~> 1.0'
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]

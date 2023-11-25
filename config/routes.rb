@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :books
   resources :tournaments, except: :show do
     member do
       get 'results'
@@ -6,37 +7,26 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/me', to: 'users#show'
-
-  get '/user_role_request/:id/approve', to: 'user_role_requests#approve', as: 'approve_user_role_request'
-  get '/user_role_request/:id/deny', to: 'user_role_requests#deny', as: 'deny_user_role_request'
-
-  get '/approve_team/:uuid', to: 'teams#existing_athlete_join_team_approval', as: 'existing_athlete_join_team_approval'
+  get '/profile', to: 'users#profile'
 
   get '/tournaments/administration/:id/:round', to: 'tournaments#administration', as: 'administration_tournament'
   get '/tournaments/display/:id/:court', to: 'tournaments#display', as: 'display'
-
   post '/tournaments/submit_scores', to: 'tournaments#submit_scores'
   post '/tournaments/update_scores', to: 'tournaments#update_scores'
   post '/tournaments/set_stale', to: 'tournaments#set_stale'
-
   post '/tournaments/admin_connection', to: 'tournaments#admin_connection'
   get '/tournaments/status/:id/:court_number/:timestamp', to: 'tournaments#status'
 
+  get '/players', to: 'players#index', as: 'players'
+  post '/create_player', to: 'players#create', as: 'create_player'
+  get '/players/new', to: 'players#new', as: 'new_player'
+  get '/players/:id/edit', to: 'players#edit', as: 'edit_player'
+
+  get '/admin', to: 'users#index'
+  
   devise_for :users, controllers: { registrations: 'registrations' }
 
-  resources :users, only: [:show, :edit, :update]
-  resources :teams, except: :index do
-    collection do
-      get 'verify'
-      post 'join'
-      delete 'remove_player'
-    end
-
-    member do
-      post 'add_player_to_team'
-    end
-  end
-
-  root 'dashboard#index'
+  resources :users
+  post '/user_delete', to: 'users#destroy', as: 'user_delete'
+  root 'tournaments#index'
 end

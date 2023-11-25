@@ -170,7 +170,7 @@
 
     totalTourneyTime = Math.round(10 * (((tournyTime / 60) * tournamentSets) + ((tournamentSets - 1) * (tournyBreakTime / 60))) * tournamentRounds ) / 10
     if (localStorage['tournamentSets'] == 0) {
-      $('#tourny-time').text("Add more athletes!")
+      $('#tourny-time').text("Add more players!")
     } else {
       $('#tourny-time').text(totalTourneyTime + " minutes")
     }

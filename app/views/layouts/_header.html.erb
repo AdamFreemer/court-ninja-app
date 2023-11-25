@@ -22,14 +22,16 @@
             <a href="/" class="text-gray-500 text-2xl tracking-tighter items-center px-1 pt-1 font-bold">Court Ninja</a>
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-            <% if current_user&.has_role?(:admin) %>
-            <a href="/admin" class="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-2 text-sm font-medium"> Admin</a>
+            <% if current_user.is_admin %>
+              <a href="/admin" class="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-2 text-sm font-medium"> Admin</a>
             <% end %>
+              <a href="/players" class="border-indigo-500 text-gray-900 inline-flex items-center pt-2 text-sm font-medium">//Players</a>
+              <a href="/tournaments" class="border-indigo-500 text-gray-900 inline-flex items-center pt-2 text-sm font-medium">//Tournaments</a>
           </div>
         </div>
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-            <a href='mailto:luckymakro+gzrxpydftpm3ahxiqvgi@boards.trello.com?subject=Court Ninja feedback from <%= "#{current_user.first_name} #{current_user.last_name}" %>'
+            <a href='mailto:someguy@gmail.com?subject=Court Ninja feedback from <%= "#{current_user.first_name} #{current_user.last_name}" %>'
                class="border-indigo-200 border-2 text-indigo-400 mt-1 inline-flex items-center px-1 rounded-lg text-sm font-medium">Submit Feedback</a>
           </div>
 
@@ -49,7 +51,7 @@
                   <li class="text-xs p-2 pb-0 font-bold">Logged in as:</li>
                   <li class="text-sm p-2 pt-0"><%= current_user.email %></li>
                   <hr>
-                  <%= link_to 'Profile', me_path, class: 'hover:bg-indigo-100 border-transparent text-indigo-700 inline-flex items-center p-2 w-full flex justify-end' %>
+                  <%= link_to 'Profile', profile_path, class: 'hover:bg-indigo-100 border-transparent text-indigo-700 inline-flex items-center p-2 w-full flex justify-end' %>
                   <%= button_to 'Sign Out', destroy_user_session_path, :method => :delete, class: 'hover:bg-indigo-100 border-transparent text-indigo-700 inline-flex items-center p-2 w-full flex justify-end' %>
                 </ul>
               </div>
