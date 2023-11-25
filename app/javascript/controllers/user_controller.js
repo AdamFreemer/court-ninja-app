@@ -39,7 +39,8 @@ export default class extends Controller {
           }
           
           if (this.typeValue == "user") {
-            window.location.href = "/admin"
+            // window.location.href = "/admin"
+            console.log("---- wtf")
           }
         }
       })  

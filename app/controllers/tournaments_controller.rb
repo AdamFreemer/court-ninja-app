@@ -20,13 +20,8 @@ class TournamentsController < ApplicationController
 
   def new
     @type = params[:type]
-    @available_players =
-      if @type == 'adhoc'
-        []
-      else
-        current_user.players.sort_by(&:last_name)
-
-      end
+    # binding.pry
+    @available_players = current_user.players.where.not(last_name: nil).sort_by(&:last_name)
     @tournament = Tournament.new
     @tournament_times = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
     @break_times = [0.12, 0.5, 1, 1.5, 2.0]

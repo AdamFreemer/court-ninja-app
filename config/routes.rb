@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :books
   resources :tournaments, except: :show do
     member do
       get 'results'
@@ -17,11 +18,12 @@ Rails.application.routes.draw do
   get '/tournaments/status/:id/:court_number/:timestamp', to: 'tournaments#status'
 
   get '/players', to: 'players#index', as: 'players'
-  get '/players/new', to: 'players#new', as: 'new_player'
   post '/create_player', to: 'players#create', as: 'create_player'
+  get '/players/new', to: 'players#new', as: 'new_player'
+  get '/players/:id/edit', to: 'players#edit', as: 'edit_player'
 
-  get '/admin', to: 'users#index', as: 'users'
-
+  get '/admin', to: 'users#index'
+  
   devise_for :users, controllers: { registrations: 'registrations' }
 
   resources :users

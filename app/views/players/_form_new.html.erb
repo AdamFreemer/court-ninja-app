@@ -1,0 +1,117 @@
+<%= form_with url: "/create_player", method: :post do |form| %>
+  <% if user.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+        <% user.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="inline">
+    <div class="my-12 sm:mt-0">
+      <div class="md:grid md:grid-cols-4 md:gap-6">
+        <div class="mt-5 md:mt-0 md:col-span-3">
+          <div class="overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 bg-white sm:p-6">
+              <div class="flex flex-col gap-6">
+                <% if params[:action] != "new" %>
+                  <div>
+                    <h2 class="text-2xl leading-6 font-medium text-gray-900 mb-2">Editing: User <%= "#{user.full_name}" %></h2>
+                  </div>
+                <% end %>
+                <label class="block text-xl font-medium text-gray-700">Primary Information</label>
+                <div class="flex gap-6">
+                  <div class="flex-1">
+                    <label for="first_name" class="block text-sm font-medium text-gray-700">First name</label>
+                    <%= form.text_field :first_name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md", placeholder: 'Required' %>
+                  </div>
+                  <div class="flex-1">
+                    <label for="last_name" class="block text-sm font-medium text-gray-700">Last name</label>
+                    <%= form.text_field :last_name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md", placeholder: 'Required'  %>
+                  </div>
+                </div>
+                <div class="flex justify-end">
+           
+                  <%= form.submit value: @submit_button_text, class: "float-right text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-md px-5 py-1 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" %>
+                  <%= link_to 'Cancel', players_path, class: "py-1" %>     
+                </div>
+
+
+                <% if params[:type] == 'team' %>
+                <br>
+
+                  <label class="block text-xl font-medium text-gray-700">Optional Information</label>
+
+                  <div class="flex gap-6">
+                    <div class="flex-1">
+                      <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                      <%= form.text_field :email, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md", placeholder: 'A placeholder will be automatically assigned if left empty' %>
+                    </div>
+                    <div class="flex-1">
+                      <label for="nick_name" class="block text-sm font-medium text-gray-700">Nick Name</label>
+                      <%= form.text_field :nick_name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                    </div>
+                  </div>
+
+                  <div class="col-span-6">
+                    <label for="address" class="block text-sm font-medium text-gray-700">Street address</label>
+                    <%= form.text_field :address, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                  </div>
+
+                  <div class="flex gap-6">
+                    <div class="flex-1">
+                      <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                      <%= form.text_field :city, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                    </div>
+                    <div class="flex-1">
+                      <label for="state" class="block text-sm font-medium text-gray-700">State / Province</label>
+                      <%= form.text_field :state, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                    </div>
+                    <div class="flex-1">
+                      <label for="zip" class="block text-sm font-medium text-gray-700">ZIP / Postal code</label>
+                      <%= form.text_field :zip, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                    </div>
+                  </div>
+
+                  <div class="flex-1">
+                    <label for="phone_number" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                    <%= form.text_field :phone_number, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                  </div>
+
+                  <div class="flex gap-6">
+                    <div class="flex-1">
+                      <label for="date_of_birth" class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                      <%= form.date_field :date_of_birth, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                    </div>
+                    <div class="flex-1">
+                      <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+                      <%= form.text_field :gender, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                    </div>
+                  </div>
+
+
+                  <div class="flex gap-6">
+                    <div class="flex-1">
+                      <label for="jersey_number" class="block text-sm font-medium text-gray-700">Jersey Number</label>
+                      <%= form.text_field :jersey_number, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                    </div>
+                    <div class="flex-1">
+                      <label for="position" class="block text-sm font-medium text-gray-700">Position<span class="text-gray-400"></span></label>
+                      <%= form.select :position, @positions, { :include_blank => "--" }, id: "position", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+                    </div>
+                  </div>
+                <% end %>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
