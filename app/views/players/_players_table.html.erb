@@ -39,6 +39,7 @@
                     data-controller="user" 
                     data-user-id-value="<%= user.id %>" 
                     data-user-type-value="player"
+                    data-user-name-value="<%= user.full_name_proper %>" 
                   >
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.id %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.last_name %></td>
@@ -48,7 +49,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.jersey_number %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.position %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      <%= link_to "Edit", edit_player_path(user), class: "text-indigo-600 hover:text-indigo-900" %>
+                      <%= link_to "Edit", edit_player_path(user, is_one_off: user.is_one_off), class: "text-indigo-600 hover:text-indigo-900" %>
                     </td>
 
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">

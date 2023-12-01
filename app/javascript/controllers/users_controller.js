@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   connect() {
-    console.log('-- Users Controller Connect')
+    // console.log('-- Users Controller Connect')
     // setTimeout(() => {
     //   this.dismiss();
     // }, 5000);

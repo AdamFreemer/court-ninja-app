@@ -28,9 +28,10 @@
                 <% users&.each do |user| %>
                   <tr 
                     class="bg-grey" 
-                    data-controller="user"
-                    data-user-id-value="<%= user.id %>"
+                    data-controller="user" 
+                    data-user-id-value="<%= user.id %>" 
                     data-user-type-value="user"
+                    data-user-name-value="<%= user.full_name_proper %>" 
                   >
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.id %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.last_name %></td>

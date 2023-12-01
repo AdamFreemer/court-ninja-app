@@ -1,5 +1,5 @@
 <h1 class="block text-md font-medium text-gray-800">
-Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose-500" id="max-players">&nbsp;</span>
+  Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose-500" id="max-players">&nbsp;</span>
 </h1>
 
 <%= form_with(model: tournament, class: "contents") do |form| %>
@@ -17,10 +17,10 @@ Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose
   <div class="space-y-6">
     <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
       <div class="md:grid md:grid-cols-3 md:gap-6">
-        <div class="md:col-span-1 max-h-96 overflow-y-auto border-[1px] p-2">
-          <label for="courts" id="players-label" class="block text-md font-medium text-gray-700">Players <span id="players-text" class="text-gray-400"></span>&nbsp;</label>
-          <% if true %>
-            <label class="block text-sm font-medium text-gray-500">Tournament rounds generated, no editing of Players allowed.</span>&nbsp;</label>
+        <div class="md:col-span-1 overflow-y-auto border-[1px] p-2">
+          <label for="courts" id="players-label" class="block text-md font-medium text-gray-700">Players <span id="players-text" class="text-gray-400"></span>&nbsp;</label>     
+          <% if !params[:action] == "new" || @tournament_configured == true %>
+            <br><label class="block text-sm font-medium text-red-700">Tournament rounds generated, no editing of Players allowed.</span>&nbsp;</label>
           <% end %>
           <% @tournament_configured ? player_list = tournament.users : player_list = @available_players %>
           <%= form.collection_check_boxes(:players, player_list, :id, :full_name, disabled: @tournament_configured) do |player| %>
@@ -32,14 +32,21 @@ Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose
               <% else %>
                 <%= player.check_box(class: "w-4 h-4 rounded mx-0 ml-1 mr-1") %>
               <% end %>
-              <%= player.text %>
+                <% if player.object.is_one_off %>
+                  <%# binding.pry %>
+                  <span class="text-gray-600 font-medium"><%= player.text %>  [One Off]</span>
+                <% else %>
+                  <span class="text-black font-medium"><%= player.text %></span>
+                <% end %>
+
+              
               <br />
-            <%end %>
+            <% end %>
           <% end %>
           <div class="py-2">
             <% if !@tournament_configured %>
-              <button id="select-all" onclick="selectAllPlayers()" class="btn btn-outline btn-primary btn-xs">Select All</button>
-              <button id="select-none" onclick="selectNonePlayers()" class="btn btn-outline btn-primary btn-xs">Select None</button>
+              <button id="select-all" onclick="selectAllPlayers()" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-4 border-2 border-blue-500 hover:border-transparent rounded-full btn-xs">Select All</button>
+              <button id="select-none" onclick="selectNonePlayers()" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-4 border-2 border-blue-500 hover:border-transparent rounded-full btn-xs">Select None</button>
             <% end %>
           </div>
 
@@ -106,11 +113,12 @@ Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose
 
     <div class="flex justify-end space-x-3">
       <%= link_to "Back to Tournaments", root_path, class: "inline-flex items-center px-5 text-md border border-transparent font-medium" %>
+      <% params[:action] == "new" ? button_text = "Create Tournament" : button_text = "Update Tournament" %>
       <button
         id="save-button"
         type="submit"
-        class="float-right text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-md px-5 py-1 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-        Create Tournament
+        class="float-right text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-md px-5 py-1 text-center mr-2 dark:bg-blue-600 hover:bg-transparent hover:text-color-blue-700">
+        <%= button_text %>
       </button>
     </div>
   </div>

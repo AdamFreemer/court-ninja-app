@@ -1,7 +1,7 @@
 <div data-controller="portal" class="mx-auto">
   <div class="pb-6 flex justify-between items-center">
-    <h1 class="font-semibold text-3xl">Tournament Management</h1>
-      <div class="flex gap-2 items-center pb-1 flow-root">
+    <h1 class="text-gray-500 text-3xl tracking-tighter items-center px-1 pt-1 font-bold">Tournament Management</h1>
+      <div class="flex gap-2 items-center pb-1 flow-root py-1">
         <button 
           type="button" 
       class="float-right text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-md px-5 py-1 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -18,7 +18,7 @@
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <% if @tournaments.count == 0 %>
             <div class="py-4 text-center text-md font-medium tracking-tight leading-none text-gray-900 md:text-md lg:text-md">
-              Such nothingness. Add some players to your team!
+              Such nothingness. Get a tournament going here!
             </div>
           <% else %>     
             <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">   

@@ -11,8 +11,8 @@ class PlayersController < ApplicationController
         else
         current_user.players.where(is_ghost_player: false)
         end
-    @players_one_off = players&.all.where(is_one_off: true)
-    @players_team = players&.all.where(is_one_off: false)  
+    @players_one_off = players.all.where(is_one_off: true).where('created_at > ?', 2.days.ago)
+    @players_team = players&.all.where(is_one_off: false)
   end
 
   def new
@@ -21,12 +21,12 @@ class PlayersController < ApplicationController
             else
               'One Off'
             end
-    @submit_button_text = 'Add Player'
+    @submit_button_text = 'Create Player'
     @user = User.new
   end
 
   def edit
-    @submit_button_text = 'Edit Player'
+    @submit_button_text = 'Update'
   end
 
   def create

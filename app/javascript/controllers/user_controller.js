@@ -4,10 +4,10 @@ export default class extends Controller {
   static values = { 
     id: Number,
     type: String,
+    name: String,
   }
 
   connect() {
-    console.log('-- User Controller Connect')
     // setTimeout(() => {
     //   this.dismiss();
     // }, 5000);
@@ -16,9 +16,7 @@ export default class extends Controller {
 
 
   delete(event) {
-    console.log('-- type:' + this.typeValue)
-    let confirmed = confirm('Are you sure you want to delete this player?');
-    console.log('user id: ' + this.idValue)
+    let confirmed = confirm('Are you sure you want to delete ' + this.nameValue + '?');
     if (!confirmed) {
       event.preventDefault();
     } else {
@@ -33,13 +31,14 @@ export default class extends Controller {
         },
         success: (response) => {
           console.log("-- successful delete")
-          console.log(response)
+          console.log("-- type: " + this.typeValue)
           if (this.typeValue == "player") {
             window.location.href = "/players"
           }
           
           if (this.typeValue == "user") {
-            // window.location.href = "/admin"
+            console.log("---- wtf")
+            window.location.href = "/users"
             console.log("---- wtf")
           }
         }

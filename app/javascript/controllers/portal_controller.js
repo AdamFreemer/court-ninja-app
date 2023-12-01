@@ -5,11 +5,11 @@ export default class extends Controller {
   }
 
   newTournamentClick() {
-    window.location.href = `/tournaments/new/?type=standard`
+    window.location.href = `/tournaments/new`
   }
 
   newAdhocTournamentClick() {
-    window.location.href = `/tournaments/new/?type=adhoc`
+    window.location.href = `/tournaments/new`
   }
 
   newTeamClick() {

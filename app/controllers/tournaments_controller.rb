@@ -13,15 +13,16 @@ class TournamentsController < ApplicationController
       @teams = current_user.teams_coached if current_user.is_coach?
     else
       @teams = current_user.teams
-    end    
+    end 
     # dashboards/index
     # redirect_to root_path
   end
 
   def new
-    @type = params[:type]
-    # binding.pry
-    @available_players = current_user.players.where.not(last_name: nil).sort_by(&:last_name)
+    one_off_players = current_user.players.where(is_one_off: true).where('created_at > ?', 2.days.ago).order(last_name: :asc)
+    team_players = current_user.players.where(is_one_off: false).order(last_name: :asc)
+
+    @available_players = one_off_players + team_players
     @tournament = Tournament.new
     @tournament_times = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
     @break_times = [0.12, 0.5, 1, 1.5, 2.0]

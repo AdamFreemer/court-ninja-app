@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[edit update destroy]
   before_action :set_positions
+  before_action :check_for_admin
 
   def index
     @title = 'All Users'
@@ -46,11 +47,11 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to players_path, notice: 'User was successfully updated.' }
+        format.html { redirect_to users_path, notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
       elsif @user.errors
         @teams = @user.teams
-        format.html { redirect_to players_path, alert: @user.errors.full_messages[0] }
+        format.html { redirect_to users_path, alert: @user.errors.full_messages[0] }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -68,6 +69,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def check_for_admin
+    redirect_to players_path unless current_user.is_admin?
+  end
 
   def set_user
     @user = User.find(params[:id])
@@ -87,6 +92,9 @@ class UsersController < ApplicationController
 
   def user_params
     params.fetch(:user, [{}]).permit(
+      :is_admin,
+      :is_coach,
+      :is_player,
       :email,
       :first_name,
       :last_name,

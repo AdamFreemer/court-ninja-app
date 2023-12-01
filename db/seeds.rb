@@ -12,22 +12,22 @@ gary = User.create(email: 'gary@freemer.com', first_name: 'Gary', last_name: 'Fr
 end
 
 #Adam Players
-User.create(email: 'tyler@test.com', first_name: 'Tyler', last_name: 'Y', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
-User.create(email: 'lauren@test.com', first_name: 'Lauren', last_name: 'D', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
-User.create(email: 'patw@test.com', first_name: 'Pat', last_name: 'W', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
-User.create(email: 'pat@test.com', first_name: 'Pat', last_name: 'R', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
-User.create(email: 'ahmed@test.com', first_name: 'Ahmed', last_name: 'W', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
-User.create(email: 'steve@test.com', first_name: 'Steve', last_name: 'A', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
-User.create(email: 'wil@test.com', first_name: 'Wil', last_name: 'H', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
-User.create(email: 'wil@test.com', first_name: 'Wil', last_name: 'L', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
-User.create(email: 'matt@test.com', first_name: 'Matt ', last_name: 'M', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
-User.create(email: 'joe@test.com ', first_name: 'Joe', last_name: 'C', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
-User.create(email: 'dean@test.com', first_name: 'Dean', last_name: 'Y', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
-User.create(email: 'bob@test.com', first_name: 'Bob', last_name: 'N', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
-User.create(email: 'dave@test.com', first_name: 'Dave', last_name: 'Y', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
-User.create(email: 'beks@test.com', first_name: 'Beks', last_name: 'N', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
+User.create(email: 'tyler@test.com', first_name: 'Tyler', last_name: 'Yahoda', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
+User.create(email: 'lauren@test.com', first_name: 'Lauren', last_name: 'Deeker', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
+User.create(email: 'patw@test.com', first_name: 'Pat', last_name: 'Wilkes', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
+User.create(email: 'pat@test.com', first_name: 'Pat', last_name: 'Roden', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
+User.create(email: 'ahmed@test.com', first_name: 'Ahmed', last_name: 'Weebley', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
+User.create(email: 'steve@test.com', first_name: 'Steve', last_name: 'Austin', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
+User.create(email: 'wil@test.com', first_name: 'Wil', last_name: 'Iam', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
+User.create(email: 'wil@test.com', first_name: 'Wil', last_name: 'Smith', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
+User.create(email: 'matt@test.com', first_name: 'Matt ', last_name: 'Moheki', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
+User.create(email: 'joe@test.com ', first_name: 'Joe', last_name: 'Blow', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
+User.create(email: 'dean@test.com', first_name: 'Dean', last_name: 'Yaritz', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
+User.create(email: 'bob@test.com', first_name: 'Bob', last_name: 'Shouster', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
+User.create(email: 'dave@test.com', first_name: 'Dave', last_name: 'Fitzpatrick', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
+User.create(email: 'beks@test.com', first_name: 'Beks', last_name: 'Nevaro', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id)
 
-User.create(email: 'tempg@test.com', first_name: 'Temp', last_name: 'G', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id, is_one_off: true)
+User.create(email: 'tempg@test.com', first_name: 'Gotce', last_name: 'Peev', password: 'password', password_confirmation: 'password', is_player: true, coach_id: adam.id, is_one_off: true)
 
 # Dan Players
 User.create(email: 'christiano@test.com', first_name: 'Christian', last_name: 'Y', password: 'password', password_confirmation: 'password', is_player: true, coach_id: dan.id)
