@@ -53,7 +53,7 @@ export default class extends Controller {
   updateTournyTimeOnPage() {
     const totalTourneyTime = Math.round(10 * (((this.tournamentTimeValue * this.setsValue) + ((this.setsValue - 1) * this.breakTimeValue)) * this.roundsValue) / 60) / 10
     if (this.setsValue == 0) {
-      $('#tourny-time').text("Add more players!")
+      $('#tourny-time').text("Add more players! (minimum 5)")
     } else {
       $('#tourny-time').text(totalTourneyTime + " minutes")
     }

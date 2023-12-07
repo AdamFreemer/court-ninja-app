@@ -54,9 +54,9 @@ class TournamentsController < ApplicationController
         @tournament.update(current_round: 1)
         # redirect to court #x if more than 1 court (other courts will be opened from front end isNew method)
         court_to_open = @tournament.courts
-        redirect_to display_url(@tournament, court_to_open), notice: 'Tournament was successfully created.'
+        redirect_to tournaments_path, notice: 'Tournament was successfully created.'
       else
-        redirect_to tournaments_url
+        redirect_to tournaments_path
       end
     else
       render :new, status: :unprocessable_entity
@@ -72,12 +72,12 @@ class TournamentsController < ApplicationController
       if @tournament.rounds_configured.empty?
         if @tournament.generate
           @tournament.update(current_round: 1)
-          redirect_to display_url(@tournament, 1), notice: 'Tournament updated and round one successfully created.'
+          redirect_to tournaments_path, notice: 'Tournament updated and round one successfully created.'
         else
           redirect_to tournaments_path, notice: 'Tournament was successfully updated (no rounds created).'
         end
       else
-        redirect_to display_url(@tournament, 1), notice: 'Tournament information updated.'
+        redirect_to tournaments_path, notice: 'Tournament information updated.'
       end
     else
       render :edit, status: :unprocessable_entity

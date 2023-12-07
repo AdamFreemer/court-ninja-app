@@ -80,8 +80,9 @@ export default class extends Controller {
         this.modalButtonsTarget.style.display = 'flex';
         this.confirmationMessageValue = 'Message'
     } else if (this.modalPurposeValue == "is-new") {
-      this.modalButtonsTarget.style.display = 'flex';
-      this.modalMessageTarget.innerHTML = 'Click Confirm to start the first match!'
+      return false
+      // this.modalButtonsTarget.style.display = 'flex';
+      // this.modalMessageTarget.innerHTML = 'Click Confirm to start the first match!'
     }
     this.modalTarget.classList.add('modal-open');
   }
@@ -109,9 +110,9 @@ export default class extends Controller {
       this.submitScores();
       this.reset();
       // start timer if NOT the last match in the round
-      if (this.tournamentCurrentCourtMatchValue != this.tournamentMatchesPerRoundValue) {
-        this.start();
-      }
+      // if (this.tournamentCurrentCourtMatchValue != this.tournamentMatchesPerRoundValue) {
+      //   this.start();
+      // }
     }
 
     setTimeout(() => {
@@ -420,7 +421,7 @@ export default class extends Controller {
       this.mainPageSubmitTextTarget.innerHTML = submitLoadingText
     } else if (this.allScoresEnteredValue == true) {
       this.mainPageSubmitTextTarget.innerHTML = 'Submit Round';
-      this.mainPageSubmitTextTarget.classList.add('bg-green-500');
+      this.mainPageSubmitTextTarget.classList.add('bg-red-500');
       this.mainPageSubmitTextTarget.classList.remove('bg-blue-700');
       this.team1ScoreTarget.disabled = true;
       this.team2ScoreTarget.disabled = true;
