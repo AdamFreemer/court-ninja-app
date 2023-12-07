@@ -7,7 +7,8 @@ gem 'rails', '~> 7.0.5'
 gem 'authentication-zero'
 gem 'cocoon', '~> 1.1'
 gem 'devise', '~> 4.8'
-gem 'google-cloud-storage', '~> 1.38', require: false
+gem "aws-sdk-s3", require: false
+# gem 'google-cloud-storage', '~> 1.38', require: false
 gem 'importmap-rails', '~> 1.0'
 gem 'jbuilder', '~> 2.11'
 gem 'mailsafe', '~> 0.3'
