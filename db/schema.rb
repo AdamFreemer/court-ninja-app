@@ -262,6 +262,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_18_015414) do
     t.boolean "is_admin", default: false
     t.boolean "is_coach", default: false
     t.boolean "is_one_off", default: false
+    t.string "unlock_token"
+    t.string "confirmation_token"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "coach_id"
@@ -274,6 +278,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_18_015414) do
     t.string "last_sign_in_ip"
     t.date "date_of_birth"
     t.index ["coach_id"], name: "index_users_on_coach_id"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   create_table "users_roles", id: false, force: :cascade do |t|

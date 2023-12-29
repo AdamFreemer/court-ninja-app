@@ -31,7 +31,6 @@ class UsersController < ApplicationController
   end
 
   def create
-    # binding.pry
     @user = User.new(user_params)
     respond_to do |format|
       if @user.save(validate: false)
@@ -46,11 +45,19 @@ class UsersController < ApplicationController
 
   def update
     respond_to do |format|
+      # raw, enc = Devise.token_generator.generate(User, :reset_password_token)
+      # @user.reset_password_token = enc
+      # @user.reset_password_sent_at = Time.now.utc
+
       if @user.update(user_params)
-        format.html { redirect_to users_path, notice: 'User was successfully updated.' }
+        # binding.pry
+        if params[:user][:update_type] == 'player' || params[:user][:update_type] == 'player_image'
+          format.html { redirect_to edit_player_path(@user, is_one_off: @user.is_one_off.to_s), notice: 'Player was successfully updated.' }
+        else
+          format.html { redirect_to edit_user_path(@user, is_one_off: @user.is_one_off.to_s), notice: 'User was successfully updated.' }
+        end
         format.json { render :show, status: :ok, location: @user }
       elsif @user.errors
-        @teams = @user.teams
         format.html { redirect_to users_path, alert: @user.errors.full_messages[0] }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -114,7 +121,9 @@ class UsersController < ApplicationController
       :contact_2_phone,
       :contact_2_address,
       :date_of_birth,
-      :profile_picture
+      :profile_picture,
+      :password,
+      :password_confirmation
     )
   end
 end

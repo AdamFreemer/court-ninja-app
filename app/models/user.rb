@@ -2,45 +2,53 @@
 #
 # Table name: users
 #
-#  id                 :bigint           not null, primary key
-#  address            :string
-#  adhoc              :boolean          default(FALSE)
-#  city               :string
-#  contact_1_address  :string
-#  contact_1_name     :string
-#  contact_1_phone    :string
-#  contact_2_address  :string
-#  contact_2_name     :string
-#  contact_2_phone    :string
-#  current_sign_in_at :datetime
-#  current_sign_in_ip :string
-#  date_of_birth      :date
-#  email              :string           default(""), not null
-#  encrypted_password :string           default(""), not null
-#  first_name         :string
-#  gender             :string
-#  is_admin           :boolean          default(FALSE)
-#  is_coach           :boolean          default(FALSE)
-#  is_ghost_player    :boolean          default(FALSE)
-#  is_one_off         :boolean          default(FALSE)
-#  is_player          :boolean          default(FALSE)
-#  jersey_number      :string
-#  last_name          :string
-#  last_sign_in_at    :datetime
-#  last_sign_in_ip    :string
-#  nick_name          :string
-#  phone_number       :string
-#  position           :string
-#  sign_in_count      :integer          default(0), not null
-#  state              :string
-#  zip                :string
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  coach_id           :bigint
+#  id                     :bigint           not null, primary key
+#  address                :string
+#  adhoc                  :boolean          default(FALSE)
+#  city                   :string
+#  confirmation_token     :string
+#  contact_1_address      :string
+#  contact_1_name         :string
+#  contact_1_phone        :string
+#  contact_2_address      :string
+#  contact_2_name         :string
+#  contact_2_phone        :string
+#  current_sign_in_at     :datetime
+#  current_sign_in_ip     :string
+#  date_of_birth          :date
+#  email                  :string           default(""), not null
+#  encrypted_password     :string           default(""), not null
+#  first_name             :string
+#  gender                 :string
+#  is_admin               :boolean          default(FALSE)
+#  is_coach               :boolean          default(FALSE)
+#  is_ghost_player        :boolean          default(FALSE)
+#  is_one_off             :boolean          default(FALSE)
+#  is_player              :boolean          default(FALSE)
+#  jersey_number          :string
+#  last_name              :string
+#  last_sign_in_at        :datetime
+#  last_sign_in_ip        :string
+#  nick_name              :string
+#  phone_number           :string
+#  position               :string
+#  reset_password_sent_at :datetime
+#  reset_password_token   :string
+#  sign_in_count          :integer          default(0), not null
+#  state                  :string
+#  unlock_token           :string
+#  zip                    :string
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  coach_id               :bigint
 #
 # Indexes
 #
-#  index_users_on_coach_id  (coach_id)
+#  index_users_on_coach_id              (coach_id)
+#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  index_users_on_unlock_token          (unlock_token) UNIQUE
 #
 # Foreign Keys
 #
