@@ -4,7 +4,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.2.2'
 gem 'rails', '~> 7.0.5'
 
-gem 'authentication-zero'
 gem 'cocoon', '~> 1.1'
 gem 'devise', '~> 4.8'
 gem "aws-sdk-s3", require: false
@@ -19,8 +18,8 @@ gem 'redis', '~> 4.0'
 gem 'rolify', '~> 6.0'
 gem 'sass-rails'
 gem 'select2-rails', '~> 4.0'
-gem 'sentry-rails', '~> 5.4'
-gem 'sentry-ruby', '~> 5.4'
+# gem 'sentry-rails', '~> 5.4'
+# gem 'sentry-ruby', '~> 5.4'
 gem 'sprockets-rails', '~> 3.4'
 gem 'stimulus-rails', '~> 1.0'
 gem 'tailwindcss-rails', '~> 2.0'

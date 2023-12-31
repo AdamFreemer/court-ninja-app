@@ -4,7 +4,7 @@
       <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2 md:mx-auto">
         <div class="w-full">
           <h1 class="text-4xl text-center px-1 pt-1 font-bold">Court Ninja</h1>
-          <h2 class="font-europa font-bold text-lg text-center my-2"><%= params[:claim] ? 'Claim Your Account' : 'Forgot your password?' %></h2>
+          <h2 class="font-europa font-bold text-lg text-center my-2"><%= params[:claim] ? 'Claim Your Account' : 'Password Reset' %></h2>
           <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
             <%= render "devise/shared/error_messages", resource: resource %>
             <% if params[:claim] %>
