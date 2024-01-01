@@ -37,16 +37,6 @@
                     <label for="position" class="block text-sm font-medium text-gray-700">Player<span class="text-gray-400"></span></label>
                     <%= form.select :is_player, [["Yes", true], ["No", false]], {}, id: "position", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
                   </div>
-
-                  <div class="flex-auto">
-                    <label for="first_name" class="block text-sm font-medium text-gray-700">Password</label>
-                    <%= form.password_field :password, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md", autocomplete: "new-password" %>
-                  </div>
-                  <div class="flex-auto">
-                    <label for="last_name" class="block text-sm font-medium text-gray-700">Re-Enter Password</label>
-                    <%= form.text_field :password_confirmation, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md", autocomplete: "new-password"  %>
-                  </div>
-
                 </div>
 
                 <div class="flex gap-6">
