@@ -14,7 +14,7 @@
             <table id="userTable" class="min-w-full divide-y divide-gray-300">
               <thead class="bg-gray-50">
                 <tr>
-                  <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "ID", sort: "id"%></th>
+                  <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">&nbsp;</th>
                   <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Last Name", sort: "last_name"%></th>
                   <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "First Name", sort: "first_name"%></th>
                   <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Email", sort: "email"%></th>
@@ -41,7 +41,15 @@
                     data-user-type-value="player"
                     data-user-name-value="<%= user.full_name_proper %>" 
                   >
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.id %></td>
+                    <td class="px-1 py-1 whitespace-nowrap text-sm font-sm text-gray-900">
+                      <div class="relative aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-[10px] mt-0 w-12 h-12 border-2 border-gray-600 text-gray-600">
+                        <% if user.profile_picture.attached? %>
+                          <%= image_tag(user.profile_picture, class: 'rounded-[50%] absolute top-0 bottom-0 left-0 right-0 w-12 h-12 object-cover object-center') %>
+                        <% else %>
+                          <%= user.initials %>
+                        <% end %>
+                      </div>
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.last_name %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.first_name %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.email if !user.is_one_off %></td>
