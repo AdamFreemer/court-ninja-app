@@ -45,13 +45,13 @@
 
   function processPlayersSelected(pSelected) {
     // Limits saving and adds warning when user role is coach (needs expansion for future roles)
-    const userIsCoach = "<%= current_user.has_role?(:coach) %>"
-    if (userIsCoach == "true" && pSelected > 14) {
+    // const userIsCoach = "<%= current_user.has_role?(:coach) %>"
+    if ( pSelected > 14) {
       $("#save-button").prop("disabled", true).addClass("opacity-50").addClass("cursor-not-allowed");
-      $("#max-players").text(" Warning: Maximum player count limit is 14");
+      // $("#max-players").text(" Warning: Maximum player count limit is 14");
     } else {
       $("#save-button").prop("disabled", false).removeClass("opacity-50").removeClass("cursor-not-allowed");
-      $("#max-players").text("");
+      // $("#max-players").text("");
     }
 
     // Shows courts dependent on player count selected
@@ -120,36 +120,36 @@
       courtsCountTwo();
       break;      
     case 15:
-      localStorage['tournamentSets'] = 5
-      localStorage['tournamentRounds'] = 3
-      courtsCountThree();
-      break;
+      // localStorage['tournamentSets'] = 5
+      // localStorage['tournamentRounds'] = 3
+      // courtsCountThree();
+      // break;
     case 16:
     case 17:
-      localStorage['tournamentSets'] = 7
-      localStorage['tournamentRounds'] = 2
-      courtsCountTwo();
-      break;    
+      // localStorage['tournamentSets'] = 7
+      // localStorage['tournamentRounds'] = 2
+      // courtsCountTwo();
+      // break;    
     case 18:
     case 19:
     case 20:
     case 21:
-      localStorage['tournamentSets'] = 7
-      localStorage['tournamentRounds'] = 3
-      courtsCountThree();
-      break;      
+      // localStorage['tournamentSets'] = 7
+      // localStorage['tournamentRounds'] = 3
+      // courtsCountThree();
+      // break;      
     case 22:
     case 23:
     case 24:
-      localStorage['tournamentSets'] = 10
-      localStorage['tournamentRounds'] = 3
-      courtsCountFour();
-      break;      
+      // localStorage['tournamentSets'] = 10
+      // localStorage['tournamentRounds'] = 3
+      // courtsCountFour();
+      // break;      
     case 25:
-      localStorage['tournamentSets'] = 12
-      localStorage['tournamentRounds'] = 2
-      courtsCountThree();
-      break;
+      // localStorage['tournamentSets'] = 12
+      // localStorage['tournamentRounds'] = 2
+      // courtsCountThree();
+      // break;
     case 26:
     case 27:
     }    
@@ -163,16 +163,20 @@
   }
 
   function updateTournyTimeOnPage() {
+    let pSelected = document.querySelectorAll('input[type="checkbox"]:checked').length;
     var tournyTime = parseFloat(localStorage['tournyTime']).toFixed(1);
     var tournyBreakTime = parseFloat(localStorage['tournyBreakTime']).toFixed(1);
     var tournamentSets = parseFloat(localStorage['tournamentSets']).toFixed(1);
     var tournamentRounds = parseFloat(localStorage['tournamentRounds']).toFixed(1);
 
     totalTourneyTime = Math.round(10 * (((tournyTime / 60) * tournamentSets) + ((tournamentSets - 1) * (tournyBreakTime / 60))) * tournamentRounds ) / 10
-    if (localStorage['tournamentSets'] == 0) {
-      $('#tourny-time').text("Add more players! (minumum 5)")
+    console.log("pSelected: " + pSelected)
+    if (pSelected < 5 || pSelected > 14) {
+      $('#tourny-time').text("Add / subtract players! (minimum 5, maximum 14)").css('color', 'red');
     } else {
-      $('#tourny-time').text(totalTourneyTime + " minutes")
+      $('#tourny-time').text(totalTourneyTime + " minutes").css('color', 'black');
+
+
     }
   }  
 
