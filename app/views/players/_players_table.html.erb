@@ -1,7 +1,7 @@
 <% if players.count > 0 %>
   <div id="users" class="min-w-full">
     <% if @players_one_off.count > 0 && @players_team.count > 0 && type == "one_off" %>
-      <span class="font-semibold">One Off Players</span><span class="font-light font-medium italic text-gray-500 float-right"> Note: One off players will be erased 24 hours after creation.</span> 
+      <span class="font-semibold">One-Off Players</span><span class="font-light font-medium italic text-gray-500 float-right"> Note: One-off players will be erased 24 hours after creation.</span> 
     <% elsif @players_one_off.count > 0 && @players_team.count > 0 && type == "team" %>
       <span class="font-semibold">Team Players</span>
     <% else %>

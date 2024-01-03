@@ -4,7 +4,7 @@
       <tr>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-        <% if current_user.has_role? "admin" %>
+        <% if current_user.is_admin == true %>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created By</th>
         <% end %>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
@@ -20,8 +20,8 @@
         <tr class="bg-grey">
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.id %></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.created_at.strftime("%b %e, %Y | %l:%M %p") %></td>
-          <% if current_user.has_role? "admin" %>
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament&.created_by&.full_name if tournament&.created_by %></td>
+          <% if current_user.is_admin == true %>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= "#{tournament&.created_by&.full_name}, id: #{tournament&.created_by&.id}" if tournament&.created_by %></td>
           <% end %>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= tournament.name %></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -29,9 +29,11 @@
             <span class="text-green-600">Completed</span>
           <% elsif tournament.rounds_configured == [] %>
             <span class="text-red-600">Incomplete configuration</span>
-          <% else %>
+          <% elsif !tournament.tournament_teams.collect(&:score).all? { |score| score.nil? } %>
             <span class="text-blue-600">In process</span>
-          <% end %>
+          <% else %>
+            <span class="text-gray-700">Created</span>
+          <% end %>          
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
             <% if tournament.rounds_configured == [] %>

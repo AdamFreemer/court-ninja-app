@@ -15,6 +15,7 @@
                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Coach</th>
                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Player</th>
                   <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Last Login", sort: "id"%></th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tourny #</th>
                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">&nbsp;</th>
                   <th scope="col" class="relative px-6 py-3">
                     <span class="sr-only">&nbsp;</span>
@@ -41,6 +42,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.is_coach %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.is_player %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.last_sign_in_at %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= Tournament.where(created_by_id: user.id).count %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       <%= link_to "Edit", edit_user_path(user), class: "text-indigo-600 hover:text-indigo-900" %>
                     </td>
