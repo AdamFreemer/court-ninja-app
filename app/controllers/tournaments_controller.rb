@@ -9,11 +9,7 @@ class TournamentsController < ApplicationController
   def index
     @tournaments = Tournament.all.order(created_at: :desc)
     @tournaments = @tournaments.where(created_by_id: current_user.id) if current_user.is_coach?
-    if current_user.is_coach?
-      @teams = current_user.teams_coached if current_user.is_coach?
-    else
-      @teams = current_user.teams
-    end 
+
     # dashboards/index
     # redirect_to root_path
   end

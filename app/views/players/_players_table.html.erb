@@ -17,8 +17,8 @@
                   <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">&nbsp;</th>
                   <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Last Name", sort: "last_name"%></th>
                   <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "First Name", sort: "first_name"%></th>
-                  <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Email", sort: "email"%></th>
                   <% if type == "team" %>
+                    <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Email", sort: "email"%></th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jersey</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
@@ -64,7 +64,7 @@
                         </button>   
                       </a>                    
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <%# <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       <button 
                         id="delete-button"
                         data-action="click->user#delete"
@@ -72,7 +72,7 @@
                         class="text-md py-0.5 px-5 text-md font-medium text-gray-400 focus:outline-none bg-white rounded-full border-2 border-gray-400 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-200">
                         Delete
                       </button>   
-                    </td>
+                    </td> %>
                   </tr>
                 <% end %>
               </tbody>
