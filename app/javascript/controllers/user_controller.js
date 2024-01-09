@@ -15,14 +15,15 @@ export default class extends Controller {
 
 
 
-  delete(event) {
+  deactivate(event) {
+    console.log('=== deactivate new!')
     let confirmed = confirm('Are you sure you want to delete ' + this.nameValue + '?');
     if (!confirmed) {
       event.preventDefault();
     } else {
       $.ajax({
         type: "POST",
-        url: "/user_delete/",
+        url: "/user_deactivate/",
         beforeSend: function(jqXHR, settings) {
           jqXHR.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
         },

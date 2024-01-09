@@ -11,8 +11,8 @@ class PlayersController < ApplicationController
         else
         current_user.players.where(is_ghost_player: false)
         end
-    @players_one_off = players.all.where(is_one_off: true).where('created_at > ?', 2.days.ago)
-    @players_team = players&.all.where(is_one_off: false)
+    @players_one_off = players.all.where(is_one_off: true, is_active: true).where('created_at > ?', 2.days.ago)
+    @players_team = players.all.where(is_one_off: false, is_active: true)
   end
 
   def new

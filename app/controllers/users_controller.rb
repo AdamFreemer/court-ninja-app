@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[edit update destroy]
+  before_action :set_user, only: %i[edit update destroy deactivate]
   before_action :set_positions
   before_action :check_for_admin
 
@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     @title = 'All Users'
     @users =
       if params[:sort]
-        User.all.where(is_ghost_player: false).order(params[:sort])
+        User.all.where(is_ghost_player: false).order("#{params[:sort]} ASC")
       else
         User.all.where(is_ghost_player: false)
       end
@@ -68,6 +68,15 @@ class UsersController < ApplicationController
 
   def destroy
     @user.destroy
+
+    respond_to do |format|
+      format.html { head :no_content }
+      format.json { head :no_content }
+    end
+  end
+
+  def deactivate
+    @user.update(is_active: false)
 
     respond_to do |format|
       format.html { head :no_content }

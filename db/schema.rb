@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_18_015414) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_09_023928) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -277,6 +277,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_18_015414) do
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.date "date_of_birth"
+    t.boolean "is_active", default: true
     t.index ["coach_id"], name: "index_users_on_coach_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

@@ -8,12 +8,13 @@
               <thead class="bg-gray-50">
                 <tr>
                   <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "ID", sort: "id"%></th>
+                  <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Active", sort: "is_active"%></th>
                   <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Last Name", sort: "last_name"%></th>
                   <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "First Name", sort: "first_name"%></th>
                   <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Email", sort: "email"%></th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Admin</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Coach</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Player</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Admin", sort: "is_admin"%></th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Coach", sort: "is_coach"%></th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Player", sort: "is_player"%></th>
                   <th scope="col" class="underline px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= link_to "Last Login", sort: "id"%></th>
                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tourny #</th>
                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">&nbsp;</th>
@@ -35,6 +36,7 @@
                     data-user-name-value="<%= user.full_name_proper %>" 
                   >
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.id %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user&.is_active %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.last_name %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.first_name %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.email %></td>
@@ -50,10 +52,10 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       <button 
                         id="delete-button"
-                        data-action="click->user#delete"
+                        data-action="click->user#deactivate"
                         type="button" 
                         class="text-indigo-600 hover:text-indigo-900">
-                        Delete
+                        Deactivate
                       </button>
                     </td>
                   </tr>

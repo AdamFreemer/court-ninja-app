@@ -22,10 +22,11 @@ Rails.application.routes.draw do
   get '/players/:id/edit', to: 'players#edit', as: 'edit_player'
 
   get '/admin', to: 'users#index'
-  
+
   devise_for :users, controllers: { registrations: 'registrations' }
 
   resources :users
-  post '/user_delete', to: 'users#destroy', as: 'user_delete'
+  post '/user_deactivate', to: 'users#deactivate', as: 'user_deactivate'
+  # post '/user_delete', to: 'users#destroy', as: 'user_delete'
   root 'tournaments#index'
 end

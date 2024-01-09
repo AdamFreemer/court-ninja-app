@@ -20,6 +20,7 @@
 #  encrypted_password     :string           default(""), not null
 #  first_name             :string
 #  gender                 :string
+#  is_active              :boolean          default(TRUE)
 #  is_admin               :boolean          default(FALSE)
 #  is_coach               :boolean          default(FALSE)
 #  is_ghost_player        :boolean          default(FALSE)
