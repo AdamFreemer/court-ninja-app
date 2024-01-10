@@ -8,10 +8,10 @@ class TournamentsController < ApplicationController
 
   def index
     @tournaments = Tournament.all.order(created_at: :desc)
-    if current_user.is_coach?
-      @tournaments = @tournaments.where(created_by_id: current_user.id)
-    else
+    if current_user.is_admin?
       @tournaments
+    else
+      @tournaments = @tournaments.where(created_by_id: current_user.id)
     end
   end
 
