@@ -44,20 +44,28 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.is_coach %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.is_player %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= user.last_sign_in_at %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= Tournament.where(created_by_id: user.id).count %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <%= Tournament.where(created_by_id: user.id).count %>, <%= user.tournaments %>
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       <%= link_to "Edit", edit_user_path(user), class: "text-indigo-600 hover:text-indigo-900" %>
                     </td>
+                    <% if user.is_active == true %>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <button 
+                          id="delete-button"
+                          data-action="click->user#deactivate"
+                          type="button" 
+                          class="text-indigo-600 hover:text-indigo-900">
+                          Deactivate
+                        </button>
+                      </td>                    
+                    <% else %>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-300">
+                      Deactivated
+                      </td>
+                    <% end %>
 
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      <button 
-                        id="delete-button"
-                        data-action="click->user#deactivate"
-                        type="button" 
-                        class="text-indigo-600 hover:text-indigo-900">
-                        Deactivate
-                      </button>
-                    </td>
                   </tr>
                 <% end %>
               </tbody>

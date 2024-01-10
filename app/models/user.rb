@@ -119,6 +119,10 @@ class User < ApplicationRecord
     end
   end
 
+  def tournaments
+    Tournament.where(created_by_id: id).map(&:id)
+  end
+
   def name_abbreviated
     if is_ghost_player
       'Ghost Player'
