@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   get '/players/new', to: 'players#new', as: 'new_player'
   get '/players/:id/edit', to: 'players#edit', as: 'edit_player'
 
-  get '/admin', to: 'users#index'
+  get '/users', to: 'users#index'
 
   devise_for :users, controllers: { registrations: 'registrations' }
 

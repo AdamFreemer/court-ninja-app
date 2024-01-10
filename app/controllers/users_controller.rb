@@ -4,13 +4,17 @@ class UsersController < ApplicationController
   before_action :check_for_admin
 
   def index
-    @title = 'All Users'
+    set_title
+
     @users =
       if params[:sort]
         User.all.where(is_ghost_player: false).order("#{params[:sort]} ASC")
       else
         User.all.where(is_ghost_player: false)
       end
+
+    @users = @users.where(is_coach: true) if params[:show] == 'coaches'
+    @users = @users.where(is_admin: true) if params[:show] == 'admins'
   end
 
   def show
@@ -92,6 +96,17 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+  end
+
+  def set_title
+    @title =
+    if params[:show] == 'coaches'
+      'Coaches'
+    elsif params[:show] == 'admins'
+      'Admins'
+    else
+      'All Users'
+    end
   end
 
   def set_positions

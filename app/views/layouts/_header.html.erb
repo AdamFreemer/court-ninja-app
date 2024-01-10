@@ -23,7 +23,9 @@
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
             <% if current_user.is_admin %>
-              <a href="/admin" class="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-2 text-sm font-medium"> Admin</a>
+              <a href="/users?show=all" class="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-2 text-sm font-medium"> All Users</a>
+              <a href="/users?show=admins" class="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-2 text-sm font-medium"> Admins</a>
+              <a href="/users?show=coaches" class="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-2 text-sm font-medium"> Coaches</a>
             <% end %>
               <a href="/players" class="border-indigo-500 text-gray-900 inline-flex items-center pt-2 text-sm font-medium">//Players</a>
               <a href="/tournaments" class="border-indigo-500 text-gray-900 inline-flex items-center pt-2 text-sm font-medium">//Tournaments</a>
