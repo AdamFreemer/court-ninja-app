@@ -3,14 +3,30 @@ class PlayersController < ApplicationController
   before_action :set_user, only: %i[edit update destroy]
   before_action :set_positions
 
+  def leaderboard
+    players =
+      if params[:sort]
+        current_user.players.where(is_ghost_player: false, is_one_off: false, is_on_leaderboard: true).order(params[:sort])
+      else
+        current_user.players.where(is_ghost_player: false, is_one_off: false, is_on_leaderboard: true)
+      end
+
+      @players = []
+      players.each do |player|
+
+        @players << [player.profile_picture, player.full_name, player.player_statistics]
+      end
+      # binding.pry
+  end
+
   def index
     @title = 'Player Management'
     players =
-        if params[:sort]
+      if params[:sort]
         current_user.players.where(is_ghost_player: false).order(params[:sort])
-        else
+      else
         current_user.players.where(is_ghost_player: false)
-        end
+      end
     @players_one_off = players.all.where(is_one_off: true, is_active: true).where('created_at > ?', 2.days.ago)
     @players_team = players.all.where(is_one_off: false, is_active: true)
   end

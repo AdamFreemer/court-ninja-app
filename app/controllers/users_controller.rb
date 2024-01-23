@@ -6,13 +6,13 @@ class UsersController < ApplicationController
   def index
     set_title
     sort =
-      if params[:sort] == nil
+      if params[:sort].nil?
         'id'
       else
         params[:sort]
       end
 
-    @users = 
+    @users =
       if params[:show] == 'coaches'
         User.all.where(is_coach: true, is_ghost_player: false).order("#{sort} ASC")
       elsif params[:show] == 'admins'
@@ -57,9 +57,8 @@ class UsersController < ApplicationController
       # raw, enc = Devise.token_generator.generate(User, :reset_password_token)
       # @user.reset_password_token = enc
       # @user.reset_password_sent_at = Time.now.utc
-
       if @user.update(user_params)
-        # binding.pry
+
         if params[:user][:update_type] == 'player' || params[:user][:update_type] == 'player_image'
           format.html { redirect_to edit_player_path(@user, is_one_off: @user.is_one_off.to_s), notice: 'Player was successfully updated.' }
         else
@@ -96,7 +95,9 @@ class UsersController < ApplicationController
   private
 
   def check_for_admin
-    redirect_to players_path unless current_user.is_admin?
+    return true if current_user.is_admin? || current_user.is_coach?
+
+    redirect_to players_path
   end
 
   def set_user
@@ -131,6 +132,7 @@ class UsersController < ApplicationController
       :is_admin,
       :is_coach,
       :is_player,
+      :is_on_leaderboard,
       :email,
       :first_name,
       :last_name,

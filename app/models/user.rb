@@ -24,6 +24,7 @@
 #  is_admin               :boolean          default(FALSE)
 #  is_coach               :boolean          default(FALSE)
 #  is_ghost_player        :boolean          default(FALSE)
+#  is_on_leaderboard      :boolean          default(TRUE)
 #  is_one_off             :boolean          default(FALSE)
 #  is_player              :boolean          default(FALSE)
 #  jersey_number          :string
@@ -119,7 +120,26 @@ class User < ApplicationRecord
     end
   end
 
-  def tournaments
+  def player_statistics
+    sets_played = user_scores.count
+    sets_won = user_scores.sum(:win)
+    sets_win_ratio = (Float(sets_won) / Float(sets_played)).round(2)
+
+    tournaments_played = tournaments.count
+    tournaments_won = tournaments.map(&:winner_id).count(id)
+    tournaments_won_ratio = (Float(tournaments_won) / Float(tournaments_played)).round(2)
+
+    {
+      sets_played: sets_played,
+      sets_won: sets_won,
+      sets_win_ratio: sets_win_ratio,
+      tournaments_played: tournaments_played,
+      tournaments_won: tournaments_won,
+      tournaments_won_ratio: tournaments_won_ratio
+    }
+  end
+
+  def tournament_array
     Tournament.where(created_by_id: id).map(&:id)
   end
 

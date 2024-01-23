@@ -23,6 +23,8 @@ Rails.application.routes.draw do
 
   get '/users', to: 'users#index'
 
+  get '/leaderboard', to: 'players#leaderboard', as: 'leaderboard'
+
   devise_for :users, controllers: { registrations: 'registrations' }
 
   resources :users
