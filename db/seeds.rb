@@ -3,7 +3,7 @@ puts "== Creating Users..."
 # Admins
 dan = User.create(email: 'dmbrooking@gmail.com', first_name: 'Dan', last_name: 'Brooking', password: 'password', password_confirmation: 'password')
 adam = User.create(email: 'adam@freemer.com', first_name: 'Adam', last_name: 'Freemer', password: 'password', password_confirmation: 'password')
-gary = User.create(email: 'gary@freemer.com', first_name: 'Gary', last_name: 'Freemer', password: 'password', password_confirmation: 'password')
+gary = User.create(email: 'gary@freemer.com', first_name: 'Gary', last_name: 'Freemer', password: 'password', password_confirmation: 'password', is_coach: true)
 
 [adam, dan].each do |user|
   user.is_admin = true

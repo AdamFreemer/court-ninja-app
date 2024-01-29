@@ -1,7 +1,3 @@
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
-  
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>  
-  
 
 
 <div class="mx-auto" data-controller="users">
@@ -11,19 +7,12 @@
   </div>
   <% if @players.count == 0 %>
     <div class="text-center text-md font-medium tracking-tight leading-none text-gray-900 md:text-md lg:text-md">
-      Such nothingness. Add some players to your leaderboard!
+      Such nothingness. Add some players and get some tournaments going!
     </div>
   <% end %>
-  <%= render "leaderboard_table", players: @players  %>
 
+  <% if @players.count != 0 %>
+    <%= render "leaderboard_table", players: @players  %>
+  <% end %>
 </div>
 
-<script>
-  $(document).ready(function() {
-    $('#leaderboard').DataTable( {
-      "columnDefs": [
-        { 'orderable': false, 'targets': [0] }
-      ]
-    });
-  });
-</script> 

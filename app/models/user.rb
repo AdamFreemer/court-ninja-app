@@ -120,7 +120,7 @@ class User < ApplicationRecord
     end
   end
 
-  def player_statistics
+  def statistics
     sets_played = user_scores.count
     sets_won = user_scores.sum(:win)
     sets_win_ratio = (Float(sets_won) / Float(sets_played)).round(2)
@@ -139,8 +139,14 @@ class User < ApplicationRecord
     }
   end
 
-  def tournament_array
-    Tournament.where(created_by_id: id).map(&:id)
+  def tournaments_array
+    tournaments = Tournament.where(created_by_id: id).map(&:id)
+    output = if tournaments == []
+               ' '
+             else
+               tournaments
+             end
+    output
   end
 
   def name_abbreviated

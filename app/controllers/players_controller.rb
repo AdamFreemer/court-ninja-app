@@ -4,19 +4,11 @@ class PlayersController < ApplicationController
   before_action :set_positions
 
   def leaderboard
-    players =
-      if params[:sort]
-        current_user.players.where(is_ghost_player: false, is_one_off: false, is_on_leaderboard: true).order(params[:sort])
-      else
-        current_user.players.where(is_ghost_player: false, is_one_off: false, is_on_leaderboard: true)
-      end
-
-      @players = []
-      players.each do |player|
-
-        @players << [player.profile_picture, player.full_name, player.player_statistics]
-      end
-      # binding.pry
+    players = current_user.players.where(is_ghost_player: false, is_on_leaderboard: true)
+    @players = []
+    players.each do |player|
+      @players << [player.profile_picture, player.full_name, player.statistics, player.initials] if player.statistics[:sets_played] > 0
+    end
   end
 
   def index

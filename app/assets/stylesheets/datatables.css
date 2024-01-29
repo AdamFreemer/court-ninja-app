@@ -1,0 +1,17 @@
+.dataTables_filter {
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-weight: 500;
+  font-color: gray;
+  font-style: italic;
+  padding: 10px;
+  position: relative;
+}
+
+.dataTables_filter input {
+  margin: 5px;
+  padding: 5px;
+  width: 200px;
+  height: 32px;
+  border: 1px solid #aaa;
+  text-indent: 1px;
+}
