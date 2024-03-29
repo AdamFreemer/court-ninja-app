@@ -36,16 +36,16 @@ class TournamentGenerator
       tournament.update(work_group: 3, courts: 1, matches_per_round: 12, rounds: 1, configuration: 'p9', current_matches: { '1' => 1 })
     end
 
-    if @player_ids.count == 10
-      create_court(tournament, round, 1, PlayerConfigs.p5, PlayerConfigs.new_round(@pids_hash))
-      create_court(tournament, round, 2, PlayerConfigs.p5, PlayerConfigs.new_round(@pids_hash))
-      tournament.update(work_group: 1, courts: 2, matches_per_round: 5, rounds: 2, configuration: 'p5', current_matches: { '1' => 1, '2' => 1 })
+    if @player_ids.count == 10 # 2 courts of 6 | top 3 each court for gold round 2
+      create_court(tournament, round, 1, PlayerConfigs.p10[0], PlayerConfigs.new_round(@pids_hash))
+      create_court(tournament, round, 2, PlayerConfigs.p10[1], PlayerConfigs.new_round(@pids_hash))
+      tournament.update(work_group: 1, courts: 2, matches_per_round: 10, rounds: 1, configuration: 'p10', current_matches: { '1' => 1, '2' => 1 })
     end
 
     if @player_ids.count.between?(11, 12) # 2 courts of 6 | top 3 each court for gold round 2
-      create_court(tournament, round, 1, PlayerConfigs.p6, PlayerConfigs.new_round(@pids_hash))
-      create_court(tournament, round, 2, PlayerConfigs.p6, PlayerConfigs.new_round(@pids_hash))
-      tournament.update(work_group: 0, courts: 2, matches_per_round: 10, rounds: 2, configuration: 'p6', current_matches: { '1' => 1, '2' => 1 })
+      create_court(tournament, round, 1, PlayerConfigs.p12[0], PlayerConfigs.new_round(@pids_hash))
+      create_court(tournament, round, 2, PlayerConfigs.p12[1], PlayerConfigs.new_round(@pids_hash))
+      tournament.update(work_group: 0, courts: 2, matches_per_round: 11, rounds: 1, configuration: 'p12', current_matches: { '1' => 1, '2' => 1 })
     end
 
     if @player_ids.count.between?(13, 14) # 2 courts of 7 | Review
@@ -128,14 +128,6 @@ class TournamentGenerator
                    players_count[:court1]
                  elsif court == 2
                    players_count[:court2]
-                 elsif court == 3
-                   players_count[:court3]
-                 elsif court == 4
-                   players_count[:court4]
-                 elsif court == 5
-                   players_count[:court5]
-                 elsif court == 6
-                   players_count[:court6]
                  end
 
     set_count = configuration.length - 1
@@ -161,8 +153,9 @@ class TournamentGenerator
     )
     team1 = TournamentTeam.create!(number: 1, tournament_id: tournament.id, court: court, round: round)
     team2 = TournamentTeam.create!(number: 2, tournament_id: tournament.id, court: court, round: round)
-
+    # binding.pry
     config[0].each do |config_player_number|
+      # binding.pry
       team1.users << User.find(player_ids[config_player_number - 1])
     end
     config[1].each do |config_player_number|
