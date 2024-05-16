@@ -37,7 +37,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @tournament.current_round == 1 ? court_sets = @court_sets_round1 : court_sets = @court_sets_round2 %>
+        <% court_sets = @court_sets_court1 %>
         <% court_sets.each do |tournament_set, i| %>
           <% team1 = tournament_set.tournament_teams.first.users %>
           <% team2 = tournament_set.tournament_teams.second.users %>
@@ -73,10 +73,10 @@
         <tr class="bg-white dark:bg-gray-800">
           <td class="inline-flex items-center mt-6 mb-4 text-base font-semibold text-gray-400 dark:text-gray-400">Scores:</td>
           <td class="px-2 py-3">&nbsp;</td>
-          <td colspan="<%= @court_sets_round1.first.tournament_teams.first.users.count + 1 %>" class="py-3 pr-4">
+          <td colspan="<%= @court_sets_court1.first.tournament_teams.first.users.count + 1 %>" class="py-3 pr-4">
             <input type="text" data-display-target="team1ScoreUpdate" class="w-full p-2.5 text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Score" required>
           </td>
-          <td colspan="<%= @court_sets_round1.first.tournament_teams.first.users.count + 1 %>" class="py-3 pr-4">
+          <td colspan="<%= @court_sets_court1.first.tournament_teams.first.users.count + 1 %>" class="py-3 pr-4">
             <input type="text" data-display-target="team2ScoreUpdate" class="w-full p-2.5 text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Score" required>
           </td>
         </tr>

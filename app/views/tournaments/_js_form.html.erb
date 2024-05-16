@@ -46,7 +46,7 @@
   function processPlayersSelected(pSelected) {
     // Limits saving and adds warning when user role is coach (needs expansion for future roles)
     // const userIsCoach = "<%= current_user.has_role?(:coach) %>"
-    if ( pSelected > 14) {
+    if ( pSelected > 15) {
       $("#save-button").prop("disabled", true).addClass("opacity-50").addClass("cursor-not-allowed");
       // $("#max-players").text(" Warning: Maximum player count limit is 14");
     } else {
@@ -171,12 +171,10 @@
 
     totalTourneyTime = Math.round(10 * (((tournyTime / 60) * tournamentSets) + ((tournamentSets - 1) * (tournyBreakTime / 60))) * tournamentRounds ) / 10
     console.log("pSelected: " + pSelected)
-    if (pSelected < 5 || pSelected > 14) {
-      $('#tourny-time').text("Add / subtract players! (minimum 5, maximum 14)").css('color', 'red');
+    if (pSelected < 5 || pSelected > 15) {
+      $('#tourny-time').text("Add / subtract players! (minimum 5, maximum 15").css('color', 'red');
     } else {
       $('#tourny-time').text(totalTourneyTime + " minutes").css('color', 'black');
-
-
     }
   }  
 

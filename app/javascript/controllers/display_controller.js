@@ -18,6 +18,7 @@ export default class extends Controller {
     tournamentCurrentCourtMatch: Number,
     tournamentTotalRounds: Number,
     courts: Number,
+    currentMatch: Number,
     matchTime: Number, // static value for Tournament Time
     matchPreTime: Number, // static value for Tournament Pre Time
     matchTimer: Number, // Actual countdown timer value
@@ -25,10 +26,13 @@ export default class extends Controller {
     modalMessageText: { type: String, default: 'Smurf' },
     matchRowSelected: Number,
   }
-  static targets = [ "displayMode", "displayModeIcon", "displayModeToggle", "displayCards", "displayCardsDisplayMode", "minute", "second", "progress", "progressbackground", "modal", "timerSection", "modalMessage", "modalButtons", "flash", "flashMessage", "playButton", "pauseButton", "primaryCourtLabel", "spinner", "set", "status", "team", "step", "team1Score", "team2Score", "team1ScoreUpdate", "team2ScoreUpdate", "mainPageSubmitText", "match", "matchSelected", "matchRowSelected", "resultsTables"
+  static targets = [ "displayMode", "displayModeIcon", "displayModeToggle", "displayCards", "displayCardsDisplayMode", "minute", "second", "progress", "progressbackground", "modal", "timerSection", "modalMessage", "modalButtons", "flash", "flashMessage", "playButton", "pauseButton", "primaryCourtLabel", "spinner", "set", "status", "team", "step", 
+  "Court1Team1Score", "Court1Team2Score", "Court2Team1Score", "Court2Team2Score", "Court3Team1Score", "Court3Team2Score", "Court4Team1Score", "Court4Team2Score", 
+  "team1ScoreUpdate", "team2ScoreUpdate", "mainPageSubmitText", "currentMatch", "matchSelected", "matchRowSelected", "resultsTables", "matchProgressBar"
   ]
 
   connect() {
+    console.log("-- display controller connect, updatePage()")
     this.updatePage();
     this.pauseButtonTarget.style.display = 'none'
     this.playButtonTarget.style.display = 'inline-block'
@@ -40,7 +44,8 @@ export default class extends Controller {
 
   // modal related methods ////////////////////////////////////////////////////////////////
 
-  mainPageSubmitClick() {
+  submitScoresClick() {
+    console.log("clicks button")
     if (this.allScoresEnteredValue != true) {
       this.modalPurposeValue = "submit-scores"
       this.openModal();
@@ -67,9 +72,8 @@ export default class extends Controller {
     if (this.displayModeValue) return false 
 
     if (this.modalPurposeValue == "submit-scores") {
-        const currentCourtMatch = this.tournamentCurrentCourtMatchValue + (this.tournamentMatchesPerRoundValue * (this.tournamentCurrentRoundValue - 1))
         this.modalButtonsTarget.style.display = 'flex';
-        this.modalMessageTarget.innerHTML = `Submit scores for Match #${currentCourtMatch}?`
+        this.modalMessageTarget.innerHTML = `Submit scores for Match #${this.currentMatchValue}?`
     } else if (this.modalPurposeValue == "submit-round") {
         this.modalButtonsTarget.style.display = 'flex';
         this.modalMessageTarget.innerHTML = 'Submit Round? (Warning: this can NOT be undone)'
@@ -91,6 +95,7 @@ export default class extends Controller {
     this.modalTarget.classList.remove('modal-open');
   }
 
+  // The actual score submission is triggered from the confirmation button on the confirm modal.
   modalConfirmClick() {
     this.modalTarget.classList.remove('modal-open');
 
@@ -109,10 +114,6 @@ export default class extends Controller {
     if (this.modalPurposeValue == "submit-scores" || this.modalPurposeValue == "submit-round") {
       this.submitScores();
       this.reset();
-      // start timer if NOT the last match in the round
-      // if (this.tournamentCurrentCourtMatchValue != this.tournamentMatchesPerRoundValue) {
-      //   this.start();
-      // }
     }
 
     setTimeout(() => {
@@ -284,6 +285,14 @@ export default class extends Controller {
   // service methods ////////////////////////////////////////////////////////////////
 
   submitScores() {
+    let scores = { 
+      court1: { team1: this.Court1Team1ScoreTarget.value, team2: this.Court1Team2ScoreTarget.value },
+      court2: { team1: this.Court2Team1ScoreTarget.value, team2: this.Court2Team2ScoreTarget.value },
+      court3: { team1: this.Court3Team1ScoreTarget.value, team2: this.Court3Team2ScoreTarget.value },
+      court4: { team1: this.Court4Team1ScoreTarget.value, team2: this.Court4Team2ScoreTarget.value }
+    }
+    console.log("-- Scores: " + JSON.stringify(scores))
+
     $.ajax({
       type: "POST",
       url: "/tournaments/submit_scores",
@@ -293,10 +302,10 @@ export default class extends Controller {
       data: {
         id: this.tournamentIdValue,
         function: this.allScoresEnteredValue ? 'round' : 'scores',
-        current_court_match: this.tournamentCurrentCourtMatchValue,
-        court: this.tournamentCurrentCourtValue,
         round: this.tournamentCurrentRoundValue,
-        scores: { team1: this.team1ScoreTarget.value, team2: this.team2ScoreTarget.value }
+        scores: scores,
+        // to deprecate
+        current_match: this.currentMatchValue
       },
       success: (response) => {
         this.isCompletedValue = response.is_completed;
@@ -306,7 +315,7 @@ export default class extends Controller {
         this.tournamentCurrentSetPlayersCourt2Value = response.current_set_players_court2;
         this.tournamentCurrentSetPlayersLivePollValue = response.current_set_players_live_poll;
         this.tournamentCurrentRoundValue = response.current_round;
-        this.tournamentCurrentCourtMatchValue = response.current_court_match;
+        this.currentMatchValue = response.current_match;
         this.mainPageSubmitTextTarget.innerHTML = this.submitButtonTextValue;
         this.updatePage(); 
         if (response.status == 'new-round') { // reload page if round processed
@@ -333,6 +342,7 @@ export default class extends Controller {
       },
       data: {
         id: this.tournamentIdValue,
+        current_match: this.currentMatchValue,
         court: this.tournamentCurrentCourtValue,
         round: this.tournamentCurrentRoundValue,
         current_court_match: this.matchRowSelectedValue,
@@ -348,6 +358,7 @@ export default class extends Controller {
   }
 
   fetchNewData() {
+    console.log('-- data refresh')
     const current_time = Math.floor(Date.now() / 1000) // last_update on server
     $.ajax({
       type: "GET",
@@ -355,22 +366,24 @@ export default class extends Controller {
       success: (response) => {
         this.isNewValue = response.is_new;
         this.courtsValue = response.courts;
+        this.currentMatchValue = response.match;
         this.tournamentScoresValue = response.scores;
         this.isCompletedValue = response.is_completed;
         this.tournamentCurrentSetPlayersCourt1Value = response.current_set_players_court1;
         this.tournamentCurrentSetPlayersCourt2Value = response.current_set_players_court2;
         this.tournamentCurrentRoundValue = response.current_round;
-        this.tournamentCurrentCourtMatchValue = response.current_court_match;
+        this.currentMatchValue = response.current_match;
 
         this.updateMatchLabel();
         this.isNew();
+        console.log(response)
       }
     })
   }
 
   isNew() {
     
-    if (this.tournamentCurrentCourtMatchValue == 1) {
+    if (this.currentMatchValue == 1) {
       this.modalPurposeValue = "is-new"      
       this.openModal();
       if (this.courtsValue == 2 && this.isNewValue == true) {
@@ -406,8 +419,14 @@ export default class extends Controller {
     this.updateMatchLabel();
     this.updateSubmitButton('update'); // default 'update' page argument
 
-    this.team1ScoreTarget.value = 0
-    this.team2ScoreTarget.value = 0
+    this.Court1Team1ScoreTarget.value = 0
+    this.Court1Team2ScoreTarget.value = 0
+    this.Court2Team1ScoreTarget.value = 0
+    this.Court2Team2ScoreTarget.value = 0
+    this.Court3Team1ScoreTarget.value = 0
+    this.Court3Team2ScoreTarget.value = 0
+    this.Court4Team1ScoreTarget.value = 0
+    this.Court4Team2ScoreTarget.value = 0
     this.matchRowSelectedValue = null // drawer match selection
   }
 
@@ -423,11 +442,23 @@ export default class extends Controller {
       this.mainPageSubmitTextTarget.innerHTML = 'Submit Round';
       this.mainPageSubmitTextTarget.classList.add('bg-red-500');
       this.mainPageSubmitTextTarget.classList.remove('bg-blue-700');
-      this.team1ScoreTarget.disabled = true;
-      this.team2ScoreTarget.disabled = true;
+      this.Court1Team1ScoreTarget.disabled = true;
+      this.Court1Team2ScoreTarget.disabled = true;
+      this.Court2Team1ScoreTarget.disabled = true;
+      this.Court2Team2ScoreTarget.disabled = true;
+      this.Court3Team1ScoreTarget.disabled = true;
+      this.Court3Team2ScoreTarget.disabled = true;
+      this.Court4Team1ScoreTarget.disabled = true;
+      this.Court4Team2ScoreTarget.disabled = true;   
     } else if (this.allScoresEnteredValue == false) {
-      this.team1ScoreTarget.disabled = false;
-      this.team2ScoreTarget.disabled = false;
+      this.Court1Team1ScoreTarget.disabled = false;
+      this.Court1Team2ScoreTarget.disabled = false;
+      this.Court2Team1ScoreTarget.disabled = false;
+      this.Court2Team2ScoreTarget.disabled = false;
+      this.Court3Team1ScoreTarget.disabled = false;
+      this.Court3Team2ScoreTarget.disabled = false;
+      this.Court4Team1ScoreTarget.disabled = false;
+      this.Court4Team2ScoreTarget.disabled = false
       this.mainPageSubmitTextTarget.innerHTML = 'Submit Scores';
       this.modalPurposeValue = "submit-scores";
     } 
@@ -470,7 +501,11 @@ export default class extends Controller {
   updateStepBar() {
     // step bar -- update for current set
     // (@tournament.current_matches[@court_number.to_s] + (steps / 2))
-    const currentCourtMatch = this.tournamentCurrentCourtMatchValue + (this.tournamentMatchesPerRoundValue * (this.tournamentCurrentRoundValue - 1))
+    console.log('-- updateStepBar -- currentMatchValue: ' + this.currentMatchValue + '| this.tournamentMatchesPerRoundValue: ' + this.tournamentMatchesPerRoundValue + '| this.tournamentCurrentRoundValue: ' + this.tournamentCurrentRoundValue)
+
+
+    
+    const currentCourtMatch = this.currentMatchValue + (this.tournamentMatchesPerRoundValue * (this.tournamentCurrentRoundValue - 1))
     this.stepTargets.forEach((element) => {
       if (element.dataset.content <= currentCourtMatch) {
         element.classList.add('step-primary')
@@ -583,8 +618,9 @@ export default class extends Controller {
   }
 
   updateMatchLabel() {
-    const currentCourtMatch = this.tournamentCurrentCourtMatchValue + (this.tournamentMatchesPerRoundValue * (this.tournamentCurrentRoundValue - 1))
-    this.matchTarget.innerHTML = `Match #${currentCourtMatch}`
+    const match = this.currentMatchValue
+    this.currentMatchTarget.innerHTML = `Match #${match}`
+    this.matchProgressBarTarget.innerHTML = `Match #${match}`
   }
 
   initialsDiv(team, player, data) {

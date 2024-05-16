@@ -1,0 +1,64 @@
+
+<div class='m-14 overflow-auto rounded-lg shadow-lg divide-gray-200 border-4 border-gray-300' style="display: <%= visibility %>";>
+
+  <div class="mt-8 text-center text-5xl font-bold tracking-tight leading-none text-gray-500 md:text-5xl lg:text-5xl dark:text-white">
+    <%= "Court ##{court_number}" %> 
+  </div>        
+  <!-- player card section -->
+  <div data-display-target="displayCards">
+    <%= render "display_cards", 
+      tournament: @tournament, 
+      row_columns: @row_columns, 
+      court_number: court_number, 
+      current_set_players_all: @current_set_players
+    %>
+  </div>
+
+  <div data-display-target="displayCardsDisplayMode">
+    <%# render "display_cards_display_mode", 
+      tournament: @tournament, 
+      row_columns: @row_columns, 
+      current_set_players_all: @current_set_players
+    %>
+  </div>          
+  <!-- end player card section -->
+
+  <!-- scoring dropwdown -->
+  <ul role="list" class="mt-2 mb-8 min-w-full items-center grid grid-cols-7">
+    <li>&nbsp;</li>
+    <li class="col-span-1 text-center text-3xl font-extrabold tracking-tight leading-none text-gray-500 md:text-3xl lg:text-3xl dark:text-white">
+      <div class="flex-auto p-2 text-2xl"><%= @tournament.court_side_a_name %></div>
+    </li>
+    <li class="col-span-1 text-center bg-white divide-y divide-gray-200">
+      <select id="score-court-<%= court_number %>-team-1" data-display-target="Court<%= court_number %>Team1Score" class="bg-gray-50 border border-gray-300 text-gray-900 text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <% if court_number <= @tournament.courts %>
+          <% @scores.each do |score| %>
+            <option class="text-center" value="<%= score %>"><%= score %></option>
+          <% end %>
+        <% end %>
+      </select>
+    </li>
+
+    <li class="mt-2 col-span-1 text-center bg-white divide-y divide-gray-200">
+      <div class="mb-3 text-center text-3xl font-bold tracking-tight leading-none text-gray-500 dark:text-white">
+          Score
+      </div>   
+    </li>
+
+    <li class="col-span-1 text-center bg-white divide-y divide-gray-200">
+      <select id="score-court-<%= court_number %>-team-2" data-display-target="Court<%= court_number %>Team2Score" class="bg-gray-50 border border-gray-300 text-gray-900 text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <% if court_number <= @tournament.courts %>
+          <% @scores.each do |score| %>
+            <option class="text-center" value="<%= score %>"><%= score %></option>
+          <% end %>
+        <% end %>
+      </select>
+    </li>
+    <li class="col-span-1 text-center text-3xl font-extrabold tracking-tight leading-none text-gray-500 md:text-3xl lg:text-3xl dark:text-white">
+      <div class="flex-auto p-2 text-2xl"><%= @tournament.court_side_b_name %></div>
+    </li> 
+    <li>&nbsp;</li>   
+  </ul>
+  <!-- end scoring dropdown -->
+  
+</div>
