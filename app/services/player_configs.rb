@@ -112,8 +112,16 @@ module PlayerConfigs
 ###### [side 1], [side 2], [byes]
 ###### Courts are grouped per each
 
-  def self.p5
-    # 5 matches
+def self.p4
+  # 5 matches
+  [
+    [[1, 2], [3, 4], []],
+    [[1, 3], [2, 4], []],
+    [[1, 4], [2, 3], []]
+  ]
+end
+
+def self.p5
     [
       [[1, 2], [3, 4], [5]],
       [[2, 5], [1, 3], [4]],
@@ -162,8 +170,9 @@ module PlayerConfigs
       [[3, 7, 8], [4, 6, 2], [1, 5]]
     ]
   end
- 
+
   def self.p8_2
+    # TODO: /display_controller.js need to add 4 card code
     [
       [[8, 5, 1, 6], [2, 3, 4, 7], []],
       [[8, 6, 2, 7], [3, 4, 5, 1], []],
@@ -324,7 +333,7 @@ module PlayerConfigs
         [[11, 4, 1],  [2, 14, 10], [8]],
         [[12, 5, 2],  [3, 1, 11],  [9]],
         [[13, 6, 3],  [4, 2, 12], [10]],
-        [[14, 7, 4],  [5, 3, 13]  [11]],
+        [[14, 7, 4],  [5, 3, 13], [11]],
         [[1, 8, 5],   [6, 4, 14], [12]],
         [[2, 9, 6],   [7, 5, 1],  [13]],
         [[3, 10, 7],  [8, 6, 2],  [14]],
@@ -530,13 +539,15 @@ module PlayerConfigs
   def self.new_round(players)
     # binding.pry
     case players[:ids].count
-    when 5 # players_count_5
+    when 4
       { court1: players[:ids].shuffle, court2: [] }
-    when 6 # players_count_6
+    when 5
       { court1: players[:ids].shuffle, court2: [] }
-    when 7 # players_count_7
+    when 6
       { court1: players[:ids].shuffle, court2: [] }
-    when 8 # players_count_8_9
+    when 7
+      { court1: players[:ids].shuffle, court2: [] }
+    when 8
       { court1: players[:ids].shuffle, court2: [] }
     when 9
       { court1: players[:ids].shuffle, court2: [] }

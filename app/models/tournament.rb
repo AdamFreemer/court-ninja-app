@@ -82,8 +82,8 @@ class Tournament < ApplicationRecord
   before_save :calculate_total_tournament_time
 
   def generate
-    return false unless players.count.between?(5, 27)
-    return false if current_round == 1 && players.count.between?(5, 9)
+    return false unless players.count.between?(4, 27)
+    # return false if current_round == 1 && players.count.between?(5, 9)
 
     ordered_player_ids =
       if self.current_round.zero? # new tournament, just use newly created self.players
@@ -97,36 +97,46 @@ class Tournament < ApplicationRecord
 
   def update_scores(score_payload, set_current_match)
     ##### Court 1
-    court_1_match = tournament_sets.find_by(court: 1, number: score_payload[:current_match])
+    # binding.pry
+    court_1_match = tournament_sets.find_by(court: score_payload[:court], number: score_payload[:current_match])
     court_1_team1 = court_1_match.tournament_teams.find_by(number: 1)
     court_1_team2 = court_1_match.tournament_teams.find_by(number: 2)
-    court_1_team1.update!(score: score_payload[:scores][:court1][:team1].to_i)
-    court_1_team2.update!(score: score_payload[:scores][:court1][:team2].to_i)
+    court_1_team1.update!(score: score_payload[:scores][:team1].to_i)
+    court_1_team2.update!(score: score_payload[:scores][:team2].to_i)
 
-    if courts > 1
-      ##### Court 2
-      court_2_match = tournament_sets.find_by(court: 2, number: score_payload[:current_match])
-      court_2_team1 = court_2_match.tournament_teams.find_by(number: 1)
-      court_2_team2 = court_2_match.tournament_teams.find_by(number: 2)
-      court_2_team1.update!(score: score_payload[:scores][:court2][:team1].to_i)
-      court_2_team2.update!(score: score_payload[:scores][:court2][:team2].to_i)
-    end
+    # ##### Court 2
+    # if courts > 1
+    #   court_2_match = tournament_sets.find_by(court: 2, number: score_payload[:current_match])
+    #   court_2_team1 = court_2_match.tournament_teams.find_by(number: 1)
+    #   court_2_team2 = court_2_match.tournament_teams.find_by(number: 2)
+    #   court_2_team1.update!(score: score_payload[:scores][:team1].to_i)
+    #   court_2_team2.update!(score: score_payload[:scores][:team2].to_i)
+    # end
+
+
     # TODO: Court 3 and 4 for future
-    
     ## we don't set current match if we're doing a utility drawer scores update
     if set_current_match
-      # binding.pry
-      # This is to keep track of individual current_sets on each court.
-      # Each court is stored as a k/v pair in a hash of all courts.
-      # i.e. current_matches: {"1"=>3, "2"=>2}, key = court, value = match
-      # binding.pry
       if matches_per_round == score_payload[:current_match].to_i
-        self.current_match = score_payload[:current_match].to_i
+        return
       else
         self.current_match = score_payload[:current_match].to_i + 1
       end
       save!
     end
+  end
+
+  def all_scores_entered?
+    # This checks all scores (regardless of round). We're looking for tournament_teams, not work teams.
+    # The result is a multi-dimensional array, we can flatten and then check for nils.
+    scores = []
+    tournament_sets.each do |set|
+      scores << set.tournament_teams.where(work_team: nil).map(&:score)
+    end
+    all_scores = scores.flatten
+    return false if all_scores.any?(nil)
+
+    true
   end
 
   def process_round(round)
@@ -177,18 +187,6 @@ class Tournament < ApplicationRecord
         end
       end
     end
-  end
-
-  def all_scores_entered(current_match)
-    return true if current_match.to_i >= matches_per_round.to_i
-
-    false
-  end
-
-  def all_scores_entered_all_courts_round(round)
-    return true if tournament_teams.where(round: round).where(score: nil).count.zero?
-
-    false
   end
 
   def scoring(tournament_set)

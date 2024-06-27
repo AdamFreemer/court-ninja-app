@@ -2,7 +2,8 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { 
-    displayMode: Boolean,
+    courtTab: { type: Number, default: 1 },
+    timerMode: { type: Boolean, default: false },
     isNew: Boolean, 
     submitButtonText: String,
     allScoresEntered: { type: Boolean, default: false },
@@ -26,13 +27,13 @@ export default class extends Controller {
     modalMessageText: { type: String, default: 'Smurf' },
     matchRowSelected: Number,
   }
-  static targets = [ "displayMode", "displayModeIcon", "displayModeToggle", "displayCards", "displayCardsDisplayMode", "minute", "second", "progress", "progressbackground", "modal", "timerSection", "modalMessage", "modalButtons", "flash", "flashMessage", "playButton", "pauseButton", "primaryCourtLabel", "spinner", "set", "status", "team", "step", 
+  static targets = [ "timerSection", "displayModeIcon", "timerModeToggle", "displayCards", "displayCardsDisplayMode", "minute", "second", "progress", "progressbackground", "modal", "timerSection", "modalMessage", "modalButtons", "flash", "flashMessage", "playButton", "pauseButton", "primaryCourtLabel", "spinner", "set", "status", "team", "step", 
   "Court1Team1Score", "Court1Team2Score", "Court2Team1Score", "Court2Team2Score", "Court3Team1Score", "Court3Team2Score", "Court4Team1Score", "Court4Team2Score", 
   "team1ScoreUpdate", "team2ScoreUpdate", "mainPageSubmitText", "currentMatch", "matchSelected", "matchRowSelected", "resultsTables", "matchProgressBar"
   ]
 
   connect() {
-    console.log("-- display controller connect, updatePage()")
+    console.log("-- display controller connect")
     this.updatePage();
     this.pauseButtonTarget.style.display = 'none'
     this.playButtonTarget.style.display = 'inline-block'
@@ -102,20 +103,17 @@ export default class extends Controller {
     // new tournament
     if (this.modalPurposeValue == "is-new") {
       this.reset();
-      this.start();
     }    
     // submit (update) scores from drawer
     if (this.modalPurposeValue == "update-scores") {
       this.updateScores();
       this.reset();
-      this.start();
     } 
     // submit (scores / round) from main page
     if (this.modalPurposeValue == "submit-scores" || this.modalPurposeValue == "submit-round") {
       this.submitScores();
       this.reset();
     }
-
     setTimeout(() => {
       this.modalTarget.classList.remove('modal-open');
     }, 5000);
@@ -163,58 +161,14 @@ export default class extends Controller {
 
   // display mode /////////////////////////////////////////////////////////////////
 
-  displayModeToggleClick() {
-    if (this.displayModeToggleTarget.checked) { // display mode on
-      // Update drawer display mode
-      this.displayModeValue = true;
-      this.displayModeIconTarget.style.display = 'inline-block';
-      this.displayModeTarget.classList.add('text-green-600');
-      this.displayModeTarget.classList.remove('text-remove-500');
-      // Hide / show correct player cards sections
-      this.displayCardsTarget.style.display = "none"
-      this.displayCardsDisplayModeTarget.style.display = "block"
-      // Hide sections of page for display mode
-      this.primaryCourtLabelTarget.style.display = 'none';
+  timerModeToggleClick() {
+    if (this.timerModeToggleTarget.checked) {
+      this.timerModeValue = true;
+      this.timerSectionTarget.style.display = 'inline';
+    } else {
+      this.timerModeValue = false;
       this.timerSectionTarget.style.display = 'none';
-      this.mainPageSubmitTextTarget.style.display = 'none';
-      this.team1ScoreTarget.style.display = 'none';
-      this.team2ScoreTarget.style.display = 'none';
-      this.resultsTablesTarget.style.display = "none"
-      // Start auto refresh
-      this.displayModeAutoRefresh();
-    } else { // display mode off
-      // Update drawer display mode
-      this.displayModeValue = false;
-      this.displayModeIconTarget.style.display = 'none';
-      this.displayModeTarget.classList.remove('text-green-600');
-      this.displayModeTarget.classList.add('text-remove-500');
-      // Hide / show correct player cards sections
-      this.displayCardsTarget.style.display = "block"
-      this.displayCardsDisplayModeTarget.style.display = "none"
-      // Show sections of page for display mode
-      this.primaryCourtLabelTarget.style.display = 'block';
-      this.timerSectionTarget.style.display = 'block';
-      this.mainPageSubmitTextTarget.style.display = 'inline-block';
-      this.team1ScoreTarget.style.display = 'inline-block';
-      this.team2ScoreTarget.style.display = 'inline-block';
-      this.resultsTablesTarget.style.display = "block"
-      // Stop auto refresh
-      clearInterval(this.displayTimer);
     }
-  }
-
-  displayModeAutoRefresh() {
-    this.displayTimer = setInterval(() => {
-      console.log('** displayMode timer running **')
-      this.fetchNewData();
-      if (this.tournamentCurrentRoundValue != this.tournamentCurrentRoundLocalValue) {
-        location.reload();
-      }
-      // update page elements
-      this.updateStepBar();
-      this.updateMatchLabel();
-      this.updatePlayerCards();
-    }, 2000);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
@@ -279,6 +233,16 @@ export default class extends Controller {
     this.updateTimerDigits();
   }
 
+  courtTabOneClick() {
+    this.courtTabValue = 1
+    console.log('courtTab: ' + this.courtTabValue)
+  }
+
+  courtTabTwoClick() {
+    this.courtTabValue = 2
+    console.log('courtTab: ' + this.courtTabValue)
+  }
+
   ///////////////////////////////////////////////////////////////////////////////////
 
 
@@ -291,7 +255,6 @@ export default class extends Controller {
       court3: { team1: this.Court3Team1ScoreTarget.value, team2: this.Court3Team2ScoreTarget.value },
       court4: { team1: this.Court4Team1ScoreTarget.value, team2: this.Court4Team2ScoreTarget.value }
     }
-    console.log("-- Scores: " + JSON.stringify(scores))
 
     $.ajax({
       type: "POST",
@@ -318,11 +281,9 @@ export default class extends Controller {
         this.currentMatchValue = response.current_match;
         this.mainPageSubmitTextTarget.innerHTML = this.submitButtonTextValue;
         this.updatePage(); 
-        if (response.status == 'new-round') { // reload page if round processed
-          window.location.href = "/tournaments/display/" + this.tournamentIdValue + "/" + this.tournamentCurrentCourtValue
+        if (response.status == 'tournament-completed') { // reload page if round processed
+          window.location.href = "/tournaments/" + this.tournamentIdValue + "/results" 
           this.modalPurposeValue = "message"
-          this.modalMessageTarget.innerHTML = response.message
-          this.openModal();
         } else if (response.message.length != 0) {
           this.modalPurposeValue = "message"
           this.modalMessageTarget.innerHTML = response.message
@@ -332,8 +293,12 @@ export default class extends Controller {
     })
   }
 
+
+
   // Confirm Click on Submit Scores
   updateScores() {
+    console.log('row selected: ' + this.matchRowSelectedValue)
+    // console.log('row selected: ' + this.matchRowSelectedValue)
     $.ajax({
       type: "POST",
       url: "/tournaments/update_scores",
@@ -342,10 +307,8 @@ export default class extends Controller {
       },
       data: {
         id: this.tournamentIdValue,
-        current_match: this.currentMatchValue,
-        court: this.tournamentCurrentCourtValue,
-        round: this.tournamentCurrentRoundValue,
-        current_court_match: this.matchRowSelectedValue,
+        court: this.courtTabValue,
+        current_match: this.matchRowSelectedValue,
         scores: { team1: this.team1ScoreUpdateTarget.value, team2: this.team2ScoreUpdateTarget.value }
       },
       success: (response) => {
@@ -358,7 +321,6 @@ export default class extends Controller {
   }
 
   fetchNewData() {
-    console.log('-- data refresh')
     const current_time = Math.floor(Date.now() / 1000) // last_update on server
     $.ajax({
       type: "GET",
@@ -418,6 +380,8 @@ export default class extends Controller {
     this.updateMatchScoringTable();
     this.updateMatchLabel();
     this.updateSubmitButton('update'); // default 'update' page argument
+
+    this.timerModeToggleClick() // set timer to default hidden / off
 
     this.Court1Team1ScoreTarget.value = 0
     this.Court1Team2ScoreTarget.value = 0
@@ -516,93 +480,97 @@ export default class extends Controller {
   }
 
   updatePlayerCards() {
-    // update Player cards
+    // player cards
+
     let team1Data = []; 
     let team2Data = []; 
     let workData = [];
-    // load correct payload depending on whether displaying court 1 or 2
-    if (this.tournamentCurrentCourtValue == 1) {
-      team1Data = this?.tournamentCurrentSetPlayersCourt1Value[0]
-      team2Data = this?.tournamentCurrentSetPlayersCourt1Value[1]
-      workData = this?.tournamentCurrentSetPlayersCourt1Value[2]
-    } else if (this.tournamentCurrentCourtValue == 2) {
-      team1Data = this?.tournamentCurrentSetPlayersCourt2Value[0]
-      team2Data = this?.tournamentCurrentSetPlayersCourt2Value[1]
-      workData = this?.tournamentCurrentSetPlayersCourt2Value[2]
-    }
-
-    // player cards
-    let update;
     // Data Array Guide //////
     // teamXData[0][1] - element 0, player id: 0, 1 or 2 (2 is optional depending on 2 or 3 person per side config)
     // teamXData[0][1] - element 1, data: 0 - player id, 1 - player name, 2 - player initials, 3 - photo / picture url
+    team1Data = this?.tournamentCurrentSetPlayersCourt1Value[0]
+    team2Data = this?.tournamentCurrentSetPlayersCourt1Value[1]
+    workData = this?.tournamentCurrentSetPlayersCourt1Value[2]
+    // Court: 1, team1Data, team2Data, workData
+    this.updateCourt("1", team1Data, team2Data, workData);
 
+    if (this.courtsValue > 1) {
+      team1Data = this?.tournamentCurrentSetPlayersCourt2Value[0]
+      team2Data = this?.tournamentCurrentSetPlayersCourt2Value[1]
+      workData = this?.tournamentCurrentSetPlayersCourt2Value[2]      
+      // Court: 2, team1Data, team2Data, workData
+      this.updateCourt("2", team1Data, team2Data, workData);
+    }
+  }  
+
+  updateCourt(court, team1Data, team2Data, workData) {
+    let update;
     if (team1Data[2][0] != '-') { // this prevents initial loading of null data
       // Team 2 Card 1
-      document.getElementById('team-1-player-0-name').innerHTML = team1Data[0][1] || "loading..."
+      document.getElementById(`court-${court}-team-1-player-0-name`).innerHTML = team1Data[0][1] || "loading..."
       if (team1Data[0][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
-        update = this.initialsDiv(1, 0, team1Data[0][2])
+        update = this.initialsDiv(court, 1, 0, team1Data[0][2])
       } else {
-        update = this.photoDiv(1, 0, team1Data[0][3])
+        update = this.photoDiv(court, 1, 0, team1Data[0][3])
       }
-      document.getElementById('team-1-player-0-picture').outerHTML = update
+      document.getElementById(`court-${court}-team-1-player-0-picture`).outerHTML = update
 
       // Team 2 Card 2
-      document.getElementById('team-1-player-1-name').innerHTML = team1Data[1][1] || "loading..."
+      document.getElementById(`court-${court}-team-1-player-1-name`).innerHTML = team1Data[1][1] || "loading..."
       if (team1Data[1][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
-        update = this.initialsDiv(1, 1, team1Data[1][2])
+        update = this.initialsDiv(court, 1, 1, team1Data[1][2])
       } else {
-        update = this.photoDiv(1, 1, team1Data[1][3])
+        update = this.photoDiv(court, 1, 1, team1Data[1][3])
       }      
-      document.getElementById('team-1-player-1-picture').outerHTML = update
+      document.getElementById(`court-${court}-team-1-player-1-picture`).outerHTML = update
       
       // Team 2 Card 3
       if (team1Data[2][0] != '-' && team1Data[2].length != 0) {
         if (team1Data[2][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
-          update = this.initialsDiv(1, 2, team1Data[2][2])
+          update = this.initialsDiv(court, 1, 2, team1Data[2][2])
         } else {
-          update = this.photoDiv(1, 2, team1Data[2][3])
+          update = this.photoDiv(court, 1, 2, team1Data[2][3])
         }
-        document.getElementById('team-1-player-2-picture').outerHTML = update
-        document.getElementById('team-1-player-2-name').innerHTML = team1Data[2][1] || "loading..."
+        document.getElementById(`court-${court}-team-1-player-2-picture`).outerHTML = update
+        document.getElementById(`court-${court}-team-1-player-2-name`).innerHTML = team1Data[2][1] || "loading..."
       }
     }
 
     if (team2Data[2][0] != '-') { // this prevents initial loading of null data
       // Team 2 Card 1
-      document.getElementById('team-2-player-0-name').innerHTML = team2Data[0][1] || "loading..."
+      document.getElementById(`court-${court}-team-2-player-0-name`).innerHTML = team2Data[0][1] || "loading..."
       if (team2Data[0][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
-        update = this.initialsDiv(2, 0, team2Data[0][2])
+        update = this.initialsDiv(court, 2, 0, team2Data[0][2])
       } else {
-        update = this.photoDiv(2, 0, team2Data[0][3])
+        update = this.photoDiv(court, 2, 0, team2Data[0][3])
       }
-      document.getElementById('team-2-player-0-picture').outerHTML = update
+      document.getElementById(`court-${court}-team-2-player-0-picture`).outerHTML = update
 
       // Team 2 Card 2
-      document.getElementById('team-2-player-1-name').innerHTML = team2Data[1][1] || "loading..."
+      document.getElementById(`court-${court}-team-2-player-1-name`).innerHTML = team2Data[1][1] || "loading..."
       if (team2Data[1][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
-        update = this.initialsDiv(2, 1, team2Data[1][2])
+        update = this.initialsDiv(court, 2, 1, team2Data[1][2])
       } else {
-        update = this.photoDiv(2, 1, team2Data[1][3])
+        update = this.photoDiv(court, 2, 1, team2Data[1][3])
       }
-      document.getElementById('team-2-player-1-picture').outerHTML = update
+      document.getElementById(`court-${court}-team-2-player-1-picture`).outerHTML = update
       
       // Team 2 Card 3
       if (team2Data[2][0] != '-' && team2Data[2].length != 0) {
         if (team2Data[2][3] == '' || typeof(team1Data[0][3]) == 'undefined') {
-          update = this.initialsDiv(2, 2, team2Data[2][2])
+          update = this.initialsDiv(court, 2, 2, team2Data[2][2])
         } else {
-          update = this.photoDiv(2, 2, team2Data[2][3])
+          update = this.photoDiv(court, 2, 2, team2Data[2][3])
         }
-        document.getElementById('team-2-player-2-picture').outerHTML = update
-        document.getElementById('team-2-player-2-name').innerHTML = team2Data[2][1] || "loading..."
+        document.getElementById(`court-${court}-team-2-player-2-picture`).outerHTML = update
+        document.getElementById(`court-${court}-team-2-player-2-name`).innerHTML = team2Data[2][1] || "loading..."
       }
     }
 
     if (workData[2][0] != '-') { // this prevents initial loading of null data
-      document.getElementById('work-player-0').innerHTML = workData[0][1] || ""
-      document.getElementById('work-player-1').innerHTML = workData[1][1] || ""
-      document.getElementById('work-player-2').innerHTML = workData[2][1] || ""
+      document.getElementById(`court-${court}-work-player-0`).innerHTML = workData[0][1] || ""
+      document.getElementById(`court-${court}-work-player-1`).innerHTML = workData[1][1] || ""
+      document.getElementById(`court-${court}-work-player-2`).innerHTML = workData[2][1] || ""
     }    
   }
 
@@ -623,14 +591,14 @@ export default class extends Controller {
     this.matchProgressBarTarget.innerHTML = `Match #${match}`
   }
 
-  initialsDiv(team, player, data) {
+  initialsDiv(court, team, player, data) {
     // HTML to render initials card
-    return `<div id='team-${team}-player-${player}-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${data || "--"}</div>`
+    return `<div id='court-${court}-team-${team}-player-${player}-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${data || "--"}</div>`
   }
 
   photoDiv(team, player, data) {
     // HTML to render photo on card
-    return `<img src=${data} id='team-${team}-player-${player}-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
+    return `<img src=${data} id='court-${court}-team-${team}-player-${player}-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
   }
 
   // Modal functionality

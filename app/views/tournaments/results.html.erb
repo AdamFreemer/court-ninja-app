@@ -4,7 +4,7 @@
       <h1 class="text-5xl font-extrabold text-gray-900 sm:text-center">Tournament Results</h1>
     </div>
 
-    <% if @tournament.courts == 1 %>
+    
       <div class="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-1">
         <%= render "results_single",
           players_gold_winner: @players_gold_winner, 
@@ -12,16 +12,35 @@
           players_silver: @players_silver
         %>
       </div>     
-    <% elsif @tournament.courts == 2 %>
-      <div class="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-2">
-        <%= render "results_double", 
-          tournament: @tournament, 
-          players_gold_winner: @players_gold_winner, 
-          players_gold: @players_gold, 
-          players_silver: @players_silver 
-        %>
-      </div>
-    <% end %>
 
+
+    <!-- tournament match list -->
+    <div>
+      <div class="mt-6 mb-2 text-center text-2xl font-extrabold tracking-tight leading-none text-gray-500 md:text-2xl lg:text-2xl dark:text-white">
+        <div class="pt-4 text-md">Court<%= @tournament.courts == 1 ? " " : " 1 " %>Statistics</div>
+      </div>      
+        <%= render "display_match_list", tournament: @tournament, court_number: 1, court_sets: @court_sets_court1 %>
+    </div>
+
+  <% if @tournament.courts == 2 %>
+    <div>
+      <div class="mt-6 mb-2 text-center text-2xl font-extrabold tracking-tight leading-none text-gray-500 md:text-2xl lg:text-2xl dark:text-white">
+        <div class="pt-4 text-md">Court 2 Statistics</div>
+      </div>      
+        <%= render "display_match_list", tournament: @tournament, court_number: 2, court_sets: @court_sets_court2 %>
+    </div>
+  <% end %>
+    <!-- tournament match list -->
+  </div>
+
+  <!-- back to tournaments button -->
+  <div class="pt-2 text-6xl text-center font-medium text-gray-900" data-controller="results">
+    <button 
+      type="button" 
+      data-action="results#backToTournamentsClick"
+      data-display-target="mainPageSubmitText" 
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-xl px-5 py-2.5 text-center mr-2 mb-2 mt-10 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+      Back To Tournaments
+    </button>
   </div>
 </div>

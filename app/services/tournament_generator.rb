@@ -16,6 +16,11 @@ class TournamentGenerator
     # create_court(tournament, round, court, # players on court, player config, court config)
     # 1 create court for each court per round (15 player has 3 courts of 5 i.e. 3 create_court's)
 
+    if @player_ids.count == 4
+      create_court(tournament, round, 1, PlayerConfigs.p4, PlayerConfigs.new_round(@pids_hash))
+      tournament.update(work_group: 0, courts: 1, matches_per_round: 3, rounds: 1, configuration: 'p4')
+    end
+
     if @player_ids.count == 5
       create_court(tournament, round, 1, PlayerConfigs.p5, PlayerConfigs.new_round(@pids_hash))
       tournament.update(work_group: 1, courts: 1, matches_per_round: 5, rounds: 1, configuration: 'p5')
@@ -171,9 +176,8 @@ class TournamentGenerator
     )
     team1 = TournamentTeam.create!(number: 1, tournament_id: tournament.id, court: court, round: round)
     team2 = TournamentTeam.create!(number: 2, tournament_id: tournament.id, court: court, round: round)
-    # binding.pry
+
     config[0].each do |config_player_number|
-      # binding.pry
       team1.users << User.find(player_ids[config_player_number - 1])
     end
     config[1].each do |config_player_number|

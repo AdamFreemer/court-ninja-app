@@ -4,7 +4,7 @@ class TournamentsController < ApplicationController
     process_round edit update destroy admin_connection update_scores set_stale]
   before_action :set_display, only: %i[display]
   before_action :round_two_generated, only: %i[administration]
-  before_action :current_set_players, only: %i[display status]
+  before_action :current_set_players, only: %i[status]
 
   def index
     @tournaments = Tournament.all.order(created_at: :desc)
@@ -16,14 +16,17 @@ class TournamentsController < ApplicationController
   end
 
   def display
-    @all_scores_entered = @tournament.all_scores_entered(@tournament.current_round)
+    redirect_to results_tournament_path(@tournament) if @tournament.tournament_completed
+
+    # current_match = 0 is set when all scores entered
+    current_set_players unless @tournament.current_match == 0
+
+    @all_scores_entered = @tournament.all_scores_entered?
     @team_size = @tournament.tournament_sets.first.tournament_teams.first.users.count
     @work_size = @tournament.tournament_sets.first.tournament_teams.third.users.count
     @row_columns = (@team_size * 2) + 1
     @court_number = params[:court].to_i
 
-    # @court_sets_round1 = @tournament.tournament_sets.where(court: @court_number, round: 1)
-    # @court_sets_round2 = @tournament.tournament_sets.where(court: @court_number, round: 2)
     @court_visibility = {
       court1: 'block',
       court2: @tournament.courts > 1 ? 'block' : 'none',
@@ -88,7 +91,7 @@ class TournamentsController < ApplicationController
         @tournament.update(current_round: 1)
         # redirect to court #x if more than 1 court (other courts will be opened from front end isNew method)
         court_to_open = @tournament.courts
-        redirect_to tournaments_path, notice: 'Tournament was successfully created.'
+        redirect_to display_path(@tournament.id, 1), notice: 'Tournament was successfully created.'
       else
         redirect_to tournaments_path
       end
@@ -139,22 +142,38 @@ class TournamentsController < ApplicationController
     players_gold.shift
     @players_gold = players_gold
     @players_silver = @tournament.player_ranking(rounds)[1]
+
+    @court_sets_court1 = @tournament.tournament_sets.where(court: 1, round: 1)
+    @court_sets_court2 = @tournament.tournament_sets.where(court: 2, round: 1)
+    @court_sets_court3 = @tournament.tournament_sets.where(court: 3, round: 1)
+    @court_sets_court4 = @tournament.tournament_sets.where(court: 4, round: 1)
+
+
+    @court_visibility = {
+      court1: 'block',
+      court2: @tournament.courts > 1 ? 'block' : 'none',
+      court3: @tournament.courts > 2 ? 'block' : 'none',
+      court4: @tournament.courts > 3 ? 'block' : 'none'
+    }
   end
 
   ##### api endpoints ########
 
   def submit_scores
+    # binding.pry
     message = ''
     status = ''
     score_payload = { current_match: params[:current_match], scores: params[:scores] }
 
-    if @tournament.current_match == @tournament.matches_per_round && params[:function] == 'round'
-      message = '<p>Alert!</p> Tournament scoring processed.'
+    # binding.pry
+    if params[:function] == 'round'
+      # message = '<p>Alert!</p> Tournament scoring processed.'
       @tournament.process_round(@tournament.current_round.to_i)
+      status = 'tournament-completed'
     else
       @tournament.update_scores(score_payload, true)
-      message = '<p>Alert!</p> Round processed.'
-      status = 'new-round'
+      # message = '<p>Alert!</p> Round processed.'
+      status = 'tournament-running'
     end
 
     current_set_players # sets @current_set_players, below
@@ -170,7 +189,7 @@ class TournamentsController < ApplicationController
       timer: @tournament.created_at.to_i,
       admin_views_count: @tournament.admin_views.count,
       current_match: @tournament.current_match,
-      all_scores_entered: @tournament.all_scores_entered(params[:current_match]),
+      all_scores_entered: @tournament.all_scores_entered?,
       message: message,
       status: status
     }

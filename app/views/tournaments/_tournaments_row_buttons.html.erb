@@ -1,10 +1,18 @@
 <%# View %>
+<%# Configuration %>
 <td class="px-2 py-4 whitespace-nowrap text-left text-sm font-medium">
-  <% if tournament.rounds_configured.include?(1) %>
+  <% if tournament.tournament_completed %>
+    <a href="<%= results_tournament_path(tournament.id) %>">
+      <button 
+        class="text-md py-0.5 px-7 mr-2 text-md font-medium text-blue-700 focus:outline-none bg-white rounded-full border-2 border-blue-700 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-blue-700 dark:border-gray-600 dark:hover:text-black dark:hover:bg-gray-200">
+        Results
+      </button>
+    </a>  
+  <% elsif tournament.rounds_configured.include?(1) %>
     <a href="<%= display_path(tournament.id, 1) %>">
       <button 
-        class="text-md py-0.5 px-8 mr-2 text-md font-medium text-green-700 focus:outline-none bg-white rounded-full border-2 border-green-700 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-green-700 dark:border-gray-600 dark:hover:text-black dark:hover:bg-gray-200">
-        View
+        class="text-md py-0.5 px-8 mr-2 text-md font-medium text-blue-700 focus:outline-none bg-white rounded-full border-2 border-blue-700 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-blue-700 dark:border-gray-600 dark:hover:text-black dark:hover:bg-gray-200">
+        &nbsp;View&nbsp;
       </button>
     </a>
   <% else %>
@@ -12,21 +20,11 @@
   <% end %>
 </td>
 
-<%# Configuration %>
 <td class="px-2 py-4 whitespace-nowrap text-left text-sm font-medium">
-  <% if tournament.tournament_completed %>
-    <a href="<%= results_tournament_path(tournament.id) %>" target="_blank">
-      <button 
-        class="text-md py-0.5 px-8 mr-2 text-md font-medium text-green-700 focus:outline-none bg-white rounded-full border-2 border-green-700 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-green-700 dark:border-gray-600 dark:hover:text-black dark:hover:bg-gray-200">
-        View
-      </button>
-    </a>
-  <% else %>
     <a href="<%= edit_tournament_path(tournament.id) %>">
       <button 
-        class="text-md py-0.5 px-8 mr-2 text-md font-medium text-red-700 focus:outline-none bg-white rounded-full border-2 border-red-700 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-green-700 dark:border-gray-600 dark:hover:text-black dark:hover:bg-gray-200">
-        &nbsp;Edit&nbsp;
+        class="text-md py-0.5 px-8 mr-2 text-md font-medium text-gray-500 focus:outline-none bg-white rounded-full border-2 border-gray-500 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-blue-700 dark:border-gray-600 dark:hover:text-black dark:hover:bg-gray-200">
+        Edit
       </button>   
-    </a>    
-  <% end %>
+    </a> 
 </td>
