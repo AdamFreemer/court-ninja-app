@@ -97,22 +97,20 @@ class Tournament < ApplicationRecord
 
   def update_scores(score_payload, set_current_match)
     ##### Court 1
-    # binding.pry
-    court_1_match = tournament_sets.find_by(court: score_payload[:court], number: score_payload[:current_match])
+    court_1_match = tournament_sets.find_by(court: 1, number: score_payload[:current_match])
     court_1_team1 = court_1_match.tournament_teams.find_by(number: 1)
     court_1_team2 = court_1_match.tournament_teams.find_by(number: 2)
-    court_1_team1.update!(score: score_payload[:scores][:team1].to_i)
-    court_1_team2.update!(score: score_payload[:scores][:team2].to_i)
+    court_1_team1.update!(score: score_payload[:scores][:court1][:team1].to_i)
+    court_1_team2.update!(score: score_payload[:scores][:court1][:team2].to_i)
 
-    # ##### Court 2
-    # if courts > 1
-    #   court_2_match = tournament_sets.find_by(court: 2, number: score_payload[:current_match])
-    #   court_2_team1 = court_2_match.tournament_teams.find_by(number: 1)
-    #   court_2_team2 = court_2_match.tournament_teams.find_by(number: 2)
-    #   court_2_team1.update!(score: score_payload[:scores][:team1].to_i)
-    #   court_2_team2.update!(score: score_payload[:scores][:team2].to_i)
-    # end
-
+    ##### Court 2
+    if courts > 1
+      court_2_match = tournament_sets.find_by(court: 2, number: score_payload[:current_match])
+      court_2_team1 = court_2_match.tournament_teams.find_by(number: 1)
+      court_2_team2 = court_2_match.tournament_teams.find_by(number: 2)
+      court_2_team1.update!(score: score_payload[:scores][:court2][:team1].to_i)
+      court_2_team2.update!(score: score_payload[:scores][:court2][:team2].to_i)
+    end
 
     # TODO: Court 3 and 4 for future
     ## we don't set current match if we're doing a utility drawer scores update
