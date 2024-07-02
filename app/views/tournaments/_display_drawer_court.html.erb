@@ -1,0 +1,53 @@
+  <div class="ml-2 mb-2 overflow-x-auto relative shadow ring-1 ring-gray-300 ring-opacity-5">
+    <table class="w-full text-sm text-left text-gray-500 divide-y divide-gray-300">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <% team_count = tournament.tournament_sets.first.tournament_teams.first.users.count %>
+        <tr>
+          <th scope="col" class="py-3">&nbsp;</th>  
+          <th scope="col" class="py-3">Match</th>
+          <th colspan="<%= team_count %>" scope="<%= team_count %>" class="py-3"><%= tournament.court_side_a_name.present? ? "#{tournament.court_side_a_name} Side" : "Side A"  %></th>
+          <th scope="col" class="py-3">Score</th>
+          <th colspan="<%= team_count %>" scope="<%= team_count %>" class="py-3"><%= tournament.court_side_b_name.present? ? "#{tournament.court_side_b_name} Side" : "Side B"  %></th>
+          <th scope="col" class="py-3">Score</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 ">
+        <% court_sets = court_sets_court %>
+
+        <% court_sets.each do |tournament_set, i| %>
+          <% team1 = tournament_set.tournament_teams.first.users %>
+          <% team2 = tournament_set.tournament_teams.second.users %>
+          <tr 
+            id="<%= tournament_set.number %>" 
+            data-display-target="matchRowSelected" 
+            data-action="click->display#matchSelectClick"
+            class="bg-white dark:bg-gray-800"
+          >
+            <td class="px-2 py-3">
+             <input id="<%= tournament_set.number %>" type="radio" data-display-target="matchSelected" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500">
+            </td>
+            <td class="px-6"><%= tournament_set.number %></td>
+            <% team1.each do |player| %>
+              <td class="px-1"><%= player.name_abbreviated %></td>
+            <% end %>
+            <td 
+              id="<%= tournament_set.tournament_teams.first.id %>" 
+              data-display-target="team"
+              class="px-6"><%= tournament_set.tournament_teams.first.score %>
+            </td>
+            <% team2.each do |player| %>
+              <td class="px-1"><%= player.name_abbreviated %></td>
+            <% end %>
+            <td 
+              id="<%= tournament_set.tournament_teams.second.id %>" 
+              data-display-target="team"
+              class="px-6"><%= tournament_set.tournament_teams.second.score %>
+            </td>
+          </tr>
+        <% end %>
+
+
+
+      </tbody>
+    </table>    
+  </div>

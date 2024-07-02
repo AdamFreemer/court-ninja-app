@@ -23,6 +23,7 @@
 #  court_side_a_name     :string
 #  court_side_b_name     :string
 #  courts                :integer
+#  current_match         :integer          default(1)
 #  current_matches       :json
 #  current_round         :integer          default(0)
 #  current_set           :integer          default(1)
@@ -81,8 +82,8 @@ class Tournament < ApplicationRecord
   before_save :calculate_total_tournament_time
 
   def generate
-    return false unless players.count.between?(5, 27)
-    return false if current_round == 1 && players.count.between?(5, 9)
+    return false unless players.count.between?(4, 27)
+    # return false if current_round == 1 && players.count.between?(5, 9)
 
     ordered_player_ids =
       if self.current_round.zero? # new tournament, just use newly created self.players
@@ -111,22 +112,29 @@ class Tournament < ApplicationRecord
       court_2_team2.update!(score: score_payload[:scores][:court2][:team2].to_i)
     end
 
-
     # TODO: Court 3 and 4 for future
     ## we don't set current match if we're doing a utility drawer scores update
     if set_current_match
-      # This is to keep track of individual current_sets on each court.
-      # Each court is stored as a k/v pair in a hash of all courts.
-      # i.e. current_matches: {"1"=>3, "2"=>2}, key = court, value = match
-      set_current_set =
-        if matches_per_round == tournament_set[:current_court_match].to_i
-          tournament_set[:current_court_match].to_i
-        else
-          tournament_set[:current_court_match].to_i + 1
-        end
-      current_matches[tournament_set[:court]] = set_current_set
+      if matches_per_round == score_payload[:current_match].to_i
+        return
+      else
+        self.current_match = score_payload[:current_match].to_i + 1
+      end
+      save!
     end
-    save!
+  end
+
+  def all_scores_entered?
+    # This checks all scores (regardless of round). We're looking for tournament_teams, not work teams.
+    # The result is a multi-dimensional array, we can flatten and then check for nils.
+    scores = []
+    tournament_sets.each do |set|
+      scores << set.tournament_teams.where(work_team: nil).map(&:score)
+    end
+    all_scores = scores.flatten
+    return false if all_scores.any?(nil)
+
+    true
   end
 
   def process_round(round)
@@ -177,18 +185,6 @@ class Tournament < ApplicationRecord
         end
       end
     end
-  end
-
-  def all_scores_entered_court_round(court, round)
-    return true if tournament_teams.where(court: court, round: round).where(score: nil).count.zero?
-
-    false
-  end
-
-  def all_scores_entered_all_courts_round(round)
-    return true if tournament_teams.where(round: round).where(score: nil).count.zero?
-
-    false
   end
 
   def scoring(tournament_set)

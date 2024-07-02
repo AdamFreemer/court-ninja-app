@@ -1,9 +1,9 @@
 <%# tournament table section %>
-<div class="overflow-auto rounded-lg shadow-xl divide-y divide-gray-500">
+<div class="overflow-auto rounded-lg divide-y divide-gray-500">
   <div class="">
     <table class="min-w-full divide-y divide-gray-300 border-2">
       <thead class="bg-gray-50">
-      <% team_count = [*1..tournament.tournament_sets.where(court: @court_number).first.tournament_teams.first.users.count - 1] %>
+      <% team_count = [*1..tournament.tournament_sets.where(court: court_number).first.tournament_teams.first.users.count - 1] %>
         <tr class="divide-x divide-gray-300">
           <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600">Match</th>
           <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-gray-600"><%= tournament.court_side_a_name %> Side</th>

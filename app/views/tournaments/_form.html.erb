@@ -111,7 +111,7 @@
     </div>
 
     <div class="flex justify-end space-x-3">
-      <%= link_to "Back to Tournaments", root_path, class: "inline-flex items-center px-5 text-md border border-transparent font-medium" %>
+      <%= link_to "Back to Tournaments", tournaments_path, class: "inline-flex items-center px-5 text-md border border-transparent font-medium" %>
       <% params[:action] == "new" ? button_text = "Create Tournament" : button_text = "Update Tournament" %>
       <button
         id="save-button"

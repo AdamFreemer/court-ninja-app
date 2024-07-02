@@ -176,6 +176,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_17_031428) do
     t.float "total_tournament_time"
     t.integer "matches_per_round"
     t.json "current_matches", default: {}
+    t.integer "current_match", default: 1
     t.boolean "is_new", default: true
     t.integer "winner_id", default: 0
     t.bigint "base_team_id"

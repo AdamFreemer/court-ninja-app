@@ -11,11 +11,11 @@
       data-display-match-pre-time-value="<%= @tournament.pre_match_time %>"
       data-display-total-match-time-value="<%= @tournament.total_match_time %>"
       data-display-tournament-matches-per-round-value="<%= @tournament.matches_per_round %>"
-      data-display-tournament-current-court-match-value=<%= @current_court_match %>
-      data-display-all-scores-entered-value=<%= @tournament.all_scores_entered_court_round(@court_number, @tournament.current_round) %>
+      data-display-current-match-value=<%= @current_match %>
+      data-display-all-scores-entered-value=<%= @tournament.all_scores_entered?  %>
       data-display-tournament-total-rounds-value=<%= @tournament.rounds %>
       >
-
+      <!-- Modal -->
       <div data-display-target="modal" class="modal">
         <div class="modal-box">
           <svg aria-hidden="true" class="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -27,158 +27,84 @@
           </div>
         </div>
       </div>
+      <!-- Modal -->
 
-      <% if !@tournament.tournament_completed %>
-        <button
-          data-drawer-target="tournament-controls" 
-          data-drawer-show="tournament-controls" aria-controls="tournament-controls" 
-          data-collapse-toggle="mobile-menu" 
-          type="button" 
-          class="ml-3 text-gray-400 rounded-lg hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-gray-400 dark:hover:text-white dark:focus:ring-gray-500" 
-          aria-controls="mobile-menu-2" aria-expanded="false">
-          <svg class="w-12 h-12" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
-        </button>
+      <!-- Side Drawer -->
+      <button
+        data-drawer-target="tournament-controls" 
+        data-drawer-show="tournament-controls" aria-controls="tournament-controls" 
+        data-collapse-toggle="mobile-menu" 
+        type="button" 
+        class="ml-3 text-gray-400 rounded-lg hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-gray-400 dark:hover:text-white dark:focus:ring-gray-500" 
+        aria-controls="mobile-menu-2" aria-expanded="false">
+        <svg class="w-12 h-12" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+      </button>
+      <%= render "display_drawer", tournament: @tournament %>
+      <!-- Side Drawer -->
         
-        <%= render "display_drawer", tournament: @tournament %>
-      <% end %>
       <div class="mb-4">
-        <div class="text-center text-7xl font-extrabold tracking-tight leading-none text-gray-500 md:text-7xl lg:text-7xl"><%= @tournament.name %> Tournament</div>
+        <div class="text-center text-6xl font-extrabold tracking-tight leading-none text-gray-500 md:text-6xl lg:text-6xl"><%= @tournament.name %> Tournament</div>
       </div>
-
-      <div data-display-target="primaryCourtLabel">
-        <h2 class="text-center mb-4 text-5xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-5xl dark:text-white">
-          <%# Only show Court Labeling if more than 1 court, and show Gold / Silver designation on Round 2+ %>
-          <% if @tournament.current_round == 2 && @court_number == 1 && @tournament.courts > 1 %>
-            <%= !@court_name.blank? ? "#{@court_name} Court (Gold)" : "Court ##{@court_number} (Gold)" %>
-          <% elsif @tournament.current_round == 2 && @court_number == 2 && @tournament.courts > 1 %>
-            <%= !@court_name.blank? ? "#{@court_name} Court (Silver)" : "Court ##{@court_number} (Silver)" %>
-          <% elsif @tournament.current_round == 1 && @tournament.courts > 1 %>
-            <%= !@court_name.blank? ? "#{@court_name} Court (##{@court_number})" : "Court ##{@court_number}" %>
-          <% end %>
-        </h2>
-      </div>
-
-      <% if @tournament.tournament_completed %>
-        <!-- Show button link to results if tournament completed -->
-        <div class="pt-2 text-xl text-center font-medium text-blue-900">
-          <a href="<%= root_path %>">
-            <button type="button" class="text-xl py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-blue-700 focus:outline-none bg-white rounded-full border-2 border-blue-700 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-blue-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-200">
-            Back to Tournaments
-            </button>         
-          </a>        
-          <a href="<%= results_tournament_path(@tournament) %>" target="_blank">
-            <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-xl px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            Tournament Results
-            </button>          
-          </a>
+      <% unless @tournament.current_match == 0 %>
+        <div data-display-target="currentMatch" class="m-8 text-center text-5xl font-bold tracking-tight leading-none text-gray-500 md:text-5xl lg:text-5xl dark:text-white">
+          <%= "Match ##{@current_match}" %> 
         </div>
-      <% else %>
-        <!-- timer section -->
-        <div data-display-target="timerSection" class="pt-2 text-6xl text-center font-medium text-gray-900">
-          <div data-display-target="status" id="status" class="italic mb-4 text-6xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white"></div>
+      <% end %>
 
-          <div data-display-target="progressbackground" class="overflow-hidden h-14 m-4 text-xs flex rounded bg-grey-200">
-            <div id="progress" style="width:100%" data-display-target="progress" class="shadow-lg flex flex-col text-center whitespace-nowrap text-white justify-center bg-grey-500"></div>
+
+      <!-- timer section -->
+      <div data-display-target="timerSection" class="pt-0 text-6xl text-center font-medium text-gray-900">
+        <div data-display-target="status" id="status" class="italic mb-4 text-6xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white"></div>
+
+        <div data-display-target="progressbackground" class="overflow-hidden h-14 m-4 text-xs flex rounded bg-grey-200">
+          <div id="progress" style="width:100%" data-display-target="progress" class="shadow-lg flex flex-col text-center whitespace-nowrap text-white justify-center bg-grey-500"></div>
+        </div>
+
+        <div class="" style="--size:10rem; --value:100;">
+          <div id="play-pause" data-action="click->display#playPauseClick">
+            <svg class="inline mt-2 mb-3 mr-2 w-32 h-32 text-green-500"
+              data-display-target="playButton"
+              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-24 h-24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
+            </svg>
+
+            <svg class="inline mt-2 mb-3 mr-2 w-32 h-32 text-red-500"
+              data-display-target="pauseButton"
+              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.5 0V9M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
           </div>
-
         
+          <div class="timer">
+            <span data-display-target="minute" class="mb-4 text-6xl font-bold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white"></span>m<span data-display-target="second" class="mb-4 text-6xl font-bold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white"></span>s
+          </div>     
 
-          <div class="" style="--size:10rem; --value:100;">
-            <div id="play-pause" data-action="click->display#playPauseClick">
-              <svg class="inline mt-2 mb-3 mr-2 w-32 h-32 text-green-500"
-                data-display-target="playButton"
-                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-24 h-24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
-              </svg>
-
-              <svg class="inline mt-2 mb-3 mr-2 w-32 h-32 text-red-500"
-                data-display-target="pauseButton"
-                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.5 0V9M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-          
-         
-
-            <div class="timer">
-              <span data-display-target="minute" class="mb-4 text-6xl font-bold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white"></span>m<span data-display-target="second" class="mb-4 text-6xl font-bold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white"></span>s
-            </div>     
-
-            <svg data-display-target="spinner" class="animate-reverse-spin inline mt-2 mr-2 w-12 h-12 text-gray-200 dark:text-gray-600 fill-black" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-              <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-            </svg>                 
-          </div>
+          <svg data-display-target="spinner" class="animate-reverse-spin inline mt-2 mr-2 w-12 h-12 text-gray-200 dark:text-gray-600 fill-black" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+          </svg>                 
         </div>
-        <!-- end timer section -->
-
-        <div class="overflow-auto rounded-lg shadow-lg divide-gray-200">
-          <!-- player card section -->
-          <div data-display-target="displayCards">
-            <%= render "display_cards", 
-              tournament: @tournament, 
-              row_columns: @row_columns, 
-              court_number: @court_number, 
-              current_set_players_all: @current_set_players
-            %>
-          </div>
-
-          <div data-display-target="displayCardsDisplayMode">
-            <%= render "display_cards_display_mode", 
-              tournament: @tournament, 
-              row_columns: @row_columns, 
-              current_set_players_all: @current_set_players
-            %>
-          </div>          
-          <!-- end player card section -->
-
-          <ul role="list" class="min-w-full items-center grid grid-cols-7">
-            <li>&nbsp;</li><li>&nbsp;</li>
-            <li class="col-span-1 text-center text-3xl font-extrabold tracking-tight leading-none text-gray-500 md:text-3xl lg:text-3xl dark:text-white">
-              <div class="flex-auto p-2 text-2xl"><%= @tournament.court_side_a_name %> Side</div>
-            </li>
-            <li>&nbsp;</li>
-            <li class="col-span-1 text-center text-3xl font-extrabold tracking-tight leading-none text-gray-500 md:text-3xl lg:text-3xl dark:text-white">
-              <div class="flex-auto p-2 text-2xl"><%= @tournament.court_side_b_name %> Side</div>
-            </li>
-            <li>&nbsp;</li><li>&nbsp;</li>
-          </ul>  
+      </div>
+      <!-- end timer section -->
+        
+        <!-- display each court -->
+        <%= render "court", court_number: 1, tournament: @tournament, visibility: @court_visibility[:court1] %>
+        <%= render "court", court_number: 2, tournament: @tournament, visibility: @court_visibility[:court2] %>
+        <%= render "court", court_number: 3, tournament: @tournament, visibility: @court_visibility[:court3] %>
+        <%= render "court", court_number: 4, tournament: @tournament, visibility: @court_visibility[:court3] %>
+        <!-- end court section -->
           
+        <div class="pt-2 text-6xl text-center font-medium text-gray-900">
 
-          <!-- scoring section -->
-          <ul role="list" class="mt-2 mb-8 min-w-full items-center grid grid-cols-7">
-            <li>&nbsp;</li><li>&nbsp;</li>
-            <li class="col-span-1 text-center bg-white divide-y divide-gray-200">
-              <select id="team-1-score" data-display-target="team1Score" class="bg-gray-50 border border-gray-300 text-gray-900 text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <% @scores.each do |score| %>
-                  <option class="text-center" value="<%= score %>"><%= score %></option>
-                <% end %>
-              </select>
-            </li>
-            <li class="mt-2 col-span-1 text-center bg-white divide-y divide-gray-200">
-          
-      
-            <button type="button" data-action="display#mainPageSubmitClick" data-display-target="mainPageSubmitText" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-xl px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-              Loading...
+            <button type="button" data-action="display#submitScoresClick" data-display-target="mainPageSubmitText" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-xl px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+              Submit Scores
             </button>
-    
-            </li>
-            <li class="col-span-1 text-center bg-white divide-y divide-gray-200">
-              <select id="team-2-score" data-display-target="team2Score" class="bg-gray-50 border border-gray-300 text-gray-900 text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <% @scores.each do |score| %>
-                  <option class="text-center" value="<%= score %>"><%= score %></option>
-                <% end %>
-              </select>
-            </li
-            <li>&nbsp;</li><li>&nbsp;</li>
-          </ul>
-          <!-- end scoring section -->
         </div>
 
         <!-- start match / round section --> 
-        <div data-display-target="match" class="mt-8 text-center text-5xl font-bold tracking-tight leading-none text-gray-500 md:text-5xl lg:text-5xl dark:text-white">
-          <%= "Match ##{@current_court_match}" %> 
+        <div data-display-target="matchProgressBar" class="mt-8 mb-4 text-center text-4xl font-bold tracking-tight leading-none text-gray-500 md:text-4xl lg:text-4xl dark:text-white">
+          <%= "Match ##{@current_match}" %> 
         </div>
         <% if @tournament.rounds > 1 %>
           <div class="text-center mb-2 text-3xl font-bold tracking-tight leading-none text-gray-500 md:text-3xl lg:text-3xl dark:text-white">
@@ -188,38 +114,43 @@
         <!-- end match / round section --> 
 
         <!-- tournament steps section -->
-        <div class="mb-4 mt-4 text-center text-3xl font-extrabold tracking-tight leading-none text-gray-500 md:text-3xl lg:text-3xl dark:text-white">
-          <div class="pt-4 mb-2 text-md">Tournament Progress</div>
-        </div>
         <div class="mb-6 mt-2 text-center text-xl font-bold tracking-tight leading-none text-gray-500 md:text-xl lg:text-xl dark:text-white">
           <ul class="steps lg:steps-horizontal">
-            <% steps = @tournament.tournament_sets.where(round: 1, court: 1).count * @tournament.rounds %>
-            <% @tournament.current_round == 1 ? current_set = @tournament.current_matches[@court_number.to_s] : current_set = (@tournament.current_matches[@court_number.to_s] + (steps / 2)) %>
-            <% (1..steps).each do |set| %>
-              <li data-display-target="step" data-content="<%= set %>" class="<%= set <= current_set ? "step-primary" : "" %> step"></li>   
+            <% (1..@tournament.matches_per_round).each do |match| %>
+              <li data-display-target="step" data-content="<%= match %>" class="<%= match <= @current_match ? "step-primary" : "" %> step"></li>   
             <% end %>       
           </ul>
         </div>
         <!-- end tournament steps section -->
-      <% end %>
+      
 
       <!-- tournament match list -->
       <div data-display-target="resultsTables">
         <div class="mt-6 mb-2 text-center text-2xl font-extrabold tracking-tight leading-none text-gray-500 md:text-2xl lg:text-2xl dark:text-white">
-          <div class="pt-4 text-md">Current Round Stats</div>
+          <div class="pt-4 text-md">Court 1 Statistics</div>
         </div>      
-        <% if @tournament.rounds_configured.count == 1 %>
-          <%= render "display_match_list", tournament: @tournament, court_number: @court_number, court_sets: @court_sets_round1 %>
-        <% elsif @tournament.rounds_configured.count == 2 %>
-          <%= render "display_match_list", tournament: @tournament, court_number: @court_number, court_sets: @court_sets_round2 %>
-        <% end %>
+          <%= render "display_match_list", tournament: @tournament, court_number: 1, court_sets: @court_sets_court1 %>
+      </div>
 
-        <% if @tournament.rounds_configured.count == 2 %>
+      <% if @tournament.courts == 2 %>
+        <div data-display-target="resultsTables">
           <div class="mt-6 mb-2 text-center text-2xl font-extrabold tracking-tight leading-none text-gray-500 md:text-2xl lg:text-2xl dark:text-white">
-            <div class="pt-4 text-md">Previous Round Stats</div>
-          </div>
-          <%= render "display_match_list", tournament: @tournament, court_number: @court_number, court_sets: @court_sets_round1 %>
-        <% end %>      
+            <div class="pt-4 text-md">Court 2 Statistics</div>
+          </div>      
+            <%= render "display_match_list", tournament: @tournament, court_number: 2, court_sets: @court_sets_court2 %>
+        </div>
+      <% end %>
+      <!-- tournament match list -->
+
+      <!-- back to tournaments button -->
+      <div class="pt-2 text-6xl text-center font-medium text-gray-900">
+        <button 
+          type="button" 
+          data-action="display#backToTournamentsClick"
+          data-display-target="mainPageSubmitText" 
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-xl px-5 py-2.5 text-center mr-2 mb-2 mt-10 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          Back To Tournaments
+        </button>
       </div>
     </div>
   </div>

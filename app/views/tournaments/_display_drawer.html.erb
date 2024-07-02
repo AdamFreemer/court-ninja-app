@@ -1,6 +1,6 @@
 <!----------- tournament controls drawer ---------->
 <div id="tournament-controls" class="fixed z-40 h-screen p-4 overflow-y-auto bg-white w-1/2 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-label">
-  <h5 id="drawer-label" class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400"><svg class="w-5 h-5 mr-2" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>Tournament Controls</h5>
+  <h2 id="drawer-label" class="text-lg font-large inline-flex items-center mb-4  font-semibold text-gray-500 dark:text-gray-400"><svg class="w-5 h-5 mr-2" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>Tournament Controls</h2>
   <button type="button" data-drawer-dismiss="tournament-controls" aria-controls="tournament-controls" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
       <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
       <span class="sr-only">Close menu</span>
@@ -8,82 +8,101 @@
 
   <span data-admin-target="timerWarning" style="display:none" class="mt-3 block text-sm font-medium text-gray-700 bg-gray-200"><i>Timer synchronizing with server...</i></span>
   <span data-admin-target="timerOffline" style="display:none" class="mt-3 block text-sm font-medium text-gray-700"><i>Timer is active on another tab or browser window.</i></span>
+
+  <!-- Display Mode -->
+  <div data-display-target="timerMode" class="mt-2 mb-4 text-gray-500">
+    <h5 id="drawer-label" class="mr-1 inline-flex items-center text-base font-semibold"><svg aria-hidden="true" class="flex-shrink-0 w-6 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>&nbsp;Timer</h5>   
+
+    <label for="checked-toggle" class="inline-flex relative items-center cursor-pointer">
+      <input 
+        data-action="display#timerModeToggleClick"
+        data-display-target="timerModeToggle"
+        type="checkbox" 
+        value="" 
+        id="checked-toggle"
+        class="sr-only peer"
+      >
+      <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+      </div>
+    </label>       
+
+    <button data-action="display#reset" type="button" class="align-top px-5 py-1 ml-1 rounded-full border border-transparent text-sm font-small text-black bg-red-200 hover:bg-red-300">Timer Reset</button>
+  </div>
+
   <span class="mt-3 mb-3 block text-sm font-medium text-gray-700">
     <b>Match Time:</b> <%= @tournament&.match_time ? @tournament.match_time / 60 : 0 %> minutes<br>
     <b>Break Time:</b> <%= @tournament&.pre_match_time_formatted %><br> 
     <b>Tournament Time:</b> ~<%= @tournament&.total_tournament_time&.round %> minutes
   </span>
 
-  <div class="grid grid-cols-3 gap-2">
-    <button data-action="display#start" type="button" class="rounded-full px-5 py-2.5 mr-2 mb-1 border border-transparent text-sm font-medium text-black bg-green-200 hover:bg-green-300">Timer Start</button>
-    <button data-action="display#pause" type="button" class="rounded-full px-5 py-2.5 mr-2 mb-1 border border-transparent text-sm font-medium text-black bg-yellow-200 hover:bg-yellow-300">Timer Pause</button>
-    <button data-action="display#reset" type="button" class="rounded-full px-5 py-2.5 mr-2 mb-1 border border-transparent text-sm font-medium text-black bg-red-200 hover:bg-red-300">Timer Reset</button>
+<% if tournament.courts == 2 %>
+  <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
+      <li class="me-2" role="presentation">
+          <button 
+            class="inline-block p-4 border-b-2 rounded-t-lg" 
+            id="profile-tab" 
+            data-tabs-target="#court-1" 
+            type="button" 
+            role="tab" 
+            aria-controls="court-1" 
+            aria-selected="false"
+            data-action="display#courtTabOneClick"
+          >Court 1
+          </button>
+      </li>
+      <% if tournament.courts == 2 %>
+        <li class="me-2" role="presentation">
+            <button 
+              class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" 
+              id="dashboard-tab" 
+              data-tabs-target="#court-2" 
+              type="button" 
+              role="tab" 
+              aria-controls="court-2" 
+              aria-selected="false"
+              data-action="display#courtTabTwoClick"
+            >Court 2
+            </button>
+        </li>
+      <% end %>
+    </ul>
   </div>
-  
+  <div id="default-tab-content">
+    <div class="hidden rounded-lg bg-gray-50 dark:bg-gray-800" id="court-1" role="tabpanel" aria-labelledby="court-1-tab">
+      <%= render "display_drawer_court", tournament: tournament, court_sets_court: @court_sets_court1 %>
+    </div>
+    <div class="hidden rounded-lg bg-gray-50 dark:bg-gray-800" id="court-2" role="tabpanel" aria-labelledby="court-2-tab">
+      <%= render "display_drawer_court", tournament: tournament, court_sets_court: @court_sets_court2 %>
+    </div>
+  </div>
+<% else %>
+  <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+    <%# render "display_drawer_court", tournament: tournament, court_sets_court: @court_sets_court1 %>
+  </div>
+<% end %>
+
+<div class="flex items-center justify-center">
+    <div class="pr-2 inline-flex items-center mt-6 mb-4 ml-4 text-base font-semibold text-gray-400 dark:text-gray-400">
+      <%= tournament.court_side_a_name.present? ? "#{tournament.court_side_a_name} Side" : "Side A" %>
+    </div>
+
+    <div class="pt-5 py-3 pr-4">
+      <input type="text" data-display-target="team1ScoreUpdate" class="w-full p-2.5 text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Score" required>
+    </div>
+
+    <div class="pr-2 inline-flex items-center mt-6 mb-4 ml-4 text-base font-semibold text-gray-400 dark:text-gray-400">
+      <%= tournament.court_side_b_name.present? ? "#{tournament.court_side_b_name} Side" : "Side B" %>
+    </div>
+
+    <div class="pt-5 py-3 pr-4">
+      <input type="text" data-display-target="team2ScoreUpdate" class="w-full p-2.5 text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Score" required>
+    </div>
+</div>
   <!-- Scoring -->
-  <h5 id="drawer-label" class="inline-flex items-center mt-6 mb-4 text-base font-semibold text-gray-500 dark:text-gray-400"><svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>&nbsp;Scoring Update</h5>     
+  <h5 id="drawer-label" class="inline-flex items-center mt-4 mb-4 text-base font-semibold text-gray-500 dark:text-gray-400"><svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>&nbsp;Scoring Update</h5>     
 
-  <div class="overflow-x-auto relative">
-    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-      <% team_count = @tournament.tournament_sets.first.tournament_teams.first.users.count %>
-        <tr>
-          <th scope="col" class="py-3">&nbsp;</th>  
-          <th scope="col" class="py-3">Match</th>
-          <th colspan="<%= team_count %>" scope="<%= team_count %>" class="py-3"><%= tournament.court_side_a_name %> Side</th>
-          <th scope="col" class="py-3">Score</th>
-          <th colspan="<%= team_count %>" scope="<%= team_count %>" class="py-3"><%= tournament.court_side_b_name %> Side</th>
-          <th scope="col" class="py-3">Score</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @tournament.current_round == 1 ? court_sets = @court_sets_round1 : court_sets = @court_sets_round2 %>
-        <% court_sets.each do |tournament_set, i| %>
-          <% team1 = tournament_set.tournament_teams.first.users %>
-          <% team2 = tournament_set.tournament_teams.second.users %>
-          <tr 
-            id="<%= tournament_set.number %>" 
-            data-display-target="matchRowSelected" 
-            data-action="click->display#matchSelectClick"
-            class="bg-white dark:bg-gray-800"
-          >
-            <td class="px-2 py-3">
-             <input id="<%= tournament_set.number %>" type="radio" data-display-target="matchSelected" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500">
-            </td>
-            <td class="px-6"><%= tournament_set.number %></td>
-            <% team1.each do |player| %>
-              <td class="px-1"><%= player.name_abbreviated %></td>
-            <% end %>
-            <td 
-              id="<%= tournament_set.tournament_teams.first.id %>" 
-              data-display-target="team"
-              class="px-6"><%= tournament_set.tournament_teams.first.score %>
-            </td>
-            <% team2.each do |player| %>
-              <td class="px-1"><%= player.name_abbreviated %></td>
-            <% end %>
-            <td 
-              id="<%= tournament_set.tournament_teams.second.id %>" 
-              data-display-target="team"
-              class="px-6"><%= tournament_set.tournament_teams.second.score %>
-            </td>
-          </tr>
-        <% end %>
-
-        <tr class="bg-white dark:bg-gray-800">
-          <td class="inline-flex items-center mt-6 mb-4 text-base font-semibold text-gray-400 dark:text-gray-400">Scores:</td>
-          <td class="px-2 py-3">&nbsp;</td>
-          <td colspan="<%= @court_sets_round1.first.tournament_teams.first.users.count + 1 %>" class="py-3 pr-4">
-            <input type="text" data-display-target="team1ScoreUpdate" class="w-full p-2.5 text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Score" required>
-          </td>
-          <td colspan="<%= @court_sets_round1.first.tournament_teams.first.users.count + 1 %>" class="py-3 pr-4">
-            <input type="text" data-display-target="team2ScoreUpdate" class="w-full p-2.5 text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Score" required>
-          </td>
-        </tr>
-
-      </tbody>
-    </table>
-  </div>
+  
 
   <!-- scoring submit -->
   <div class="mt-2">
@@ -97,26 +116,7 @@
     </div>
   </div>        
   
-  <!-- Court Selection -->
-  <% if @tournament.courts >= 2 %>
-    <h5 id="drawer-label" class="inline-flex items-center mt-6 text-base font-semibold text-gray-500 dark:text-gray-400"><svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>&nbsp;Court Selection</h5>        
-    <div class="mt-2">
-      <div class="grid grid-cols-2 gap-3">
-        <button 
-          type="button" 
-          data-action="display#openCourtOneClick"
-          class="rounded-lg px-5 py-2.5 mr-2 mb-2 border text-sm font-medium rounded text-black bg-gray-200 hover:bg-gray-300">
-          Court 1
-        </button>
-        <button 
-          type="button"
-          data-action="display#openCourtTwoClick"
-          class="rounded-lg px-5 py-2.5 mr-2 mb-2 border text-sm font-medium rounded text-black bg-gray-200 hover:bg-gray-300">
-          Court 2
-        </button>
-      </div>          
-    </div>
-  <% end %>
+
 
   <!-- Match / Round Operations -->
   <h5 id="drawer-label" class="inline-flex items-center mt-6 text-base font-semibold text-gray-500 dark:text-gray-400"><svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>&nbsp;Match / Round Operations</h5>     
@@ -138,29 +138,5 @@
     </div>           
   </div>
 
-  <!-- Display Mode -->
-  <div data-display-target="displayMode" class="mt-6 text-gray-500">
-    <h5 id="drawer-label" class="inline-flex items-center text-base font-semibold"><svg aria-hidden="true" class="flex-shrink-0 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>&nbsp;Display Mode</h5>   
-    <span data-display-target="displayModeIcon" class="inline-flex text-green-300">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z" />
-      </svg>
-    </span>    
-  </div>
 
-  <div class="mt-4">
-    <label for="checked-toggle" class="inline-flex relative items-center cursor-pointer">
-      <input 
-        data-action="display#displayModeToggleClick"
-        data-display-target="displayModeToggle"
-        type="checkbox" 
-        value="" 
-        id="checked-toggle" 
-        class="sr-only peer"
-      >
-      <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
-      </div>
-      <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Engage display mode to monitor all court scores in real time.</span>
-    </label>        
-  </div>
 </div>

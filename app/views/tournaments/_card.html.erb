@@ -1,13 +1,13 @@
 <li class="col-span-1 text-center bg-white rounded-lg shadow-lg divide-y divide-gray-200">
   <div class="flex-auto p-2">
-    <div id="team-<%= team %>-player-<%= index %>-container" class="player-initials team-<%= team %> w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl mt-6 border-4 border-gray-600 text-gray-600">
+    <div id="court-<%= court %>-team-<%= team %>-player-<%= index %>-container" class="player-initials team-<%= team %> w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl mt-6 border-4 border-gray-600 text-gray-600">
       <% player_ = User.find(player[0]) %>
       <% if player_.profile_picture.attached? %>
-        <img src="<%= player[3] %>" id="team-<%= team %>-player-<%= index %>-picture" class="rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center">
+        <img src="<%= player[3] %>" id="court-<%= court %>-team-<%= team %>-player-<%= index %>-picture" class="rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center">
       <% else %>
-        <div id="team-<%= team %>-player-<%= index %>-picture"><%= player_.initials %></div>
+        <div id="court-<%= court %>-team-<%= team %>-player-<%= index %>-picture"><%= player_.initials %></div>
       <% end %>
     </div> 
-    <h3 id="team-<%= team %>-player-<%= index %>-name" class="player-name team-<%= team %> mt-6 text-gray-900 text-xl font-medium"><%= player[1] %></h3>
+    <h3 id="court-<%= court %>-team-<%= team %>-player-<%= index %>-name" class="player-name team-<%= team %> mt-6 text-gray-900 text-xl font-medium"><%= player[1] %></h3>
   </div>
 </li>
