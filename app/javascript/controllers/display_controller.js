@@ -492,18 +492,19 @@ export default class extends Controller {
     team2Data = this?.tournamentCurrentSetPlayersCourt1Value[1]
     workData = this?.tournamentCurrentSetPlayersCourt1Value[2]
     // Court: 1, team1Data, team2Data, workData
-    this.updateCourt("1", team1Data, team2Data, workData);
+    this.updateCourt(1, team1Data, team2Data, workData);
 
     if (this.courtsValue > 1) {
       team1Data = this?.tournamentCurrentSetPlayersCourt2Value[0]
       team2Data = this?.tournamentCurrentSetPlayersCourt2Value[1]
       workData = this?.tournamentCurrentSetPlayersCourt2Value[2]      
       // Court: 2, team1Data, team2Data, workData
-      this.updateCourt("2", team1Data, team2Data, workData);
+      this.updateCourt(2, team1Data, team2Data, workData);
     }
   }  
 
   updateCourt(court, team1Data, team2Data, workData) {
+    console.log("----- updateCourt, court: " + court)
     let update;
     if (team1Data[2][0] != '-') { // this prevents initial loading of null data
       // Team 2 Card 1
