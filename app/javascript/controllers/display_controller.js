@@ -593,11 +593,12 @@ export default class extends Controller {
   }
 
   initialsDiv(court, team, player, data) {
+    console.log("----- initialsDiv, court: " + court)
     // HTML to render initials card
     return `<div id='court-${court}-team-${team}-player-${player}-picture' class='player-initials team-2 w-2/3 h-2/3 mx-auto aspect-square bg-gray-300 rounded-[50%] flex justify-center items-center text-3xl border-gray-600 text-gray-600'>${data || "--"}</div>`
   }
 
-  photoDiv(team, player, data) {
+  photoDiv(court, team, player, data) {
     // HTML to render photo on card
     return `<img src=${data} id='court-${court}-team-${team}-player-${player}-picture' class='rounded-[50%] top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center'>`
   }
