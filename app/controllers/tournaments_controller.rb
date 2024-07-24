@@ -160,7 +160,6 @@ class TournamentsController < ApplicationController
   ##### api endpoints ########
 
   def submit_scores
-    # binding.pry
     message = ''
     status = ''
     score_payload = { current_match: params[:current_match], scores: params[:scores] }
@@ -171,7 +170,7 @@ class TournamentsController < ApplicationController
       @tournament.process_round(@tournament.current_round.to_i)
       status = 'tournament-completed'
     else
-      @tournament.update_scores(score_payload, true)
+      @tournament.update_scores(score_payload)
       # message = '<p>Alert!</p> Round processed.'
       status = 'tournament-running'
     end
@@ -195,6 +194,19 @@ class TournamentsController < ApplicationController
     }
   end
 
+  def update_scores
+    # for sidebar score updates
+    message = "Alert: Scores updated."
+    status = ''
+    score_payload = { court: params[:court], current_match: params[:selected_match], scores: params[:scores] }
+    @tournament.update_scores_sidebar(score_payload)
+
+    render json: {
+      message: message,
+      status: status
+    }
+  end
+
   def status
     @tournament.status_process_admin_views(params[:timestamp])
     scores = @tournament.tournament_teams.collect { |t| [t.id, t.score] }
@@ -210,18 +222,6 @@ class TournamentsController < ApplicationController
       courts: @tournament.courts,
       timer: @tournament.created_at.to_i,
       current_match: @tournament.current_match
-    }
-  end
-
-  def update_scores
-    message = "Alert: Scores updated."
-    status = ''
-    tournament_set = { round: params[:round], court: params[:court], current_match: params[:current_match], scores: params[:scores] }
-    @tournament.update_scores(tournament_set, false)
-
-    render json: {
-      message: message,
-      status: status
     }
   end
 
@@ -293,18 +293,18 @@ class TournamentsController < ApplicationController
 
   def current_set_players
     @current_set_players = []
-
+    # binding.pry
     teams = @tournament.tournament_sets.find_by(number: @tournament.current_match, court: 1, round: @tournament.current_round).tournament_teams.order(:number)
     user_ids = teams.map { |team| team.users.map(&:id) }
     names_abbreviated = teams.map { |team| team.users.map(&:name_abbreviated) }
     names_initials = teams.map { |team| team.users.map(&:initials) }
     picture = teams.map { |team| team.users.map { |user| user.profile_picture.attached? ? url_for(user.profile_picture) : '' } }
     current_set_players = user_ids.zip(names_abbreviated, names_initials, picture)
-
     @current_set_players[0] = current_set_players.map { |team| [team.map(&:first).compact, team.map(&:second).compact, team.map(&:third).compact] }
-    # binding.pry
+
     # TODO: this (below) needs to expand for higher court counts
     return unless @tournament.courts > 1
+
     teams = @tournament.tournament_sets.find_by(number: @tournament.current_match, court: 2, round: @tournament.current_round).tournament_teams.order(:number)
     user_ids = teams.map { |team| team.users.map(&:id) }
     names_abbreviated = teams.map { |team| team.users.map(&:name_abbreviated) }

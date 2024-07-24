@@ -71,7 +71,7 @@ class Tournament < ApplicationRecord
   has_many :tournament_teams, dependent: :destroy
   has_many :tournament_sets, dependent: :destroy
   has_many :tournament_users, dependent: :destroy
-  has_many :users, through: :tournament_users, dependent: :destroy
+  has_many :users, through: :tournament_users
   has_many :user_scores, dependent: :destroy
 
 
@@ -95,7 +95,7 @@ class Tournament < ApplicationRecord
     round.generate_round(current_round + 1)
   end
 
-  def update_scores(score_payload, set_current_match)
+  def update_scores(score_payload)
     ##### Court 1
     court_1_match = tournament_sets.find_by(court: 1, number: score_payload[:current_match])
     court_1_team1 = court_1_match.tournament_teams.find_by(number: 1)
@@ -113,15 +113,22 @@ class Tournament < ApplicationRecord
     end
 
     # TODO: Court 3 and 4 for future
-    ## we don't set current match if we're doing a utility drawer scores update
-    if set_current_match
-      if matches_per_round == score_payload[:current_match].to_i
-        return
-      else
-        self.current_match = score_payload[:current_match].to_i + 1
-      end
-      save!
+    if matches_per_round == score_payload[:current_match].to_i
+      return
+    else
+      self.current_match = score_payload[:current_match].to_i + 1
     end
+    save!
+  end
+
+  def update_scores_sidebar(score_payload)
+    # score_payload = { court: params[:court], current_match: params[:selected_match], scores: params[:scores] }
+    match = tournament_sets.find_by(court: score_payload[:court], number: score_payload[:current_match])
+    team1 = match.tournament_teams.find_by(number: 1)
+    team2 = match.tournament_teams.find_by(number: 2)
+
+    team1.update!(score: score_payload[:scores][:team1].to_i)
+    team2.update!(score: score_payload[:scores][:team2].to_i)
   end
 
   def all_scores_entered?

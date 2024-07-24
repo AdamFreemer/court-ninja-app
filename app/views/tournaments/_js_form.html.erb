@@ -184,7 +184,7 @@
     totalTourneyTime = Math.round(10 * (((tournyTime / 60) * tournamentSets) + ((tournamentSets - 1) * (tournyBreakTime / 60))) * tournamentRounds ) / 10
     console.log("pSelected: " + pSelected)
     if (pSelected < 4 || pSelected > 15) {
-      $('#tourny-time').text("Add / subtract players! (minimum 4, maximum 15").css('color', 'red');
+      $('#tourny-time').text("Add / subtract players! (minimum 4, maximum 15)").css('color', 'red');
     } else {
       $('#tourny-time').text(totalTourneyTime + " minutes").css('color', 'black');
     }

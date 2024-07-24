@@ -293,12 +293,8 @@ export default class extends Controller {
     })
   }
 
-
-
-  // Confirm Click on Submit Scores
   updateScores() {
-    console.log('row selected: ' + this.matchRowSelectedValue)
-    // console.log('row selected: ' + this.matchRowSelectedValue)
+    let scores = { team1: this.team1ScoreUpdateTarget.value, team2: this.team2ScoreUpdateTarget.value }
     $.ajax({
       type: "POST",
       url: "/tournaments/update_scores",
@@ -308,8 +304,8 @@ export default class extends Controller {
       data: {
         id: this.tournamentIdValue,
         court: this.courtTabValue,
-        current_match: this.matchRowSelectedValue,
-        scores: { team1: this.team1ScoreUpdateTarget.value, team2: this.team2ScoreUpdateTarget.value }
+        selected_match: this.matchRowSelectedValue,
+        scores: scores
       },
       success: (response) => {
         window.location.href = "/tournaments/display/" + this.tournamentIdValue + "/" + this.tournamentCurrentCourtValue
