@@ -125,7 +125,7 @@ class TournamentsController < ApplicationController
     @tournament.destroy
 
     respond_to do |format|
-      format.html { redirect_to tournaments_url, notice: "Tournament was successfully destroyed." }
+      format.html { redirect_to tournaments_path, notice: 'Tournament was successfully deleted.', status: 303 }
       format.json { head :no_content }
     end
   end

@@ -24,7 +24,7 @@
 #
 class TournamentSet < ApplicationRecord
   belongs_to :tournament
-  has_many :tournament_set_tournament_teams
+  has_many :tournament_set_tournament_teams, dependent: :destroy
   has_many :tournament_teams, through: :tournament_set_tournament_teams
   has_many :user_scores
 end

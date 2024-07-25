@@ -25,13 +25,13 @@
 class TournamentTeam < ApplicationRecord
   belongs_to :tournament
 
-  has_many :tournament_team_users
+  has_many :tournament_team_users, dependent: :destroy
   has_many :users, through: :tournament_team_users
 
-  has_many :tournament_set_tournament_teams
+  has_many :tournament_set_tournament_teams, dependent: :destroy
   has_many :tournament_sets, through: :tournament_set_tournament_teams
 
-  has_many :user_scores
+  has_many :user_scores, dependent: :destroy
 
   def self.score_update(score_data)
     teams_count = score_data.length

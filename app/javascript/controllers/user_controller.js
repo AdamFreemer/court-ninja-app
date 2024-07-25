@@ -8,15 +8,12 @@ export default class extends Controller {
   }
 
   connect() {
-    // setTimeout(() => {
-    //   this.dismiss();
-    // }, 5000);
+
   }
 
 
 
   deactivate(event) {
-    console.log('=== deactivate new!')
     let confirmed = confirm('Are you sure you want to delete ' + this.nameValue + '?');
     if (!confirmed) {
       event.preventDefault();
@@ -31,16 +28,12 @@ export default class extends Controller {
           id: this.idValue,
         },
         success: (response) => {
-          console.log("-- successful delete")
-          console.log("-- type: " + this.typeValue)
           if (this.typeValue == "player") {
             window.location.href = "/players"
           }
           
           if (this.typeValue == "user") {
-            console.log("---- wtf")
             window.location.href = "/users"
-            console.log("---- wtf")
           }
         }
       })  
