@@ -147,8 +147,7 @@ class TournamentsController < ApplicationController
     @court_sets_court2 = @tournament.tournament_sets.where(court: 2, round: 1)
     @court_sets_court3 = @tournament.tournament_sets.where(court: 3, round: 1)
     @court_sets_court4 = @tournament.tournament_sets.where(court: 4, round: 1)
-
-
+    
     @court_visibility = {
       court1: 'block',
       court2: @tournament.courts > 1 ? 'block' : 'none',
