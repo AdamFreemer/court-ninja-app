@@ -7,7 +7,6 @@
     <% end %>
 
     <!-- Team 1 (left side) -->
-    <%# binding.pry %>
     <% current_set_players[0].reject { |c| c.empty? }.each_with_index do |player, index| %>
       <%= render "card", court: court_number, player: player, index: index, team: 1 %>
     <% end %>

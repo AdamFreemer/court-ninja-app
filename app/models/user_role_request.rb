@@ -26,7 +26,7 @@ class UserRoleRequest < ApplicationRecord
   belongs_to :user
   belongs_to :processed_by, class_name: 'User', optional: true
 
-  def send_user_role_request_email
-    UserMailer.user_role_request_email(self).deliver_now
+  def send_user_request_email
+    UserMailer.user_request_email(self).deliver_now
   end
 end

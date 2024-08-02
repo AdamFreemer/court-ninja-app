@@ -432,7 +432,6 @@ def self.p5
   end
 
   def self.new_round(players)
-    # binding.pry
     case players[:ids].count
     when 4
       { court1: players[:ids].shuffle, court2: [] }

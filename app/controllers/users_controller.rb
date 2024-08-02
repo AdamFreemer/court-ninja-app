@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[edit update destroy deactivate]
   before_action :set_positions
-  before_action :check_for_admin
+  before_action :check_for_admin#, except: %i[edit]
 
   def index
     set_title
@@ -36,6 +36,8 @@ class UsersController < ApplicationController
   end
 
   def edit
+    @user = current_user if current_user.is_coach? && !current_user.is_admin?
+
     @submit_button_text = 'Edit User'
   end
 
@@ -95,7 +97,9 @@ class UsersController < ApplicationController
   private
 
   def check_for_admin
-    return true if current_user.is_admin? || current_user.is_coach?
+    return true if current_user.is_admin?
+
+    return true if current_user.players.exists?(@user.id)
 
     redirect_to players_path
   end

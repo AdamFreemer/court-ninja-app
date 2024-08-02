@@ -6,6 +6,9 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/user_role_request/:id/approve', to: 'user_role_requests#approve', as: 'approve_user_role_request'
+  get '/user_role_request/:id/deny', to: 'user_role_requests#deny', as: 'deny_user_role_request'
+
   get '/profile', to: 'users#profile'
 
   get '/tournaments/administration/:id/:round', to: 'tournaments#administration', as: 'administration_tournament'

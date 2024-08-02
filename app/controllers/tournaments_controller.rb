@@ -71,10 +71,7 @@ class TournamentsController < ApplicationController
   end
 
   def edit
-    # binding.pry
     @available_players = current_user.players
-
-
     @tournament_configured = !@tournament.rounds_configured.empty?
     @player_names = @tournament.users.map(&:name_abbreviated)
   end
@@ -163,7 +160,6 @@ class TournamentsController < ApplicationController
     status = ''
     score_payload = { current_match: params[:current_match], scores: params[:scores] }
 
-    # binding.pry
     if params[:function] == 'round'
       # message = '<p>Alert!</p> Tournament scoring processed.'
       @tournament.process_round(@tournament.current_round.to_i)
@@ -292,7 +288,6 @@ class TournamentsController < ApplicationController
 
   def current_set_players
     @current_set_players = []
-    # binding.pry
     teams = @tournament.tournament_sets.find_by(number: @tournament.current_match, court: 1, round: @tournament.current_round).tournament_teams.order(:number)
     user_ids = teams.map { |team| team.users.map(&:id) }
     names_abbreviated = teams.map { |team| team.users.map(&:name_abbreviated) }
