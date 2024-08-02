@@ -2,9 +2,9 @@ class UserMailer < ApplicationMailer
   default from: 'from@example.com'
   layout 'mailer'
 
-  def user_role_request_email(user_role_request)
-    @user_role_request = user_role_request
-    @user = user_role_request.user
+  def user_request_email(user_request)
+    @user_request = user_request
+    @user = user_request.user
     mail(to: User.with_role(:admin).pluck(:email), from: @user.email, subject: 'New User Request')
   end
 

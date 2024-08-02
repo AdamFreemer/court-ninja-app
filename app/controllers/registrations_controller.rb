@@ -13,11 +13,11 @@ class RegistrationsController < Devise::RegistrationsController
     if resource.save
       # return if team
 
-      return unless %w[coach organization].include?(params['user']['role'].downcase)
+      # return unless %w[coach organization].include?(params['user']['role'].downcase)
 
       req = UserRoleRequest.create!(user_id: resource.id)
-      req.add_role(params['user']['role'].downcase)
-      req.send_user_role_request_email
+      # req.add_role(params['user']['role'].downcase)
+      req.send_user_request_email
     else
       redirect_to new_registration_path(@user) && return
     end

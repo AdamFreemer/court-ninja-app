@@ -60,7 +60,7 @@ class User < ApplicationRecord
   rolify
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :recoverable, :validatable, :trackable #:rememberable, :registerable
+  devise :database_authenticatable, :recoverable, :validatable, :trackable, :registerable#, :rememberable
 
   has_many :tournament_users, dependent: :destroy
   has_many :tournaments, through: :tournament_users

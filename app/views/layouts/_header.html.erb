@@ -54,7 +54,7 @@
                   <li class="text-xs p-2 pb-0 font-bold">Logged in as:</li>
                   <li class="text-sm p-2 pt-0"><%= current_user.email %></li>
                   <hr>
-                  <%= link_to 'Profile', profile_path, class: 'hover:bg-indigo-100 border-transparent text-indigo-700 inline-flex items-center p-2 w-full flex justify-end' %>
+                  <%= link_to 'Profile', edit_user_path(current_user), class: 'hover:bg-indigo-100 border-transparent text-indigo-700 inline-flex items-center p-2 w-full flex justify-end' %>
                   <%= button_to 'Sign Out', destroy_user_session_path, :method => :delete, class: 'hover:bg-indigo-100 border-transparent text-indigo-700 inline-flex items-center p-2 w-full flex justify-end' %>
                 </ul>
               </div>
