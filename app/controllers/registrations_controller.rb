@@ -10,11 +10,12 @@ class RegistrationsController < Devise::RegistrationsController
     # resource.add_role :athlete if params['user']['role'].downcase == 'athlete' || team.present?
     # resource.teams << team if team
 
+    # set new user as coach
+    resource.is_coach = true
+
     if resource.save
       # return if team
-
       # return unless %w[coach organization].include?(params['user']['role'].downcase)
-
       req = UserRoleRequest.create!(user_id: resource.id)
       # req.add_role(params['user']['role'].downcase)
       req.send_user_request_email
