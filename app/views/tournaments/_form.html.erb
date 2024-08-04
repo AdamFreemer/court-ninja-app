@@ -18,8 +18,7 @@
     <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
       <div class="md:grid md:grid-cols-3 md:gap-6">
         <div class="md:col-span-1 overflow-y-auto border-[1px] p-2">
-          
-          <% if tournament.players.count > 1 %>
+          <% if current_user.players.count > 0 %>
             <label for="courts" id="players-label" class="block text-md font-medium text-gray-700">Players <span id="players-text" class="text-gray-400"></span>&nbsp;</label>
           <% else %>
             <label for="courts" id="players-label" class="block text-md font-medium text-gray-700">
