@@ -36,7 +36,7 @@
         <% end %>
         <th scope="col" class="border-2 px-2 py-3.5 text-left text-md font-semibold text-black">Score</th>
         <% if tournament.work_group > 0 %>
-          <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-black">Working</th>
+          <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-black">Bystander</th>
           <% (1..(@tournament.work_group - 1)).each do |blank| %>
             <th scope="col" class="px-2 py-3.5 text-left text-md font-semibold text-black">&nbsp;</th>
           <% end %>

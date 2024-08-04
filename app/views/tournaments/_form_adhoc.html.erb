@@ -63,12 +63,12 @@
                 <%= form.select :match_time, @match_times, { :placeholder => "Please Select" }, id: "tournament-time", data: { action: 'change->adhoc#timeSelects', turbo: false }, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
               </div>
               <div class="col-span-6 sm:col-span-3 lg:col-span-3">
-                <label for="break-time" class="block text-sm font-medium text-gray-700">Break Time Length<span class="text-gray-400"></span></label>
+                <label for="break-time" class="block text-sm font-medium text-gray-700">Timer Break Time Length<span class="text-gray-400"></span></label>
                 <%= form.select :pre_match_time, @pre_match_times, { :placeholder => "Please Select" }, id: "break-time", data: { action: 'change->adhoc#timeSelects', turbo: false }, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
               </div>   
 
               <div data-adhoc-target="court-1" id="court-1-container" class="col-span-6 sm:col-span-6 lg:col-span-3">
-                <label for="courts" class="block text-sm font-medium text-gray-700">Court 1 Name</label>
+                <label for="courts" class="block text-sm font-medium text-gray-700">Court Name</label>
                 <%= form.text_field :court_1_name, id: "court-1-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
               </div>
               <div data-adhoc-target="court-2" id="court-2-container" class="col-span-6 sm:col-span-6 lg:col-span-3">

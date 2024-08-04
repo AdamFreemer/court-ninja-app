@@ -16,8 +16,12 @@
     <%# link_to 'New Player', new_user_path, class: "inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
   </div>
   <% if @players_one_off.count + @players_team.count == 0 %>
-    <div class="text-center text-md font-medium tracking-tight leading-none text-gray-900 md:text-md lg:text-md">
-      Such nothingness. Add some players to your team!
+    <div class="italic text-center text-md font-medium tracking-tight leading-none text-gray-900 md:text-md lg:text-md">
+      Such nothingness :(<br><br> Add some players to your team!<br><br>
+    </div>
+    <div class="italic text-center text-sm font-medium tracking-tight leading-none text-gray-900 md:text-md lg:text-md">
+      Create a "One-off Player" when the person will be <br>temporary or for an adhoc Tournament situation.<br>
+      Members of your Team should be "Team Players".
     </div>
   <% end %>
   <%= render "players_table", players: @players_one_off, type: "one_off" %>
