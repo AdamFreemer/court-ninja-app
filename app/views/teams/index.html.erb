@@ -1,0 +1,25 @@
+<div class="mx-auto" data-controller="users">
+  <div class="pb-6 flex justify-between items-center">
+    <h1 class="text-gray-500 text-3xl tracking-tighter items-center pt-1 font-bold">Teams</h1>
+    <div class="flex gap-2 items-center pb-1 flow-root">     
+      <%= button_to "Create Team", new_team_path, method: :get, class: "float-right text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-full text-md px-5 py-1 text-center mr-2" %> 
+    </div>    
+  </div>
+  <% if @teams.all.count == 0 %>
+    <div class="italic text-center text-md font-medium tracking-tight leading-none text-gray-600 md:text-md lg:text-md">
+      Such nothingness :(<br><br> Create a Team for optimal efficiency in running your practices!<br><br>
+    </div>
+
+    <div class="justify-center flex items-center">
+        <div class="w-1/3 rounded-lg border-dashed p-4 border-2 border-gray-500 italic text-justify text-sm font-medium text-gray-500 md:text-md lg:text-md">
+          <br>
+          Lorem Epsin
+          <br><br>
+          Lorem Epsin
+          <br><br>
+        </div>
+    </div>
+
+  <% end %>
+  <%= render "teams_table", teams: @teams %>
+</div>

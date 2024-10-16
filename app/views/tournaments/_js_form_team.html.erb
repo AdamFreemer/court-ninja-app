@@ -5,7 +5,7 @@
     // On load set session data
     setDefaultSessionData();
     // Show / hide courts according to players checked and update session data
-    $("input:checkbox").change(function() { playersSelectedChange(); }); 
+    $("input:radiow").change(function() { playersSelectedChange(); }); 
     // Update session data on tournament time changes
     tournyTimeChangeListener();
     tournyBreakTimeChangeListener();
@@ -38,6 +38,7 @@
   }
 
   function playersSelectedChange() {
+    console.log("-- click == ")
     let pSelected = document.querySelectorAll('input[type="checkbox"]:checked').length;
     $('#players-label').text(`Players (${pSelected} selected)`);
     processPlayersSelected(pSelected);

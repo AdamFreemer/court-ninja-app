@@ -39,6 +39,7 @@
 #  rounds_finalized      :integer          default([]), is an Array
 #  state                 :string
 #  team_size             :integer
+#  teams                 :string           default([]), is an Array
 #  timer_mode            :string           default("break")
 #  timer_state           :string           default("initial")
 #  timer_time            :integer          default(0)
@@ -73,18 +74,17 @@ class Tournament < ApplicationRecord
   has_many :tournament_users, dependent: :destroy
   has_many :users, through: :tournament_users
   has_many :user_scores, dependent: :destroy
-
+  # has_many :teams, dependent: :destroy
 
   scope :before_today, -> { where("created_at < ?", 1.days.ago) }
   scope :today, -> { where("created_at > ?", DateTime.now.beginning_of_day) }
 
-  # after_save :associate_players  #TODO: refactor to not hit db when not needed
   before_save :calculate_total_tournament_time
 
   def generate
     return false unless players.count.between?(4, 27)
-    # return false if current_round == 1 && players.count.between?(5, 9)
 
+    # return false if current_round == 1 && players.count.between?(5, 9)
     ordered_player_ids =
       if self.current_round.zero? # new tournament, just use newly created self.players
         players
@@ -374,6 +374,36 @@ class Tournament < ApplicationRecord
 
   def total_match_time
     match_time + pre_match_time
+  end
+
+  def display_configuration
+    case self.configuration
+
+    when 'p4'
+      'Doubles, 1 court, 3 matches, no bystanders.'
+    when 'p5'
+      'Doubles, 1 court, 5 matches, 1 bystander.'
+    when 'p6'
+      'Triples, 1 court, 10 matches, no bystanders.'
+    when 'p7'
+      'Triples, 1 court, 7 matches, 1 bystander.'
+    when 'p8'
+      'Triples, 1 court, 8 matches, 2 bystanders.'
+    when 'p9'
+      'Triples, 1 court, 9 matches, 3 bystanders.'
+    when 'p10'
+      'Doubles 2 courts, 10 matches, 2 bystanders.'
+    when 'p11'
+      'Doubles, 2 courts, 11 matches, 3 bystanders.'
+    when 'p12'
+      'Triples, 2 courts, 11 matches, no bystanders.'
+    when 'p13'
+      'Triples, 2 courts, 13 matches, 1 bystander.'
+    when 'p14'
+      'Triples, 2 courts, 14 matches, 2 bystanders.'
+    when 'p15'
+      'Triples, 2 courts, 10 matches, 3 bystanders.'
+    end
   end
   # rubocop:enable Lint/NumberConversion
 end

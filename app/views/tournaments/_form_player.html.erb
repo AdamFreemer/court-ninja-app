@@ -16,7 +16,8 @@
   <%= form.hidden_field :base_team_id, value: @team_id || form.object.base_team_id  %>
   <div class="space-y-6">
     <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
-      <div class="md:grid md:grid-cols-3 md:gap-6">
+      <div class="md:grid md:grid-cols-4 md:gap-6">
+
         <div class="md:col-span-1 overflow-y-auto border-[1px] p-2">
           <% if current_user.players.count > 0 %>
             <label for="courts" id="players-label" class="block text-md font-medium text-gray-700">Players <span id="players-text" class="text-gray-400"></span>&nbsp;</label>
@@ -25,13 +26,10 @@
               <br>No players exist. <%= link_to "Click here", players_path, class: "text-blue-500" %> first to create!<br><br>
             </label>
           <% end %>
-
-
           <% if !params[:action] == "new" || @tournament_configured == true %>
             <br><label class="block text-sm font-medium text-red-700">Tournament rounds generated, no editing of Players allowed.</span>&nbsp;</label>
           <% end %>
           <% @tournament_configured ? player_list = tournament.users : player_list = @available_players %>
-
           <%= form.collection_check_boxes(:players, player_list, :id, :full_name, disabled: @tournament_configured) do |player| %>
             <%= player.label class:"text-sm font-medium text-gray-70 py-1" do %>
               <% if @tournament_configured %>
@@ -46,8 +44,6 @@
                 <% else %>
                   <span class="text-black font-medium"><%= player.text %></span>
                 <% end %>
-
-              
               <br />
             <% end %>
           <% end %>
@@ -57,7 +53,6 @@
               <button id="select-none" onclick="selectNonePlayers()" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white px-4 border-2 border-blue-500 hover:border-transparent rounded-full btn-xs">Select None</button>
             <% end %>
           </div>
-
         </div>
 
         <div class="mt-5 md:mt-0 md:col-span-2">

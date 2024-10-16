@@ -1,5 +1,11 @@
 <div class="mx-auto md:w-2/3 w-full">
-  <h1 class="text-gray-500 text-4xl tracking-tighter items-center pt-1 font-bold">New Tournament</h1>
-  <%= render "form", tournament: @tournament %>
+  <h1 class="text-gray-500 text-4xl tracking-tighter items-center pt-1 font-bold">New <%= params[:type].capitalize %> Tournament</h1>
 
+  <% if params[:type] == "team" %>
+    <%= render "form_team", tournament: @tournament %>
+  <% end %>
+
+  <% if params[:type] == "player" %>
+    <%= render "form_player", tournament: @tournament %>
+  <% end %>
 </div>

@@ -58,6 +58,7 @@ class TournamentsController < ApplicationController
   def new
     one_off_players = current_user.players.where(is_one_off: true).where('created_at > ?', 2.days.ago).order(last_name: :asc)
     team_players = current_user.players.where(is_one_off: false).order(last_name: :asc)
+    @teams = Team.where(coach_id: current_user.id)
 
     @available_players = one_off_players + team_players
     @tournament = Tournament.new
@@ -71,6 +72,7 @@ class TournamentsController < ApplicationController
   end
 
   def edit
+    @teams = Team.where(coach_id: current_user.id)
     @available_players = current_user.players
     @tournament_configured = !@tournament.rounds_configured.empty?
     @player_names = @tournament.users.map(&:name_abbreviated)
@@ -80,6 +82,7 @@ class TournamentsController < ApplicationController
     @tournament = Tournament.new(tournament_params)
     @tournament.created_by = current_user
     @tournament.timer_time = @tournament.pre_match_time + @tournament.match_time # set default time to be display
+    @teams = Team.where(coach_id: current_user.id)
 
     set_create_update(params)
     if @tournament.save
@@ -98,6 +101,7 @@ class TournamentsController < ApplicationController
   end
 
   def update
+    @teams = Team.where(coach_id: current_user.id)
     cleaned_up_params = tournament_params
     cleaned_up_params[:players] = cleaned_up_params[:players].compact_blank.map { |i| Integer(i, 10) } if @tournament.adhoc == false
 
@@ -144,7 +148,7 @@ class TournamentsController < ApplicationController
     @court_sets_court2 = @tournament.tournament_sets.where(court: 2, round: 1)
     @court_sets_court3 = @tournament.tournament_sets.where(court: 3, round: 1)
     @court_sets_court4 = @tournament.tournament_sets.where(court: 4, round: 1)
-    
+
     @court_visibility = {
       court1: 'block',
       court2: @tournament.courts > 1 ? 'block' : 'none',
@@ -309,11 +313,17 @@ class TournamentsController < ApplicationController
   end
 
   def set_create_update(params)
-    if params[:tournament][:adhoc] == 'true'
-      create_adhoc_players(params[:tournament])
-    else
+
+    if params[:tournament][:players].present?
+      # binding.pry
       @tournament.players = params[:tournament][:players].reject(&:blank?).map(&:to_i) unless params[:tournament][:players].nil?
     end
+    
+    if params[:tournament][:teams].present?
+      @tournament.players = Team.find(params[:tournament][:teams]).players.collect(&:id)
+    end
+    
+
   end
 
   def create_adhoc_players(tournament_params)

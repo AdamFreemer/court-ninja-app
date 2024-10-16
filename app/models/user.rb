@@ -43,6 +43,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  coach_id               :bigint
+#  team_id                :integer
 #
 # Indexes
 #
@@ -75,8 +76,6 @@ class User < ApplicationRecord
   has_many :teams, through: :player_teams
 
   has_many :user_scores, dependent: :destroy
-
-  has_many :teams_coached, foreign_key: :coach_id, dependent: :nullify, class_name: 'Team'
 
   has_many :tournaments_run, foreign_key: :created_by_id, dependent: :nullify, class_name: 'Tournament'
 
