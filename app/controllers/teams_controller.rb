@@ -20,6 +20,8 @@ class TeamsController < ApplicationController
     @team = Team.new(team_params)
     @team.coach_id = current_user.id
 
+    @team.update_players(params)
+    
     respond_to do |format|
       if @team.save
         format.html { redirect_to teams_path, notice: 'Team was successfully created.' }
