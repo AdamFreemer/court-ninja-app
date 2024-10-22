@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_17_031428) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_05_023215) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -180,6 +180,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_17_031428) do
     t.boolean "is_new", default: true
     t.integer "winner_id", default: 0
     t.bigint "base_team_id"
+    t.string "teams", default: [], array: true
     t.index ["base_team_id"], name: "index_tournaments_on_base_team_id"
     t.index ["created_by_id"], name: "index_tournaments_on_created_by_id"
   end
@@ -280,6 +281,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_17_031428) do
     t.date "date_of_birth"
     t.boolean "is_active", default: true
     t.boolean "is_on_leaderboard", default: true
+    t.integer "team_id"
     t.index ["coach_id"], name: "index_users_on_coach_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

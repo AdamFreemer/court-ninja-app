@@ -4,8 +4,13 @@ export default class extends Controller {
   connect() {
   }
 
-  newTournamentClick() {
-    window.location.href = `/tournaments/new`
+  newTournamentTeamClick() {
+    // TODO validate a team selected
+    window.location.href = `/tournaments/new?type=team`
+  }
+
+  newTournamentPlayerClick() {
+    window.location.href = `/tournaments/new?type=player`
   }
 
   newAdhocTournamentClick() {

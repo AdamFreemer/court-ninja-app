@@ -1,0 +1,107 @@
+<%= form_with(model: tournament, class: "contents") do |form| %>
+  <% if tournament.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+      <h2><%= pluralize(tournament.errors.count, "error") %> prohibited this tournament from being saved:</h2>
+      <ul>
+        <% tournament.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="space-y-6">
+    <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
+      <div class="md:grid md:grid-cols-4 md:gap-6">
+
+        <div class="md:col-span-2 overflow-y-auto border-[1px] p-2">
+          <% if @teams.count != 0 %>
+            <label for="courts" id="teams-label" class="block text-md font-bold text-gray-700">Teams <span id="teams-text" class="text-gray-400"></span>&nbsp;</label>
+          <% else %>
+            <label for="courts" id="teams-label" class="block text-md font-medium text-gray-700">
+              <br>No Teams exist. <%= link_to "Click here", teams_path, class: "text-blue-500" %> first to create!<br><br>
+            </label>
+          <% end %>
+
+
+          <%= form.collection_radio_buttons(:teams, @teams, :id, :name) do |team| %>
+            <%= team.radio_button(class: "w-4 h-4 rounded mx-0 ml-1 mr-1", players: team.object&.players&.count) %>
+            <%= team.label class:"text-sm font-bold text-gray-70 py-1" %>
+            <span class="text-sm font-medium text-gray-70 py-1"><%= " - #{team.object&.players&.count} Players [Configuration: #{team.object.display_configuration}]" %></span>
+            <br />
+          <% end %>
+        </div>
+
+        <div class="mt-5 md:mt-0 md:col-span-2">
+          <form action="#" method="POST">
+            <div class="grid grid-cols-6 gap-6">
+              <div class="col-span-6 sm:col-span-6">
+                <label for="name" class="block text-sm font-medium text-gray-700">Tournament Name</label>
+                <%= form.text_field :name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>
+
+              <% if false # removed from use for now %>
+                <div class="col-span-6">
+                  <label for="street-address" class="block text-sm font-medium text-gray-700">Street Address</label>
+                  <%= form.text_field :address1, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                </div>
+
+                <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                  <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                  <%= form.text_field :city, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                </div>
+
+                <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                  <label for="region" class="block text-sm font-medium text-gray-700">State / Province</label>
+                  <%= form.text_field :state, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                </div>
+
+                <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                  <label for="postal-code" class="block text-sm font-medium text-gray-700">Postal code</label>
+                  <%= form.text_field :zip, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                </div>
+              <% end %>
+            </div>
+
+            <%= render "form_courts", form: form %>
+
+            <div class="grid grid-cols-6 gap-6 mt-6">
+              <div id="court-side-a" class="col-span-6 sm:col-span-6 lg:col-span-2">
+                <label for="courts" class="block text-sm font-medium text-gray-700">Court Side A Name</label>
+                <%= form.text_field :court_side_a_name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>
+              <div id="court-side-b" class="col-span-6 sm:col-span-6 lg:col-span-2">
+                <label for="courts" class="block text-sm font-medium text-gray-700">Court Side B Name</label>
+                <%= form.text_field :court_side_b_name, id: "court-2-name", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-6 gap-6 mt-6">
+              <div class="col-span-6 sm:col-span-3 lg:col-span-3">
+                <label for="tournament-time" class="block text-sm font-medium text-gray-700">Timer Match Time Length<span class="text-gray-400"></span></label>
+                <%= form.select :match_time, @match_times, { :placeholder => "Please Select" }, id: "tournament-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+              </div>
+              <div class="col-span-6 sm:col-span-3 lg:col-span-3">
+                <label for="break-time" class="block text-sm font-medium text-gray-700">Timer Break Time Length<span class="text-gray-400"></span></label>
+                <%= form.select :pre_match_time, @pre_match_times, { :placeholder => "Please Select" }, id: "break-time", class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:border-indigo-500 sm:text-sm rounded-md" %>
+              </div>
+            </div>
+            <%= form.hidden_field :adhoc, value: false %>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end space-x-3">
+      <%= link_to "Back to Tournaments", tournaments_path, class: "inline-flex items-center px-5 text-md border border-transparent font-medium" %>
+      <% params[:action] == "new" ? button_text = "Create Tournament" : button_text = "Update Tournament" %>
+      <button
+        id="save-button"
+        type="submit"
+        class="float-right text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-md px-5 py-1 text-center mr-2 dark:bg-blue-600 hover:bg-transparent hover:text-color-blue-700">
+        <%= button_text %>
+      </button>
+    </div>
+  </div>
+<% end %>
+
+<%= render "js_form_team", tournament: @tournament %>

@@ -7,16 +7,16 @@ module PlayerConfigs
 ###### [side 1], [side 2], [byes]
 ###### Courts are grouped per each
 
-def self.p4
-  # 5 matches
-  [
-    [[1, 2], [3, 4], []],
-    [[1, 3], [2, 4], []],
-    [[1, 4], [2, 3], []]
-  ]
-end
+  def self.p4
+    # 5 matches
+    [
+      [[1, 2], [3, 4], []],
+      [[1, 3], [2, 4], []],
+      [[1, 4], [2, 3], []]
+    ]
+  end
 
-def self.p5
+  def self.p5
     [
       [[1, 2], [3, 4], [5]],
       [[2, 5], [1, 3], [4]],
