@@ -32,7 +32,6 @@ class TeamsController < ApplicationController
   end
 
   def update
-    # binding.pry
     @team.update_players(params)
 
     respond_to do |format|

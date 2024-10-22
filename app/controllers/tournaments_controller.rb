@@ -315,7 +315,6 @@ class TournamentsController < ApplicationController
   def set_create_update(params)
 
     if params[:tournament][:players].present?
-      # binding.pry
       @tournament.players = params[:tournament][:players].reject(&:blank?).map(&:to_i) unless params[:tournament][:players].nil?
     end
     

@@ -5,7 +5,7 @@
     // On load set session data
     setDefaultSessionData();
     // Show / hide courts according to players checked and update session data
-    $("input:radiow").change(function() { playersSelectedChange(); }); 
+    $("input:radio").change(function() { playersSelectedChange(); }); 
     // Update session data on tournament time changes
     tournyTimeChangeListener();
     tournyBreakTimeChangeListener();
@@ -39,9 +39,14 @@
 
   function playersSelectedChange() {
     console.log("-- click == ")
-    let pSelected = document.querySelectorAll('input[type="checkbox"]:checked').length;
-    $('#players-label').text(`Players (${pSelected} selected)`);
-    processPlayersSelected(pSelected);
+
+    players = parseInt($("input[type='radio']:checked").attr('players'), 10)
+    console.log(players)
+    processPlayersSelected(players)
+    //console.log(document.querySelectorAll('input[type="radio"]:checked').val())
+
+    // $('#players-label').text(`Players (${pSelected} selected)`);
+    // processPlayersSelected(pSelected);
   } 
 
   function processPlayersSelected(pSelected) {
@@ -60,52 +65,52 @@
     case 0:
       localStorage['tournamentSets'] = 0
       localStorage['tournamentRounds'] = 1
-      courtsCountOne();
+      courtsCountNone();
       break;
     case 1:
       localStorage['tournamentSets'] = 0
       localStorage['tournamentRounds'] = 1
-      courtsCountOne();
+      courtsCountNone();
       break;
     case 2:
       localStorage['tournamentSets'] = 0
       localStorage['tournamentRounds'] = 1
-      courtsCountOne();
+      courtsCountNone();
       break;
     case 3:
       localStorage['tournamentSets'] = 0
       localStorage['tournamentRounds'] = 1
-      courtsCountOne();
+      courtsCountNone();
       break;
     case 4:
       localStorage['tournamentSets'] = 3
       localStorage['tournamentRounds'] = 1
-      courtsCountOne();
+      courtsCountNone();
       break;
     case 5:
       localStorage['tournamentSets'] = 5
       localStorage['tournamentRounds'] = 1
-      courtsCountOne();
+      courtsCountNone();
       break;                      
     case 6:
       localStorage['tournamentSets'] = 10
       localStorage['tournamentRounds'] = 1
-      courtsCountOne();
+      courtsCountNone();
       break;
     case 7:
       localStorage['tournamentSets'] = 7
       localStorage['tournamentRounds'] = 1
-      courtsCountOne();
+      courtsCountNone();
       break;
     case 8:
       localStorage['tournamentSets'] = 8
       localStorage['tournamentRounds'] = 1
-      courtsCountOne();
+      courtsCountNone();
       break;      
     case 9:
       localStorage['tournamentSets'] = 9
       localStorage['tournamentRounds'] = 1
-      courtsCountOne();
+      courtsCountNone();
       break;
     case 10:
       localStorage['tournamentSets'] = 10
@@ -224,6 +229,15 @@
       courtsCountOne();
     }
   }  
+
+  function courtsCountNone() {
+    $("#court-1-container").hide();
+    $("#court-2-container").hide();
+    $("#court-3-container").hide();
+    $("#court-4-container").hide();
+    $("#court-5-container").hide();
+    $("#court-6-container").hide();
+  };
 
   function courtsCountOne() {
     $("#court-1-container").show();

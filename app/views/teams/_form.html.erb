@@ -45,10 +45,8 @@
 
     <% player_list = team&.players %>
     <% available_players = current_user.players.order('last_name asc') %>
-    <%# binding.pry %>
     
     <%= form.collection_check_boxes(:players, available_players, :id, :full_name) do |player| %>
-    <% #binding.pry %>
       <%= player.label class:"text-sm font-medium text-gray-70 py-1" do %>
         <% %>
         <%= player.check_box(class: "w-4 h-4 rounded mx-0 ml-1 mr-1", checked: player_list.collect(&:id).include?(player.object.id)) %>

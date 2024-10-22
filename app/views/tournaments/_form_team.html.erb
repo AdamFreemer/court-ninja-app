@@ -1,7 +1,3 @@
-<h1 class="block text-md font-medium text-gray-800">
-  Total Tournament Time: <span id="tourny-time">0</span><br><span class="text-rose-500" id="max-players">&nbsp;</span>
-</h1>
-
 <%= form_with(model: tournament, class: "contents") do |form| %>
   <% if tournament.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
@@ -28,7 +24,7 @@
 
 
           <%= form.collection_radio_buttons(:teams, @teams, :id, :name) do |team| %>
-            <%= team.radio_button(class: "w-4 h-4 rounded mx-0 ml-1 mr-1") %>
+            <%= team.radio_button(class: "w-4 h-4 rounded mx-0 ml-1 mr-1", players: team.object&.players&.count) %>
             <%= team.label class:"text-sm font-bold text-gray-70 py-1" %>
             <span class="text-sm font-medium text-gray-70 py-1"><%= " - #{team.object&.players&.count} Players [Configuration: #{team.object.display_configuration}]" %></span>
             <br />
