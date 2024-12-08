@@ -22,8 +22,10 @@
   </head>
 
   <body class="min-h-screen">
+
     <% if current_user %>
-      <% if action_name == "display" || action_name == "results" %>
+      <%# binding.pry %>
+      <% if action_name == "display" || action_name == "results" || params[:controller] == "landing" %>
         <%= render 'layouts/headerless' %>
       <% else %>
         <%= render 'layouts/header' %>
@@ -33,6 +35,7 @@
         <%= yield %>
       </main>
     <% else %>
+
       <%= yield %>
     <% end %>
     <%= render 'layouts/footer' %>

@@ -28,11 +28,14 @@ Rails.application.routes.draw do
 
   get '/leaderboard', to: 'players#leaderboard', as: 'leaderboard'
 
+  get '/welcome', to: 'landing#welcome', as: 'welcome'
+  get '/learn_more', to: 'landing#learn_more', as: 'learn_more'
+
   devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions' }
 
   resources :users
   resources :teams
   post '/user_deactivate', to: 'users#deactivate', as: 'user_deactivate'
   # post '/user_delete', to: 'users#destroy', as: 'user_delete'
-  root 'tournaments#index'
+  root 'landing#welcome'
 end

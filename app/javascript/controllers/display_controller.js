@@ -144,7 +144,9 @@ export default class extends Controller {
   }
 
   backToTournamentsClick() {
-    window.location.href = "/"
+    event.preventDefault();
+    // window.location.href = "/leaderboard"
+    console.log("##### Hello")
   }
 
   editTournamentClick() {

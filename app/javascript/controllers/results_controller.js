@@ -6,6 +6,6 @@ export default class extends Controller {
   };
 
   backToTournamentsClick() {
-    window.location.href = "/"
+    window.location.href = "/leaderboard"
   }
 }
