@@ -28,8 +28,10 @@ Rails.application.routes.draw do
 
   get '/leaderboard', to: 'players#leaderboard', as: 'leaderboard'
 
-  get '/welcome', to: 'landing#welcome', as: 'welcome'
-  get '/learn_more', to: 'landing#learn_more', as: 'learn_more'
+  get '/home', to: 'home#home', as: 'home'
+  get '/learn_more', to: 'home#learn_more', as: 'learn_more'
+  get '/subscription', to: 'home#subscription', as: 'subscription'
+  get '/confirmation', to: 'home#confirmation', as: 'confirmationw'
 
   devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions' }
 
@@ -37,5 +39,10 @@ Rails.application.routes.draw do
   resources :teams
   post '/user_deactivate', to: 'users#deactivate', as: 'user_deactivate'
   # post '/user_delete', to: 'users#destroy', as: 'user_delete'
-  root 'landing#welcome'
+  
+  get '/sign_up', to: 'registrations#new'
+  
+  get 'dashboard', to: 'dashboard#index'
+  
+  root 'home#home'
 end

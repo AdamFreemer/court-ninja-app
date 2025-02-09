@@ -26,6 +26,7 @@ gem 'select2-rails', '~> 4.0'
 # gem 'sentry-ruby', '~> 5.4'
 gem 'sprockets-rails', '~> 3.4'
 gem 'stimulus-rails', '~> 1.0'
+gem 'stripe'
 gem 'tailwindcss-rails', '~> 2.0'
 gem 'turbo-rails', '~> 1.0'
 

@@ -8,10 +8,10 @@
       <% end %>
     </div>
     <div class="flex justify-center items-center mt-6 border-1 border-gray-600">
-      <div class="py-4 whitespace-nowrap text-lg">User ID: <%= current_user.id %></div>
+      <div class="py-4 whitespace-nowrap text-lg">Your administrative user ID: <%= current_user.id %></div>
     </div>    
 
-    <%= form_with(model: @user, id: 'profile-picture-form') do |form| %>
+    <%= form_with(model: current_user, id: 'profile-picture-form') do |form| %>
       <div class="w-full flex justify-center mt-4">
         <input type="button" value="<%= current_user.profile_picture.attached? ? "Change Picture" : 'Upload Picture' %>" onclick="document.getElementById('profile-picture-field').click();" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-lg font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" />
         <%= form.file_field :profile_picture, id: 'profile-picture-field', class: 'hidden' %>
@@ -22,7 +22,7 @@
 
 
 <script>
-  document.getElementById("profile-picture-field").onchange = function() {
+    document.getElementById("profile-picture-field").onchange = function() {
     document.getElementById("profile-picture-form").submit();
   };
 </script>

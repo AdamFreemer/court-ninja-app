@@ -1,0 +1,16 @@
+<div class="text-center">
+  <% if @tournament_users.empty? %>
+    <p class="text-lg text-gray-600 mb-8">
+      Add some players and get some tournaments going first by clicking here!
+    </p>
+
+    <!-- Added centered, framed image -->
+    <div class="max-w-2xl mx-auto">
+      <%= image_tag "sign-up.jpg", 
+          class: "w-full h-auto rounded-2xl shadow-xl object-cover aspect-[4/3]",
+          alt: "Get started" %>
+    </div>
+  <% else %>
+    <!-- Existing leaderboard content -->
+  <% end %>
+</div> 

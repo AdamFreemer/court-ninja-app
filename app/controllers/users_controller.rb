@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[edit update destroy deactivate]
   before_action :set_positions
-  before_action :check_for_admin#, except: %i[edit]
+  before_action :check_for_admin, except: %i[profile update]
 
   def index
     set_title
