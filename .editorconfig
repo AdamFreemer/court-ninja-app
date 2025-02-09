@@ -1,0 +1,101 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+
+# Ruby files
+[*.{rb,rake,gemspec}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# Rails specific files
+[*.{erb,rake,slim,jbuilder,ruby.ecr,ruby.echtml}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+[config.ru]
+indent_style = space
+indent_size = 2
+
+[Rakefile]
+indent_style = space
+indent_size = 2
+
+[Gemfile*]
+indent_style = space
+indent_size = 2
+
+# Tailwind CSS files
+[tailwind.config.{js,cjs,mjs,ts}]
+indent_style = space
+indent_size = 2
+
+[*.css]
+indent_style = space
+indent_size = 2
+quote_type = single
+
+# YAML files
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# JavaScript files
+[*.{js,jsx,ts,tsx}]
+indent_style = space
+indent_size = 2
+quote_type = single
+max_line_length = 100
+
+# CSS/SCSS files
+[*.{css,scss,sass}]
+indent_style = space
+indent_size = 2
+quote_type = single
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = 80
+
+# JSON files
+[*.json]
+indent_style = space
+indent_size = 2
+
+# Configuration files
+[{package.json,.travis.yml}]
+indent_style = space
+indent_size = 2
+
+# Database schema and migrations
+[db/**.rb]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# Routes
+[config/routes.rb]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# Environment configurations
+[config/environments/*.rb]
+indent_style = space
+indent_size = 2
+
+# Test files
+[{spec,test}/**]
+indent_style = space
+indent_size = 2
+max_line_length = 120 

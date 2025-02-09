@@ -2,7 +2,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
 
   before_action :authenticate_user!
+  before_action :check_if_subscribed
   before_action :configure_permitted_parameters, if: :devise_controller?
+  helper_method :user_subscribed?
 
   def after_sign_in_path_for(resource_or_scope)
     stored_location_for(resource_or_scope) || super
@@ -27,7 +29,21 @@ class ApplicationController < ActionController::Base
   end
   
   def after_sign_in_path_for(resource)
-    leaderboard_path
+    subscription = StripeProcessing.check_subscription(resource.email)
+    
+    # Consider both active and trialing subscriptions as valid
+    is_subscribed = subscription&.active? || false
+    
+    resource.update!(
+      subscribed: is_subscribed,
+      subscription_status: subscription&.status
+    )
+    
+    if is_subscribed
+      leaderboard_path
+    else
+      redirect_to "https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ", allow_other_host: true and return
+    end
   end
 
   private
@@ -38,5 +54,27 @@ class ApplicationController < ActionController::Base
 
   def store_user_location!
     store_location_for(:user, request.fullpath)
+  end
+
+  def user_subscribed?
+    current_user&.subscribed?
+  end
+
+  def require_subscription
+    unless user_subscribed?
+      redirect_to pricing_path, alert: 'This feature requires an active subscription'
+    end
+  end
+
+  def check_if_subscribed
+    return unless current_user
+    return if devise_controller?
+    return if controller_name == 'home'
+    return if current_user.subscribed?
+    return if current_user.is_admin?
+
+    redirect_to "https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ", 
+                allow_other_host: true, 
+                alert: 'Please subscribe to continue using this feature.'
   end
 end

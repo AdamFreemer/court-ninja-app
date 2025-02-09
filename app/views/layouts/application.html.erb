@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="h-full bg-white">
   <head>
     <title>Court Ninja</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -21,21 +21,29 @@
 
   </head>
 
-  <body class="min-h-screen">
+  <body class="h-full">
 
     <% if current_user %>
-      <%# binding.pry %>
-      <% if action_name == "display" || action_name == "results" || params[:controller] == "landing" %>
+      <% if action_name == "display" || action_name == "results" || params[:controller] == "home" %>
         <%= render 'layouts/headerless' %>
       <% else %>
         <%= render 'layouts/header' %>
       <% end %>
       <main class="px-8 py-4">
         <%= render 'layouts/alerts' %>
-        <%= yield %>
+        <% if user_subscribed? %>
+          <%= yield %>
+        <% else %>
+          <% if content_for?(:public_content) %>
+            <%= yield :public_content %>
+          <% else %>
+            <%= yield %>
+          <% end %>
+          
+
+        <% end %>
       </main>
     <% else %>
-
       <%= yield %>
     <% end %>
     <%= render 'layouts/footer' %>

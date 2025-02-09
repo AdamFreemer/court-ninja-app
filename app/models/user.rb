@@ -38,11 +38,15 @@
 #  reset_password_token   :string
 #  sign_in_count          :integer          default(0), not null
 #  state                  :string
+#  subscribed             :boolean          default(FALSE)
+#  subscription_plan      :integer          default(0)
+#  subscription_status    :string
 #  unlock_token           :string
 #  zip                    :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  coach_id               :bigint
+#  stripe_id              :integer
 #  team_id                :integer
 #
 # Indexes
@@ -90,6 +94,23 @@ class User < ApplicationRecord
   attr_accessor :role, :invite_code
 
   before_save :resolve_email
+
+  # Associations
+  has_many :teams, foreign_key: 'coach_id'
+  alias_method :teams_coached, :teams  # This creates teams_coached as an alias for teams
+
+  # Or alternatively, you could define it as a method:
+  def teams_coached
+    teams
+  end
+
+  def is_coach?
+    role == 'coach'  # Adjust this based on how you're tracking user roles
+  end
+
+  def is_admin?
+    role == 'admin'  # Adjust this based on how you're tracking user roles
+  end
 
   def full_name
     "#{last_name}, #{first_name}"
