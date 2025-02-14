@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     return leaderboard_path if resource.is_admin?
-    
+
     subscription = StripeProcessing.check_subscription(resource.email)
     
     # Consider both active and trialing subscriptions as valid
@@ -76,6 +76,7 @@ class ApplicationController < ActionController::Base
 
     redirect_to "https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ", 
                 allow_other_host: true,
+
                 alert: 'Please subscribe to continue using this feature.'
   end
 end

@@ -33,7 +33,7 @@ class SessionsController < Devise::SessionsController
       if resource.is_admin?
         redirect_to leaderboard_path and return
       end
-      
+
       subscription = StripeProcessing.check_subscription(resource.email)
       is_subscribed = subscription&.active? || false
       
@@ -57,5 +57,11 @@ class SessionsController < Devise::SessionsController
       redirect_to new_user_session_path, 
         alert: 'Invalid email or password.' and return
     end
+  end
+
+  private
+
+  def after_sign_in_path_for(resource)
+    super
   end
 end

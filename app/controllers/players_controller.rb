@@ -5,10 +5,14 @@ class PlayersController < ApplicationController
   before_action :check_subscription, unless: :skip_subscription_check?
   
   def leaderboard
-    players = current_user.players.where(is_ghost_player: false, is_on_leaderboard: true)
-    @players = []
-    players.each do |player|
-      @players << [player.profile_picture, player.full_name, player.statistics, player.initials] if player.statistics[:sets_played] > 0
+    if current_user&.subscribed?
+      players = current_user.players.where(is_ghost_player: false, is_on_leaderboard: true)
+      @players = []
+      players.each do |player|
+        @players << [player.profile_picture, player.full_name, player.statistics, player.initials] if player.statistics[:sets_played] > 0
+      end
+    else
+      redirect_to "https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ", allow_other_host: true
     end
   end
 
