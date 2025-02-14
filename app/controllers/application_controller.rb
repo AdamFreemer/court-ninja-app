@@ -73,10 +73,9 @@ class ApplicationController < ActionController::Base
 
   def check_subscription
     return unless current_user
-
+    
     redirect_to "https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ", 
                 allow_other_host: true,
-
                 alert: 'Please subscribe to continue using this feature.'
   end
 end
