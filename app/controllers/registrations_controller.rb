@@ -1,4 +1,5 @@
 class RegistrationsController < Devise::RegistrationsController
+  skip_before_action :check_subscription  # Updated from check_if_subscribed
   def new
     @invite_code = params[:invite_code]
     super

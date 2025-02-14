@@ -5,14 +5,7 @@ class TournamentsController < ApplicationController
   before_action :set_display, only: %i[display]
   before_action :round_two_generated, only: %i[administration]
   before_action :current_set_players, only: %i[status]
-
-  before_action :check_if_subscribed
-
-  def check_if_subscribed
-    return if current_user&.subscribed?
-
-    redirect_to 'https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ', allow_other_host: true
-  end
+  before_action :check_subscription, unless: :skip_subscription_check?
 
   def index
     @tournaments = Tournament.all.order(created_at: :desc)

@@ -109,7 +109,7 @@ class User < ApplicationRecord
   end
 
   def is_admin?
-    role == 'admin'  # Adjust this based on how you're tracking user roles
+    is_admin # Use the database column directly
   end
 
   def full_name

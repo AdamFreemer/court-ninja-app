@@ -1,17 +1,9 @@
 class TeamsController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :set_team, only: %i[edit update destroy]
-
-  before_action :check_if_subscribed
-
-  def check_if_subscribed
-    return if current_user&.subscribed?
-
-    redirect_to 'https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ', allow_other_host: true
-  end
+  before_action :check_subscription, unless: :skip_subscription_check?
 
   def index
-
     @teams = Team.where(coach_id: current_user.id)
   end
 
@@ -67,8 +59,6 @@ class TeamsController < ApplicationController
   end
 
   private
-
-
 
   def set_team
     @team = Team.find(params[:id])
