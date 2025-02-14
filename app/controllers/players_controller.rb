@@ -2,7 +2,7 @@ class PlayersController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :set_user, only: %i[edit update destroy]
   before_action :set_positions
-  before_action :check_if_subscribed
+  before_action :check_subscription, unless: :skip_subscription_check?
   
   def leaderboard
     if current_user&.subscribed?

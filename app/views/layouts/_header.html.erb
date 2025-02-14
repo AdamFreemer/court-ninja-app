@@ -71,8 +71,9 @@
                   <%= link_to 'Profile', profile_path(current_user), class: 'hover:bg-indigo-100 border-transparent text-indigo-700 inline-flex items-center p-2 w-full flex justify-end' %>
                   <%= link_to 'Account', "https://billing.stripe.com/p/login/9AQ3eogeubJ96zu7ss", class: 'hover:bg-indigo-100 border-transparent text-indigo-700 inline-flex items-center p-2 w-full flex justify-end', target: :_blank %>
                   <% unless current_user.subscribed? %>
-                    <%= link_to "https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ", 
-                        class: 'hover:bg-indigo-100 border-transparent text-indigo-700 inline-flex items-center p-2 w-full flex justify-end' %>
+                    <%= link_to "Subscribe", "https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ", 
+                        class: 'hover:bg-indigo-100 border-transparent text-indigo-700 inline-flex items-center p-2 w-full flex justify-end',
+                        target: :_blank %>
                   <% end %>
                   <%= button_to 'Sign Out', destroy_user_session_path, :method => :delete, class: 'hover:bg-indigo-100 border-transparent text-indigo-700 inline-flex items-center p-2 w-full flex justify-end' %>
                 </ul>

@@ -1,6 +1,7 @@
 class TeamsController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :set_team, only: %i[edit update destroy]
+  before_action :check_subscription, unless: :skip_subscription_check?
 
   before_action :check_if_subscribed
 
@@ -11,7 +12,6 @@ class TeamsController < ApplicationController
   end
 
   def index
-
     @teams = Team.where(coach_id: current_user.id)
   end
 
@@ -67,8 +67,6 @@ class TeamsController < ApplicationController
   end
 
   private
-
-
 
   def set_team
     @team = Team.find(params[:id])

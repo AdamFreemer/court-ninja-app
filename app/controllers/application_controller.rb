@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
 
   before_action :authenticate_user!
-  before_action :check_if_subscribed
+  before_action :check_subscription, unless: :skip_subscription_check?
   before_action :configure_permitted_parameters, if: :devise_controller?
   helper_method :user_subscribed?
 
@@ -18,17 +18,15 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-    if user_signed_in?
-      super
-    else
-      # redirect_to welcome_path
-      # redirect_to login_path, :notice => 'if you want to add a notice'
-      ## if you want render 404 page
-      ## render :file => File.join(Rails.root, 'public/404'), :formats => [:html], :status => 404, :layout => false
-    end
+    return true if current_user&.is_admin?
+    return true if devise_controller?
+    return true if controller_name == 'home'
+    super
   end
-  
+
   def after_sign_in_path_for(resource)
+    return leaderboard_path if resource.is_admin?
+
     subscription = StripeProcessing.check_subscription(resource.email)
     
     # Consider both active and trialing subscriptions as valid
@@ -66,15 +64,19 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def check_if_subscribed
+  def skip_subscription_check?
+    devise_controller? || 
+    controller_name == 'home' || 
+    current_user&.is_admin? || 
+    current_user&.subscribed?
+  end
+
+  def check_subscription
     return unless current_user
-    return if devise_controller?
-    return if controller_name == 'home'
-    return if current_user.subscribed?
-    return if current_user.is_admin?
 
     redirect_to "https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ", 
-                allow_other_host: true, 
+                allow_other_host: true,
+
                 alert: 'Please subscribe to continue using this feature.'
   end
 end

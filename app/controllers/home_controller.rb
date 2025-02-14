@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   skip_before_action :authenticate_user!
-  skip_before_action :check_if_subscribed
+  skip_before_action :check_subscription
 
   # before_action :set_selected_class
 
