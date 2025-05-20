@@ -1,0 +1,25 @@
+<div style="text-align: center; max-width: 600px; margin: 40px auto; padding: 20px;">
+  <h1 style="font-size: 28px; font-weight: bold; margin-bottom: 20px;">Subscribe to Court Ninja</h1>
+  
+  <p style="font-size: 18px; margin-bottom: 30px;">Get access to all features including tournament management and player tracking.</p>
+  
+  <div style="display: flex; justify-content: center;">
+    <%= button_to "Subscribe Now - $9/month", subscription_path, method: :post, class: "subscribe-button" %>
+  </div>
+</div>
+
+<style>
+  .subscribe-button {
+    background-color: #5850EC;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .subscribe-button:hover {
+    background-color: #4C43E2;
+  }
+</style> 

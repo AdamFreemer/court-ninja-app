@@ -19,6 +19,8 @@
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>  
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.tailwindcss.min.js"></script>  
 
+    <script src="https://js.stripe.com/v3/"></script>
+
   </head>
 
   <body class="h-full">
@@ -47,6 +49,12 @@
       <%= yield %>
     <% end %>
     <%= render 'layouts/footer' %>
+
+    <% if @stripe_public_key %>
+      <script>
+        window.stripePublicKey = '<%= @stripe_public_key %>';
+      </script>
+    <% end %>
   </body>
 </html>
 

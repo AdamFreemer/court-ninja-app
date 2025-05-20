@@ -45,4 +45,28 @@ Rails.application.routes.draw do
   get 'dashboard', to: 'dashboard#index'
   
   root 'home#home'
+
+  post '/webhooks/stripe', to: 'webhooks#stripe'
+
+  resources :webhooks, only: [] do
+    collection do
+      post :stripe
+    end
+  end
+
+
+  # Add this temporary route to handle redirects from existing checkout sessions
+  get '/subscription/success', to: 'subscriptions#success'
+  get '/subscription/cancel', to: 'subscriptions#cancel'  
+
+  resources :subscriptions, only: [:new, :create] do
+    collection do
+      get :success
+      get :cancel
+    end
+  end
+
+  # Add this route to handle POST to singular /subscription
+  post '/subscription', to: 'subscriptions#create'
+
 end

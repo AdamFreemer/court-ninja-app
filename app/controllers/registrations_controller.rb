@@ -1,5 +1,6 @@
 class RegistrationsController < Devise::RegistrationsController
   skip_before_action :check_subscription
+  before_action :configure_stripe, only: [:new, :create]
 
   def new
     @invite_code = params[:invite_code]
@@ -30,6 +31,32 @@ class RegistrationsController < Devise::RegistrationsController
     super do |resource|
       if resource.persisted?
         resource.is_coach = true
+        
+        # Explicitly set the API key here
+        if Rails.env.production?
+          Stripe.api_key = ENV['STRIPE_KEY']
+        else
+          Stripe.api_key = ENV['STRIPE_KEY'] # Using live key for testing
+        end
+        
+        Rails.logger.info "Stripe API key set: #{Stripe.api_key.present? ? 'Yes' : 'No'}"
+        
+        # Create Stripe customer
+        begin
+          customer = Stripe::Customer.create({
+            email: resource.email,
+            name: "#{resource.first_name} #{resource.last_name}".strip,
+            metadata: { user_id: resource.id }
+          })
+          
+          # Only update the stripe_id
+          resource.update!(stripe_id: customer.id)
+          Rails.logger.info "Created Stripe customer with ID: #{customer.id}"
+          
+        rescue Stripe::StripeError => e
+          Rails.logger.error "Error creating Stripe customer: #{e.message}"
+        end
+        
         if resource.save
           req = UserRoleRequest.create!(user_id: resource.id)
           req.send_user_request_email
@@ -41,9 +68,22 @@ class RegistrationsController < Devise::RegistrationsController
   protected
 
   def after_sign_up_path_for(resource)
-    {
-      url: 'https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ',
-      allow_other_host: true 
-    }
+    # Always redirect to the payment link
+    { url: 'https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ', allow_other_host: true }
+  end
+
+  private
+
+  def sign_up_params
+    params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name)
+  end
+
+  def configure_stripe
+    if Rails.env.production?
+      Stripe.api_key = ENV['STRIPE_KEY']
+    else
+      Stripe.api_key = ENV['STRIPE_KEY'] # Using live key for now
+    end
+    Rails.logger.info "Stripe configured with API key present: #{Stripe.api_key.present?}"
   end
 end

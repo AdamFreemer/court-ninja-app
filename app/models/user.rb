@@ -46,7 +46,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  coach_id               :bigint
-#  stripe_id              :integer
+#  stripe_id              :string
 #  team_id                :integer
 #
 # Indexes
@@ -66,6 +66,9 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :recoverable, :validatable, :trackable, :registerable#, :rememberable
+
+  # Add dependent: :destroy to ensure role requests are deleted with user
+  has_many :user_role_requests, dependent: :destroy
 
   has_many :tournament_users, dependent: :destroy
   has_many :tournaments, through: :tournament_users
@@ -123,10 +126,12 @@ class User < ApplicationRecord
   def initials
     if is_ghost_player
       ''
-    elsif adhoc
-      "#{nick_name[0]}"
-    else
+    elsif adhoc && nick_name.present?
+      nick_name[0].to_s
+    elsif first_name.present? && last_name.present?
       "#{first_name[0]}#{last_name[0]}"
+    else
+      ''
     end
   end
 
@@ -184,5 +189,37 @@ class User < ApplicationRecord
 
     # If email is blank, stamp with current unix time (ms)
     update(email: "#{DateTime.now.strftime('%Q')}@mail.com", is_one_off: true)
+  end
+
+  def update_subscription_status(subscription)
+    is_active = subscription&.status == 'active'
+    update!(
+      subscribed: is_active,
+      subscription_status: subscription&.status
+    )
+  end
+
+  def verify_subscription
+    return true if is_admin? # Admins always have access
+    
+    # Only make API call if subscription status is unclear
+    if subscription_status.nil? || subscription_status == 'incomplete'
+      # Configure Stripe key for test mode
+      Stripe.api_key = ENV['STRIPE_KEY']
+      
+      # Retrieve customer and subscription info
+      customer = Stripe::Customer.retrieve(stripe_id) if stripe_id.present?
+      subscription = customer&.subscriptions&.data&.first if customer
+      
+      if subscription
+        is_active = ['active', 'trialing'].include?(subscription.status)
+        update!(
+          subscribed: is_active,
+          subscription_status: subscription.status
+        )
+      end
+    end
+    
+    subscribed
   end
 end

@@ -28,15 +28,15 @@ class ApplicationController < ActionController::Base
     return leaderboard_path if resource.is_admin?
 
     subscription = StripeProcessing.check_subscription(resource.email)
-    
+
     # Consider both active and trialing subscriptions as valid
     is_subscribed = subscription&.active? || false
-    
+
     resource.update!(
       subscribed: is_subscribed,
       subscription_status: subscription&.status
     )
-    
+
     if is_subscribed
       leaderboard_path
     else
@@ -67,15 +67,28 @@ class ApplicationController < ActionController::Base
   def skip_subscription_check?
     devise_controller? || 
     controller_name == 'home' || 
-    current_user&.is_admin? || 
-    current_user&.subscribed?
+    controller_name == 'webhooks' ||
+    (controller_name == 'sessions' && action_name == 'new')
   end
 
   def check_subscription
-    return unless current_user
+    return if current_user&.subscribed?
     
-    redirect_to "https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ", 
-                allow_other_host: true,
-                alert: 'Please subscribe to continue using this feature.'
+    # Store the attempted path for redirect after subscription
+    store_location_for(:user, request.fullpath)
+    
+    redirect_to new_subscription_path, 
+                alert: 'Please subscribe to access this feature.'
+  end
+
+  def configure_stripe
+    # Use test keys in development/test, live keys in production
+    if Rails.env.production?
+      Stripe.api_key = ENV['STRIPE_KEY']
+      @stripe_public_key = ENV['STRIPE_PUBLISHABLE_KEY']
+    else
+      Stripe.api_key = ENV['STRIPE_TEST_KEY']
+      @stripe_public_key = ENV['STRIPE_TEST_PUBLISHABLE_KEY']
+    end
   end
 end

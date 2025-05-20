@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_02_07_042254) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_08_205801) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -284,7 +284,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_07_042254) do
     t.integer "team_id"
     t.boolean "subscribed", default: false
     t.integer "subscription_plan", default: 0
-    t.integer "stripe_id"
+    t.string "stripe_id"
     t.string "subscription_status"
     t.index ["coach_id"], name: "index_users_on_coach_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
