@@ -1,10 +1,10 @@
-<div style="text-align: center; max-width: 600px; margin: 40px auto; padding: 20px;">
+<div style="text-align: center; max-width: 600px; margin: 40px auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
   <h1 style="font-size: 28px; font-weight: bold; margin-bottom: 20px;">Subscribe to Court Ninja</h1>
   
   <p style="font-size: 18px; margin-bottom: 30px;">Get access to all features including tournament management and player tracking.</p>
   
   <div style="display: flex; justify-content: center;">
-    <%= button_to "Subscribe Now - $9/month", subscription_path, method: :post, class: "subscribe-button" %>
+    <%= link_to "Subscribe Now - $9/month", "https://buy.stripe.com/7sYbJ149m1dm0UJ4Dp2sM02", class: "subscribe-button", target: "_blank", data: { turbo: false }, allow_other_host: true %>
   </div>
 </div>
 
@@ -17,6 +17,8 @@
     font-weight: 500;
     border: none;
     cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
   }
   
   .subscribe-button:hover {
