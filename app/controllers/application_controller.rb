@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
     if is_subscribed
       leaderboard_path
     else
-      redirect_to "https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ", allow_other_host: true and return
+      redirect_to "https://buy.stripe.com/7sYbJ149m1dm0UJ4Dp2sM02", allow_other_host: true and return
     end
   end
 

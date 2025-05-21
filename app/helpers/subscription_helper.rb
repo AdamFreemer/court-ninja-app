@@ -9,7 +9,7 @@ module SubscriptionHelper
         }
       else
         {
-          href: 'https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ',
+          href: 'https://buy.stripe.com/7sYbJ149m1dm0UJ4Dp2sM02',
           target: '_blank',
           data: { turbo: false },
           allow_other_host: true

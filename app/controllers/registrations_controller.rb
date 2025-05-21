@@ -69,7 +69,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   def after_sign_up_path_for(resource)
     # Always redirect to the payment link
-    { url: 'https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ', allow_other_host: true }
+    { url: 'https://buy.stripe.com/7sYbJ149m1dm0UJ4Dp2sM02', allow_other_host: true }
   end
 
   private

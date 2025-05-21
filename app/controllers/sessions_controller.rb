@@ -46,11 +46,9 @@ class SessionsController < Devise::SessionsController
         redirect_to leaderboard_path and return
       else
         if params[:from_stripe]
-          redirect_to dashboard_path, 
-            alert: 'Please complete your subscription to access all features.' and return
+          redirect_to dashboard_path, alert: 'Please complete your subscription to access all features.' and return
         else
-          redirect_to "https://buy.stripe.com/14k9Ezgq4bDa2kwfYZ", 
-            allow_other_host: true and return
+          redirect_to 'https://buy.stripe.com/7sYbJ149m1dm0UJ4Dp2sM02', allow_other_host: true and return
         end
       end
     else
