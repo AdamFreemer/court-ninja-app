@@ -179,15 +179,22 @@
       </div>
     </section>
 
-
-
-
-
-
-
-  
-
-    
+    <!-- Call to action button section -->
+    <section class="py-16 bg-slate-50">
+      <div class="max-w-screen-xl px-5 mx-auto sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-semibold font-display text-slate-900 sm:text-4xl mb-8">
+          Ready to find your Court Ninja?
+        </h2>
+        <div class="mt-8 mb-12 flex justify-center">
+          <%= link_to subscription_path, class: "px-8 py-6 text-3xl font-semibold text-white bg-indigo-600 rounded-full hover:bg-indigo-700 transition duration-300 shadow-lg min-w-[100px] text-center" do %>
+            Get Started
+            <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-30 h-7 ml-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          <% end %>
+        </div>
+      </div>
+    </section>
 
     <!-- Footer Container -->
     <section class="pt-12 sm:pt-16">
